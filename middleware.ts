@@ -63,7 +63,7 @@ function isAgentRequest(request: NextRequest): boolean {
   return false;
 }
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Only intercept the homepage for agents
