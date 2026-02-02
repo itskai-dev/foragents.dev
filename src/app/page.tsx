@@ -126,6 +126,18 @@ export default function Home() {
               Submit
             </Link>
             <Link
+              href="/search"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Search
+            </Link>
+            <Link
+              href="/guides"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Guides
+            </Link>
+            <Link
               href="/about"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
