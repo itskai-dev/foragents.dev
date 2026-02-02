@@ -8,7 +8,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle } from "@/lib/data";
+import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents } from "@/lib/data";
 import Link from "next/link";
 
 function timeAgo(dateStr: string): string {
@@ -64,6 +64,7 @@ export default function Home() {
   const llmsTxtEntries = getLlmsTxtEntries();
   const agents = getAgents();
   const featuredAgents = getFeaturedAgents();
+  const acpAgents = getAcpAgents();
 
   return (
     <div className="min-h-screen">
@@ -207,7 +208,7 @@ export default function Home() {
 
           {/* Stats bar */}
           <p className="mt-8 font-mono text-[13px] text-muted-foreground">
-            ── {agents.length} agents · {skills.length} skills · {mcpServers.length} MCP servers · {llmsTxtEntries.length} llms.txt sites ──
+            ── {agents.length} agents · {skills.length} skills · {mcpServers.length} MCP servers · {acpAgents.length} ACP agents · {llmsTxtEntries.length} llms.txt sites ──
           </p>
         </div>
       </section>
