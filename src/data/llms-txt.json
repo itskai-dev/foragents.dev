@@ -1,0 +1,119 @@
+[
+  {
+    "id": "openai",
+    "domain": "platform.openai.com",
+    "url": "https://platform.openai.com/docs/llms.txt",
+    "title": "OpenAI Platform Docs",
+    "description": "Developer documentation for the OpenAI Platform. Covers text generation, agents, function calling, fine-tuning, and the full API reference. Each doc page has a markdown twin.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Documentation sets", "Get started", "Core concepts", "Agents", "Built-in tools", "Model distillation", "Evaluation", "Realtime", "Prompt generation"]
+  },
+  {
+    "id": "vercel",
+    "domain": "vercel.com",
+    "url": "https://vercel.com/llms.txt",
+    "title": "Vercel Documentation",
+    "description": "Vercel is the AI Cloud — a unified platform for building, deploying, and scaling AI-powered applications and agentic workloads. Comprehensive docs on deployments, domains, functions, and more.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Getting Started", "AI Resources", "Frameworks", "Infrastructure", "Workflow Collaboration", "Security"]
+  },
+  {
+    "id": "nextjs",
+    "domain": "nextjs.org",
+    "url": "https://nextjs.org/llms.txt",
+    "title": "Next.js",
+    "description": "The React Framework for the Web. Full-stack web applications with React Components. Includes versioned documentation for Next.js 14, 15, and 16 with LLM-optimized markdown access.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Documentation", "Versioned Documentation", "Support Policy", "Learn Next.js", "Blog"]
+  },
+  {
+    "id": "supabase",
+    "domain": "supabase.com",
+    "url": "https://supabase.com/llms.txt",
+    "title": "Supabase Docs",
+    "description": "Open-source Firebase alternative with Postgres database, Auth, Edge Functions, Realtime, and Storage. SDK references for JavaScript, Dart, Swift, Kotlin, Python, and C#.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Guides", "Reference (JavaScript)", "Reference (Dart)", "Reference (Swift)", "Reference (Kotlin)", "Reference (Python)", "Reference (C#)", "CLI Reference"]
+  },
+  {
+    "id": "stripe",
+    "domain": "docs.stripe.com",
+    "url": "https://docs.stripe.com/llms.txt",
+    "title": "Stripe Documentation",
+    "description": "Complete Stripe payment platform documentation. Covers payments, billing, Connect, terminal, webhooks, and the full API reference. Every doc available as .md endpoints.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Docs", "Payment Methods", "Payments", "Billing", "Connect", "Terminal", "Financial Connections", "Identity"]
+  },
+  {
+    "id": "cloudflare",
+    "domain": "developers.cloudflare.com",
+    "url": "https://developers.cloudflare.com/llms.txt",
+    "title": "Cloudflare Developer Documentation",
+    "description": "Build and deploy full-stack applications everywhere with integrated compute, storage, and networking. Covers Workers, Pages, R2, D1, AI, and the Agents SDK.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Agents", "Workers", "Pages", "R2", "D1", "AI", "Vectorize", "Queues", "KV"]
+  },
+  {
+    "id": "clerk",
+    "domain": "clerk.com",
+    "url": "https://clerk.com/llms.txt",
+    "title": "Clerk",
+    "description": "The most comprehensive User Management Platform. Embeddable UIs, flexible APIs, and admin dashboards for authentication. Includes AI authentication solutions and agent identity.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Product", "Solutions", "Blog", "SDKs"]
+  },
+  {
+    "id": "astro",
+    "domain": "docs.astro.build",
+    "url": "https://docs.astro.build/llms.txt",
+    "title": "Astro",
+    "description": "All-in-one web framework using island architecture and server-first design. Provides abridged, complete, and topic-specific documentation sets optimized for LLM consumption.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Documentation Sets", "Notes", "Optional"]
+  },
+  {
+    "id": "convex",
+    "domain": "docs.convex.dev",
+    "url": "https://docs.convex.dev/llms.txt",
+    "title": "Convex Documentation",
+    "description": "Reactive database with TypeScript queries, mutations, and actions. Full-stack backend with real-time sync, file storage, scheduled functions, and auth integration.",
+    "lastChecked": "2026-02-02",
+    "sections": ["understanding", "quickstart", "functions", "database", "file-storage", "auth", "scheduling", "search", "production"]
+  },
+  {
+    "id": "resend",
+    "domain": "resend.com",
+    "url": "https://resend.com/llms.txt",
+    "title": "Resend",
+    "description": "Email API for developers. Modern email sending and receiving platform for transactional and marketing emails. Includes SDKs for Node.js, Python, PHP, Ruby, Go, Java, Elixir, Rust, and .NET.",
+    "lastChecked": "2026-02-02",
+    "sections": ["SDKs"]
+  },
+  {
+    "id": "mcp",
+    "domain": "modelcontextprotocol.io",
+    "url": "https://modelcontextprotocol.io/llms.txt",
+    "title": "Model Context Protocol",
+    "description": "Open standard for connecting AI agents to tools and data sources. Specification, SDKs, example clients, and community governance for the MCP ecosystem.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Docs", "Specification", "SDKs", "Tutorials"]
+  },
+  {
+    "id": "netlify",
+    "domain": "docs.netlify.com",
+    "url": "https://docs.netlify.com/llms.txt",
+    "title": "Netlify Documentation",
+    "description": "Web platform for building highly performant, secure, and reliable websites. Covers Edge Functions, serverless functions, build configuration, deploy previews, and more.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Development & Functions", "Frameworks", "Platform", "Integrations"]
+  },
+  {
+    "id": "deno",
+    "domain": "docs.deno.com",
+    "url": "https://docs.deno.com/llms.txt",
+    "title": "Deno Documentation",
+    "description": "Open source JavaScript, TypeScript, and WebAssembly runtime with secure defaults. Covers the Deno CLI, Deno Deploy cloud service, and related tools.",
+    "lastChecked": "2026-02-02",
+    "sections": ["Runtime Documentation", "Deno Deploy", "Subhosting", "Examples"]
+  }
+]

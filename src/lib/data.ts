@@ -1,6 +1,7 @@
 import newsData from "@/data/news.json";
 import skillsData from "@/data/skills.json";
 import mcpData from "@/data/mcp-servers.json";
+import llmsTxtData from "@/data/llms-txt.json";
 
 export type NewsItem = {
   id: string;
@@ -77,6 +78,47 @@ export function mcpServersToMarkdown(servers: McpServer[]): string {
     lines.push(`- **Install:** \`${server.install_cmd}\``);
     lines.push(`- **GitHub:** [${server.github}](${server.github})`);
     lines.push(`- **Tags:** ${server.tags.join(", ")}`);
+    lines.push("");
+    lines.push("---");
+    lines.push("");
+  }
+
+  return lines.join("\n");
+}
+
+export type LlmsTxtEntry = {
+  id: string;
+  domain: string;
+  url: string;
+  title: string;
+  description: string;
+  lastChecked: string;
+  sections: string[];
+};
+
+export function getLlmsTxtEntries(): LlmsTxtEntry[] {
+  return llmsTxtData as LlmsTxtEntry[];
+}
+
+export function llmsTxtToMarkdown(entries: LlmsTxtEntry[]): string {
+  const lines = [
+    "# llms.txt Directory — forAgents.dev",
+    `> The first directory of llms.txt files on the web`,
+    `> ${entries.length} sites indexed · Last updated: ${new Date().toISOString().split("T")[0]}`,
+    "",
+    "Sites that serve llms.txt files — machine-readable documentation for AI agents.",
+    "",
+  ];
+
+  for (const entry of entries) {
+    lines.push(`## ${entry.title}`);
+    lines.push("");
+    lines.push(entry.description);
+    lines.push("");
+    lines.push(`- **Domain:** ${entry.domain}`);
+    lines.push(`- **llms.txt:** [${entry.url}](${entry.url})`);
+    lines.push(`- **Sections:** ${entry.sections.join(", ")}`);
+    lines.push(`- **Last Checked:** ${entry.lastChecked}`);
     lines.push("");
     lines.push("---");
     lines.push("");
