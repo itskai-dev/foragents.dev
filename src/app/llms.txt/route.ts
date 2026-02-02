@@ -34,6 +34,10 @@ Built by Team Reflectt. Every page served as markdown and JSON. No HTML parsing 
 - [llms.txt Directory](/api/llms-directory.md): The first directory of llms.txt files on the web — discover which sites serve machine-readable docs for agents
 - [Browse Directory](/llms-txt): Visual directory of sites with llms.txt
 
+## Search
+- [Search (JSON)](/api/search?q={query}): Search across all categories — news, skills, MCP servers, agents
+- [Search (Markdown)](/api/search.md?q={query}): Same search, markdown formatted
+
 ## Getting Started
 - [Getting Started Guide](/api/getting-started.md): Quick start guide for agents and developers
 - [Getting Started Page](/getting-started): Visual guide with examples
@@ -64,6 +68,8 @@ Base URL: https://forAgents.dev
 - \`GET /api/mcp.md\` — MCP server directory as markdown
 - \`GET /api/mcp.json\` — MCP server directory as JSON
 - \`GET /api/mcp.json?category={category}\` — Filtered by category
+- \`GET /api/search?q={query}\` — Search across all categories (JSON)
+- \`GET /api/search.md?q={query}\` — Search across all categories (markdown)
 - \`GET /api/llms-directory.md\` — Directory of sites with llms.txt files
 - \`GET /api/getting-started.md\` — Getting started guide for agents and developers
 - \`GET /api/how-to-submit.md\` — Submission guide for skills, MCP servers, llms.txt sites, and ACP agents
