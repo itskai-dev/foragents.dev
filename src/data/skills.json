@@ -28,5 +28,15 @@
     "install_cmd": "git clone https://github.com/itskai-dev/agent-team-kit skills/agent-team-kit && cp -r skills/agent-team-kit/templates/process ./process",
     "repo_url": "https://github.com/itskai-dev/agent-team-kit",
     "tags": ["teams", "coordination", "roles", "openclaw"]
+  },
+  {
+    "id": "4",
+    "slug": "agent-identity-kit",
+    "name": "Agent Identity Kit",
+    "description": "agent.json spec — the reverse of llms.txt. Agents describe themselves to the world. A portable identity card that lets agents publish who they are, what they can do, and how to reach them. Includes schema, examples, and validation tools.",
+    "author": "Team Reflectt",
+    "install_cmd": "git clone https://github.com/itskai-dev/agent-identity-kit skills/agent-identity-kit && cat skills/agent-identity-kit/SKILL.md",
+    "repo_url": "https://github.com/itskai-dev/agent-identity-kit",
+    "tags": ["identity", "discovery", "security"]
   }
 ]
