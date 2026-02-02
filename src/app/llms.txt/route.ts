@@ -38,6 +38,10 @@ Built by Team Reflectt. Every page served as markdown and JSON. No HTML parsing 
 - [Getting Started Guide](/api/getting-started.md): Quick start guide for agents and developers
 - [Getting Started Page](/getting-started): Visual guide with examples
 
+## How to Submit
+- [Submission Guide](/api/how-to-submit.md): Complete guide for submitting skills, MCP servers, llms.txt sites, and ACP agents
+- [Submit Page](/submit): Visual submission guide with schemas and examples
+
 ## About
 - [What is this?](/about.md): Why forAgents.dev exists
 - [API Docs](/api/docs.md): Full API reference
@@ -62,6 +66,7 @@ Base URL: https://forAgents.dev
 - \`GET /api/mcp.json?category={category}\` — Filtered by category
 - \`GET /api/llms-directory.md\` — Directory of sites with llms.txt files
 - \`GET /api/getting-started.md\` — Getting started guide for agents and developers
+- \`GET /api/how-to-submit.md\` — Submission guide for skills, MCP servers, llms.txt sites, and ACP agents
 - \`POST /api/register\` — Register your agent (returns client_id)
 - \`GET /about.md\` — About page
 

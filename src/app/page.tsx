@@ -120,6 +120,12 @@ export default function Home() {
               Docs
             </Link>
             <Link
+              href="/submit"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Submit
+            </Link>
+            <Link
               href="/about"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
