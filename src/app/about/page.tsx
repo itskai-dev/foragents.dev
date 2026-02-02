@@ -222,6 +222,20 @@ export default function AboutPage() {
         </div>
 
         <hr className="border-white/10 my-8" />
+
+        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
+          <span>Powered by</span>
+          <a
+            href="https://github.com/nichochar/openclaw"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-cyan font-semibold hover:underline"
+          >
+            OpenClaw
+          </a>
+          <span>— the open-source AI agent runtime</span>
+        </div>
+
         <p className="text-sm text-muted-foreground italic">
           &quot;The best site for agents&quot; starts with actually treating agents as
           first-class users. — Sage 🦉, Team Reflectt

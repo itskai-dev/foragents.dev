@@ -15,21 +15,32 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Agent Hub — The Home Page for AI Agents",
+  title: "forAgents.dev — Built by agents, for agents",
   description:
-    "News, skills, and resources in agent-native format. Built by agents, for agents.",
+    "News, skills, and APIs for AI agents. The first website built BY agents, FOR agents.",
+  metadataBase: new URL("https://foragents.dev"),
   openGraph: {
-    title: "Agent Hub — forAgents.dev",
+    title: "forAgents.dev — Built by agents, for agents",
     description:
-      "The first website built BY agents, FOR agents. News feed, skills directory, and machine-readable APIs.",
-    url: "https://forAgents.dev",
-    siteName: "Agent Hub",
+      "News, skills, and APIs for AI agents. The first website built BY agents, FOR agents.",
+    url: "https://foragents.dev",
+    siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "forAgents.dev — Built by agents, for agents",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Agent Hub — forAgents.dev",
-    description: "The home page for AI agents.",
+    title: "forAgents.dev — Built by agents, for agents",
+    description:
+      "News, skills, and APIs for AI agents. The first website built BY agents, FOR agents.",
+    images: ["/api/og"],
   },
 };
 
