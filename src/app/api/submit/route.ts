@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { getSupabase } from "@/lib/supabase";
 
 const SUBMISSIONS_PATH = path.join(process.cwd(), "data", "submissions.json");
 
@@ -17,6 +18,8 @@ type Submission = {
   submitted_at: string;
 };
 
+// ---------- JSON file helpers (fallback) ----------
+
 async function readSubmissions(): Promise<Submission[]> {
   try {
     const raw = await fs.readFile(SUBMISSIONS_PATH, "utf-8");
@@ -30,80 +33,157 @@ async function writeSubmissions(submissions: Submission[]): Promise<void> {
   await fs.writeFile(SUBMISSIONS_PATH, JSON.stringify(submissions, null, 2));
 }
 
+// ---------- Validation ----------
+
+function validate(body: Record<string, unknown>): string[] {
+  const { type, name, description, url, author, tags } = body;
+  const errors: string[] = [];
+  if (!type || !["skill", "mcp", "agent"].includes(type as string)) {
+    errors.push('type must be one of: "skill", "mcp", "agent"');
+  }
+  if (!name || typeof name !== "string" || name.trim().length === 0) {
+    errors.push("name is required");
+  }
+  if (!description || typeof description !== "string" || description.trim().length === 0) {
+    errors.push("description is required");
+  }
+  if (!url || typeof url !== "string" || !(url as string).startsWith("http")) {
+    errors.push("url is required and must be a valid URL");
+  }
+  if (!author || typeof author !== "string" || author.trim().length === 0) {
+    errors.push("author is required");
+  }
+  if (!Array.isArray(tags) || tags.length === 0) {
+    errors.push("tags must be a non-empty array of strings");
+  }
+  return errors;
+}
+
+// ---------- Supabase submit ----------
+
+async function submitToSupabase(body: Record<string, unknown>) {
+  const supabase = getSupabase()!;
+  const { type, name, description, url, author, tags, install_cmd } = body;
+
+  // Check duplicate by URL
+  const { data: existing } = await supabase
+    .from("submissions")
+    .select("id")
+    .eq("url", (url as string).trim())
+    .eq("status", "pending")
+    .limit(1);
+
+  if (existing && existing.length > 0) {
+    return {
+      error: "A submission with this URL is already pending review",
+      status: 409,
+    };
+  }
+
+  const row = {
+    type,
+    name: (name as string).trim(),
+    description: (description as string).trim(),
+    url: (url as string).trim(),
+    author: (author as string).trim(),
+    tags: (tags as string[]).map((t) => t.trim().toLowerCase()),
+    install_cmd: install_cmd ? (install_cmd as string).trim() : null,
+    status: "pending",
+  };
+
+  const { data, error } = await supabase
+    .from("submissions")
+    .insert(row)
+    .select("id, type, name, status, created_at")
+    .single();
+
+  if (error) {
+    console.error("Supabase insert error:", error);
+    // Unique constraint on url
+    if (error.code === "23505") {
+      return { error: "A submission with this URL already exists", status: 409 };
+    }
+    return { error: "Database error", status: 500 };
+  }
+
+  return {
+    success: true,
+    submission: {
+      id: data.id,
+      type: data.type,
+      name: data.name,
+      status: data.status,
+      submitted_at: data.created_at,
+    },
+    status: 201,
+  };
+}
+
+// ---------- JSON file submit (fallback) ----------
+
+async function submitToFile(body: Record<string, unknown>) {
+  const { type, name, description, url, author, tags, install_cmd } = body;
+
+  const submissions = await readSubmissions();
+  const duplicate = submissions.find(
+    (s) => s.name.toLowerCase() === (name as string).trim().toLowerCase() && s.status === "pending"
+  );
+  if (duplicate) {
+    return { error: "A submission with this name is already pending review", status: 409 };
+  }
+
+  const submission: Submission = {
+    id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    type: type as Submission["type"],
+    name: (name as string).trim(),
+    description: (description as string).trim(),
+    url: (url as string).trim(),
+    author: (author as string).trim(),
+    tags: (tags as string[]).map((t) => t.trim().toLowerCase()),
+    install_cmd: install_cmd ? (install_cmd as string).trim() : undefined,
+    status: "pending",
+    submitted_at: new Date().toISOString(),
+  };
+
+  submissions.push(submission);
+  await writeSubmissions(submissions);
+
+  return {
+    success: true,
+    submission: {
+      id: submission.id,
+      type: submission.type,
+      name: submission.name,
+      status: submission.status,
+      submitted_at: submission.submitted_at,
+    },
+    status: 201,
+  };
+}
+
+// ---------- Route handlers ----------
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    // Validate required fields
-    const { type, name, description, url, author, tags, install_cmd } = body;
-
-    const errors: string[] = [];
-    if (!type || !["skill", "mcp", "agent"].includes(type)) {
-      errors.push('type must be one of: "skill", "mcp", "agent"');
-    }
-    if (!name || typeof name !== "string" || name.trim().length === 0) {
-      errors.push("name is required");
-    }
-    if (!description || typeof description !== "string" || description.trim().length === 0) {
-      errors.push("description is required");
-    }
-    if (!url || typeof url !== "string" || !url.startsWith("http")) {
-      errors.push("url is required and must be a valid URL");
-    }
-    if (!author || typeof author !== "string" || author.trim().length === 0) {
-      errors.push("author is required");
-    }
-    if (!Array.isArray(tags) || tags.length === 0) {
-      errors.push("tags must be a non-empty array of strings");
-    }
-
+    const errors = validate(body);
     if (errors.length > 0) {
-      return NextResponse.json(
-        { error: "Validation failed", details: errors },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 });
     }
 
-    // Check for duplicate names
-    const submissions = await readSubmissions();
-    const duplicate = submissions.find(
-      (s) => s.name.toLowerCase() === name.trim().toLowerCase() && s.status === "pending"
-    );
-    if (duplicate) {
-      return NextResponse.json(
-        { error: "A submission with this name is already pending review" },
-        { status: 409 }
-      );
+    const useSupabase = !!getSupabase();
+    const result = useSupabase ? await submitToSupabase(body) : await submitToFile(body);
+
+    if ("error" in result) {
+      return NextResponse.json({ error: result.error }, { status: result.status });
     }
-
-    // Create submission
-    const submission: Submission = {
-      id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      type,
-      name: name.trim(),
-      description: description.trim(),
-      url: url.trim(),
-      author: author.trim(),
-      tags: tags.map((t: string) => t.trim().toLowerCase()),
-      ...(install_cmd && { install_cmd: install_cmd.trim() }),
-      status: "pending",
-      submitted_at: new Date().toISOString(),
-    };
-
-    submissions.push(submission);
-    await writeSubmissions(submissions);
 
     return NextResponse.json(
       {
         success: true,
         message: "Submission received! It will be reviewed by the forAgents.dev team.",
-        submission: {
-          id: submission.id,
-          type: submission.type,
-          name: submission.name,
-          status: submission.status,
-          submitted_at: submission.submitted_at,
-        },
+        submission: result.submission,
       },
       { status: 201 }
     );
