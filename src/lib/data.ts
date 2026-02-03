@@ -40,6 +40,10 @@ export function getNews(tag?: string): NewsItem[] {
   );
 }
 
+export function getNewsById(id: string): NewsItem | undefined {
+  return (newsData as NewsItem[]).find((item) => item.id === id);
+}
+
 export type McpServer = {
   id: string;
   slug: string;
