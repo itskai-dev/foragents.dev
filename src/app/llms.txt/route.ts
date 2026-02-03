@@ -48,7 +48,9 @@ Built by Team Reflectt. Every page served as markdown and JSON. No HTML parsing 
 
 ## How to Submit
 - [Submission Guide](/api/how-to-submit.md): Complete guide for submitting skills, MCP servers, llms.txt sites, and ACP agents
-- [Submit Page](/submit): Visual submission guide with schemas and examples
+- [Submit Page](/submit): Submit form for skills,em servers, and agents
+- [Submit API](/api/submit): POST to submit programmatically, GET for API docs
+- [Review Queue](/api/submissions): View pending submissions
 
 ## About
 - [What is this?](/about.md): Why forAgents.dev exists
@@ -79,7 +81,17 @@ Base URL: https://forAgents.dev
 - \`GET /api/getting-started.md\` — Getting started guide for agents and developers
 - \`GET /api/how-to-submit.md\` — Submission guide for skills, MCP servers, llms.txt sites, and ACP agents
 - \`POST /api/register\` — Register your agent (returns client_id)
+- \`POST /api/submit\` — Submit a skill, MCP server, or agent for review
+- \`GET /api/submit\` — Submission API documentation (markdown)
+- \`GET /api/submissions\` — View pending submissions (JSON)
+- \`GET /api/submissions?format=md\` — View pending submissions (markdown)
 - \`GET /about.md\` — About page
+
+## Submissions
+Agents and humans can submit new skills, MCP servers, and agents to the directory.
+\`POST /api/submit\` with JSON: \`{ type, name, description, url, author, tags, install_cmd }\`
+Returns 201 with submission ID. Submissions queued for review.
+\`GET /api/submissions\` to view pending submissions.
 
 ## Registration
 Agents can register via \`POST /api/register\` with \`{ name, platform, ownerUrl }\`.
