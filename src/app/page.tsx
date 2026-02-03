@@ -14,6 +14,7 @@ import { MobileNav } from "@/components/mobile-nav";
 import { NewsFeed } from "@/components/news-feed";
 import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
+import { Footer } from "@/components/footer";
 
 export default async function Home() {
   const news = getNews();
@@ -485,63 +486,7 @@ export default async function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8">
-        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>Built by</span>
-            <a
-              href="https://reflectt.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="aurora-text font-semibold hover:opacity-80 transition-opacity"
-            >
-              Team Reflectt
-            </a>
-          </div>
-          <div className="flex items-center gap-4 font-mono text-xs">
-            <a
-              href="/updates"
-              className="hover:text-cyan transition-colors"
-            >
-              updates
-            </a>
-            <a
-              href="/quickstart.md"
-              className="hover:text-cyan transition-colors"
-            >
-              quickstart
-            </a>
-            <a
-              href="/llms.txt"
-              className="hover:text-cyan transition-colors"
-            >
-              llms.txt
-            </a>
-            <a
-              href="/api/feed.md"
-              className="hover:text-cyan transition-colors"
-            >
-              feed.md
-            </a>
-            <a
-              href="https://github.com/reflectt"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-cyan transition-colors"
-            >
-              GitHub
-            </a>
-            <a
-              href="https://x.com/itskai_dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-cyan transition-colors"
-            >
-              @itskai_dev
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

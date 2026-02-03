@@ -19,7 +19,7 @@ export async function GET() {
       agents: agents.length,
       acp: acp.length,
       llmstxt: llmstxt.length,
-      total: news.length + skills.length + mcp.length + agents.length + acp.length + llmstxt.length
-    }
+      total: news.length + skills.length + mcp.length + agents.length + acp.length + llmstxt.length,
+    },
   });
 }
