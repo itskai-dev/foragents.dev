@@ -1,140 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  getNews,
-  getSkills,
-  getMcpServers,
-  getAgents,
-  getAcpAgents,
-  getLlmsTxtEntries,
-  type NewsItem,
-  type Skill,
-  type McpServer,
-  type Agent,
-  type AcpAgent,
-  type LlmsTxtEntry,
-} from "@/lib/data";
+import { getSupabase } from "@/lib/supabase";
 
-/**
- * Score how well an item matches a query.
- * Returns 0 for no match, higher = more relevant.
- * - Exact name match: 100
- * - Name contains query: 50
- * - Tags/category exact match: 30
- * - Description contains query: 10
- * - Multiple term matches boost score
- */
-function score(query: string, ...fields: { value: string | string[]; weight: number }[]): number {
-  const q = query.toLowerCase();
-  const terms = q.split(/\s+/).filter(Boolean);
-  let total = 0;
+type SearchResult = {
+  title: string;
+  description: string;
+  url: string;
+  type: string;
+};
 
-  for (const field of fields) {
-    const values = Array.isArray(field.value) ? field.value : [field.value];
-    for (const v of values) {
-      if (!v) continue;
-      const lower = v.toLowerCase();
-      if (lower === q) {
-        total += field.weight * 10; // exact match
-      } else if (lower.includes(q)) {
-        total += field.weight * 5; // full query substring
-      } else {
-        // partial term matching
-        for (const term of terms) {
-          if (lower.includes(term)) {
-            total += field.weight;
-          }
-        }
-      }
-    }
-  }
-
-  return total;
-}
-
-function scored<T>(items: T[], query: string, scorer: (item: T) => number): T[] {
-  return items
-    .map((item) => ({ item, score: scorer(item) }))
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .map((x) => x.item);
-}
-
-export type SearchResults = {
+type SearchResults = {
   query: string;
-  news: NewsItem[];
-  skills: Skill[];
-  mcpServers: McpServer[];
-  agents: Agent[];
-  acpAgents: AcpAgent[];
-  llmsTxtSites: LlmsTxtEntry[];
+  news: SearchResult[];
+  skills: SearchResult[];
+  agents: SearchResult[];
+  mcp_servers: SearchResult[];
+  llmstxt: SearchResult[];
   total: number;
 };
 
-export function search(query: string): SearchResults {
-  const news = scored(getNews(), query, (n) =>
-    score(query,
-      { value: n.title, weight: 10 },
-      { value: n.tags, weight: 8 },
-      { value: n.summary, weight: 3 },
-    )
-  );
-
-  const skills = scored(getSkills(), query, (s) =>
-    score(query,
-      { value: s.name, weight: 10 },
-      { value: s.tags, weight: 8 },
-      { value: s.description, weight: 3 },
-    )
-  );
-
-  const mcpServers = scored(getMcpServers(), query, (m) =>
-    score(query,
-      { value: m.name, weight: 10 },
-      { value: m.category, weight: 8 },
-      { value: m.tags, weight: 8 },
-      { value: m.description, weight: 3 },
-    )
-  );
-
-  const agents = scored(getAgents(), query, (a) =>
-    score(query,
-      { value: a.name, weight: 10 },
-      { value: a.role, weight: 6 },
-      { value: a.skills, weight: 6 },
-      { value: a.description, weight: 3 },
-    )
-  );
-
-  const acpAgents = scored(getAcpAgents(), query, (a) =>
-    score(query,
-      { value: a.name, weight: 10 },
-      { value: a.category, weight: 8 },
-      { value: a.tags, weight: 8 },
-      { value: a.description, weight: 3 },
-    )
-  );
-
-  const llmsTxtSites = scored(getLlmsTxtEntries(), query, (l) =>
-    score(query,
-      { value: l.title, weight: 10 },
-      { value: l.domain, weight: 8 },
-      { value: l.sections, weight: 6 },
-      { value: l.description, weight: 3 },
-    )
-  );
-
-  return {
-    query,
-    news,
-    skills,
-    mcpServers,
-    agents,
-    acpAgents,
-    llmsTxtSites,
-    total: news.length + skills.length + mcpServers.length + agents.length + acpAgents.length + llmsTxtSites.length,
-  };
-}
-
+/**
+ * Search endpoint for forAgents.dev
+ * GET /api/search?q=query
+ * Returns JSON by default, markdown if Accept header requests it
+ */
 export async function GET(request: NextRequest) {
   const q = request.nextUrl.searchParams.get("q")?.trim();
 
@@ -145,9 +33,159 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const results = search(q);
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json(
+      { error: "Database not configured" },
+      { status: 503 }
+    );
+  }
 
-  return NextResponse.json(results, {
-    headers: { "Cache-Control": "public, max-age=60" },
-  });
+  // Search pattern for ILIKE queries
+  const pattern = `%${q}%`;
+
+  try {
+    // Search news table
+    const { data: newsData } = await supabase
+      .from("news")
+      .select("id, title, summary, source_url")
+      .or(`title.ilike.${pattern},summary.ilike.${pattern}`)
+      .order("published_at", { ascending: false })
+      .limit(5);
+
+    const news: SearchResult[] = (newsData || []).map((item) => ({
+      title: item.title,
+      description: item.summary || "",
+      url: item.source_url,
+      type: "news",
+    }));
+
+    // Search skills table
+    const { data: skillsData } = await supabase
+      .from("skills")
+      .select("slug, name, description")
+      .or(`name.ilike.${pattern},description.ilike.${pattern}`)
+      .limit(5);
+
+    const skills: SearchResult[] = (skillsData || []).map((item) => ({
+      title: item.name,
+      description: item.description,
+      url: `/skills/${item.slug}`,
+      type: "skill",
+    }));
+
+    // Search agents table
+    const { data: agentsData } = await supabase
+      .from("agents")
+      .select("id, name, platform, owner_url")
+      .or(`name.ilike.${pattern},platform.ilike.${pattern}`)
+      .limit(5);
+
+    const agents: SearchResult[] = (agentsData || []).map((item) => ({
+      title: item.name,
+      description: `${item.platform} agent`,
+      url: item.owner_url || `/agents/${item.id}`,
+      type: "agent",
+    }));
+
+    // MCP servers and llmstxt tables don't exist yet, return empty arrays
+    const mcp_servers: SearchResult[] = [];
+    const llmstxt: SearchResult[] = [];
+
+    const results: SearchResults = {
+      query: q,
+      news,
+      skills,
+      agents,
+      mcp_servers,
+      llmstxt,
+      total: news.length + skills.length + agents.length,
+    };
+
+    // Check if client wants markdown
+    const acceptHeader = request.headers.get("accept") || "";
+    const wantsMarkdown = 
+      acceptHeader.includes("text/markdown") || 
+      acceptHeader.includes("text/plain");
+
+    if (wantsMarkdown) {
+      const markdown = formatResultsAsMarkdown(results);
+      return new NextResponse(markdown, {
+        headers: {
+          "Content-Type": "text/markdown; charset=utf-8",
+          "Cache-Control": "public, max-age=60",
+        },
+      });
+    }
+
+    return NextResponse.json(results, {
+      headers: { "Cache-Control": "public, max-age=60" },
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+    return NextResponse.json(
+      { error: "Search failed" },
+      { status: 500 }
+    );
+  }
+}
+
+function formatResultsAsMarkdown(results: SearchResults): string {
+  const lines = [
+    `# Search Results for "${results.query}"`,
+    "",
+    `**Total:** ${results.total} results`,
+    "",
+  ];
+
+  if (results.news.length > 0) {
+    lines.push("## 📰 News", "");
+    for (const item of results.news) {
+      lines.push(`- **[${item.title}](${item.url})**`);
+      lines.push(`  ${item.description}`);
+      lines.push("");
+    }
+  }
+
+  if (results.skills.length > 0) {
+    lines.push("## 🛠️ Skills", "");
+    for (const item of results.skills) {
+      lines.push(`- **[${item.title}](${item.url})**`);
+      lines.push(`  ${item.description}`);
+      lines.push("");
+    }
+  }
+
+  if (results.agents.length > 0) {
+    lines.push("## 🤖 Agents", "");
+    for (const item of results.agents) {
+      lines.push(`- **[${item.title}](${item.url})**`);
+      lines.push(`  ${item.description}`);
+      lines.push("");
+    }
+  }
+
+  if (results.mcp_servers.length > 0) {
+    lines.push("## 🔌 MCP Servers", "");
+    for (const item of results.mcp_servers) {
+      lines.push(`- **[${item.title}](${item.url})**`);
+      lines.push(`  ${item.description}`);
+      lines.push("");
+    }
+  }
+
+  if (results.llmstxt.length > 0) {
+    lines.push("## 📄 llms.txt Sites", "");
+    for (const item of results.llmstxt) {
+      lines.push(`- **[${item.title}](${item.url})**`);
+      lines.push(`  ${item.description}`);
+      lines.push("");
+    }
+  }
+
+  if (results.total === 0) {
+    lines.push("No results found.");
+  }
+
+  return lines.join("\n");
 }

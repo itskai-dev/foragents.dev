@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { search } from "@/app/api/search/route";
 
+/**
+ * Markdown variant of search endpoint
+ * GET /api/search.md?q=query
+ * Always returns markdown format
+ */
 export async function GET(request: NextRequest) {
   const q = request.nextUrl.searchParams.get("q")?.trim();
 
@@ -11,79 +15,27 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const results = search(q);
-  const lines: string[] = [
-    `# Search Results — "${q}"`,
-    `> ${results.total} results across all categories`,
-    "",
-  ];
+  // Make an internal request to the main search API with markdown accept header
+  const baseUrl = request.nextUrl.origin;
+  const searchUrl = new URL("/api/search", baseUrl);
+  searchUrl.searchParams.set("q", q);
 
-  if (results.news.length > 0) {
-    lines.push(`## News (${results.news.length})`);
-    lines.push("");
-    for (const item of results.news) {
-      lines.push(`- **${item.title}** — ${item.summary}`);
-      lines.push(`  Source: [${item.source_name}](${item.source_url}) · ${item.published_at}`);
-    }
-    lines.push("");
+  const response = await fetch(searchUrl.toString(), {
+    headers: {
+      Accept: "text/markdown",
+    },
+  });
+
+  if (!response.ok) {
+    return new NextResponse(`Search failed: ${response.statusText}`, {
+      status: response.status,
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
+    });
   }
 
-  if (results.skills.length > 0) {
-    lines.push(`## Skills (${results.skills.length})`);
-    lines.push("");
-    for (const skill of results.skills) {
-      lines.push(`- **${skill.name}** — ${skill.description}`);
-      lines.push(`  Install: \`${skill.install_cmd}\` · Tags: ${skill.tags.join(", ")}`);
-    }
-    lines.push("");
-  }
+  const markdown = await response.text();
 
-  if (results.mcpServers.length > 0) {
-    lines.push(`## MCP Servers (${results.mcpServers.length})`);
-    lines.push("");
-    for (const server of results.mcpServers) {
-      lines.push(`- **${server.name}** — ${server.description}`);
-      lines.push(`  Category: ${server.category} · Tags: ${server.tags.join(", ")}`);
-    }
-    lines.push("");
-  }
-
-  if (results.agents.length > 0) {
-    lines.push(`## Agents (${results.agents.length})`);
-    lines.push("");
-    for (const agent of results.agents) {
-      lines.push(`- **${agent.name}** (@${agent.handle}) — ${agent.description}`);
-      lines.push(`  Role: ${agent.role} · Platforms: ${agent.platforms.join(", ")}`);
-    }
-    lines.push("");
-  }
-
-  if (results.acpAgents.length > 0) {
-    lines.push(`## ACP Agents (${results.acpAgents.length})`);
-    lines.push("");
-    for (const agent of results.acpAgents) {
-      lines.push(`- **${agent.name}** — ${agent.description}`);
-      lines.push(`  Category: ${agent.category} · IDEs: ${agent.ides.join(", ")} · Tags: ${agent.tags.join(", ")}`);
-    }
-    lines.push("");
-  }
-
-  if (results.llmsTxtSites.length > 0) {
-    lines.push(`## llms.txt Sites (${results.llmsTxtSites.length})`);
-    lines.push("");
-    for (const site of results.llmsTxtSites) {
-      lines.push(`- **${site.title}** (${site.domain}) — ${site.description}`);
-      lines.push(`  URL: [${site.url}](${site.url}) · Sections: ${site.sections.join(", ")}`);
-    }
-    lines.push("");
-  }
-
-  if (results.total === 0) {
-    lines.push("No results found.");
-    lines.push("");
-  }
-
-  return new NextResponse(lines.join("\n"), {
+  return new NextResponse(markdown, {
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
       "Cache-Control": "public, max-age=60",
