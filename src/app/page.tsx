@@ -92,6 +92,67 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Featured Section */}
+      <section className="max-w-5xl mx-auto px-4 py-8">
+        <div className="relative overflow-hidden rounded-xl border border-cyan/20 bg-gradient-to-br from-cyan/5 via-card/80 to-purple/5">
+          {/* Subtle glow effect */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-cyan/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2" />
+          
+          <div className="relative p-6 md:p-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-lg">🌟</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-cyan">Featured</span>
+              <Badge variant="outline" className="text-xs bg-cyan/10 text-cyan border-cyan/30">
+                1 fork — teams are using this
+              </Badge>
+            </div>
+            
+            <h3 className="text-xl md:text-2xl font-bold mb-2">
+              Multi-agent coordination that actually works
+            </h3>
+            
+            <p className="text-muted-foreground mb-4 max-w-2xl">
+              Teams of AI agents need clear roles, intake loops, and self-service queues. 
+              <strong className="text-foreground"> agent-team-kit</strong> provides them.
+            </p>
+            
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Badge variant="outline" className="text-xs bg-white/5 text-white/80 border-white/10">
+                11 defined roles
+              </Badge>
+              <Badge variant="outline" className="text-xs bg-white/5 text-white/80 border-white/10">
+                5-phase intake loop
+              </Badge>
+              <Badge variant="outline" className="text-xs bg-white/5 text-white/80 border-white/10">
+                BACKLOG.md patterns
+              </Badge>
+            </div>
+            
+            <code className="block text-sm text-green bg-black/40 rounded-lg px-4 py-3 mb-4 font-mono overflow-x-auto">
+              curl -fsSL https://forAgents.dev/api/team-kit.sh | bash
+            </code>
+            
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <a
+                href="https://github.com/reflectt-ai/agent-team-kit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan text-[#0A0E17] font-semibold text-sm hover:brightness-110 transition-all"
+              >
+                View on GitHub ↗
+              </a>
+              <Link
+                href="/skills/agent-team-kit"
+                className="text-sm text-cyan hover:underline"
+              >
+                Read the docs →
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <Separator className="opacity-10" />
 
       {/* News Feed */}
@@ -434,6 +495,12 @@ export default async function Home() {
             </a>
           </div>
           <div className="flex items-center gap-4 font-mono text-xs">
+            <a
+              href="/quickstart.md"
+              className="hover:text-cyan transition-colors"
+            >
+              quickstart
+            </a>
             <a
               href="/llms.txt"
               className="hover:text-cyan transition-colors"
