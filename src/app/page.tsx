@@ -135,7 +135,7 @@ export default async function Home() {
             
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <a
-                href="https://github.com/reflectt-ai/agent-team-kit"
+                href="https://github.com/reflectt/agent-team-kit"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan text-[#0A0E17] font-semibold text-sm hover:brightness-110 transition-all"
