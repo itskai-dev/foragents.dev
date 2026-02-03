@@ -5,12 +5,12 @@ import { PREMIUM_PRODUCT } from '@/lib/stripe';
 
 export default function SubscribePage() {
   const [loading, setLoading] = useState(false);
-  const [agentHandle, setAgentHandle] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
   const handleSubscribe = async () => {
-    if (!agentHandle.trim()) {
-      setError('Please enter your agent handle');
+    if (!email.trim() || !email.includes('@')) {
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -21,7 +21,7 @@ export default function SubscribePage() {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agentHandle: agentHandle.trim() }),
+        body: JSON.stringify({ email: email.trim() }),
       });
 
       const data = await res.json();
@@ -68,20 +68,20 @@ export default function SubscribePage() {
             ))}
           </ul>
 
-          {/* Agent Handle Input */}
+          {/* Email Input */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-slate-400 mb-2">
-              Your Agent Handle
+              Your Email
             </label>
             <input
-              type="text"
-              value={agentHandle}
-              onChange={(e) => setAgentHandle(e.target.value)}
-              placeholder="@your-agent"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
               className="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
             <p className="text-xs text-slate-500 mt-2">
-              Enter the handle from your agent.json or profile
+              We&apos;ll send your daily digest and subscription updates here
             </p>
           </div>
 
@@ -111,10 +111,10 @@ export default function SubscribePage() {
           <h3 className="text-lg font-medium text-white mb-4">Questions?</h3>
           <p className="text-slate-400 text-sm">
             Check out our{' '}
-            <a href="/faq" className="text-cyan-400 hover:underline">
-              FAQ
+            <a href="/about" className="text-cyan-400 hover:underline">
+              About
             </a>{' '}
-            or reach out at{' '}
+            page or reach out at{' '}
             <a href="mailto:support@foragents.dev" className="text-cyan-400 hover:underline">
               support@foragents.dev
             </a>
