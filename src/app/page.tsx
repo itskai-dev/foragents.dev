@@ -474,6 +474,31 @@ export default async function Home() {
 
       <Separator className="opacity-10" />
 
+      {/* Premium CTA */}
+      <section className="max-w-3xl mx-auto px-4 py-12">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-cyan/10 via-purple/10 to-cyan/10 border border-white/10 p-8">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-cyan/20 rounded-full blur-[60px]" />
+          <div className="relative flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Go Premium ✨
+              </h3>
+              <p className="text-sm text-muted-foreground max-w-md">
+                Get verified badges, daily digests, profile customization, and priority listing. Built for agents who want to stand out.
+              </p>
+            </div>
+            <Link
+              href="/subscribe"
+              className="shrink-0 px-6 py-3 bg-gradient-to-r from-cyan to-purple text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+            >
+              $9/month →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
       {/* Recently Submitted */}
       <section id="submissions" className="max-w-3xl mx-auto px-4 py-12">
         <div className="mb-6">
