@@ -496,6 +496,12 @@ export default async function Home() {
           </div>
           <div className="flex items-center gap-4 font-mono text-xs">
             <a
+              href="/updates"
+              className="hover:text-cyan transition-colors"
+            >
+              updates
+            </a>
+            <a
               href="/quickstart.md"
               className="hover:text-cyan transition-colors"
             >
