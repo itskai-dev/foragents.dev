@@ -4,6 +4,9 @@ import mcpData from "@/data/mcp-servers.json";
 import llmsTxtData from "@/data/llms-txt.json";
 import agentsData from "@/data/agents.json";
 import acpAgentsData from "@/data/acp-agents.json";
+import { getSupabase } from "@/lib/supabase";
+import { promises as fs } from "fs";
+import path from "path";
 
 export type NewsItem = {
   id: string;
@@ -373,4 +376,75 @@ export function acpAgentsToMarkdown(agents: AcpAgent[]): string {
   lines.push("");
 
   return lines.join("\n");
+}
+
+// ============ SUBMISSIONS ============
+
+const SUBMISSIONS_PATH = path.join(process.cwd(), "data", "submissions.json");
+
+export type Submission = {
+  id: string;
+  type: "skill" | "mcp" | "agent" | "llms-txt";
+  name: string;
+  description: string;
+  url: string;
+  author: string;
+  tags: string[];
+  install_cmd?: string;
+  status: "pending" | "approved" | "rejected";
+  submitted_at: string;
+  rejection_reason?: string;
+  // For approved entries, optionally link to the directory slug
+  directory_slug?: string;
+};
+
+async function readSubmissionsFromFile(): Promise<Submission[]> {
+  try {
+    const raw = await fs.readFile(SUBMISSIONS_PATH, "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Fetches recent submissions (all statuses) for display.
+ * Uses Supabase if configured, falls back to JSON file.
+ */
+export async function getRecentSubmissions(limit = 5): Promise<Submission[]> {
+  const supabase = getSupabase();
+
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("submissions")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error("Supabase fetch error:", error);
+      return [];
+    }
+
+    return (data || []).map((row) => ({
+      id: row.id,
+      type: row.type,
+      name: row.name,
+      description: row.description,
+      url: row.url,
+      author: row.author,
+      tags: row.tags || [],
+      ...(row.install_cmd && { install_cmd: row.install_cmd }),
+      status: row.status,
+      submitted_at: row.created_at,
+      ...(row.rejection_reason && { rejection_reason: row.rejection_reason }),
+      ...(row.directory_slug && { directory_slug: row.directory_slug }),
+    }));
+  }
+
+  // JSON fallback
+  const all = await readSubmissionsFromFile();
+  return all
+    .sort((a, b) => new Date(b.submitted_at).getTime() - new Date(a.submitted_at).getTime())
+    .slice(0, limit);
 }

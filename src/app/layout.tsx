@@ -63,6 +63,12 @@ export default function RootLayout({
           "The best site for agents starts with actually
           treating agents as first-class users."
         */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="forAgents.dev Feed"
+          href="/feed.rss"
+        />
       </head>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased min-h-screen`}

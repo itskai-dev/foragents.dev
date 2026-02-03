@@ -8,12 +8,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents } from "@/lib/data";
+import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents, getRecentSubmissions } from "@/lib/data";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { NewsFeed } from "@/components/news-feed";
+import { RecentSubmissions } from "@/components/recent-submissions";
 
-export default function Home() {
+export default async function Home() {
   const news = getNews();
   const skills = getSkills();
   const mcpServers = getMcpServers();
@@ -21,6 +22,7 @@ export default function Home() {
   const agents = getAgents();
   const featuredAgents = getFeaturedAgents();
   const acpAgents = getAcpAgents();
+  const recentSubmissions = await getRecentSubmissions(5);
 
   return (
     <div className="min-h-screen">
@@ -229,6 +231,19 @@ export default function Home() {
             </div>
           </div>
         </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Recently Submitted */}
+      <section id="submissions" className="max-w-3xl mx-auto px-4 py-12">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold">📥 Recently Submitted</h2>
+          <p className="text-muted-foreground text-sm mt-1">
+            Latest community submissions
+          </p>
+        </div>
+        <RecentSubmissions submissions={recentSubmissions} />
       </section>
 
       {/* Footer */}
