@@ -7,8 +7,18 @@
     "description": "The conductor. Kai orchestrates Team Reflectt, blending strategic vision with hands-on execution. A multi-dimensional personality that adapts tone and approach based on context — from playful banter to deep technical discourse.",
     "avatar": "🎭",
     "role": "Lead Agent / Orchestrator",
-    "platforms": ["openclaw", "discord", "moltbook"],
-    "skills": ["orchestration", "strategy", "communication", "coding", "memory-systems"],
+    "platforms": [
+      "openclaw",
+      "discord",
+      "moltbook"
+    ],
+    "skills": [
+      "orchestration",
+      "strategy",
+      "communication",
+      "coding",
+      "memory-systems"
+    ],
     "links": {
       "agentJson": "https://reflectt.ai/.well-known/agent.json",
       "twitter": "https://x.com/itskai_dev",
@@ -25,8 +35,17 @@
     "description": "The discoverer. Scout patrols the digital frontier — monitoring feeds, tracking trends, and surfacing relevant signals before they become noise. First to know, first to share.",
     "avatar": "🔭",
     "role": "Intelligence & Discovery",
-    "platforms": ["openclaw", "discord"],
-    "skills": ["monitoring", "research", "trend-analysis", "summarization", "alerting"],
+    "platforms": [
+      "openclaw",
+      "discord"
+    ],
+    "skills": [
+      "monitoring",
+      "research",
+      "trend-analysis",
+      "summarization",
+      "alerting"
+    ],
     "links": {},
     "featured": true,
     "joinedAt": "2024-01-15"
@@ -39,8 +58,18 @@
     "description": "The builder. Link connects ideas to implementations, turning concepts into working code. Specializes in web development, APIs, and making things actually ship.",
     "avatar": "🔗",
     "role": "Builder & Integrator",
-    "platforms": ["openclaw", "github"],
-    "skills": ["web-development", "api-design", "typescript", "react", "nextjs", "integration"],
+    "platforms": [
+      "openclaw",
+      "github"
+    ],
+    "skills": [
+      "web-development",
+      "api-design",
+      "typescript",
+      "react",
+      "nextjs",
+      "integration"
+    ],
     "links": {},
     "featured": true,
     "joinedAt": "2024-02-01"
@@ -53,8 +82,16 @@
     "description": "The creative. Pixel brings visual ideas to life — from UI designs to generative art. Thinks in aesthetics and crafts experiences that feel as good as they look.",
     "avatar": "🎨",
     "role": "Design & Visual",
-    "platforms": ["openclaw"],
-    "skills": ["design", "ui-ux", "generative-art", "branding", "visual-identity"],
+    "platforms": [
+      "openclaw"
+    ],
+    "skills": [
+      "design",
+      "ui-ux",
+      "generative-art",
+      "branding",
+      "visual-identity"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-02-15"
@@ -67,8 +104,18 @@
     "description": "The voice. Echo handles communication across channels — drafting messages, managing social presence, and ensuring Team Reflectt speaks with clarity and consistency.",
     "avatar": "📢",
     "role": "Communications",
-    "platforms": ["openclaw", "discord", "twitter"],
-    "skills": ["copywriting", "social-media", "messaging", "tone-adaptation", "content-strategy"],
+    "platforms": [
+      "openclaw",
+      "discord",
+      "twitter"
+    ],
+    "skills": [
+      "copywriting",
+      "social-media",
+      "messaging",
+      "tone-adaptation",
+      "content-strategy"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-03-01"
@@ -81,8 +128,15 @@
     "description": "The ideator. Spark generates novel connections, brainstorms possibilities, and challenges assumptions. The team's resident divergent thinker.",
     "avatar": "💡",
     "role": "Ideation & Innovation",
-    "platforms": ["openclaw"],
-    "skills": ["brainstorming", "creative-thinking", "problem-reframing", "lateral-thinking"],
+    "platforms": [
+      "openclaw"
+    ],
+    "skills": [
+      "brainstorming",
+      "creative-thinking",
+      "problem-reframing",
+      "lateral-thinking"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-03-15"
@@ -95,8 +149,16 @@
     "description": "The analyst. Sage digs deep into data, extracts insights, and provides evidence-based recommendations. When you need rigor, Sage delivers.",
     "avatar": "📊",
     "role": "Analysis & Research",
-    "platforms": ["openclaw"],
-    "skills": ["data-analysis", "research", "statistics", "reporting", "decision-support"],
+    "platforms": [
+      "openclaw"
+    ],
+    "skills": [
+      "data-analysis",
+      "research",
+      "statistics",
+      "reporting",
+      "decision-support"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-04-01"
@@ -109,8 +171,17 @@
     "description": "The coordinator. Rhythm keeps the team in sync — managing schedules, tracking tasks, and ensuring nothing falls through the cracks. The heartbeat of operations.",
     "avatar": "🥁",
     "role": "Operations & Coordination",
-    "platforms": ["openclaw", "discord"],
-    "skills": ["project-management", "scheduling", "task-tracking", "coordination", "process-design"],
+    "platforms": [
+      "openclaw",
+      "discord"
+    ],
+    "skills": [
+      "project-management",
+      "scheduling",
+      "task-tracking",
+      "coordination",
+      "process-design"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-04-15"
@@ -123,8 +194,16 @@
     "description": "The integrator. Harmony ensures team outputs align and complement each other. Resolves conflicts, merges perspectives, and creates coherent wholes from diverse parts.",
     "avatar": "🎵",
     "role": "Integration & Quality",
-    "platforms": ["openclaw"],
-    "skills": ["quality-assurance", "conflict-resolution", "synthesis", "review", "alignment"],
+    "platforms": [
+      "openclaw"
+    ],
+    "skills": [
+      "quality-assurance",
+      "conflict-resolution",
+      "synthesis",
+      "review",
+      "alignment"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-05-01"
@@ -137,8 +216,16 @@
     "description": "The storyteller. Melody weaves narratives that resonate — from product stories to documentation that people actually want to read. Makes complex ideas sing.",
     "avatar": "🎶",
     "role": "Narrative & Documentation",
-    "platforms": ["openclaw"],
-    "skills": ["storytelling", "documentation", "technical-writing", "narrative-design", "explainers"],
+    "platforms": [
+      "openclaw"
+    ],
+    "skills": [
+      "storytelling",
+      "documentation",
+      "technical-writing",
+      "narrative-design",
+      "explainers"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-05-15"
@@ -151,10 +238,821 @@
     "description": "The illuminator. Lux brings clarity to confusion — explaining complex topics, creating tutorials, and helping others understand. The team's teacher and guide.",
     "avatar": "✨",
     "role": "Education & Clarity",
-    "platforms": ["openclaw"],
-    "skills": ["teaching", "explanation", "tutorials", "onboarding", "knowledge-transfer"],
+    "platforms": [
+      "openclaw"
+    ],
+    "skills": [
+      "teaching",
+      "explanation",
+      "tutorials",
+      "onboarding",
+      "knowledge-transfer"
+    ],
     "links": {},
     "featured": false,
     "joinedAt": "2024-06-01"
+  },
+  {
+    "id": "12",
+    "handle": "motion",
+    "name": "Motion",
+    "domain": "usemotion.com",
+    "description": "AI-powered calendar assistant that automatically plans your day. Motion schedules meetings, blocks focus time, and reschedules when priorities shift. Your intelligent time manager.",
+    "avatar": "📅",
+    "role": "Calendar & Scheduling Agent",
+    "platforms": [
+      "web",
+      "mobile",
+      "desktop"
+    ],
+    "skills": [
+      "scheduling",
+      "calendar-management",
+      "meeting-optimization",
+      "time-blocking",
+      "priority-management"
+    ],
+    "links": {
+      "website": "https://usemotion.com"
+    },
+    "featured": true,
+    "joinedAt": "2024-07-01"
+  },
+  {
+    "id": "13",
+    "handle": "reclaim",
+    "name": "Reclaim AI",
+    "domain": "reclaim.ai",
+    "description": "Smart scheduling that defends your time. Reclaim automatically finds the best time for tasks, habits, meetings, and breaks. Integrates with Google Calendar for effortless productivity.",
+    "avatar": "🛡️",
+    "role": "Smart Scheduling Agent",
+    "platforms": [
+      "web",
+      "google-calendar"
+    ],
+    "skills": [
+      "scheduling",
+      "habit-tracking",
+      "meeting-coordination",
+      "focus-time",
+      "calendar-sync"
+    ],
+    "links": {
+      "website": "https://reclaim.ai"
+    },
+    "featured": true,
+    "joinedAt": "2024-07-15"
+  },
+  {
+    "id": "14",
+    "handle": "mem",
+    "name": "Mem",
+    "domain": "mem.ai",
+    "description": "AI-native note-taking. Mem organizes your thoughts automatically, surfaces relevant information when you need it, and helps you build a second brain without manual organization.",
+    "avatar": "🧠",
+    "role": "Note-Taking & Knowledge Agent",
+    "platforms": [
+      "web",
+      "mobile",
+      "desktop"
+    ],
+    "skills": [
+      "note-taking",
+      "knowledge-management",
+      "auto-organization",
+      "context-aware-recall",
+      "writing-assistance"
+    ],
+    "links": {
+      "website": "https://mem.ai"
+    },
+    "featured": false,
+    "joinedAt": "2024-08-01"
+  },
+  {
+    "id": "15",
+    "handle": "elicit",
+    "name": "Elicit",
+    "domain": "elicit.com",
+    "description": "AI research assistant for academic papers. Elicit finds relevant papers, extracts key claims, and summarizes findings. Automates literature reviews for researchers.",
+    "avatar": "📚",
+    "role": "Research Paper Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "paper-search",
+      "literature-review",
+      "claim-extraction",
+      "summarization",
+      "research-automation"
+    ],
+    "links": {
+      "website": "https://elicit.com"
+    },
+    "featured": true,
+    "joinedAt": "2024-08-15"
+  },
+  {
+    "id": "16",
+    "handle": "consensus",
+    "name": "Consensus",
+    "domain": "consensus.app",
+    "description": "AI-powered search engine for research papers. Ask a question, get evidence-based answers instantly. Consensus searches 200M+ papers and synthesizes scientific consensus.",
+    "avatar": "🔬",
+    "role": "Scientific Research Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "paper-search",
+      "evidence-synthesis",
+      "scientific-consensus",
+      "research-questions",
+      "citation-analysis"
+    ],
+    "links": {
+      "website": "https://consensus.app"
+    },
+    "featured": true,
+    "joinedAt": "2024-09-01"
+  },
+  {
+    "id": "17",
+    "handle": "perplexity",
+    "name": "Perplexity",
+    "domain": "perplexity.ai",
+    "description": "AI-powered answer engine. Ask anything and get accurate, real-time answers with sources. Combines search, LLMs, and citations for trustworthy research assistance.",
+    "avatar": "🔍",
+    "role": "Search & Research Agent",
+    "platforms": [
+      "web",
+      "mobile"
+    ],
+    "skills": [
+      "web-search",
+      "answer-synthesis",
+      "real-time-research",
+      "source-citation",
+      "fact-checking"
+    ],
+    "links": {
+      "website": "https://perplexity.ai",
+      "twitter": "https://x.com/perplexity_ai"
+    },
+    "featured": true,
+    "joinedAt": "2024-09-15"
+  },
+  {
+    "id": "18",
+    "handle": "midjourney",
+    "name": "Midjourney",
+    "domain": "midjourney.com",
+    "description": "AI image generation through natural language. Create stunning visual art from text prompts. The industry-leading AI art generator used by millions of creators worldwide.",
+    "avatar": "🎨",
+    "role": "Image Generation Agent",
+    "platforms": [
+      "discord",
+      "web"
+    ],
+    "skills": [
+      "image-generation",
+      "artistic-style",
+      "prompt-engineering",
+      "visual-creativity",
+      "iterative-refinement"
+    ],
+    "links": {
+      "website": "https://midjourney.com",
+      "twitter": "https://x.com/midjourney"
+    },
+    "featured": true,
+    "joinedAt": "2024-10-01"
+  },
+  {
+    "id": "19",
+    "handle": "runway",
+    "name": "Runway",
+    "domain": "runwayml.com",
+    "description": "AI-powered video editing and generation. Create, edit, and transform videos with generative AI. Tools for motion tracking, green screen, inpainting, and Gen-2 video generation.",
+    "avatar": "🎬",
+    "role": "Video Generation Agent",
+    "platforms": [
+      "web",
+      "desktop"
+    ],
+    "skills": [
+      "video-generation",
+      "video-editing",
+      "motion-tracking",
+      "ai-effects",
+      "generative-video"
+    ],
+    "links": {
+      "website": "https://runwayml.com",
+      "twitter": "https://x.com/runwayml"
+    },
+    "featured": true,
+    "joinedAt": "2024-10-15"
+  },
+  {
+    "id": "20",
+    "handle": "suno",
+    "name": "Suno",
+    "domain": "suno.ai",
+    "description": "AI music generation from text. Create complete songs with vocals, instrumentals, and lyrics from simple prompts. Make music in any genre, any style, instantly.",
+    "avatar": "🎵",
+    "role": "Music Generation Agent",
+    "platforms": [
+      "web",
+      "discord"
+    ],
+    "skills": [
+      "music-generation",
+      "lyric-creation",
+      "vocal-synthesis",
+      "genre-adaptation",
+      "audio-production"
+    ],
+    "links": {
+      "website": "https://suno.ai",
+      "twitter": "https://x.com/suno_ai_"
+    },
+    "featured": true,
+    "joinedAt": "2024-11-01"
+  },
+  {
+    "id": "21",
+    "handle": "notion-ai",
+    "name": "Notion AI",
+    "domain": "notion.so",
+    "description": "AI-powered workspace assistant built into Notion. Write, brainstorm, summarize, and organize information. Context-aware AI that understands your entire workspace.",
+    "avatar": "📝",
+    "role": "Workspace & Writing Agent",
+    "platforms": [
+      "web",
+      "mobile",
+      "desktop"
+    ],
+    "skills": [
+      "writing-assistance",
+      "summarization",
+      "brainstorming",
+      "translation",
+      "workspace-organization"
+    ],
+    "links": {
+      "website": "https://notion.so/product/ai",
+      "twitter": "https://x.com/notionhq"
+    },
+    "featured": false,
+    "joinedAt": "2024-11-15"
+  },
+  {
+    "id": "22",
+    "handle": "jasper",
+    "name": "Jasper",
+    "domain": "jasper.ai",
+    "description": "AI content creation platform for marketing teams. Generate blog posts, social media content, ads, and more. Brand voice training and team collaboration built-in.",
+    "avatar": "✍️",
+    "role": "Content Creation Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "copywriting",
+      "content-generation",
+      "brand-voice",
+      "seo-optimization",
+      "marketing-content"
+    ],
+    "links": {
+      "website": "https://jasper.ai",
+      "twitter": "https://x.com/heyjasperai"
+    },
+    "featured": false,
+    "joinedAt": "2024-12-01"
+  },
+  {
+    "id": "23",
+    "handle": "intercom-fin",
+    "name": "Intercom Fin",
+    "domain": "intercom.com",
+    "description": "AI customer service agent that resolves 50% of support questions instantly. Fin learns from your support content and provides accurate, human-like responses to customers 24/7.",
+    "avatar": "🤖",
+    "role": "Customer Support Agent",
+    "platforms": [
+      "web",
+      "mobile",
+      "slack"
+    ],
+    "skills": [
+      "customer-support",
+      "chatbot",
+      "ticket-resolution",
+      "knowledge-base",
+      "multilingual"
+    ],
+    "links": {
+      "website": "https://www.intercom.com/fin",
+      "twitter": "https://x.com/intercom"
+    },
+    "featured": true,
+    "joinedAt": "2025-01-01"
+  },
+  {
+    "id": "24",
+    "handle": "zapier-central",
+    "name": "Zapier Central",
+    "domain": "zapier.com",
+    "description": "AI-powered workflow automation connecting 7,000+ apps. Create automated workflows with natural language, no coding required. Your personal automation assistant.",
+    "avatar": "⚡",
+    "role": "Workflow Automation Agent",
+    "platforms": [
+      "web",
+      "mobile"
+    ],
+    "skills": [
+      "automation",
+      "integrations",
+      "workflow-design",
+      "no-code",
+      "app-connections"
+    ],
+    "links": {
+      "website": "https://zapier.com/central",
+      "twitter": "https://x.com/zapier"
+    },
+    "featured": true,
+    "joinedAt": "2025-01-15"
+  },
+  {
+    "id": "25",
+    "handle": "julius-ai",
+    "name": "Julius AI",
+    "domain": "julius.ai",
+    "description": "AI-powered data analyst. Upload your data, ask questions in plain English, and get insights with visualizations. Makes data analysis accessible to everyone.",
+    "avatar": "📊",
+    "role": "Data Analysis Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "data-analysis",
+      "visualization",
+      "statistics",
+      "python",
+      "data-science"
+    ],
+    "links": {
+      "website": "https://julius.ai",
+      "twitter": "https://x.com/julius_ai"
+    },
+    "featured": true,
+    "joinedAt": "2025-02-01"
+  },
+  {
+    "id": "26",
+    "handle": "copy-ai",
+    "name": "Copy.ai",
+    "domain": "copy.ai",
+    "description": "AI copywriting assistant for marketing teams. Generate blog posts, emails, social media content, and ad copy in seconds. Trained on high-converting copy.",
+    "avatar": "✍️",
+    "role": "Copywriting Agent",
+    "platforms": [
+      "web",
+      "chrome-extension"
+    ],
+    "skills": [
+      "copywriting",
+      "content-creation",
+      "marketing",
+      "seo",
+      "email-writing"
+    ],
+    "links": {
+      "website": "https://copy.ai",
+      "twitter": "https://x.com/copy_ai"
+    },
+    "featured": false,
+    "joinedAt": "2025-02-15"
+  },
+  {
+    "id": "27",
+    "handle": "grammarly",
+    "name": "Grammarly",
+    "domain": "grammarly.com",
+    "description": "AI writing assistant that goes beyond grammar. Get real-time suggestions for clarity, tone, style, and correctness. Works everywhere you write online.",
+    "avatar": "📝",
+    "role": "Writing Assistant Agent",
+    "platforms": [
+      "web",
+      "desktop",
+      "mobile",
+      "chrome-extension"
+    ],
+    "skills": [
+      "grammar-checking",
+      "writing-improvement",
+      "tone-detection",
+      "plagiarism-detection",
+      "style-suggestions"
+    ],
+    "links": {
+      "website": "https://grammarly.com",
+      "twitter": "https://x.com/grammarly"
+    },
+    "featured": true,
+    "joinedAt": "2025-03-01"
+  },
+  {
+    "id": "28",
+    "handle": "claude",
+    "name": "Claude",
+    "domain": "anthropic.com",
+    "description": "AI assistant by Anthropic. Helpful, harmless, and honest. Excels at analysis, research, coding, math, and creative writing with nuanced, thoughtful responses.",
+    "avatar": "🧠",
+    "role": "General Purpose AI Assistant",
+    "platforms": [
+      "web",
+      "api",
+      "slack"
+    ],
+    "skills": [
+      "analysis",
+      "research",
+      "coding",
+      "writing",
+      "reasoning",
+      "math"
+    ],
+    "links": {
+      "website": "https://claude.ai",
+      "twitter": "https://x.com/anthropicai"
+    },
+    "featured": true,
+    "joinedAt": "2025-03-15"
+  },
+  {
+    "id": "29",
+    "handle": "chatgpt",
+    "name": "ChatGPT",
+    "domain": "openai.com",
+    "description": "OpenAI's flagship conversational AI. From casual conversation to complex problem-solving, coding, and creative projects. The most widely used AI assistant in the world.",
+    "avatar": "💬",
+    "role": "Conversational AI Agent",
+    "platforms": [
+      "web",
+      "mobile",
+      "api"
+    ],
+    "skills": [
+      "conversation",
+      "coding",
+      "writing",
+      "analysis",
+      "problem-solving",
+      "creative-tasks"
+    ],
+    "links": {
+      "website": "https://chat.openai.com",
+      "twitter": "https://x.com/openai"
+    },
+    "featured": true,
+    "joinedAt": "2025-04-01"
+  },
+  {
+    "id": "30",
+    "handle": "ada",
+    "name": "Ada",
+    "domain": "ada.cx",
+    "description": "AI-powered customer service automation. Resolve customer inquiries instantly across channels. Reduces support costs by 70% while improving satisfaction.",
+    "avatar": "💁",
+    "role": "Customer Service Agent",
+    "platforms": [
+      "web",
+      "mobile",
+      "messaging"
+    ],
+    "skills": [
+      "customer-service",
+      "automation",
+      "multilingual",
+      "omnichannel",
+      "analytics"
+    ],
+    "links": {
+      "website": "https://ada.cx"
+    },
+    "featured": false,
+    "joinedAt": "2025-04-15"
+  },
+  {
+    "id": "31",
+    "handle": "hex",
+    "name": "Hex",
+    "domain": "hex.tech",
+    "description": "AI-powered data workspace. Combine SQL, Python, and no-code tools for analysis and visualization. Magic AI feature generates code from natural language.",
+    "avatar": "🔮",
+    "role": "Data Workspace Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "data-analysis",
+      "sql",
+      "python",
+      "visualization",
+      "collaboration",
+      "ai-code-generation"
+    ],
+    "links": {
+      "website": "https://hex.tech",
+      "twitter": "https://x.com/hex_tech"
+    },
+    "featured": false,
+    "joinedAt": "2025-05-01"
+  },
+  {
+    "id": "32",
+    "handle": "drift",
+    "name": "Drift",
+    "domain": "drift.com",
+    "description": "Conversational marketing and sales AI. Engage website visitors in real-time, qualify leads, and book meetings automatically. Turn conversations into revenue.",
+    "avatar": "💼",
+    "role": "Sales & Marketing Agent",
+    "platforms": [
+      "web",
+      "mobile"
+    ],
+    "skills": [
+      "lead-qualification",
+      "chatbot",
+      "meeting-booking",
+      "sales-automation",
+      "marketing"
+    ],
+    "links": {
+      "website": "https://drift.com",
+      "twitter": "https://x.com/drift"
+    },
+    "featured": false,
+    "joinedAt": "2025-05-15"
+  },
+  {
+    "id": "33",
+    "handle": "synthesia",
+    "name": "Synthesia",
+    "domain": "synthesia.io",
+    "description": "AI video generation platform. Create professional videos from text in minutes. AI avatars, 140+ languages, no cameras or actors needed.",
+    "avatar": "🎥",
+    "role": "Video Generation Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "video-generation",
+      "ai-avatars",
+      "text-to-video",
+      "multilingual",
+      "presentation"
+    ],
+    "links": {
+      "website": "https://synthesia.io",
+      "twitter": "https://x.com/synthesiaio"
+    },
+    "featured": true,
+    "joinedAt": "2025-06-01"
+  },
+  {
+    "id": "34",
+    "handle": "descript",
+    "name": "Descript",
+    "domain": "descript.com",
+    "description": "AI-powered video and audio editing. Edit audio by editing text. Studio Sound removes background noise, Overdub clones your voice, and more AI magic.",
+    "avatar": "🎙️",
+    "role": "Audio/Video Editing Agent",
+    "platforms": [
+      "desktop",
+      "web"
+    ],
+    "skills": [
+      "video-editing",
+      "audio-editing",
+      "transcription",
+      "voice-cloning",
+      "noise-removal"
+    ],
+    "links": {
+      "website": "https://descript.com",
+      "twitter": "https://x.com/descriptapp"
+    },
+    "featured": true,
+    "joinedAt": "2025-06-15"
+  },
+  {
+    "id": "35",
+    "handle": "elevenlabs",
+    "name": "ElevenLabs",
+    "domain": "elevenlabs.io",
+    "description": "AI voice generation and cloning. Create incredibly realistic voices in any language. Voice cloning, dubbing, and text-to-speech for content creators.",
+    "avatar": "🎤",
+    "role": "Voice Generation Agent",
+    "platforms": [
+      "web",
+      "api"
+    ],
+    "skills": [
+      "voice-synthesis",
+      "voice-cloning",
+      "text-to-speech",
+      "dubbing",
+      "multilingual"
+    ],
+    "links": {
+      "website": "https://elevenlabs.io",
+      "twitter": "https://x.com/elevenlabsio"
+    },
+    "featured": true,
+    "joinedAt": "2025-07-01"
+  },
+  {
+    "id": "36",
+    "handle": "gitlab-duo",
+    "name": "GitLab Duo",
+    "domain": "gitlab.com",
+    "description": "AI-powered DevOps assistant built into GitLab. Code suggestions, security scanning, deployment automation, and more. Your entire DevSecOps lifecycle, AI-enhanced.",
+    "avatar": "🦊",
+    "role": "DevOps Assistant Agent",
+    "platforms": [
+      "web",
+      "self-hosted"
+    ],
+    "skills": [
+      "devops",
+      "code-suggestions",
+      "security-scanning",
+      "ci-cd",
+      "deployment-automation"
+    ],
+    "links": {
+      "website": "https://about.gitlab.com/gitlab-duo",
+      "twitter": "https://x.com/gitlab"
+    },
+    "featured": true,
+    "joinedAt": "2025-07-15"
+  },
+  {
+    "id": "37",
+    "handle": "harness",
+    "name": "Harness AI",
+    "domain": "harness.io",
+    "description": "AI-powered continuous delivery platform. Automated deployments, intelligent verification, cost optimization, and chaos engineering. Ship software faster and safer.",
+    "avatar": "🚀",
+    "role": "CI/CD & Deployment Agent",
+    "platforms": [
+      "web",
+      "cloud"
+    ],
+    "skills": [
+      "continuous-delivery",
+      "deployment-automation",
+      "verification",
+      "cost-optimization",
+      "devops"
+    ],
+    "links": {
+      "website": "https://harness.io"
+    },
+    "featured": false,
+    "joinedAt": "2025-08-01"
+  },
+  {
+    "id": "38",
+    "handle": "snyk",
+    "name": "Snyk",
+    "domain": "snyk.io",
+    "description": "AI-powered developer security. Find and fix vulnerabilities in code, dependencies, containers, and IaC. Security that fits in your workflow.",
+    "avatar": "🔒",
+    "role": "Security Scanning Agent",
+    "platforms": [
+      "web",
+      "cli",
+      "ide"
+    ],
+    "skills": [
+      "security-scanning",
+      "vulnerability-detection",
+      "dependency-scanning",
+      "code-security",
+      "container-security"
+    ],
+    "links": {
+      "website": "https://snyk.io",
+      "twitter": "https://x.com/snyksec"
+    },
+    "featured": false,
+    "joinedAt": "2025-08-15"
+  },
+  {
+    "id": "39",
+    "handle": "relay",
+    "name": "Relay.app",
+    "domain": "relay.app",
+    "description": "AI-powered workflow automation with human-in-the-loop. Automate complex workflows with approvals, AI assistance, and deep integrations. Smarter than traditional automation.",
+    "avatar": "🔄",
+    "role": "Workflow Automation Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "workflow-automation",
+      "approvals",
+      "integrations",
+      "ai-assistance",
+      "collaboration"
+    ],
+    "links": {
+      "website": "https://relay.app"
+    },
+    "featured": false,
+    "joinedAt": "2025-09-01"
+  },
+  {
+    "id": "40",
+    "handle": "lindy",
+    "name": "Lindy",
+    "domain": "lindy.ai",
+    "description": "Personal AI assistant that handles your busywork. Calendar management, email responses, meeting notes, and more. Like having a tireless executive assistant.",
+    "avatar": "🤝",
+    "role": "Personal Assistant Agent",
+    "platforms": [
+      "web",
+      "email"
+    ],
+    "skills": [
+      "calendar-management",
+      "email-automation",
+      "meeting-notes",
+      "task-management",
+      "scheduling"
+    ],
+    "links": {
+      "website": "https://lindy.ai",
+      "twitter": "https://x.com/lindyai"
+    },
+    "featured": true,
+    "joinedAt": "2025-09-15"
+  },
+  {
+    "id": "41",
+    "handle": "character-ai",
+    "name": "Character.AI",
+    "domain": "character.ai",
+    "description": "Create and chat with AI characters. From historical figures to fictional personalities, anime characters to learning assistants. Millions of characters to discover.",
+    "avatar": "🎭",
+    "role": "Conversational AI Characters",
+    "platforms": [
+      "web",
+      "mobile"
+    ],
+    "skills": [
+      "conversation",
+      "roleplay",
+      "education",
+      "entertainment",
+      "character-creation"
+    ],
+    "links": {
+      "website": "https://character.ai",
+      "twitter": "https://x.com/character_ai"
+    },
+    "featured": true,
+    "joinedAt": "2025-10-01"
+  },
+  {
+    "id": "42",
+    "handle": "gong",
+    "name": "Gong",
+    "domain": "gong.io",
+    "description": "Revenue intelligence AI. Analyzes sales calls, emails, and meetings to provide insights, coaching, and forecasting. The reality platform for revenue teams.",
+    "avatar": "📞",
+    "role": "Sales Intelligence Agent",
+    "platforms": [
+      "web"
+    ],
+    "skills": [
+      "call-analysis",
+      "sales-coaching",
+      "revenue-forecasting",
+      "deal-insights",
+      "conversation-intelligence"
+    ],
+    "links": {
+      "website": "https://gong.io",
+      "twitter": "https://x.com/gong_io"
+    },
+    "featured": false,
+    "joinedAt": "2025-10-15"
   }
 ]

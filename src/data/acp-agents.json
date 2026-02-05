@@ -9,10 +9,18 @@
     "license": "proprietary",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/auggie.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "npx",
     "install_cmd": "npx @augmentcode/auggie@latest --acp",
-    "tags": ["ai-agent", "refactoring", "context-engine", "enterprise"]
+    "tags": [
+      "ai-agent",
+      "refactoring",
+      "context-engine",
+      "enterprise"
+    ]
   },
   {
     "id": "claude-code-acp",
@@ -24,10 +32,18 @@
     "license": "proprietary",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/claude-code-acp.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "npx",
     "install_cmd": "npx @zed-industries/claude-code-acp@latest",
-    "tags": ["ai-agent", "anthropic", "claude", "coding"]
+    "tags": [
+      "ai-agent",
+      "anthropic",
+      "claude",
+      "coding"
+    ]
   },
   {
     "id": "codex-acp",
@@ -39,10 +55,18 @@
     "license": "Apache-2.0",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/codex-acp.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "binary",
     "install_cmd": "# Via ACP Registry in JetBrains/Zed",
-    "tags": ["ai-agent", "openai", "codex", "open-source"]
+    "tags": [
+      "ai-agent",
+      "openai",
+      "codex",
+      "open-source"
+    ]
   },
   {
     "id": "factory-droid",
@@ -54,10 +78,18 @@
     "license": "proprietary",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/factory-droid.svg",
     "category": "code-generation",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "binary",
     "install_cmd": "# Via ACP Registry in JetBrains/Zed",
-    "tags": ["ai-agent", "automation", "enterprise", "workflows"]
+    "tags": [
+      "ai-agent",
+      "automation",
+      "enterprise",
+      "workflows"
+    ]
   },
   {
     "id": "gemini",
@@ -69,10 +101,18 @@
     "license": "Apache-2.0",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/gemini.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "npx",
     "install_cmd": "npx @google/gemini-cli@latest --experimental-acp",
-    "tags": ["ai-agent", "google", "multimodal", "open-source"]
+    "tags": [
+      "ai-agent",
+      "google",
+      "multimodal",
+      "open-source"
+    ]
   },
   {
     "id": "github-copilot",
@@ -84,10 +124,18 @@
     "license": "proprietary",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/github-copilot.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "npx",
     "install_cmd": "npx @github/copilot-language-server@latest --acp",
-    "tags": ["ai-agent", "github", "copilot", "pair-programming"]
+    "tags": [
+      "ai-agent",
+      "github",
+      "copilot",
+      "pair-programming"
+    ]
   },
   {
     "id": "mistral-vibe",
@@ -99,10 +147,18 @@
     "license": "Apache-2.0",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/mistral-vibe.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "binary",
     "install_cmd": "# Via ACP Registry in JetBrains/Zed",
-    "tags": ["ai-agent", "mistral", "open-source", "lightweight"]
+    "tags": [
+      "ai-agent",
+      "mistral",
+      "open-source",
+      "lightweight"
+    ]
   },
   {
     "id": "opencode",
@@ -114,10 +170,18 @@
     "license": "MIT",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/opencode.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "binary",
     "install_cmd": "# Via ACP Registry or: opencode acp",
-    "tags": ["ai-agent", "open-source", "community", "multi-llm"]
+    "tags": [
+      "ai-agent",
+      "open-source",
+      "community",
+      "multi-llm"
+    ]
   },
   {
     "id": "qwen-code",
@@ -129,9 +193,271 @@
     "license": "Apache-2.0",
     "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/qwen-code.svg",
     "category": "coding-assistant",
-    "ides": ["JetBrains", "Zed"],
+    "ides": [
+      "JetBrains",
+      "Zed"
+    ],
     "install_type": "npx",
     "install_cmd": "npx @qwen-code/qwen-code@latest --acp",
-    "tags": ["ai-agent", "alibaba", "qwen", "multilingual", "open-source"]
+    "tags": [
+      "ai-agent",
+      "alibaba",
+      "qwen",
+      "multilingual",
+      "open-source"
+    ]
+  },
+  {
+    "id": "aider",
+    "name": "Aider",
+    "version": "0.44.1",
+    "description": "AI pair programming in your terminal. Aider lets you pair program with LLMs, to edit code in your local git repos. Works with GPT-4, Claude, and more.",
+    "repository": "https://github.com/paul-gauthier/aider",
+    "author": "Paul Gauthier",
+    "license": "Apache-2.0",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/aider.svg",
+    "category": "coding-assistant",
+    "ides": [
+      "CLI",
+      "Terminal"
+    ],
+    "install_type": "pip",
+    "install_cmd": "pip install aider-chat",
+    "tags": [
+      "ai-agent",
+      "cli",
+      "git",
+      "multi-llm",
+      "open-source"
+    ]
+  },
+  {
+    "id": "cursor",
+    "name": "Cursor",
+    "version": "0.39.2",
+    "description": "The AI-first code editor. Built to make you extraordinarily productive, Cursor is the best way to code with AI. Fork of VS Code with AI deeply integrated.",
+    "repository": "https://www.cursor.com",
+    "author": "Anysphere",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/cursor.svg",
+    "category": "coding-assistant",
+    "ides": [
+      "Cursor"
+    ],
+    "install_type": "app",
+    "install_cmd": "# Download from cursor.com",
+    "tags": [
+      "ai-agent",
+      "editor",
+      "vscode-fork",
+      "productivity"
+    ]
+  },
+  {
+    "id": "tabnine",
+    "name": "Tabnine",
+    "version": "5.9.6",
+    "description": "AI code completion that you control. Tabnine runs locally or in the cloud, supports all languages, and learns your coding patterns for personalized suggestions.",
+    "repository": "https://github.com/codota/tabnine-vscode",
+    "author": "Tabnine",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/tabnine.svg",
+    "category": "code-completion",
+    "ides": [
+      "VSCode",
+      "JetBrains",
+      "Vim",
+      "Sublime"
+    ],
+    "install_type": "extension",
+    "install_cmd": "# Install via IDE marketplace",
+    "tags": [
+      "ai-agent",
+      "autocomplete",
+      "privacy",
+      "local"
+    ]
+  },
+  {
+    "id": "codeium",
+    "name": "Codeium",
+    "version": "1.8.30",
+    "description": "Free AI-powered code completion. Modern coding superpowers for free. Supports 70+ languages with unlimited usage. The fastest growing GitHub Copilot alternative.",
+    "repository": "https://github.com/Exafunction/codeium.vim",
+    "author": "Exafunction",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/codeium.svg",
+    "category": "code-completion",
+    "ides": [
+      "VSCode",
+      "JetBrains",
+      "Vim",
+      "Neovim",
+      "Emacs"
+    ],
+    "install_type": "extension",
+    "install_cmd": "# Install via IDE marketplace",
+    "tags": [
+      "ai-agent",
+      "free",
+      "autocomplete",
+      "fast"
+    ]
+  },
+  {
+    "id": "continue",
+    "name": "Continue",
+    "version": "0.9.177",
+    "description": "Open-source autopilot for VS Code and JetBrains. Easily understand codebases, write new features, and refactor existing code. Bring your own LLM.",
+    "repository": "https://github.com/continuedev/continue",
+    "author": "Continue",
+    "license": "Apache-2.0",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/continue.svg",
+    "category": "coding-assistant",
+    "ides": [
+      "VSCode",
+      "JetBrains"
+    ],
+    "install_type": "extension",
+    "install_cmd": "# Install via IDE marketplace",
+    "tags": [
+      "ai-agent",
+      "open-source",
+      "multi-llm",
+      "customizable"
+    ]
+  },
+  {
+    "id": "windsurf",
+    "name": "Windsurf",
+    "version": "1.0.0",
+    "description": "Codeium's agentic IDE. Flow state coding with AI that understands your entire codebase. Real-time collaboration between you and AI.",
+    "repository": "https://codeium.com/windsurf",
+    "author": "Codeium",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/windsurf.svg",
+    "category": "coding-assistant",
+    "ides": [
+      "Windsurf IDE"
+    ],
+    "install_type": "app",
+    "install_cmd": "# Download from codeium.com/windsurf",
+    "tags": [
+      "ai-agent",
+      "agentic-ide",
+      "codebase-understanding",
+      "flow-state"
+    ]
+  },
+  {
+    "id": "bolt-new",
+    "name": "Bolt.new",
+    "version": "2.0.0",
+    "description": "AI-powered web development in the browser. Build full-stack apps from prompts. Instant deploy, no setup required. By StackBlitz.",
+    "repository": "https://bolt.new",
+    "author": "StackBlitz",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/bolt.svg",
+    "category": "code-generation",
+    "ides": [
+      "Browser"
+    ],
+    "install_type": "web",
+    "install_cmd": "# Visit bolt.new",
+    "tags": [
+      "ai-agent",
+      "web-development",
+      "instant-deploy",
+      "full-stack"
+    ]
+  },
+  {
+    "id": "v0-dev",
+    "name": "v0",
+    "version": "1.0.0",
+    "description": "Vercel's generative UI system. Generate React components from text descriptions. AI that understands design and code. Perfect for rapid prototyping.",
+    "repository": "https://v0.dev",
+    "author": "Vercel",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/v0.svg",
+    "category": "code-generation",
+    "ides": [
+      "Web"
+    ],
+    "install_type": "web",
+    "install_cmd": "# Visit v0.dev",
+    "tags": [
+      "ai-agent",
+      "ui-generation",
+      "react",
+      "nextjs",
+      "prototyping"
+    ]
+  },
+  {
+    "id": "replit-agent",
+    "name": "Replit Agent",
+    "version": "1.5.0",
+    "description": "AI software engineer that builds full applications from prompts. Plans, codes, debugs, and deploys complete projects. Your autonomous coding partner.",
+    "repository": "https://replit.com/agent",
+    "author": "Replit",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/replit.svg",
+    "category": "code-generation",
+    "ides": [
+      "Replit"
+    ],
+    "install_type": "web",
+    "install_cmd": "# Use in Replit IDE",
+    "tags": [
+      "ai-agent",
+      "autonomous",
+      "full-stack",
+      "deployment"
+    ]
+  },
+  {
+    "id": "devin",
+    "name": "Devin",
+    "version": "1.0.0",
+    "description": "The first AI software engineer by Cognition Labs. Plans and executes complex software engineering tasks end-to-end. Works in its own environment with tools.",
+    "repository": "https://www.cognition-labs.com/devin",
+    "author": "Cognition Labs",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/devin.svg",
+    "category": "coding-assistant",
+    "ides": [
+      "Standalone"
+    ],
+    "install_type": "web",
+    "install_cmd": "# Beta access via cognition-labs.com",
+    "tags": [
+      "ai-agent",
+      "autonomous",
+      "software-engineer",
+      "task-execution"
+    ]
+  },
+  {
+    "id": "github-spark",
+    "name": "GitHub Spark",
+    "version": "0.1.0",
+    "description": "Build and share micro apps using natural language. GitHub's experimental AI-powered app builder. No code needed, just describe what you want.",
+    "repository": "https://githubnext.com/projects/github-spark",
+    "author": "GitHub Next",
+    "license": "proprietary",
+    "icon": "https://cdn.agentclientprotocol.com/registry/v1/latest/spark.svg",
+    "category": "code-generation",
+    "ides": [
+      "Web"
+    ],
+    "install_type": "web",
+    "install_cmd": "# Visit githubnext.com/projects/github-spark",
+    "tags": [
+      "ai-agent",
+      "no-code",
+      "micro-apps",
+      "experimental"
+    ]
   }
 ]

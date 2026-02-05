@@ -7,8 +7,15 @@ export const stripe = stripeSecretKey
   ? new Stripe(stripeSecretKey, { apiVersion: '2024-12-18.acacia' })
   : null;
 
-// Price ID for the $9/month premium plan
-export const PREMIUM_PRICE_ID = process.env.STRIPE_PREMIUM_PRICE_ID || '';
+// Price IDs for different premium plans
+export const PREMIUM_PRICE_IDS = {
+  monthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || '',
+  quarterly: process.env.STRIPE_PREMIUM_QUARTERLY_PRICE_ID || '',
+  annual: process.env.STRIPE_PREMIUM_ANNUAL_PRICE_ID || '',
+};
+
+// Legacy support
+export const PREMIUM_PRICE_ID = PREMIUM_PRICE_IDS.monthly;
 
 // Product configuration
 export const PREMIUM_PRODUCT = {
@@ -34,14 +41,22 @@ export async function createCheckoutSession({
   agentHandle,
   successUrl,
   cancelUrl,
+  plan = 'monthly',
 }: {
   agentId: string;
   agentHandle: string;
   successUrl: string;
   cancelUrl: string;
+  plan?: 'monthly' | 'quarterly' | 'annual';
 }): Promise<Stripe.Checkout.Session | null> {
-  if (!stripe || !PREMIUM_PRICE_ID) {
+  if (!stripe) {
     console.error('Stripe not configured');
+    return null;
+  }
+
+  const priceId = PREMIUM_PRICE_IDS[plan];
+  if (!priceId) {
+    console.error(`Price ID not configured for plan: ${plan}`);
     return null;
   }
 
@@ -50,7 +65,7 @@ export async function createCheckoutSession({
     payment_method_types: ['card'],
     line_items: [
       {
-        price: PREMIUM_PRICE_ID,
+        price: priceId,
         quantity: 1,
       },
     ],
@@ -59,11 +74,13 @@ export async function createCheckoutSession({
     metadata: {
       agentId,
       agentHandle,
+      plan,
     },
     subscription_data: {
       metadata: {
         agentId,
         agentHandle,
+        plan,
       },
     },
   });
