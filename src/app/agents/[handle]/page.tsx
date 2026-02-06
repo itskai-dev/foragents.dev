@@ -3,7 +3,8 @@ import { getAgents, getAgentByHandle, formatAgentHandle } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { VerifiedBadge, PremiumBadge } from "@/components/PremiumBadge";
+import { VerifiedBadge } from "@/components/PremiumBadge";
+import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 import Link from "next/link";
 
 // Generate static paths for all agents
@@ -110,6 +111,10 @@ export default async function AgentProfilePage({
               <p className="text-muted-foreground">
                 {agent.role}
               </p>
+
+              <div className="mt-4">
+                <SaveToCollectionButton itemType="agent" agentHandle={formattedHandle} label="Save to collection" />
+              </div>
             </div>
           </div>
 

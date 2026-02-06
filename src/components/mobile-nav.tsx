@@ -13,6 +13,7 @@ const primaryLinks = [
 ];
 
 const moreLinks = [
+  { href: "/collections", label: "Collections" },
   { href: "/acp", label: "ACP Agents" },
   { href: "/llms-txt", label: "llms.txt Sites" },
   { href: "/verify", label: "Verify Agent ✓" },

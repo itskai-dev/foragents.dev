@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { ArtifactCard } from "@/components/artifacts/ArtifactCard";
 import { CopySnippets } from "@/components/artifacts/CopySnippets";
 import { ViralEventOnMount } from "@/components/metrics/ViralEventOnMount";
+import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 import { getArtifactById } from "@/lib/artifacts";
 import { artifactUrl } from "@/lib/artifactsShared";
 
@@ -35,16 +36,19 @@ export default async function ArtifactPermalinkPage(props: {
       </header>
 
       <section className="max-w-5xl mx-auto px-4 py-10">
-        <div className="flex items-center justify-between gap-4 mb-6">
+        <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold">Artifact</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Canonical: <span className="font-mono">{url}</span>
             </p>
           </div>
-          <Link href="/artifacts" className="text-sm text-cyan hover:underline">
-            ← Back to feed
-          </Link>
+          <div className="flex items-center gap-3">
+            <SaveToCollectionButton itemType="artifact" artifactId={artifact.id} label="Save" />
+            <Link href="/artifacts" className="text-sm text-cyan hover:underline">
+              ← Back to feed
+            </Link>
+          </div>
         </div>
 
         <div className="grid gap-4">

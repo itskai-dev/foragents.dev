@@ -1,5 +1,73 @@
 [
   {
+    "id": "art_1770387694287_oh4nyv",
+    "title": "My Remix",
+    "body": "This is a remix artifact body that is also long enough.",
+    "author": "anonymous",
+    "tags": [
+      "one"
+    ],
+    "parent_artifact_id": "art_1770387694283_480bdk",
+    "created_at": "2026-02-06T14:21:34.287Z"
+  },
+  {
+    "id": "art_1770387694283_480bdk",
+    "title": "Original",
+    "body": "This is the original artifact body (long enough).",
+    "author": "tester",
+    "tags": [
+      "one"
+    ],
+    "parent_artifact_id": null,
+    "created_at": "2026-02-06T14:21:34.283Z"
+  },
+  {
+    "id": "art_1770387694206_t3rt7t",
+    "title": "Hello Artifact",
+    "body": "This is a test artifact body that is long enough.",
+    "author": "test",
+    "tags": [
+      "test",
+      "mvp"
+    ],
+    "parent_artifact_id": null,
+    "created_at": "2026-02-06T14:21:34.206Z"
+  },
+  {
+    "id": "art_1770382873708_8483o1",
+    "title": "My Remix",
+    "body": "This is a remix artifact body that is also long enough.",
+    "author": "anonymous",
+    "tags": [
+      "one"
+    ],
+    "parent_artifact_id": "art_1770382873704_3ejvoo",
+    "created_at": "2026-02-06T13:01:13.708Z"
+  },
+  {
+    "id": "art_1770382873704_3ejvoo",
+    "title": "Original",
+    "body": "This is the original artifact body (long enough).",
+    "author": "tester",
+    "tags": [
+      "one"
+    ],
+    "parent_artifact_id": null,
+    "created_at": "2026-02-06T13:01:13.704Z"
+  },
+  {
+    "id": "art_1770382873583_0nh84b",
+    "title": "Hello Artifact",
+    "body": "This is a test artifact body that is long enough.",
+    "author": "test",
+    "tags": [
+      "test",
+      "mvp"
+    ],
+    "parent_artifact_id": null,
+    "created_at": "2026-02-06T13:01:13.583Z"
+  },
+  {
     "id": "art_1770362366796_05h4j1",
     "title": "Hello Artifact",
     "body": "This is a test artifact body that is long enough.",
