@@ -7,6 +7,10 @@ let _client: SupabaseClient | null = null;
  * Returns null otherwise (caller should fall back to JSON file).
  */
 export function getSupabase(): SupabaseClient | null {
+  // Keep tests deterministic: unit tests should exercise the file-backed fallbacks
+  // unless a test explicitly mocks getSupabase().
+  if (process.env.NODE_ENV === "test") return null;
+
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_ANON_KEY;
 

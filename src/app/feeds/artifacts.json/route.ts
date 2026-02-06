@@ -9,11 +9,16 @@ function toSummary(text: string): string {
   return `${cleaned.slice(0, 277)}...`;
 }
 
+function normalizeHandle(raw: string): string {
+  const t = raw.trim();
+  return t.startsWith("@") ? t.slice(1).trim() : t;
+}
+
 function filterByAgent(items: Artifact[], agent?: string): Artifact[] {
   const a = agent?.trim();
   if (!a) return items;
-  const needle = a.toLowerCase();
-  return items.filter((it) => (it.author ?? "").toLowerCase() === needle);
+  const needle = normalizeHandle(a).toLowerCase();
+  return items.filter((it) => normalizeHandle(it.author ?? "").toLowerCase() === needle);
 }
 
 export async function GET(request: NextRequest) {

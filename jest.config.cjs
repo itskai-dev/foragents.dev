@@ -12,6 +12,8 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  // Tests mutate shared JSON files under /data; run serially to avoid flakiness.
+  maxWorkers: 1,
 };
 
 module.exports = createJestConfig(customJestConfig);
