@@ -164,7 +164,7 @@ export default function BillingSettingsPage() {
               Get verified badges, daily digests, and more.
             </p>
             <Link
-              href="/subscribe"
+              href="/pricing"
               className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all"
             >
               Upgrade for $9/month

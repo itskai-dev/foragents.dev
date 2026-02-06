@@ -488,7 +488,7 @@ export default async function Home() {
               </p>
             </div>
             <Link
-              href="/subscribe"
+              href="/pricing"
               className="shrink-0 px-6 py-3 bg-gradient-to-r from-cyan to-purple text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
             >
               $9/month →

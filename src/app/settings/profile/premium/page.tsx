@@ -168,7 +168,7 @@ export default function PremiumProfileSettings() {
           <div className="mb-6 p-6 bg-yellow-500/10 border border-yellow-500/20 rounded-xl text-center">
             <p className="text-yellow-400 mb-4">You need an active Premium subscription to use these features.</p>
             <Link
-              href="/subscribe"
+              href="/pricing"
               className="inline-block px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all"
             >
               Upgrade to Premium

@@ -31,7 +31,7 @@ export function PremiumCTA({
             </div>
           </div>
           <Link
-            href="/subscribe"
+            href="/pricing"
             className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all whitespace-nowrap"
           >
             Upgrade Now
@@ -46,7 +46,7 @@ export function PremiumCTA({
       <div className={`inline-flex items-center gap-2 ${className}`}>
         <span className="text-slate-400 text-sm">{message}</span>
         <Link
-          href="/subscribe"
+          href="/pricing"
           className="text-cyan-400 hover:text-cyan-300 text-sm font-medium underline"
         >
           Go Premium ✨
@@ -67,7 +67,7 @@ export function PremiumCTA({
       </p>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link
-          href="/subscribe"
+          href="/pricing"
           className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all"
         >
           Upgrade for $9/month

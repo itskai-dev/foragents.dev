@@ -10,6 +10,12 @@ function hoursBetween(aIso: string, bIso: string) {
   return Math.abs(b - a) / (1000 * 60 * 60);
 }
 
+/**
+ * GET /api/health/feed
+ *
+ * Lightweight health endpoint specifically for feed freshness.
+ * Prefers Supabase when configured and populated, falls back to static bundled data.
+ */
 export async function GET() {
   const now = new Date().toISOString();
 
@@ -38,7 +44,7 @@ export async function GET() {
   }
 
   // Fallback to static bundled data.
-  const items = await getNews();
+  const items = getNews();
   const lastPublishedAt = items?.[0]?.published_at;
 
   if (lastPublishedAt) {

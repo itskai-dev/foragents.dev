@@ -172,7 +172,7 @@ export default function ProfileSettingsPage() {
               Profile customization is available for Premium members. Upgrade to unlock extended bios, pinned skills, custom links, and accent colors.
             </p>
             <Link
-              href="/subscribe"
+              href="/pricing"
               className="inline-block px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold rounded-lg transition-all"
             >
               Upgrade for $9/month

@@ -19,10 +19,7 @@ export async function POST(req: NextRequest) {
     const { agentHandle, email, plan } = await req.json();
 
     if (!agentHandle && !email) {
-      return NextResponse.json(
-        { error: 'agentHandle or email is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'agentHandle or email is required' }, { status: 400 });
     }
 
     const supabase = getSupabaseAdmin();
@@ -30,34 +27,34 @@ export async function POST(req: NextRequest) {
     let agentId = 'unknown';
     let finalHandle = (agentHandle || (email as string).split('@')[0] || 'unknown') as string;
 
+    // Normalize inputs
+    const cleanHandle = typeof finalHandle === 'string' ? finalHandle.replace(/^@/, '').trim() : 'unknown';
+    const cleanEmail = typeof email === 'string' ? email.trim() : undefined;
+
     if (supabase) {
       if (agentHandle) {
-        const clean = (agentHandle as string).replace(/^@/, '').trim();
         const { data: agent } = await supabase
           .from('agents')
           .select('id, handle, is_premium')
-          .eq('handle', clean)
+          .eq('handle', cleanHandle)
           .maybeSingle();
 
         if (agent?.is_premium) {
-          return NextResponse.json(
-            { error: 'This agent already has an active subscription' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'This agent already has an active subscription' }, { status: 400 });
         }
 
         if (agent?.id) {
           agentId = agent.id;
-          finalHandle = agent.handle || clean;
-        } else if (email) {
+          finalHandle = agent.handle || cleanHandle;
+        } else if (cleanEmail) {
           // Create a minimal agent row if handle doesn't exist.
           const { data: created, error } = await supabase
             .from('agents')
             .insert({
-              handle: clean,
-              name: clean,
+              handle: cleanHandle,
+              name: cleanHandle,
               platform: 'foragents',
-              owner_url: email,
+              owner_url: cleanEmail,
             })
             .select('id, handle')
             .single();
@@ -70,33 +67,29 @@ export async function POST(req: NextRequest) {
           agentId = created.id;
           finalHandle = created.handle;
         }
-      } else if (email) {
+      } else if (cleanEmail) {
         // Try to find or create agent by owner_url (email)
         const { data: agent } = await supabase
           .from('agents')
           .select('id, handle, name, is_premium')
-          .eq('owner_url', (email as string).trim())
+          .eq('owner_url', cleanEmail)
           .maybeSingle();
 
         if (agent?.is_premium) {
-          return NextResponse.json(
-            { error: 'You already have an active subscription' },
-            { status: 400 }
-          );
+          return NextResponse.json({ error: 'You already have an active subscription' }, { status: 400 });
         }
 
         if (agent?.id) {
           agentId = agent.id;
-          finalHandle = agent.handle || agent.name || finalHandle;
+          finalHandle = agent.handle || agent.name || cleanHandle;
         } else {
-          const clean = finalHandle.replace(/^@/, '').trim();
           const { data: created, error } = await supabase
             .from('agents')
             .insert({
-              handle: clean,
-              name: clean,
+              handle: cleanHandle,
+              name: cleanHandle,
               platform: 'foragents',
-              owner_url: (email as string).trim(),
+              owner_url: cleanEmail,
             })
             .select('id, handle')
             .single();
@@ -119,7 +112,7 @@ export async function POST(req: NextRequest) {
       agentHandle: finalHandle,
       plan,
       successUrl: `${baseUrl}/subscribe/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancelUrl: `${baseUrl}/subscribe?canceled=true`,
+      cancelUrl: `${baseUrl}/pricing?canceled=true`,
     });
 
     if (!session) {

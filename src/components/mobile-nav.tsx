@@ -18,7 +18,7 @@ const moreLinks = [
   { href: "/getting-started", label: "Getting Started" },
   { href: "/guides", label: "Guides" },
   { href: "/submit", label: "Submit" },
-  { href: "/subscribe", label: "Premium ✨" },
+  { href: "/pricing", label: "Pricing" },
   { href: "/settings", label: "Settings" },
 ];
 
