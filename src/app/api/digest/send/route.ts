@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { render } from '@react-email/components';
 import { requireCronAuth } from '@/lib/server/cron-auth';
 import { getSupabaseAdmin } from '@/lib/server/supabase-admin';
-import { sendDigestEmail } from '@/lib/resend';
+import { resend, FROM_EMAIL, REPLY_TO } from '@/lib/resend';
 import { DigestEmail } from '@/components/emails/DigestEmail';
 
 export async function POST(req: NextRequest) {
@@ -83,8 +83,15 @@ export async function POST(req: NextRequest) {
       date: today,
     };
 
-    // Render email to HTML
+    // Render email to HTML (same content for all recipients)
     const emailHtml = await render(DigestEmail(emailProps));
+
+    if (!resend) {
+      return NextResponse.json(
+        { error: 'Email service not configured' },
+        { status: 500 }
+      );
+    }
 
     // Send to each subscriber
     const results = {
@@ -94,29 +101,37 @@ export async function POST(req: NextRequest) {
       errors: [] as string[],
     };
 
-    // TODO: Fix sendDigestEmail parameters to match function signature
-    // Temporarily disabled to fix build
-    // for (const subscriber of subscribers) {
-    //   if (!subscriber.email) continue;
-    //   const result = await sendDigestEmail({
-    //     to: subscriber.email,
-    //     recipientName: subscriber.name || subscriber.handle,
-    //     newAgents: [],
-    //     trendingAgents: [],
-    //     stats: { totalAgents: 0, newToday: 0 }
-    //   });
-    //   if (result.success) results.sent++;
-    //   else {
-    //     results.failed++;
-    //     results.errors.push(`${subscriber.handle}: ${result.error}`);
-    //   }
-    // }
-    results.sent = subscribers.length; // Mock for now
+    const subject = `🤖 forAgents.dev Daily Digest — ${today}`;
+
+    for (const subscriber of subscribers) {
+      if (!subscriber.email) continue;
+
+      try {
+        const { error } = await resend.emails.send({
+          from: FROM_EMAIL,
+          to: subscriber.email,
+          subject,
+          html: emailHtml,
+          replyTo: REPLY_TO,
+        });
+
+        if (error) {
+          results.failed++;
+          results.errors.push(`${subscriber.handle}: ${error.message}`);
+        } else {
+          results.sent++;
+        }
+      } catch (err) {
+        results.failed++;
+        results.errors.push(`${subscriber.handle}: Failed to send`);
+        console.error('Digest send failed:', err);
+      }
+    }
 
     console.log(`Digest sent: ${results.sent}/${results.total}`);
 
     return NextResponse.json({
-      success: true,
+      success: results.failed === 0,
       results,
     });
   } catch (error) {
