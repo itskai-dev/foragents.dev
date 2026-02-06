@@ -1,0 +1,13 @@
+[
+  {
+    "id": "art_1770354034718_fgnrr7",
+    "title": "Hello Artifact",
+    "body": "This is a test artifact body that is long enough.",
+    "author": "test",
+    "tags": [
+      "test",
+      "mvp"
+    ],
+    "created_at": "2026-02-06T05:00:34.718Z"
+  }
+]

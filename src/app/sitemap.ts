@@ -27,6 +27,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${baseUrl}/artifacts`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/mcp`,
       lastModified: now,
       changeFrequency: "weekly",
