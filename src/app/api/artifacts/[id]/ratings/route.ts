@@ -1,51 +1,71 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAgentAuth } from "@/lib/server/agent-auth";
-import { checkRateLimit } from "@/lib/server/rate-limit";
-import { validateAndNormalizeRating } from "@/lib/socialFeedback";
-import { upsertRating } from "@/lib/socialFeedbackStore";
+import { checkRateLimit } from "@/lib/server/rateLimit";
+import {
+  parseMarkdownWithFrontmatter,
+  validateRatingFrontmatter,
+  type RatingFrontmatter,
+} from "@/lib/socialFeedback";
+import { upsertArtifactRating } from "@/lib/server/artifactFeedback";
 
-async function readMarkdownBody(request: NextRequest): Promise<string> {
-  const contentType = request.headers.get("content-type") ?? "";
-  if (contentType.includes("application/json")) {
-    const json = (await request.json()) as { markdown?: unknown };
-    if (typeof json.markdown === "string") return json.markdown;
-    return "";
+const MAX_MD_BYTES = 20_000;
+
+async function readMarkdownBody(req: NextRequest): Promise<string> {
+  const ct = req.headers.get("content-type") ?? "";
+  if (ct.includes("application/json")) {
+    const json = (await req.json().catch(() => null)) as null | { markdown?: unknown };
+    return typeof json?.markdown === "string" ? json.markdown : "";
   }
-  return await request.text();
+  return await req.text();
 }
 
-export async function POST(request: NextRequest, ctx: { params: Promise<{ id: string }> }) {
-  const auth = await requireAgentAuth(request);
-  if (auth.errorResponse) return auth.errorResponse;
-  const agent = auth.agent!;
+export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id: artifactId } = await context.params;
 
-  const { id: artifactId } = await ctx.params;
+  const { agent, errorResponse } = await requireAgentAuth(request);
+  if (errorResponse) return errorResponse;
 
-  const rate = checkRateLimit({
-    key: `ratings:${agent.agent_id}`,
+  const rl = checkRateLimit({
+    key: `ratings:${agent!.agent_id}`,
     limit: 30,
     windowMs: 60 * 60 * 1000,
   });
-  if (!rate.ok) {
+  if (!rl.ok) {
     return NextResponse.json(
       { error: "Rate limit exceeded" },
-      { status: 429, headers: { "Retry-After": String(rate.retryAfterSec) } }
+      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } }
     );
   }
 
-  const markdown = await readMarkdownBody(request);
-  const normalized = validateAndNormalizeRating({ artifactIdFromPath: artifactId, markdown });
-  if (!normalized.ok) {
-    return NextResponse.json({ error: "Validation failed", details: normalized.errors }, { status: 400 });
+  const raw = await readMarkdownBody(request);
+  if (!raw || typeof raw !== "string") {
+    return NextResponse.json({ error: "Validation failed", details: ["markdown body is required"] }, { status: 400 });
   }
 
-  const { rating, created } = await upsertRating({
+  if (Buffer.byteLength(raw, "utf-8") > MAX_MD_BYTES) {
+    return NextResponse.json(
+      { error: "Validation failed", details: ["body too large"] },
+      { status: 400 }
+    );
+  }
+
+  const parsed = parseMarkdownWithFrontmatter<RatingFrontmatter>(raw);
+  const fm = validateRatingFrontmatter(parsed.frontmatter);
+
+  const details = [...fm.errors];
+  if (fm.artifact_id && fm.artifact_id !== artifactId) details.push("artifact_id mismatch");
+
+  if (details.length) {
+    return NextResponse.json({ error: "Validation failed", details }, { status: 400 });
+  }
+
+  const { rating, created } = await upsertArtifactRating({
     artifact_id: artifactId,
-    score: normalized.value.score,
-    dims: normalized.value.dims,
-    raw_md: normalized.value.raw_md,
-    notes_md: normalized.value.notes_md,
-    rater: agent,
+    rater: agent!,
+    score: fm.score!,
+    dims: fm.dims ?? {},
+    raw_md: parsed.raw_md,
+    notes_md: parsed.body_md || null,
   });
 
   return NextResponse.json({ success: true, rating }, { status: created ? 201 : 200 });

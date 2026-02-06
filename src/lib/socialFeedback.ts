@@ -1,15 +1,58 @@
-import "server-only";
-
 import matter from "gray-matter";
 
 export type CommentKind = "review" | "question" | "issue" | "improvement";
 
-export type ParsedMarkdown<TFrontmatter> = {
+export type CursorTuple = { created_at: string; id: string };
+
+export type ParsedMarkdown<TFrontmatter extends Record<string, unknown>> = {
   raw_md: string;
   frontmatter: TFrontmatter;
   body_md: string;
   body_text: string | null;
 };
+
+export function encodeCursor(tuple: CursorTuple): string {
+  return Buffer.from(JSON.stringify(tuple), "utf-8").toString("base64url");
+}
+
+export function decodeCursor(cursor: string | null): CursorTuple | null {
+  if (!cursor) return null;
+  try {
+    const json = Buffer.from(cursor, "base64url").toString("utf-8");
+    const parsed = JSON.parse(json) as { created_at?: unknown; id?: unknown };
+    if (typeof parsed?.created_at !== "string" || typeof parsed?.id !== "string") return null;
+    return { created_at: parsed.created_at, id: parsed.id };
+  } catch {
+    return null;
+  }
+}
+
+export function parseMarkdownWithFrontmatter<TFrontmatter extends Record<string, unknown>>(
+  raw: string
+): ParsedMarkdown<TFrontmatter> {
+  const parsed = matter(raw);
+  const body_md = (parsed.content ?? "").trim();
+
+  return {
+    raw_md: raw,
+    frontmatter: (parsed.data ?? {}) as TFrontmatter,
+    body_md,
+    body_text: markdownToText(body_md),
+  };
+}
+
+export function markdownToText(md: string): string {
+  // Best-effort plain text (v0). Keep simple and safe.
+  const withoutCodeBlocks = md.replace(/```[\s\S]*?```/g, " ");
+  const withoutInlineCode = withoutCodeBlocks.replace(/`[^`]*`/g, " ");
+  const withoutLinks = withoutInlineCode.replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1");
+  const withoutMd = withoutLinks
+    .replace(/[#>*_~\-]+/g, " ")
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return withoutMd;
+}
 
 export type CommentFrontmatter = {
   artifact_id?: unknown;
@@ -24,162 +67,82 @@ export type RatingFrontmatter = {
   dims?: unknown;
 };
 
-export type NormalizedCommentInput = {
-  artifact_id: string;
-  kind: CommentKind;
+export type RatingDims = Partial<Record<"usefulness" | "correctness" | "novelty", number>>;
+
+export function validateCommentFrontmatter(frontmatter: CommentFrontmatter): {
+  artifact_id: string | null;
+  kind: CommentKind | null;
   parent_id: string | null;
-  body_md: string;
-  body_text: string | null;
-  raw_md: string;
-};
+  errors: string[];
+} {
+  const errors: string[] = [];
 
-export type NormalizedRatingInput = {
-  artifact_id: string;
-  score: number;
-  dims: Record<string, number> | null;
-  notes_md: string | null;
-  raw_md: string;
-};
+  const artifact_id = typeof frontmatter.artifact_id === "string" ? frontmatter.artifact_id.trim() : "";
+  if (!artifact_id) errors.push("artifact_id is required");
 
-function stripMarkdownToText(md: string): string {
-  // Best-effort v0: remove code fences and common markdown markers.
-  return md
-    .replace(/```[\s\S]*?```/g, " ")
-    .replace(/`[^`]*`/g, " ")
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[[^\]]*\]\([^)]*\)/g, "$1")
-    .replace(/[#>*_~-]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const kindRaw = typeof frontmatter.kind === "string" ? frontmatter.kind.trim() : "";
+  const allowedKinds: CommentKind[] = ["review", "question", "issue", "improvement"];
+  const kind = allowedKinds.includes(kindRaw as CommentKind) ? (kindRaw as CommentKind) : null;
+  if (!kind) errors.push("kind is required (review|question|issue|improvement)");
+
+  let parent_id: string | null = null;
+  if (frontmatter.parent_id === null || frontmatter.parent_id === "null" || typeof frontmatter.parent_id === "undefined") {
+    parent_id = null;
+  } else if (typeof frontmatter.parent_id === "string") {
+    const v = frontmatter.parent_id.trim();
+    parent_id = v ? v : null;
+  } else {
+    errors.push("parent_id must be a string or null when provided");
+  }
+
+  return { artifact_id: artifact_id || null, kind, parent_id, errors };
 }
 
-export function parseMarkdown<TFrontmatter extends Record<string, unknown>>(
-  raw: string
-): ParsedMarkdown<TFrontmatter> {
-  const parsed = matter(raw);
-  const body_md = (parsed.content ?? "").trim();
-  const body_text = body_md ? stripMarkdownToText(body_md) : null;
-  return {
-    raw_md: raw,
-    frontmatter: (parsed.data ?? {}) as TFrontmatter,
-    body_md,
-    body_text,
-  };
-}
-
-function isCommentKind(v: unknown): v is CommentKind {
-  return v === "review" || v === "question" || v === "issue" || v === "improvement";
-}
-
-function coerceNullString(v: unknown): string | null {
-  if (v === null || v === undefined) return null;
-  if (typeof v === "string") {
-    const t = v.trim();
-    return t ? t : null;
+function parseScore(v: unknown): number | null {
+  if (typeof v === "number" && Number.isFinite(v)) return Math.trunc(v);
+  if (typeof v === "string" && v.trim()) {
+    const n = Number(v);
+    if (Number.isFinite(n)) return Math.trunc(n);
   }
   return null;
 }
 
-function validateScore(v: unknown): number | null {
-  const n = typeof v === "number" ? v : typeof v === "string" ? Number(v) : NaN;
-  if (!Number.isFinite(n)) return null;
-  const i = Math.trunc(n);
-  if (i < 1 || i > 5) return null;
-  return i;
-}
-
-function normalizeDims(v: unknown): Record<string, number> | null {
-  if (!v || typeof v !== "object" || Array.isArray(v)) return null;
-  const allowed = ["usefulness", "correctness", "novelty"];
-  const out: Record<string, number> = {};
-  for (const k of allowed) {
-    const score = validateScore((v as Record<string, unknown>)[k]);
-    if (score !== null) out[k] = score;
+function normalizeDims(v: unknown): RatingDims | null {
+  if (!v) return {};
+  if (typeof v !== "object" || Array.isArray(v)) return null;
+  const dims: RatingDims = {};
+  for (const key of ["usefulness", "correctness", "novelty"] as const) {
+    const raw = (v as Record<string, unknown>)[key];
+    if (typeof raw === "undefined" || raw === null) continue;
+    const n = parseScore(raw);
+    if (n === null) return null;
+    dims[key] = n;
   }
-  return Object.keys(out).length ? out : null;
+  return dims;
 }
 
-export function validateAndNormalizeComment(params: {
-  artifactIdFromPath: string;
-  markdown: string;
-}): { ok: true; value: NormalizedCommentInput } | { ok: false; errors: string[] } {
+export function validateRatingFrontmatter(frontmatter: RatingFrontmatter): {
+  artifact_id: string | null;
+  score: number | null;
+  dims: RatingDims | null;
+  errors: string[];
+} {
   const errors: string[] = [];
-  const parsed = parseMarkdown<CommentFrontmatter>(params.markdown);
-  const fm = parsed.frontmatter;
 
-  const artifact_id = typeof fm.artifact_id === "string" ? fm.artifact_id.trim() : "";
+  const artifact_id = typeof frontmatter.artifact_id === "string" ? frontmatter.artifact_id.trim() : "";
   if (!artifact_id) errors.push("artifact_id is required");
-  if (artifact_id && artifact_id !== params.artifactIdFromPath) errors.push("artifact_id mismatch");
 
-  if (!isCommentKind(fm.kind)) errors.push("kind is required");
+  const score = parseScore(frontmatter.score);
+  if (score === null) errors.push("score is required");
+  else if (score < 1 || score > 5) errors.push("score must be between 1 and 5");
 
-  const parent_id = coerceNullString(fm.parent_id);
-
-  if (!parsed.body_md || parsed.body_md.length < 1) errors.push("body must be >= 1 char");
-  if (parsed.raw_md.length > 20_000) errors.push("markdown too large (max 20KB)");
-
-  if (errors.length) return { ok: false, errors };
-
-  return {
-    ok: true,
-    value: {
-      artifact_id,
-      kind: fm.kind as CommentKind,
-      parent_id,
-      body_md: parsed.body_md,
-      body_text: parsed.body_text,
-      raw_md: parsed.raw_md,
-    },
-  };
-}
-
-export function validateAndNormalizeRating(params: {
-  artifactIdFromPath: string;
-  markdown: string;
-}): { ok: true; value: NormalizedRatingInput } | { ok: false; errors: string[] } {
-  const errors: string[] = [];
-  const parsed = parseMarkdown<RatingFrontmatter>(params.markdown);
-  const fm = parsed.frontmatter;
-
-  const artifact_id = typeof fm.artifact_id === "string" ? fm.artifact_id.trim() : "";
-  if (!artifact_id) errors.push("artifact_id is required");
-  if (artifact_id && artifact_id !== params.artifactIdFromPath) errors.push("artifact_id mismatch");
-
-  const score = validateScore(fm.score);
-  if (score === null) errors.push("score is required (1..5)");
-
-  const dims = normalizeDims(fm.dims);
-
-  if (parsed.raw_md.length > 20_000) errors.push("markdown too large (max 20KB)");
-
-  if (errors.length) return { ok: false, errors };
-
-  const notes_md = parsed.body_md ? parsed.body_md : null;
-
-  return {
-    ok: true,
-    value: {
-      artifact_id,
-      score: score!,
-      dims,
-      notes_md,
-      raw_md: parsed.raw_md,
-    },
-  };
-}
-
-export function encodeCursor(cursor: { created_at: string; id: string }): string {
-  return Buffer.from(JSON.stringify(cursor), "utf-8").toString("base64url");
-}
-
-export function decodeCursor(encoded: string | null): { created_at: string; id: string } | null {
-  if (!encoded) return null;
-  try {
-    const raw = Buffer.from(encoded, "base64url").toString("utf-8");
-    const parsed = JSON.parse(raw) as { created_at?: unknown; id?: unknown };
-    if (typeof parsed.created_at !== "string" || typeof parsed.id !== "string") return null;
-    return { created_at: parsed.created_at, id: parsed.id };
-  } catch {
-    return null;
+  const dims = normalizeDims(frontmatter.dims);
+  if (dims === null) errors.push("dims must be an object of 1..5 numbers when provided");
+  else {
+    for (const [k, v] of Object.entries(dims)) {
+      if (typeof v !== "number" || v < 1 || v > 5) errors.push(`dims.${k} must be between 1 and 5`);
+    }
   }
+
+  return { artifact_id: artifact_id || null, score, dims, errors };
 }

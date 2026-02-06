@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRatingsSummary } from "@/lib/socialFeedbackStore";
+import { getArtifactRatingsSummary } from "@/lib/server/artifactFeedback";
 
-export async function GET(_request: NextRequest, ctx: { params: Promise<{ id: string }> }) {
-  const { id: artifactId } = await ctx.params;
-  const summary = await getRatingsSummary({ artifact_id: artifactId });
-  return NextResponse.json(summary, { status: 200 });
+export async function GET(_request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id: artifactId } = await context.params;
+
+  const summary = await getArtifactRatingsSummary(artifactId);
+
+  return NextResponse.json(summary, {
+    status: 200,
+    headers: {
+      "Cache-Control": "public, max-age=10, s-maxage=60",
+    },
+  });
 }
