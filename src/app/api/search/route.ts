@@ -3,6 +3,13 @@ import { getSupabase } from "@/lib/supabase";
 import { getSupabaseAdmin } from "@/lib/supabaseAdmin";
 import { getAgentPremiumByHandle } from "@/lib/premiumStore";
 import { entitlementsFor } from "@/lib/entitlements";
+import {
+  checkAndConsumeSearchQuota,
+  getQuotaLimitForUserState,
+  newAnonymousSearchId,
+  type SearchQuotaUserState,
+} from "@/lib/searchQuota";
+import { emitEvent } from "@/lib/telemetry";
 
 type SearchResult = {
   title: string;
@@ -36,6 +43,82 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Optional: if caller provides an agent handle, we can apply Premium entitlements.
+  // (MVP: increases per-category result caps.)
+  const agentHandle = request.nextUrl.searchParams.get("agentHandle")?.trim();
+  const premiumLookupClient = getSupabaseAdmin() || getSupabase();
+  const premiumStatus = agentHandle
+    ? await getAgentPremiumByHandle({ supabase: premiumLookupClient, agentHandle })
+    : null;
+
+  const userState: SearchQuotaUserState = premiumStatus?.isPremium
+    ? "premium"
+    : agentHandle
+      ? "free"
+      : "anonymous";
+
+  // Best-effort anonymous identity: cookie-based, with IP fallback.
+  const existingAnonId = request.cookies.get("fa_search_id")?.value;
+  const anonId = existingAnonId || newAnonymousSearchId();
+  const ip = (request.headers.get("x-forwarded-for") || "").split(",")[0].trim();
+  const quotaId = agentHandle ? `agent:${agentHandle.replace(/^@/, "")}` : `anon:${anonId}:${ip || "noip"}`;
+  const quotaLimit = getQuotaLimitForUserState(userState);
+  const quota = checkAndConsumeSearchQuota({ id: quotaId, limit: quotaLimit });
+
+  if (!quota.allowed) {
+    const upgrade_url = "/pricing";
+    const retryAfterSeconds = Math.max(
+      0,
+      Math.floor((new Date(quota.resetAt).getTime() - Date.now()) / 1000)
+    );
+
+    await emitEvent({
+      supabase: getSupabaseAdmin() || null,
+      name: "paywall_hit",
+      props: {
+        paywall_type: "search_quota",
+        surface: "api",
+        path: "/api/search",
+        q_len: q.length,
+        user_state: userState,
+        quota_remaining: 0,
+        quota_limit: quotaLimit,
+        experiment_variant: "A_inline",
+      },
+    });
+
+    const res = NextResponse.json(
+      {
+        error: "search_limit_reached",
+        message: "Daily search limit reached",
+        remaining: 0,
+        upgrade_url,
+        retry_after_seconds: retryAfterSeconds,
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(retryAfterSeconds),
+          "Cache-Control": "no-store",
+        },
+      }
+    );
+
+    if (!existingAnonId) {
+      res.cookies.set({
+        name: "fa_search_id",
+        value: anonId,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+      });
+    }
+
+    return res;
+  }
+
   const supabase = getSupabase();
   if (!supabase) {
     return NextResponse.json(
@@ -44,13 +127,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Optional: if caller provides an agent handle, we can apply Premium entitlements.
-  // (MVP: increases per-category result caps.)
-  const agentHandle = request.nextUrl.searchParams.get("agentHandle")?.trim();
-  const premiumLookupClient = getSupabaseAdmin() || getSupabase();
-  const premiumStatus = agentHandle
-    ? await getAgentPremiumByHandle({ supabase: premiumLookupClient, agentHandle })
-    : null;
   const entitlements = entitlementsFor({ isPremium: !!premiumStatus?.isPremium });
 
   // Search pattern for ILIKE queries
@@ -104,7 +180,9 @@ export async function GET(request: NextRequest) {
     const mcp_servers: SearchResult[] = [];
     const llmstxt: SearchResult[] = [];
 
-    const results: SearchResults = {
+    const results: SearchResults & {
+      quota?: { remaining: number; limit: number; user_state: SearchQuotaUserState; reset_at: string };
+    } = {
       query: q,
       news,
       skills,
@@ -112,6 +190,12 @@ export async function GET(request: NextRequest) {
       mcp_servers,
       llmstxt,
       total: news.length + skills.length + agents.length,
+      quota: {
+        remaining: quota.remaining,
+        limit: quota.limit,
+        user_state: userState,
+        reset_at: quota.resetAt,
+      },
     };
 
     // Check if client wants markdown
@@ -122,17 +206,41 @@ export async function GET(request: NextRequest) {
 
     if (wantsMarkdown) {
       const markdown = formatResultsAsMarkdown(results);
-      return new NextResponse(markdown, {
+      const res = new NextResponse(markdown, {
         headers: {
           "Content-Type": "text/markdown; charset=utf-8",
           "Cache-Control": "public, max-age=60",
         },
       });
+      if (!existingAnonId) {
+        res.cookies.set({
+          name: "fa_search_id",
+          value: anonId,
+          httpOnly: true,
+          sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
+          path: "/",
+          maxAge: 60 * 60 * 24 * 365,
+        });
+      }
+      return res;
     }
 
-    return NextResponse.json(results, {
+    const res = NextResponse.json(results, {
       headers: { "Cache-Control": "public, max-age=60" },
     });
+    if (!existingAnonId) {
+      res.cookies.set({
+        name: "fa_search_id",
+        value: anonId,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+      });
+    }
+    return res;
   } catch (error) {
     console.error("Search error:", error);
     return NextResponse.json(

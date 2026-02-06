@@ -6,7 +6,7 @@ export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const { email, plan } = await req.json();
 
     if (!email || typeof email !== 'string') {
       return NextResponse.json(
@@ -20,11 +20,14 @@ export async function POST(req: NextRequest) {
     let agentId: string = 'unknown';
     let agentHandle: string = email.split('@')[0];
 
+    const cleanPlan: 'monthly' | 'quarterly' | 'annual' =
+      plan === 'monthly' || plan === 'quarterly' || plan === 'annual' ? plan : 'monthly';
+
     if (supabase) {
       // Check if agent exists by email (stored in owner_url)
       const { data: existingAgent } = await supabase
         .from('agents')
-        .select('id, name, is_premium')
+        .select('id, handle, name, is_premium')
         .eq('owner_url', email)
         .single();
 
@@ -36,7 +39,7 @@ export async function POST(req: NextRequest) {
           );
         }
         agentId = existingAgent.id;
-        agentHandle = existingAgent.name || agentHandle;
+        agentHandle = existingAgent.handle || existingAgent.name || agentHandle;
       } else {
         // Create new agent record
         const { data: newAgent, error } = await supabase
@@ -66,6 +69,7 @@ export async function POST(req: NextRequest) {
     const session = await createCheckoutSession({
       agentId,
       agentHandle,
+      plan: cleanPlan,
       successUrl: `${baseUrl}/subscribe/success?session_id={CHECKOUT_SESSION_ID}`,
       cancelUrl: `${baseUrl}/subscribe?canceled=true`,
     });

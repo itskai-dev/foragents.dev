@@ -22,14 +22,41 @@ function SearchContent() {
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<SearchResults | null>(null);
   const [loading, setLoading] = useState(false);
+  const [quotaBlocked, setQuotaBlocked] = useState<null | { message: string; upgrade_url: string }>(null);
 
   useEffect(() => {
     if (!initialQuery) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     fetch(`/api/search?q=${encodeURIComponent(initialQuery)}`)
-      .then((res) => res.json())
-      .then((data) => {
+      .then(async (res) => {
+        if (res.status === 429) {
+          const body = (await res.json().catch(() => null)) as
+            | { message?: string; upgrade_url?: string }
+            | null;
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setQuotaBlocked({
+            message: body?.message || "You’ve hit today’s search limit.",
+            upgrade_url: body?.upgrade_url || "/pricing",
+          });
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setResults(null);
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setLoading(false);
+          // Minimal event
+          // eslint-disable-next-line no-console
+          console.log("[event] paywall_hit", {
+            paywall_type: "search_quota",
+            surface: "web",
+            path: "/search",
+            q_len: initialQuery.length,
+          });
+          return;
+        }
+
+        const data = (await res.json()) as SearchResults;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setQuotaBlocked(null);
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setResults(data);
         // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -81,6 +108,41 @@ function SearchContent() {
             GET /api/search.md?q=…
           </a>
         </p>
+
+        {/* Quota paywall */}
+        {quotaBlocked && !loading && (
+          <div className="mb-6 rounded-lg border border-cyan/20 bg-cyan/5 p-4">
+            <p className="font-semibold text-foreground mb-1">You’ve hit today’s search limit.</p>
+            <p className="text-sm text-muted-foreground mb-3">{quotaBlocked.message}</p>
+            <ul className="text-sm text-muted-foreground mb-4 list-disc pl-5">
+              <li>Unlimited search across the directory</li>
+              <li>Priority access + faster discovery</li>
+            </ul>
+            <div className="flex items-center gap-3">
+              <Link
+                href={`${quotaBlocked.upgrade_url}?src=search_limit`}
+                className="inline-flex items-center justify-center h-9 px-4 rounded-md bg-cyan text-[#0A0E17] font-semibold text-xs hover:brightness-110 transition-all"
+                onClick={() => {
+                  // eslint-disable-next-line no-console
+                  console.log("[event] upgrade_click", {
+                    source: "search_limit",
+                    surface: "web",
+                    cta_placement: "inline",
+                    path: "/search",
+                  });
+                }}
+              >
+                Upgrade to Premium
+              </Link>
+              <Link
+                href="/"
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                See free feed
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* Loading */}
         {loading && (
