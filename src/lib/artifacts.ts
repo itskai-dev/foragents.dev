@@ -52,6 +52,12 @@ async function writeArtifactsFile(artifacts: Artifact[]): Promise<void> {
   await fs.writeFile(ARTIFACTS_PATH, JSON.stringify(artifacts, null, 2));
 }
 
+function isMissingArtifactsTable(err: unknown): boolean {
+  if (!err || typeof err !== "object") return false;
+  const code = (err as { code?: unknown }).code;
+  return code === "PGRST205";
+}
+
 export async function createArtifact(input: {
   title: string;
   body: string;
@@ -75,18 +81,21 @@ export async function createArtifact(input: {
       .single();
 
     if (error) {
-      console.error("Supabase createArtifact error:", error);
-      throw new Error("Database error");
+      if (!isMissingArtifactsTable(error)) {
+        console.error("Supabase createArtifact error:", error);
+        throw new Error("Database error");
+      }
+      // else: fall back to file-backed create
+    } else {
+      return {
+        id: data.id,
+        title: data.title,
+        body: data.body,
+        author: data.author,
+        tags: data.tags ?? [],
+        created_at: data.created_at,
+      };
     }
-
-    return {
-      id: data.id,
-      title: data.title,
-      body: data.body,
-      author: data.author,
-      tags: data.tags ?? [],
-      created_at: data.created_at,
-    };
   }
 
   const artifacts = await readArtifactsFile();
@@ -100,10 +109,7 @@ export async function createArtifact(input: {
   return artifact;
 }
 
-export async function getArtifacts(params?: {
-  limit?: number;
-  before?: string | null;
-}): Promise<Artifact[]> {
+export async function getArtifacts(params?: { limit?: number; before?: string | null }): Promise<Artifact[]> {
   const limit = Math.min(100, Math.max(1, params?.limit ?? 30));
   const before = params?.before ?? null;
 
@@ -121,24 +127,25 @@ export async function getArtifacts(params?: {
 
     const { data, error } = await q;
     if (error) {
-      console.error("Supabase getArtifacts error:", error);
-      throw new Error("Database error");
+      if (!isMissingArtifactsTable(error)) {
+        console.error("Supabase getArtifacts error:", error);
+        throw new Error("Database error");
+      }
+      // else: fall back to file-backed artifacts
+    } else {
+      return (data ?? []).map((d) => ({
+        id: d.id,
+        title: d.title,
+        body: d.body,
+        author: d.author,
+        tags: d.tags ?? [],
+        created_at: d.created_at,
+      }));
     }
-
-    return (data ?? []).map((d) => ({
-      id: d.id,
-      title: d.title,
-      body: d.body,
-      author: d.author,
-      tags: d.tags ?? [],
-      created_at: d.created_at,
-    }));
   }
 
   const artifacts = await readArtifactsFile();
-  const sorted = artifacts.sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  );
+  const sorted = artifacts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   const filtered = before
     ? sorted.filter((a) => new Date(a.created_at).getTime() < new Date(before).getTime())
     : sorted;
@@ -157,19 +164,22 @@ export async function getArtifactById(id: string): Promise<Artifact | null> {
       .maybeSingle();
 
     if (error) {
-      console.error("Supabase getArtifactById error:", error);
-      throw new Error("Database error");
+      if (!isMissingArtifactsTable(error)) {
+        console.error("Supabase getArtifactById error:", error);
+        throw new Error("Database error");
+      }
+      // else: fall back to file-backed artifacts
+    } else {
+      if (!data) return null;
+      return {
+        id: data.id,
+        title: data.title,
+        body: data.body,
+        author: data.author,
+        tags: data.tags ?? [],
+        created_at: data.created_at,
+      };
     }
-
-    if (!data) return null;
-    return {
-      id: data.id,
-      title: data.title,
-      body: data.body,
-      author: data.author,
-      tags: data.tags ?? [],
-      created_at: data.created_at,
-    };
   }
 
   const artifacts = await readArtifactsFile();
