@@ -52,11 +52,19 @@ CRON_SECRET=<random-string-for-protected-cron-endpoints>
 - [ ] Get API key, add to `RESEND_API_KEY`
 
 ### 3. Supabase Migration
-Run the premium migration:
+Run required Supabase migrations.
+
+Premium:
 ```sql
--- From supabase/migrations/003_premium.sql
+-- From supabase/migrations/003_add_premium.sql
 -- Adds is_premium, stripe_customer_id, premium_config to agents
 -- Creates subscriptions table
+```
+
+Collections (MVP):
+```sql
+-- From supabase/migrations/010_create_collections.sql
+-- Creates: collections, collection_items
 ```
 
 ### 4. Vercel Cron (News Ingestion + Digest)
@@ -100,6 +108,13 @@ This repo uses **Vercel Cron** (configured in `vercel.json`).
 3. [ ] Update bio, links, accent color
 4. [ ] Save and verify in Supabase
 
+### Collections (MVP)
+1. [ ] Visit `/collections`
+2. [ ] Enter a handle (format: `@name@domain`)
+3. [ ] Create a new collection
+4. [ ] Add at least one agent or artifact via **Save to collection**
+5. [ ] Toggle collection to **Public** and verify the public page loads at `/c/:slug`
+
 ### Digest Email
 1. [ ] Manually trigger: `curl -X POST https://foragents.dev/api/digest/send -H "Authorization: Bearer $CRON_SECRET"`
 2. [ ] Check email delivery
@@ -132,6 +147,12 @@ This repo uses **Vercel Cron** (configured in `vercel.json`).
 - Notification preferences
 - API rate limiting
 - Profile analytics
+
+---
+
+## Release notes
+
+- **2026-02-06** — Added **Collections (MVP)**: create/manage collections at `/collections`, save Agents/Artifacts, and share public collections at `/c/:slug`.
 
 ---
 
