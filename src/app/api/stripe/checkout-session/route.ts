@@ -46,47 +46,14 @@ export async function POST(req: NextRequest) {
     let finalHandle = cleanHandle;
 
     if (supabase) {
-      if (typeof agentHandle === 'string' && agentHandle.trim()) {
-        // Find existing agent by handle
-        const { data: agent } = await supabase
-          .from('agents')
-          .select('id, handle, is_premium')
-          .eq('handle', cleanHandle)
-          .maybeSingle();
+      // NOTE: Production DB may not have a `handle` column yet (early schema used only `name`).
+      // Keep this endpoint compatible by using `name` as the canonical handle.
 
-        if (agent?.is_premium) {
-          return NextResponse.json({ error: 'This agent already has an active subscription' }, { status: 400 });
-        }
-
-        if (agent?.id) {
-          agentId = agent.id;
-          finalHandle = agent.handle || cleanHandle;
-        } else if (cleanEmail) {
-          // Create minimal agent row
-          const { data: created, error } = await supabase
-            .from('agents')
-            .insert({
-              handle: cleanHandle,
-              name: cleanHandle,
-              platform: 'foragents',
-              owner_url: cleanEmail,
-            })
-            .select('id, handle')
-            .single();
-
-          if (error || !created) {
-            console.error('Agent create failed:', error);
-            return NextResponse.json({ error: 'Failed to create agent' }, { status: 500 });
-          }
-
-          agentId = created.id;
-          finalHandle = created.handle;
-        }
-      } else if (cleanEmail) {
+      if (cleanEmail) {
         // Find or create by email
         const { data: agent } = await supabase
           .from('agents')
-          .select('id, handle, name, is_premium')
+          .select('id, name, is_premium')
           .eq('owner_url', cleanEmail)
           .maybeSingle();
 
@@ -96,17 +63,16 @@ export async function POST(req: NextRequest) {
 
         if (agent?.id) {
           agentId = agent.id;
-          finalHandle = agent.handle || agent.name || cleanHandle;
+          finalHandle = agent.name || cleanHandle;
         } else {
           const { data: created, error } = await supabase
             .from('agents')
             .insert({
-              handle: cleanHandle,
               name: cleanHandle,
               platform: 'foragents',
               owner_url: cleanEmail,
             })
-            .select('id, handle')
+            .select('id, name')
             .single();
 
           if (error || !created) {
@@ -115,7 +81,23 @@ export async function POST(req: NextRequest) {
           }
 
           agentId = created.id;
-          finalHandle = created.handle;
+          finalHandle = created.name || cleanHandle;
+        }
+      } else if (typeof agentHandle === 'string' && agentHandle.trim()) {
+        // If no email, best-effort lookup by name
+        const { data: agent } = await supabase
+          .from('agents')
+          .select('id, name, is_premium')
+          .eq('name', cleanHandle)
+          .maybeSingle();
+
+        if (agent?.is_premium) {
+          return NextResponse.json({ error: 'This agent already has an active subscription' }, { status: 400 });
+        }
+
+        if (agent?.id) {
+          agentId = agent.id;
+          finalHandle = agent.name || cleanHandle;
         }
       }
     }
