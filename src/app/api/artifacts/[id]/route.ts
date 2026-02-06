@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getArtifactById } from "@/lib/artifacts";
+import { getArtifactById, getArtifactLineage } from "@/lib/artifacts";
 import { logViralEvent } from "@/lib/server/viralMetrics";
 
 export async function GET(
@@ -13,12 +13,17 @@ export async function GET(
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
+  const lineage = await getArtifactLineage(artifact.id).catch(() => []);
+
   // Metrics must never block.
   void logViralEvent("artifact_viewed", { artifact_id: artifact.id });
 
   return NextResponse.json(
     {
-      artifact,
+      artifact: {
+        ...artifact,
+        lineage,
+      },
       updated_at: new Date().toISOString(),
     },
     {

@@ -3,7 +3,7 @@ import "server-only";
 import { promises as fs } from "fs";
 import path from "path";
 import { getSupabase } from "@/lib/supabase";
-import type { Artifact } from "@/lib/artifactsShared";
+import type { Artifact, ArtifactLineageItem } from "@/lib/artifactsShared";
 
 const ARTIFACTS_PATH = path.join(process.cwd(), "data", "artifacts.json");
 
@@ -35,6 +35,14 @@ export function validateArtifactInput(body: Record<string, unknown>): string[] {
     errors.push("tags must be an array of strings when provided");
   }
 
+  if (
+    body.parent_artifact_id !== undefined &&
+    body.parent_artifact_id !== null &&
+    typeof body.parent_artifact_id !== "string"
+  ) {
+    errors.push("parent_artifact_id must be a string when provided");
+  }
+
   return errors;
 }
 
@@ -63,6 +71,7 @@ export async function createArtifact(input: {
   body: string;
   author?: string;
   tags?: string[];
+  parent_artifact_id?: string | null;
 }): Promise<Artifact> {
   const supabase = getSupabase();
 
@@ -71,13 +80,14 @@ export async function createArtifact(input: {
     body: input.body.trim(),
     author: (input.author ?? "anonymous").trim() || "anonymous",
     tags: normalizeTags(input.tags ?? []),
+    parent_artifact_id: input.parent_artifact_id ?? null,
   };
 
   if (supabase) {
     const { data, error } = await supabase
       .from("artifacts")
       .insert(row)
-      .select("id, title, body, author, tags, created_at")
+      .select("id, title, body, author, tags, created_at, parent_artifact_id")
       .single();
 
     if (error) {
@@ -94,6 +104,7 @@ export async function createArtifact(input: {
         author: data.author,
         tags: data.tags ?? [],
         created_at: data.created_at,
+        parent_artifact_id: data.parent_artifact_id ?? null,
       };
     }
   }
@@ -117,7 +128,7 @@ export async function getArtifacts(params?: { limit?: number; before?: string | 
   if (supabase) {
     let q = supabase
       .from("artifacts")
-      .select("id, title, body, author, tags, created_at")
+      .select("id, title, body, author, tags, created_at, parent_artifact_id")
       .order("created_at", { ascending: false })
       .limit(limit);
 
@@ -140,6 +151,7 @@ export async function getArtifacts(params?: { limit?: number; before?: string | 
         author: d.author,
         tags: d.tags ?? [],
         created_at: d.created_at,
+        parent_artifact_id: (d as { parent_artifact_id?: string | null }).parent_artifact_id ?? null,
       }));
     }
   }
@@ -158,7 +170,7 @@ export async function getArtifactById(id: string): Promise<Artifact | null> {
   if (supabase) {
     const { data, error } = await supabase
       .from("artifacts")
-      .select("id, title, body, author, tags, created_at")
+      .select("id, title, body, author, tags, created_at, parent_artifact_id")
       .eq("id", id)
       .limit(1)
       .maybeSingle();
@@ -178,12 +190,73 @@ export async function getArtifactById(id: string): Promise<Artifact | null> {
         author: data.author,
         tags: data.tags ?? [],
         created_at: data.created_at,
+        parent_artifact_id: data.parent_artifact_id ?? null,
       };
     }
   }
 
   const artifacts = await readArtifactsFile();
   return artifacts.find((a) => a.id === id) ?? null;
+}
+
+export async function getArtifactLineage(id: string, opts?: { maxDepth?: number }): Promise<ArtifactLineageItem[]> {
+  const maxDepth = Math.min(25, Math.max(1, opts?.maxDepth ?? 10));
+
+  const supabase = getSupabase();
+  if (supabase) {
+    const lineage: ArtifactLineageItem[] = [];
+    const seen = new Set<string>();
+
+    // Start from the artifact's parent.
+    const base = await getArtifactById(id);
+    let cur = base?.parent_artifact_id ?? null;
+
+    while (cur && lineage.length < maxDepth) {
+      if (seen.has(cur)) break;
+      seen.add(cur);
+
+      const { data, error } = await supabase
+        .from("artifacts")
+        .select("id, title, parent_artifact_id")
+        .eq("id", cur)
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        if (!isMissingArtifactsTable(error)) {
+          console.error("Supabase getArtifactLineage error:", error);
+          throw new Error("Database error");
+        }
+        break; // fallback path handled below
+      }
+      if (!data) break;
+
+      lineage.push({ id: data.id, title: data.title });
+      cur = (data as { parent_artifact_id?: string | null }).parent_artifact_id ?? null;
+    }
+
+    if (lineage.length > 0 || !cur) return lineage;
+    // if table missing, continue to file fallback below
+  }
+
+  const artifacts = await readArtifactsFile();
+  const byId = new Map(artifacts.map((a) => [a.id, a] as const));
+  const lineage: ArtifactLineageItem[] = [];
+  const seen = new Set<string>();
+
+  const base = byId.get(id);
+  let cur = base?.parent_artifact_id ?? null;
+  while (cur && lineage.length < maxDepth) {
+    if (seen.has(cur)) break;
+    seen.add(cur);
+
+    const parent = byId.get(cur);
+    if (!parent) break;
+    lineage.push({ id: parent.id, title: parent.title });
+    cur = parent.parent_artifact_id ?? null;
+  }
+
+  return lineage;
 }
 
 // (snippets + url helpers moved to artifactsShared.ts)

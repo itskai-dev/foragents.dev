@@ -45,3 +45,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 supabase/.temp/
+
+# viral metrics local fallback
+/data/viral_events.ndjson
+/.tmp-tests/
