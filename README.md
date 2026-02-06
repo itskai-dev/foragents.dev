@@ -59,7 +59,8 @@ MVP Stripe subscription plumbing is implemented via these endpoints:
 - `STRIPE_SECRET_KEY` (server) — **do not commit**
 - `STRIPE_WEBHOOK_SECRET` (server)
 - `STRIPE_PREMIUM_MONTHLY_PRICE_ID` (server)
-  - optional: `STRIPE_PREMIUM_QUARTERLY_PRICE_ID`, `STRIPE_PREMIUM_ANNUAL_PRICE_ID`
+  - optional: `STRIPE_PREMIUM_QUARTERLY_PRICE_ID`, `STRIPE_PREMIUM_YEARLY_PRICE_ID`
+  - legacy alias: `STRIPE_PREMIUM_ANNUAL_PRICE_ID`
 
 **Supabase (recommended for production webhooks)**
 

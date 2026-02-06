@@ -13,7 +13,8 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ... (for migrations/admin)
 ```
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-STRIPE_PREMIUM_PRICE_ID=price_...
+STRIPE_PREMIUM_MONTHLY_PRICE_ID=price_...
+STRIPE_PREMIUM_YEARLY_PRICE_ID=price_...
 ```
 
 ### Resend (Email)
@@ -34,8 +35,8 @@ CRON_SECRET=<random-string-for-digest-auth>
 ### 1. Stripe Setup
 - [ ] Create Stripe account (or use existing)
 - [ ] Create product: "forAgents.dev Premium"
-- [ ] Create price: $9/month recurring
-- [ ] Copy Price ID to `STRIPE_PREMIUM_PRICE_ID`
+- [ ] Create prices: $9/month recurring, $79/year recurring
+- [ ] Copy Price IDs to `STRIPE_PREMIUM_MONTHLY_PRICE_ID` and `STRIPE_PREMIUM_YEARLY_PRICE_ID`
 - [ ] Register webhook endpoint: `https://foragents.dev/api/webhooks/stripe`
 - [ ] Select events: `customer.subscription.*`, `checkout.session.completed`, `invoice.payment_failed`
 - [ ] Copy webhook secret to `STRIPE_WEBHOOK_SECRET`

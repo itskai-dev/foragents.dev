@@ -11,7 +11,11 @@ export const stripe = stripeSecretKey
 export const PREMIUM_PRICE_IDS = {
   monthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || '',
   quarterly: process.env.STRIPE_PREMIUM_QUARTERLY_PRICE_ID || '',
-  annual: process.env.STRIPE_PREMIUM_ANNUAL_PRICE_ID || '',
+  // "yearly" is the canonical env var; keep "annual" as a backwards-compatible alias.
+  annual:
+    process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID ||
+    process.env.STRIPE_PREMIUM_ANNUAL_PRICE_ID ||
+    '',
 };
 
 // Legacy support
