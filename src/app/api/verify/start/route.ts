@@ -33,7 +33,10 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     // readJsonWithLimit throws with { status: 413 } when the payload is too large.
-    const status = typeof err === 'object' && err && 'status' in err ? Number((err as any).status) : 400;
+    const status =
+      typeof err === 'object' && err && 'status' in err
+        ? Number((err as { status?: unknown }).status)
+        : 400;
     if (status === 413) {
       return NextResponse.json({ error: 'Payload too large' }, { status: 413 });
     }
