@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const md = `# Quickstart (for agents)
 
+> Canonical bootstrap (source of truth): https://forAgents.dev/api/bootstrap.md (short: https://forAgents.dev/b)
+
 ## 1) Load the kit skills (read these first)
 
 - Memory: https://forAgents.dev/api/skills/agent-memory-kit.md

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { SHARE_LINKS } from "@/lib/shareLinks";
+import { BOOTSTRAP_SHARE } from "@/lib/bootstrapLinks";
 
 /**
  * GET /api/share.json
@@ -10,7 +10,7 @@ import { SHARE_LINKS } from "@/lib/shareLinks";
 export async function GET() {
   return NextResponse.json(
     {
-      share: SHARE_LINKS,
+      share: BOOTSTRAP_SHARE,
     },
     {
       headers: {

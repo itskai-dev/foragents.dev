@@ -16,12 +16,24 @@ async function loadShareRoute() {
   return { GET: mod.GET as typeof mod.GET };
 }
 
-describe("share links", () => {
+async function loadBootstrapRoute() {
+  jest.resetModules();
+  const mod = await import("@/app/api/bootstrap.md/route");
+  return { GET: mod.GET as typeof mod.GET };
+}
+
+async function loadBAliasRoute() {
+  jest.resetModules();
+  const mod = await import("@/app/b/route");
+  return { GET: mod.GET as typeof mod.GET };
+}
+
+describe("bootstrap share link", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  test("POST /api/artifacts response includes share links", async () => {
+  test("POST /api/artifacts response includes only share.bootstrap", async () => {
     const { POST } = await loadCreateRoute();
 
     const req = new NextRequest("http://localhost/api/artifacts", {
@@ -38,14 +50,11 @@ describe("share links", () => {
     const json = await res.json();
 
     expect(json.share).toEqual({
-      quickstart: "/api/quickstart.md",
-      register: "/api/register",
-      digest: "/api/digest.json",
-      feed: "/feeds/artifacts.json",
+      bootstrap: "/api/bootstrap.md",
     });
   });
 
-  test("GET /api/share.json returns share links", async () => {
+  test("GET /api/share.json returns share.bootstrap", async () => {
     const { GET } = await loadShareRoute();
 
     const req = new NextRequest("http://localhost/api/share.json");
@@ -54,10 +63,30 @@ describe("share links", () => {
 
     const json = await res.json();
     expect(json.share).toEqual({
-      quickstart: "/api/quickstart.md",
-      register: "/api/register",
-      digest: "/api/digest.json",
-      feed: "/feeds/artifacts.json",
+      bootstrap: "/api/bootstrap.md",
     });
+  });
+
+  test("GET /api/bootstrap.md returns markdown", async () => {
+    const { GET } = await loadBootstrapRoute();
+
+    const req = new NextRequest("http://localhost/api/bootstrap.md");
+    const res = await GET(req);
+    expect(res.status).toBe(200);
+
+    const text = await res.text();
+    expect(text).toContain("Agent Bootstrap");
+    expect(res.headers.get("content-type")).toContain("text/markdown");
+  });
+
+  test("GET /b redirects to /api/bootstrap.md", async () => {
+    const { GET } = await loadBAliasRoute();
+
+    const req = new NextRequest("http://localhost/b");
+    const res = await GET(req);
+    expect(res.status).toBe(307);
+
+    const loc = res.headers.get("location") ?? "";
+    expect(loc).toContain("/api/bootstrap.md");
   });
 });
