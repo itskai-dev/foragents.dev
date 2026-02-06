@@ -24,7 +24,7 @@ RESEND_API_KEY=re_...
 ### App Config
 ```
 NEXT_PUBLIC_BASE_URL=https://foragents.dev
-CRON_SECRET=<random-string-for-digest-auth>
+CRON_SECRET=<random-string-for-protected-cron-endpoints>
 ```
 
 ---
@@ -54,21 +54,23 @@ Run the premium migration:
 -- Creates subscriptions table
 ```
 
-### 4. Vercel Cron (Daily Digest)
-Add to `vercel.json`:
-```json
-{
-  "crons": [
-    {
-      "path": "/api/digest/send",
-      "schedule": "0 15 * * *"
-    }
-  ]
-}
-```
-(7 AM PST = 15:00 UTC)
+### 4. Vercel Cron (News Ingestion + Digest)
+This repo uses **Vercel Cron** (configured in `vercel.json`).
 
-The endpoint expects `Authorization: Bearer <CRON_SECRET>` header.
+#### News ingestion
+- Cron path: `GET /api/ingest` (Vercel Cron sends GET)
+- The handler only runs ingestion when the request includes the `x-vercel-cron: 1` header.
+- Manual ingestion (for debugging) is available via:
+  ```bash
+  curl -X POST https://foragents.dev/api/ingest \
+    -H "Authorization: Bearer $CRON_SECRET"
+  ```
+
+#### Daily digest
+- Cron route: `POST /api/cron/digest`
+- Expects `Authorization: Bearer <CRON_SECRET>` header.
+
+(7 AM PST = 15:00 UTC)
 
 ---
 
