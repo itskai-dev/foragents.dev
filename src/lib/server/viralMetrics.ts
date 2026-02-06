@@ -8,6 +8,7 @@ export type ViralMetricEventType =
   | "artifact_created"
   | "artifact_viewed"
   | "artifact_share_copied"
+  | "artifact_remixed"
   | "comment_created"
   | "rating_created_or_updated";
 
@@ -23,6 +24,7 @@ export const VIRAL_EVENT_TYPES: ViralMetricEventType[] = [
   "artifact_created",
   "artifact_viewed",
   "artifact_share_copied",
+  "artifact_remixed",
   "comment_created",
   "rating_created_or_updated",
 ];
@@ -179,6 +181,7 @@ export function summarizeViralEvents(events: ViralMetricEvent[]) {
     artifact_created: 0,
     artifact_viewed: 0,
     artifact_share_copied: 0,
+    artifact_remixed: 0,
     comment_created: 0,
     rating_created_or_updated: 0,
   };
@@ -210,6 +213,7 @@ export function summarizeArtifacts(events: ViralMetricEvent[]) {
         artifact_created: 0,
         artifact_viewed: 0,
         artifact_share_copied: 0,
+        artifact_remixed: 0,
         comment_created: 0,
         rating_created_or_updated: 0,
       },
@@ -223,6 +227,7 @@ export function summarizeArtifacts(events: ViralMetricEvent[]) {
     const score =
       x.counts.artifact_viewed +
       3 * x.counts.artifact_share_copied +
+      4 * x.counts.artifact_remixed +
       5 * x.counts.comment_created +
       2 * x.counts.rating_created_or_updated;
 

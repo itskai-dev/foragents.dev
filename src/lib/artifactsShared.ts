@@ -1,3 +1,8 @@
+export type ArtifactLineageItem = {
+  id: string;
+  title: string;
+};
+
 export type Artifact = {
   id: string;
   title: string;
@@ -5,6 +10,12 @@ export type Artifact = {
   author: string;
   tags: string[];
   created_at: string;
+  parent_artifact_id?: string | null;
+  /**
+   * Lightweight ancestor chain (nearest parent first).
+   * Optional to keep list endpoints lean.
+   */
+  lineage?: ArtifactLineageItem[];
 };
 
 export function artifactUrl(id: string): string {

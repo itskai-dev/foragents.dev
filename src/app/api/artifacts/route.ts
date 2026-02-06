@@ -126,6 +126,10 @@ export async function POST(request: NextRequest) {
       body: (body.body as string).trim(),
       author: typeof body.author === "string" ? body.author : undefined,
       tags: Array.isArray(body.tags) ? (body.tags as string[]) : undefined,
+      parent_artifact_id:
+        typeof body.parent_artifact_id === "string" && body.parent_artifact_id.trim()
+          ? (body.parent_artifact_id as string).trim()
+          : null,
     });
 
     // Metrics must never block the core flow.

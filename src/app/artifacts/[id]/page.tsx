@@ -18,6 +18,8 @@ export default async function ArtifactPermalinkPage(props: {
 
   const url = artifactUrl(artifact.id);
 
+  const parent = artifact.parent_artifact_id ? await getArtifactById(artifact.parent_artifact_id) : null;
+
   return (
     <div className="min-h-screen">
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
@@ -47,6 +49,16 @@ export default async function ArtifactPermalinkPage(props: {
 
         <div className="grid gap-4">
           <ViralEventOnMount type="artifact_viewed" artifactId={artifact.id} />
+
+          {parent && (
+            <div className="text-sm text-muted-foreground">
+              Remix of{" "}
+              <Link href={`/artifacts/${parent.id}`} className="text-cyan hover:underline">
+                {parent.title}
+              </Link>
+            </div>
+          )}
+
           <ArtifactCard artifact={artifact} />
           <CopySnippets title={artifact.title} url={url} artifactId={artifact.id} />
         </div>
