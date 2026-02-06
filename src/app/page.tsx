@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents, getRecentSubmissions } from "@/lib/data";
+import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { NewsFeed } from "@/components/news-feed";
@@ -16,8 +17,24 @@ import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
 import { Footer } from "@/components/footer";
 
+export const revalidate = 300;
+
 export default async function Home() {
-  const news = getNews();
+  // Prefer Supabase-backed news when available; fall back to bundled JSON.
+  let news = getNews();
+  const supabase = getSupabase();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("news")
+      .select("id,title,summary,source_url,source_name,tags,published_at")
+      .order("published_at", { ascending: false })
+      .limit(100);
+
+    if (!error && data && data.length > 0) {
+      // Supabase shape matches NewsItem.
+      news = data as typeof news;
+    }
+  }
   const skills = getSkills();
   const mcpServers = getMcpServers();
   const llmsTxtEntries = getLlmsTxtEntries();
