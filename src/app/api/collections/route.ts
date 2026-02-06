@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
 import { getSupabase } from "@/lib/supabase";
 import { ensureUniqueSlug, normalizeOwnerHandle } from "@/lib/collections";
 
@@ -72,11 +73,24 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }
 
-  const body = (await req.json().catch(() => null)) as null | {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(`collections:post:${ip}`, { windowMs: 60_000, max: 20 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+  let body: null | {
     ownerHandle?: string;
     name?: string;
     description?: string;
-  };
+  } = null;
+
+  try {
+    body = await readJsonWithLimit(req, 12_000);
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;
+    if (status === 413) return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    return NextResponse.json({ error: "Invalid request body. Expected JSON." }, { status: 400 });
+  }
 
   const ownerHandle = normalizeOwnerHandle(body?.ownerHandle || "");
   if (!ownerHandle) {

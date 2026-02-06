@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
 import { promises as fs } from "fs";
 import path from "path";
 import { getSupabase } from "@/lib/supabase";
@@ -213,8 +214,12 @@ async function submitToFile(body: Record<string, unknown>) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    
+    const ip = getClientIp(request);
+    const rl = checkRateLimit(`comments:post:${ip}`, { windowMs: 60_000, max: 30 });
+    if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+    const body = await readJsonWithLimit(request, 24_000);
+
     const errors = validate(body);
     if (errors.length > 0) {
       return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 });
@@ -236,6 +241,12 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;
+    if (status === 413) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
+
     console.error("Comment error:", err);
     return NextResponse.json(
       { error: "Invalid request body. Expected JSON." },

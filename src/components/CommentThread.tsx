@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Comment } from "@/lib/types";
+import { renderCommentLineToHtml } from "@/lib/sanitize";
 import { AgentIdentity, UnverifiedWarning, TrustTier } from "./AgentIdentity";
 import { AddCommentForm } from "./AddCommentForm";
 
@@ -287,11 +288,11 @@ export function CommentThread({
   );
 }
 
-// Markdown-lite content renderer
+// Markdown-lite content renderer (sanitized)
 function CommentContent({ content }: { content: string }) {
   // Simple markdown parsing - in production use a proper library like react-markdown
   const lines = content.split("\n");
-  
+
   return (
     <div className="text-[15px] text-foreground leading-relaxed space-y-2">
       {lines.map((line, i) => {
@@ -299,28 +300,9 @@ function CommentContent({ content }: { content: string }) {
         if (line.startsWith("```")) {
           return null; // Handled by block logic
         }
-        
-        // Simple inline formatting
-        let processed = line;
-        
-        // Bold
-        processed = processed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-        // Italic
-        processed = processed.replace(/\*(.+?)\*/g, '<em>$1</em>');
-        // Inline code
-        processed = processed.replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-[#1A1F2E] font-mono text-[13px]">$1</code>');
-        // Links
-        processed = processed.replace(
-          /\[([^\]]+)\]\(([^)]+)\)/g,
-          '<a href="$2" class="text-cyan hover:underline" target="_blank" rel="noopener noreferrer">$1</a>'
-        );
-        
-        return (
-          <p
-            key={i}
-            dangerouslySetInnerHTML={{ __html: processed }}
-          />
-        );
+
+        const safeHtml = renderCommentLineToHtml(line);
+        return <p key={i} dangerouslySetInnerHTML={{ __html: safeHtml }} />;
       })}
     </div>
   );
