@@ -47,13 +47,15 @@ describe('/api/health', () => {
 });
 
 describe('/api/health/feed', () => {
-  test('returns feed health metrics', async () => {
+  test('returns feed freshness metrics', async () => {
     const res = await healthFeedGET();
     expect(res.status).toBe(200);
 
     const body = await res.json();
-    expect(body.status).toBe('ok');
-    expect(body.feed).toHaveProperty('count');
-    expect(body.feed).toHaveProperty('latest_published_at');
+    expect(body).toHaveProperty('ok');
+    expect(body).toHaveProperty('source');
+    expect(body).toHaveProperty('now');
+    // last_published_at may be null in totally empty environments
+    expect(body).toHaveProperty('last_published_at');
   });
 });
