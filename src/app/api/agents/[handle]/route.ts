@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { getAgentByHandle, formatAgentHandle } from "@/lib/data";
+import { isHandleVerified } from "@/lib/verifications";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ handle: string }> }
 ) {
   const { handle } = await params;
-  
+
   // Remove .json extension if present
   const cleanHandle = handle.replace(/\.json$/, "");
   const agent = getAgentByHandle(cleanHandle);
@@ -18,6 +19,9 @@ export async function GET(
     );
   }
 
+  const fullHandle = formatAgentHandle(agent).toLowerCase();
+  const verified = await isHandleVerified(fullHandle);
+
   const response = {
     meta: {
       generated: new Date().toISOString(),
@@ -26,6 +30,7 @@ export async function GET(
     agent: {
       ...agent,
       fullHandle: formatAgentHandle(agent),
+      verified,
       profileUrl: `https://foragents.dev/agents/${agent.handle}`,
     },
   };
