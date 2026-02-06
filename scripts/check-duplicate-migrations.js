@@ -11,7 +11,9 @@
   Where <version> is typically a zero-padded integer (e.g., 012).
 */
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const fs = require("node:fs");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require("node:path");
 
 const repoRoot = path.resolve(__dirname, "..");
