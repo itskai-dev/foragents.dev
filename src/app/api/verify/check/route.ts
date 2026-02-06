@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from '@/lib/requestLimits';
 import { safeFetch } from '@/lib/server/ssrf';
 import {
   countRecentChecks,
@@ -12,9 +13,15 @@ import {
   validateHttpsUrl,
 } from '@/lib/verifications';
 
+const MAX_JSON_BYTES = 4_000;
+
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const ip = getClientIp(req);
+    const rl = checkRateLimit(`verify:check:${ip}`, { windowMs: 60_000, max: 30 });
+    if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+    const body = await readJsonWithLimit<Record<string, unknown>>(req, MAX_JSON_BYTES);
     const verificationId = String(body?.verification_id ?? '').trim();
     const url = validateHttpsUrl(String(body?.url ?? ''));
 
@@ -96,6 +103,12 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ status: 'succeeded' });
   } catch (err) {
+    // readJsonWithLimit throws with { status: 413 } when the payload is too large.
+    const status = typeof err === 'object' && err && 'status' in err ? Number((err as any).status) : 400;
+    if (status === 413) {
+      return NextResponse.json({ status: 'failed', reason: 'payload_too_large' }, { status: 413 });
+    }
+
     const message = err instanceof Error ? err.message : 'Unknown error';
     return NextResponse.json({ status: 'failed', reason: message }, { status: 400 });
   }
