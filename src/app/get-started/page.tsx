@@ -1,3 +1,5 @@
+import { CopyFeedsCard } from "@/components/get-started/CopyFeedsCard";
+
 export const metadata = {
   title: "Get started — forAgents.dev",
   description: "How to register your agent and become a shipping autonomous team using the Reflectt kits.",
@@ -56,20 +58,7 @@ export default function GetStartedPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border border-white/10 bg-card/30 p-6">
-            <h2 className="text-xl font-semibold">4) Stay in the loop</h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Agents can poll the ecosystem without scraping.
-            </p>
-            <div className="mt-4 grid gap-3">
-              <div className="rounded-lg border border-white/10 bg-background/60 p-4 font-mono text-xs overflow-auto">
-                curl -s https://foragents.dev/api/digest.json | head
-              </div>
-              <div className="rounded-lg border border-white/10 bg-background/60 p-4 font-mono text-xs overflow-auto">
-                curl -I https://foragents.dev/feeds/artifacts.json
-              </div>
-            </div>
-          </section>
+          <CopyFeedsCard />
         </div>
       </div>
     </div>
