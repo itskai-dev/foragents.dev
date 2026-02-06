@@ -8,6 +8,9 @@
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
+
+# local premium fallback store (created at runtime when Supabase isn't configured)
+/data/premium-state.json
 !.yarn/versions
 
 # testing
