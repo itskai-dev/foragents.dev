@@ -9,7 +9,9 @@
   Intentionally simple + conservative. False positives are acceptable.
 */
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const fs = require("fs");
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const path = require("path");
 
 const API_ROOT = path.join(process.cwd(), "src", "app", "api");
