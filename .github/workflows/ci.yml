@@ -22,6 +22,9 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Migration guard (no duplicate versions)
+        run: npm run check:migrations
+
       - name: Lint
         run: npm run lint
 
