@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase } from '@/lib/supabase';
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from '@/lib/requestLimits';
+
+const MAX_JSON_BYTES = 30_000;
 
 // GET - Fetch agent profile and premium config
 export async function GET(req: NextRequest) {
@@ -57,14 +60,23 @@ export async function GET(req: NextRequest) {
 // PUT - Update agent premium config
 export async function PUT(req: NextRequest) {
   try {
-    const { agentHandle, premiumConfig } = await req.json();
+    const ip = getClientIp(req);
+    const rl = checkRateLimit(`profile:put:${ip}`, { windowMs: 60_000, max: 20 });
+    if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
 
-    if (!agentHandle) {
+    const { agentHandle, premiumConfig } = await readJsonWithLimit<Record<string, unknown>>(req, MAX_JSON_BYTES);
+
+    if (typeof agentHandle !== 'string' || !agentHandle.trim()) {
       return NextResponse.json(
         { error: 'Agent handle is required' },
         { status: 400 }
       );
     }
+
+    const premiumConfigObj: Record<string, unknown> =
+      premiumConfig && typeof premiumConfig === 'object' && !Array.isArray(premiumConfig)
+        ? (premiumConfig as Record<string, unknown>)
+        : {};
 
     const cleanHandle = agentHandle.replace(/^@/, '').trim();
     const supabase = getSupabase();
@@ -98,10 +110,15 @@ export async function PUT(req: NextRequest) {
     }
 
     // Validate and sanitize premium config
+    const extendedBio = typeof premiumConfigObj.extendedBio === 'string' ? premiumConfigObj.extendedBio : '';
+    const pinnedSkills = Array.isArray(premiumConfigObj.pinnedSkills) ? premiumConfigObj.pinnedSkills : [];
+    const customLinks = Array.isArray(premiumConfigObj.customLinks) ? premiumConfigObj.customLinks : [];
+    const accentColor = typeof premiumConfigObj.accentColor === 'string' ? premiumConfigObj.accentColor : '';
+
     const sanitizedConfig = {
-      extendedBio: (premiumConfig.extendedBio || '').slice(0, 500),
-      pinnedSkills: (premiumConfig.pinnedSkills || []).slice(0, 3),
-      customLinks: (Array.isArray(premiumConfig.customLinks) ? premiumConfig.customLinks : [])
+      extendedBio: extendedBio.slice(0, 500),
+      pinnedSkills: pinnedSkills.slice(0, 3),
+      customLinks: customLinks
         .slice(0, 5)
         .map((link: unknown) => {
           const obj = (link && typeof link === 'object') ? (link as Record<string, unknown>) : {};
@@ -112,8 +129,8 @@ export async function PUT(req: NextRequest) {
             url: url.slice(0, 200),
           };
         }),
-      accentColor: /^#[0-9A-Fa-f]{6}$/.test(premiumConfig.accentColor) 
-        ? premiumConfig.accentColor 
+      accentColor: /^#[0-9A-Fa-f]{6}$/.test(accentColor) 
+        ? accentColor 
         : '#22d3ee',
     };
 
@@ -139,6 +156,12 @@ export async function PUT(req: NextRequest) {
       premiumConfig: sanitizedConfig,
     });
   } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (error as any)?.status === 'number' ? (error as any).status : 500;
+    if (status === 413) {
+      return NextResponse.json({ error: 'Request body too large' }, { status: 413 });
+    }
+
     console.error('Profile update error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { normalizeOwnerHandle } from "@/lib/collections";
+import { checkRateLimit, getClientIp, rateLimitResponse } from "@/lib/requestLimits";
+
+const MAX_BODY_BYTES = 2_000;
 
 function ownerHandleFrom(req: NextRequest): string | null {
   const header = req.headers.get("x-owner-handle") || req.headers.get("x-agent-handle");
@@ -11,6 +14,16 @@ function ownerHandleFrom(req: NextRequest): string | null {
 }
 
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string; itemId: string }> }) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(`collections:items:delete:${ip}`, { windowMs: 60_000, max: 60 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+  // DELETE requests should not include a body; cap just in case.
+  const len = Number(req.headers.get("content-length") || "0");
+  if (Number.isFinite(len) && len > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+  }
+
   const supabase = getSupabase();
   if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
 
