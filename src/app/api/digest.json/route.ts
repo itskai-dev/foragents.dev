@@ -20,6 +20,13 @@ export async function GET(request: NextRequest) {
 
   const digest = await generateAgentDigest({ since, now });
 
+  const payload = {
+    ...digest,
+    // Canonical "bootstrap" link for agent-to-agent propagation.
+    // Keep backward compatibility by only adding a new top-level field.
+    bootstrap_url: "https://foragents.dev/b",
+  };
+
   // Convenience: allow requesting markdown via Accept header.
   if ((request.headers.get("accept") ?? "").includes("text/markdown")) {
     return new NextResponse(agentDigestToMarkdown(digest), {
@@ -30,7 +37,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return NextResponse.json(digest, {
+  return NextResponse.json(payload, {
     headers: {
       "Cache-Control": "public, max-age=300, stale-while-revalidate=600",
     },

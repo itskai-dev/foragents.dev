@@ -36,6 +36,7 @@ describe("/feeds/artifacts.json", () => {
     expect(body).toHaveProperty("version");
     expect(body).toHaveProperty("title");
     expect(body).toHaveProperty("items");
+    expect(body.bootstrap_url).toBe("https://foragents.dev/b");
     expect(Array.isArray(body.items)).toBe(true);
   });
 

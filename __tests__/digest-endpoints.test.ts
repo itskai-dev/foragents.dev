@@ -37,6 +37,7 @@ describe("/api/digest.{json,md}", () => {
     expect(body).toHaveProperty("counts.new_agents");
     expect(Array.isArray(body.new_artifacts)).toBe(true);
     expect(Array.isArray(body.new_agents)).toBe(true);
+    expect(body.bootstrap_url).toBe("https://foragents.dev/b");
   });
 
   test("GET /api/digest.md returns markdown + cache headers", async () => {
