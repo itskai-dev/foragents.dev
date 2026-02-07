@@ -41,9 +41,11 @@ function isWriteRouteHandler(src) {
 
 function hasBodyCap(src) {
   // Allow optional TS generics: readJsonWithLimit<T>(...) or readJsonWithLimit<Record<string,unknown>>(...)
+  // Also allow a strict content-length guard for endpoints that should have no body (e.g. DELETE).
   return (
     /readJsonWithLimit(?:<[^\n]*?>+)?\s*\(/.test(src) ||
-    /readTextWithLimit(?:<[^\n]*?>+)?\s*\(/.test(src)
+    /readTextWithLimit(?:<[^\n]*?>+)?\s*\(/.test(src) ||
+    /MAX_BODY_BYTES/.test(src)
   );
 }
 
