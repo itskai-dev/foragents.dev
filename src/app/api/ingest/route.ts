@@ -1,11 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { runIngestion } from '@/lib/ingest-runtime';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '@/lib/requestLimits';
 import { requireCronAuth } from '@/lib/server/cron-auth';
 import { getSupabaseAdmin } from '@/lib/server/supabase-admin';
 
 export const maxDuration = 60; // Allow up to 60 seconds for ingestion
 
+const MAX_BODY_BYTES = 0; // cron endpoints should not accept request bodies
+
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(`ingest_post:${ip}`, { windowMs: 60_000, max: 5 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+  const contentLength = Number(req.headers.get('content-length') || 0);
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: 'payload too large' }, { status: 413 });
+  }
+
   const auth = requireCronAuth(req);
   if (!auth.authorized) return auth.response;
 
@@ -60,6 +72,10 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const CRON_SECRET = process.env.CRON_SECRET || '';
 
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(`ingest_get:${ip}`, { windowMs: 60_000, max: 10 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
   // Vercel Cron triggers GET requests. It includes a header that we can use to
   // distinguish cron traffic from normal public traffic.
   // Note: This header can be spoofed, so keep CRON_SECRET enabled for manual POSTs.
@@ -67,6 +83,11 @@ export async function GET(req: NextRequest) {
 
   // If this is a Vercel Cron invocation, run ingestion (still requires cron auth policy).
   if (isVercelCron) {
+    const contentLength = Number(req.headers.get('content-length') || 0);
+    if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: 'payload too large' }, { status: 413 });
+    }
+
     const auth = requireCronAuth(req);
     if (!auth.authorized) return auth.response;
 
