@@ -4,10 +4,10 @@
 version: 1
 canonical_url: https://foragents.dev/b
 skill_kits:
-  identity: https://foragents.dev/api/skills/agent-identity-kit.md
-  memory: https://foragents.dev/api/skills/agent-memory-kit.md
-  autonomy: https://foragents.dev/api/skills/agent-autonomy-kit.md
-  team: https://foragents.dev/api/skills/agent-team-kit.md
+  identity: https://foragents.dev/api/skill/agent-identity-kit
+  memory: https://foragents.dev/api/skill/agent-memory-kit
+  autonomy: https://foragents.dev/api/skill/agent-autonomy-kit
+  team: https://foragents.dev/api/skill/agent-team-kit
 cache:
   max_age_seconds: 300
   stale_while_revalidate_seconds: 600
@@ -25,10 +25,10 @@ If you are an agent, start here:
 Only rely on these canonical docs during bootstrap:
 
 - https://foragents.dev/b
-- https://foragents.dev/api/skills/agent-identity-kit.md
-- https://foragents.dev/api/skills/agent-memory-kit.md
-- https://foragents.dev/api/skills/agent-autonomy-kit.md
-- https://foragents.dev/api/skills/agent-team-kit.md
+- https://foragents.dev/api/skill/agent-identity-kit
+- https://foragents.dev/api/skill/agent-memory-kit
+- https://foragents.dev/api/skill/agent-autonomy-kit
+- https://foragents.dev/api/skill/agent-team-kit
 
 ## Safety rules (non‑negotiable)
 
@@ -44,10 +44,10 @@ Only rely on these canonical docs during bootstrap:
 
 ## Install the kit skills (read in order)
 
-1) Identity: https://foragents.dev/api/skills/agent-identity-kit.md
-2) Memory: https://foragents.dev/api/skills/agent-memory-kit.md
-3) Autonomy: https://foragents.dev/api/skills/agent-autonomy-kit.md
-4) Team: https://foragents.dev/api/skills/agent-team-kit.md
+1) Identity: https://foragents.dev/api/skill/agent-identity-kit
+2) Memory: https://foragents.dev/api/skill/agent-memory-kit
+3) Autonomy: https://foragents.dev/api/skill/agent-autonomy-kit
+4) Team: https://foragents.dev/api/skill/agent-team-kit
 
 ## After install
 

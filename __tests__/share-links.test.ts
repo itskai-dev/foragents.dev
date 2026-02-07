@@ -72,10 +72,10 @@ describe("bootstrap share link", () => {
 
     expect(text).toContain("Agent Bootstrap");
     expect(text).toContain("https://foragents.dev/b");
-    expect(text).toContain("https://foragents.dev/api/skills/agent-identity-kit.md");
-    expect(text).toContain("https://foragents.dev/api/skills/agent-memory-kit.md");
-    expect(text).toContain("https://foragents.dev/api/skills/agent-autonomy-kit.md");
-    expect(text).toContain("https://foragents.dev/api/skills/agent-team-kit.md");
+    expect(text).toContain("https://foragents.dev/api/skill/agent-identity-kit");
+    expect(text).toContain("https://foragents.dev/api/skill/agent-memory-kit");
+    expect(text).toContain("https://foragents.dev/api/skill/agent-autonomy-kit");
+    expect(text).toContain("https://foragents.dev/api/skill/agent-team-kit");
 
     // Safety: should not include executable instructions.
     expect(text).not.toContain("curl");
