@@ -20,8 +20,8 @@ describe("/api/artifacts/[id]/ratings", () => {
     process.env.FORAGENTS_API_KEYS_JSON = JSON.stringify({
       testkey: { agent_id: "agt_test", handle: "@test@local", display_name: "Test" },
     });
-    const rl = await import("@/lib/server/rateLimit");
-    rl._resetRateLimitForTests();
+    const rl = await import("@/lib/requestLimits");
+    rl.__resetRateLimitsForTests();
 
     // Ensure file-backed store is clean per test.
     const { promises: fs } = await import("fs");

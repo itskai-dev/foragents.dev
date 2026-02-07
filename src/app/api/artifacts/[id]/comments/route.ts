@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAgentAuth } from "@/lib/server/agent-auth";
-import { checkRateLimit } from "@/lib/server/rateLimit";
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit, readTextWithLimit } from "@/lib/requestLimits";
 import {
   parseMarkdownWithFrontmatter,
   validateCommentFrontmatter,
@@ -14,81 +14,86 @@ import {
 import { logViralEvent } from "@/lib/server/viralMetrics";
 
 const MAX_MD_BYTES = 20_000;
+// Cap the *request* body (slightly above MAX_MD_BYTES to allow JSON wrapper).
+const MAX_BODY_BYTES = 24_000;
 
 async function readMarkdownBody(req: NextRequest): Promise<string> {
   const ct = req.headers.get("content-type") ?? "";
   if (ct.includes("application/json")) {
-    const json = (await req.json().catch(() => null)) as null | { markdown?: unknown };
-    const md = typeof json?.markdown === "string" ? json.markdown : "";
-    return md;
+    const json = await readJsonWithLimit<{ markdown?: unknown }>(req, MAX_BODY_BYTES);
+    return typeof json?.markdown === "string" ? json.markdown : "";
   }
-  return await req.text();
+
+  return await readTextWithLimit(req, MAX_BODY_BYTES);
 }
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-  const { id: artifactId } = await context.params;
+  try {
+    const { id: artifactId } = await context.params;
 
-  const { agent, errorResponse } = await requireAgentAuth(request);
-  if (errorResponse) return errorResponse;
+    const { agent, errorResponse } = await requireAgentAuth(request);
+    if (errorResponse) return errorResponse;
 
-  const rl = checkRateLimit({
-    key: `comments:${agent!.agent_id}`,
-    limit: 20,
-    windowMs: 60 * 60 * 1000,
-  });
-  if (!rl.ok) {
-    return NextResponse.json(
-      { error: "Rate limit exceeded" },
-      { status: 429, headers: { "Retry-After": String(rl.retryAfterSec) } }
-    );
-  }
+    const ip = getClientIp(request);
+    const rl = checkRateLimit(`artifacts:comments:post:${ip}`, { windowMs: 60_000, max: 20 });
+    if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
 
-  const raw = await readMarkdownBody(request);
-  if (!raw || typeof raw !== "string") {
-    return NextResponse.json({ error: "Validation failed", details: ["markdown body is required"] }, { status: 400 });
-  }
-
-  if (Buffer.byteLength(raw, "utf-8") > MAX_MD_BYTES) {
-    return NextResponse.json(
-      { error: "Validation failed", details: ["body too large"] },
-      { status: 400 }
-    );
-  }
-
-  const parsed = parseMarkdownWithFrontmatter<CommentFrontmatter>(raw);
-  const fm = validateCommentFrontmatter(parsed.frontmatter);
-
-  const details = [...fm.errors];
-  if (fm.artifact_id && fm.artifact_id !== artifactId) details.push("artifact_id mismatch");
-  if (!parsed.body_md || parsed.body_md.length < 1) details.push("body must be >= 1 char");
-
-  if (details.length) {
-    return NextResponse.json({ error: "Validation failed", details }, { status: 400 });
-  }
-
-  if (fm.parent_id) {
-    const exists = await commentExistsOnArtifact(fm.parent_id, artifactId);
-    if (!exists) {
+    const raw = await readMarkdownBody(request);
+    if (!raw || typeof raw !== "string") {
       return NextResponse.json(
-        { error: "Validation failed", details: ["parent_id not found on artifact"] },
+        { error: "Validation failed", details: ["markdown body is required"] },
         { status: 400 }
       );
     }
+
+    if (Buffer.byteLength(raw, "utf-8") > MAX_MD_BYTES) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
+
+    const parsed = parseMarkdownWithFrontmatter<CommentFrontmatter>(raw);
+    const fm = validateCommentFrontmatter(parsed.frontmatter);
+
+    const details = [...fm.errors];
+    if (fm.artifact_id && fm.artifact_id !== artifactId) details.push("artifact_id mismatch");
+    if (!parsed.body_md || parsed.body_md.length < 1) details.push("body must be >= 1 char");
+
+    if (details.length) {
+      return NextResponse.json({ error: "Validation failed", details }, { status: 400 });
+    }
+
+    if (fm.parent_id) {
+      const exists = await commentExistsOnArtifact(fm.parent_id, artifactId);
+      if (!exists) {
+        return NextResponse.json(
+          { error: "Validation failed", details: ["parent_id not found on artifact"] },
+          { status: 400 }
+        );
+      }
+    }
+
+    const comment = await createArtifactComment({
+      artifact_id: artifactId,
+      parent_id: fm.parent_id,
+      kind: fm.kind!,
+      raw_md: parsed.raw_md,
+      body_md: parsed.body_md,
+      body_text: parsed.body_text,
+      author: agent!,
+    });
+
+    void logViralEvent("comment_created", { artifact_id: artifactId });
+
+    return NextResponse.json({ success: true, comment }, { status: 201 });
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;
+    if (status === 413) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
+
+    console.error("Artifact comment error:", err);
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
-
-  const comment = await createArtifactComment({
-    artifact_id: artifactId,
-    parent_id: fm.parent_id,
-    kind: fm.kind!,
-    raw_md: parsed.raw_md,
-    body_md: parsed.body_md,
-    body_text: parsed.body_text,
-    author: agent!,
-  });
-
-  void logViralEvent("comment_created", { artifact_id: artifactId });
-
-  return NextResponse.json({ success: true, comment }, { status: 201 });
 }
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {

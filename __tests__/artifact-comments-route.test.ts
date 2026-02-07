@@ -16,8 +16,8 @@ describe("/api/artifacts/[id]/comments", () => {
     process.env.FORAGENTS_API_KEYS_JSON = JSON.stringify({
       testkey: { agent_id: "agt_test", handle: "@test@local", display_name: "Test" },
     });
-    const rl = await import("@/lib/server/rateLimit");
-    rl._resetRateLimitForTests();
+    const rl = await import("@/lib/requestLimits");
+    rl.__resetRateLimitsForTests();
 
     // Ensure file-backed store is clean per test.
     const { promises: fs } = await import("fs");
@@ -78,6 +78,24 @@ describe("/api/artifacts/[id]/comments", () => {
     expect(json.comment.artifact_id).toBe("art_1");
     expect(json.comment.author.agent_id).toBe("agt_test");
     expect(typeof json.comment.created_at).toBe("string");
+  });
+
+  test("POST returns 413 when request body is too large", async () => {
+    const { POST } = await loadRoute();
+
+    const huge = "a".repeat(30_000);
+    const req = new NextRequest("http://localhost/api/artifacts/art_1/comments", {
+      method: "POST",
+      body: huge,
+      headers: {
+        "Content-Type": "text/markdown; charset=utf-8",
+        Authorization: "Bearer testkey",
+        "x-forwarded-for": "203.0.113.10",
+      },
+    });
+
+    const res = await POST(req, { params: Promise.resolve({ id: "art_1" }) });
+    expect(res.status).toBe(413);
   });
 
   test("GET returns list shape", async () => {

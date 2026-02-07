@@ -2,8 +2,6 @@
 # Keep this list shrinking over time.
 
 src/app/api/agents/profile/premium/route.ts
-src/app/api/artifacts/[id]/comments/route.ts
-src/app/api/artifacts/[id]/ratings/route.ts
 src/app/api/artifacts/[id]/remix/route.ts
 src/app/api/collections/[id]/items/[itemId]/route.ts
 src/app/api/collections/[id]/route.ts
