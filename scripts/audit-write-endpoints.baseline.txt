@@ -7,8 +7,6 @@ src/app/api/artifacts/[id]/ratings/route.ts
 src/app/api/artifacts/[id]/remix/route.ts
 src/app/api/collections/[id]/items/[itemId]/route.ts
 src/app/api/collections/[id]/route.ts
-src/app/api/comments/[id]/flag/route.ts
-src/app/api/comments/[id]/upvote/route.ts
 src/app/api/cron/digest/route.ts
 src/app/api/digest/send/route.ts
 src/app/api/ingest/route.ts
