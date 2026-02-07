@@ -13,13 +13,17 @@ function labelForType(type: RecentlyViewedItem["type"]) {
 }
 
 export function ResumeSection() {
-  const [items, setItems] = useState<RecentlyViewedItem[]>([]);
-  const [mounted, setMounted] = useState(false);
+  const [items, setItems] = useState<RecentlyViewedItem[]>(() => {
+    // Avoid effects that only exist to set state on mount.
+    // This runs only on the client; the component is `use client`.
+    try {
+      return getRecentlyViewed().slice(0, 8);
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
-    setMounted(true);
-    setItems(getRecentlyViewed().slice(0, 8));
-
     const onUpdate = () => setItems(getRecentlyViewed().slice(0, 8));
 
     window.addEventListener("recentlyViewedUpdated", onUpdate);
@@ -41,7 +45,6 @@ export function ResumeSection() {
     [items],
   );
 
-  if (!mounted) return null;
   if (!hasItems) return null;
 
   return (
