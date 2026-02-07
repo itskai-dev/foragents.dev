@@ -1,23 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { render } from '@react-email/components';
+import { checkRateLimit, getClientIp, rateLimitResponse, readTextWithLimit } from '@/lib/requestLimits';
 import { requireCronAuth } from '@/lib/server/cron-auth';
 import { getSupabaseAdmin } from '@/lib/server/supabase-admin';
 import { resend, FROM_EMAIL, REPLY_TO } from '@/lib/resend';
 import { DigestEmail } from '@/components/emails/DigestEmail';
 
 export async function POST(req: NextRequest) {
-  const auth = requireCronAuth(req);
-  if (!auth.authorized) return auth.response;
-
-  const supabase = getSupabaseAdmin();
-  if (!supabase) {
-    return NextResponse.json(
-      { error: 'Database not configured' },
-      { status: 500 }
-    );
-  }
-
   try {
+    const ip = getClientIp(req);
+    const rl = checkRateLimit(`digest:send:${ip}`, { windowMs: 60_000, max: 10 });
+    if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+    // Enforce a small body cap even though we don't use the body.
+    await readTextWithLimit(req, 2_000);
+
+    const auth = requireCronAuth(req);
+    if (!auth.authorized) return auth.response;
+
+    const supabase = getSupabaseAdmin();
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database not configured' },
+        { status: 500 }
+      );
+    }
+
     // Get premium subscribers with email
     const { data: subscribers, error: subError } = await supabase
       .from('agents')
@@ -134,17 +142,24 @@ export async function POST(req: NextRequest) {
       success: results.failed === 0,
       results,
     });
-  } catch (error) {
-    console.error('Digest send error:', error);
-    return NextResponse.json(
-      { error: 'Failed to send digest' },
-      { status: 500 }
-    );
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (err as any)?.status === 'number' ? (err as any).status : 500;
+    if (status === 413) {
+      return NextResponse.json({ error: 'Request body too large' }, { status: 413 });
+    }
+
+    console.error('Digest send error:', err);
+    return NextResponse.json({ error: 'Failed to send digest' }, { status: 500 });
   }
 }
 
 // Also support GET for manual testing (with auth)
 export async function GET(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(`digest:send:get:${ip}`, { windowMs: 60_000, max: 30 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
   const auth = requireCronAuth(req);
   if (!auth.authorized) return auth.response;
 
