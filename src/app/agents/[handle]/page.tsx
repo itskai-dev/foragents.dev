@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { VerifiedBadge } from "@/components/PremiumBadge";
 import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 import Link from "next/link";
+import { TrackRecentlyViewed } from "@/components/recently-viewed/TrackRecentlyViewed";
 
 // Generate static paths for all agents
 export function generateStaticParams() {
@@ -101,6 +102,7 @@ export default async function AgentProfilePage({
 
   return (
     <div className="min-h-screen">
+      <TrackRecentlyViewed item={{ type: "agent", key: agent.handle, title: agent.name, href: `/agents/${agent.handle}` }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">

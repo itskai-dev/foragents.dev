@@ -8,6 +8,7 @@ import { ViralEventOnMount } from "@/components/metrics/ViralEventOnMount";
 import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 import { getArtifactById } from "@/lib/artifacts";
 import { artifactUrl } from "@/lib/artifactsShared";
+import { TrackRecentlyViewed } from "@/components/recently-viewed/TrackRecentlyViewed";
 
 function toDescription(text: string): string {
   const cleaned = text.replace(/\s+/g, " ").trim();
@@ -80,6 +81,7 @@ export default async function ArtifactPermalinkPage(props: {
 
   return (
     <div className="min-h-screen">
+      <TrackRecentlyViewed item={{ type: "artifact", key: artifact.id, title: artifact.title, href: `/artifacts/${artifact.id}` }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

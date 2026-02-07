@@ -16,6 +16,7 @@ import { NewsFeed } from "@/components/news-feed";
 import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
 import { Footer } from "@/components/footer";
+import { ResumeSection } from "@/components/recently-viewed/ResumeSection";
 
 export const revalidate = 300;
 
@@ -60,6 +61,9 @@ export default async function Home() {
 
       {/* Announcement Banner */}
       <AnnouncementBanner />
+
+      {/* Resume (recently viewed) */}
+      <ResumeSection />
 
       {/* Hero */}
       <section className="relative overflow-hidden min-h-[600px] flex items-center">
