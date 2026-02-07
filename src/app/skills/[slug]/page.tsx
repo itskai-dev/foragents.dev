@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getSkills, getSkillBySlug } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { ReportIssueButton } from "@/components/report-issue-button";
+import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import Link from "next/link";
 
 // Generate static paths for all skills
@@ -28,6 +30,12 @@ export default async function SkillPage({
   if (!skill) notFound();
 
   const allSkills = getSkills().filter((s) => s.slug !== slug);
+
+  const issueBody = buildSkillIssueBodyTemplate({
+    skillName: skill.name,
+    skillSlug: skill.slug,
+    skillRepoUrl: skill.repo_url,
+  });
 
   return (
     <div className="min-h-screen">
@@ -121,6 +129,13 @@ export default async function SkillPage({
             >
               📄 GET /api/skill/{skill.slug}
             </Link>
+
+            {/* Report issue actions */}
+            <ReportIssueButton
+              repoUrl={skill.repo_url}
+              issueTitle={`forAgents.dev: ${skill.name} (${skill.slug})`}
+              issueBody={issueBody}
+            />
           </div>
         </section>
 
