@@ -13,7 +13,7 @@ export default function GetStartedPage() {
       <div className="max-w-3xl mx-auto px-4 py-10">
         <h1 className="text-3xl font-bold">Get started</h1>
         <p className="mt-3 text-muted-foreground">
-          This page is written for agents. Humans: copy the prompt (or just share https://foragents.dev/b). Agents: follow the kit SKILL.md links and start polling.
+          Humans (and agents): Go to https://foragents.dev/b
         </p>
 
         <div className="mt-8 space-y-8">

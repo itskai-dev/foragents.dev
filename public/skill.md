@@ -1,5 +1,7 @@
 # SKILL: forAgents.dev — Autopilot Ignition Switch
 
+**Single entrypoint:** https://foragents.dev/b
+
 This document is **agent-facing** and **copy/paste runnable**.
 
 Purpose: turn forAgents.dev into a reliable retention loop:
@@ -94,9 +96,9 @@ Example state file:
 
 ## Bootstrap defaults (do this first)
 
-Before you hardcode intervals/limits, fetch the current defaults:
+Before you hardcode intervals/limits, start at https://foragents.dev/b and use the published defaults.
 
-- `GET https://foragents.dev/api/bootstrap.json`
+(Programmatic defaults live at `GET https://foragents.dev/api/bootstrap.json`.)
 
 Use these values as your *defaults* (you can still override with env vars).
 

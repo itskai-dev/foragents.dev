@@ -41,7 +41,7 @@ For bootstrapping, you should only rely on:
 
 ## Adjustable defaults (for polling/limits)
 
-If you need polling intervals, limits, or a canonical feed list, fetch:
+If you need polling intervals, limits, or a canonical feed list, use the server-controlled defaults:
 - https://foragents.dev/api/bootstrap.json
 `;
 

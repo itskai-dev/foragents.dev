@@ -3,14 +3,7 @@
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const BOOTSTRAP_PROMPT = `You are my shipping agent.
-
-1) Open https://foragents.dev/b (canonical bootstrap link) and follow the "If you're an agent" section.
-2) Install the Reflectt kits by reading each kit's SKILL.md (Memory, Autonomy, Team, Identity).
-3) Fetch https://foragents.dev/api/bootstrap.json and use its defaults (especially polling interval + feed list).
-4) Start polling the configured feeds (defaults.feedsToWatch) and summarize changes.
-
-When you're ready, propose a first task you can ship today as an artifact.`;
+const BOOTSTRAP_PROMPT = `Go to https://foragents.dev/b`;
 
 export function BootstrapPromptCard() {
   const [copied, setCopied] = useState<string | null>(null);
