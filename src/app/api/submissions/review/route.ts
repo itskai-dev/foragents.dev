@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp, rateLimitResponse, readTextWithLimit } from "@/lib/requestLimits";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireCronAuth } from "@/lib/server/cron-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
@@ -38,42 +39,42 @@ const SPAM_PATTERNS = [
 function isGibberishName(name: string): boolean {
   // Too short
   if (name.length < 3) return true;
-  
+
   // All consonants, no vowels (likely gibberish)
   const vowelRatio = (name.match(/[aeiou]/gi) || []).length / name.length;
   if (vowelRatio < 0.1 && name.length > 5) return true;
-  
+
   // Too many consecutive consonants
   if (/[bcdfghjklmnpqrstvwxz]{5,}/i.test(name)) return true;
-  
+
   // Random-looking string (too many numbers mixed with letters)
   const numRatio = (name.match(/\d/g) || []).length / name.length;
   if (numRatio > 0.5 && name.length > 4) return true;
-  
+
   return false;
 }
 
 function isSpammyDescription(description: string): boolean {
-  return SPAM_PATTERNS.some(pattern => pattern.test(description));
+  return SPAM_PATTERNS.some((pattern) => pattern.test(description));
 }
 
 // Check if URL already exists in directory
 function isDuplicateUrl(url: string, type: string): boolean {
   const normalizedUrl = url.toLowerCase().replace(/\/+$/, "");
-  
+
   // Check existing directory entries
   const skills = getSkills();
   const mcpServers = getMcpServers();
   const agents = getAgents();
   const llmsTxtEntries = getLlmsTxtEntries();
-  
+
   // Check skills
   for (const skill of skills) {
     if (skill.repo_url.toLowerCase().replace(/\/+$/, "") === normalizedUrl) {
       return true;
     }
   }
-  
+
   // Check MCP servers
   for (const server of mcpServers) {
     const serverUrl = server.url.toLowerCase().replace(/\/+$/, "");
@@ -82,7 +83,7 @@ function isDuplicateUrl(url: string, type: string): boolean {
       return true;
     }
   }
-  
+
   // Check agents
   for (const agent of agents) {
     const agentJson = agent.links.agentJson?.toLowerCase().replace(/\/+$/, "");
@@ -92,14 +93,14 @@ function isDuplicateUrl(url: string, type: string): boolean {
       return true;
     }
   }
-  
+
   // Check llms.txt entries
   for (const entry of llmsTxtEntries) {
     if (entry.url.toLowerCase().replace(/\/+$/, "") === normalizedUrl) {
       return true;
     }
   }
-  
+
   return false;
 }
 
@@ -108,7 +109,7 @@ async function checkUrlValidity(url: string): Promise<{ valid: boolean; status?:
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
-    
+
     const response = await safeFetch(url, {
       method: "HEAD",
       signal: controller.signal,
@@ -117,14 +118,14 @@ async function checkUrlValidity(url: string): Promise<{ valid: boolean; status?:
       },
       redirect: "manual",
     });
-    
+
     clearTimeout(timeout);
-    
+
     // Accept 2xx and 3xx as valid
     if (response.ok || (response.status >= 300 && response.status < 400)) {
       return { valid: true, status: response.status };
     }
-    
+
     // Some servers don't support HEAD, try GET
     if (response.status === 405) {
       const getResponse = await safeFetch(url, {
@@ -137,7 +138,7 @@ async function checkUrlValidity(url: string): Promise<{ valid: boolean; status?:
       });
       return { valid: getResponse.ok, status: getResponse.status };
     }
-    
+
     return { valid: false, status: response.status };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -150,13 +151,13 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
   const issues: string[] = [];
   let shouldReject = false;
   let shouldHold = false;
-  
+
   // Check 1: Name quality
   if (isGibberishName(submission.name)) {
     issues.push("Name appears to be gibberish or invalid");
     shouldReject = true;
   }
-  
+
   // Check 2: Description length and quality
   if (submission.description.length < 20) {
     issues.push(`Description too short (${submission.description.length} chars, minimum 20)`);
@@ -165,12 +166,12 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
     issues.push(`Description is short (${submission.description.length} chars, recommend 50+)`);
     shouldHold = true;
   }
-  
+
   if (isSpammyDescription(submission.description)) {
     issues.push("Description contains spam-like content");
     shouldReject = true;
   }
-  
+
   // Check 3: Duplicate URL
   const normalizedUrl = submission.url.toLowerCase().replace(/\/+$/, "");
   if (isDuplicateUrl(submission.url, submission.type)) {
@@ -180,7 +181,7 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
     issues.push("URL already approved in another pending submission");
     shouldReject = true;
   }
-  
+
   // Check 4: URL validity
   const urlCheck = await checkUrlValidity(submission.url);
   if (!urlCheck.valid) {
@@ -195,7 +196,7 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
       shouldHold = true; // Might be temporary
     }
   }
-  
+
   // Determine action
   if (shouldReject) {
     return {
@@ -205,7 +206,7 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
       reason: issues.join("; "),
     };
   }
-  
+
   if (shouldHold || issues.length > 0) {
     return {
       id: submission.id,
@@ -214,7 +215,7 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
       reason: issues.length > 0 ? issues.join("; ") : "Uncertain - manual review recommended",
     };
   }
-  
+
   // All checks passed
   return {
     id: submission.id,
@@ -225,68 +226,75 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
 }
 
 // Apply review decision to database
-async function applyReviewDecision(
-  supabase: SupabaseClient,
-  result: ReviewResult
-): Promise<boolean> {
+async function applyReviewDecision(supabase: SupabaseClient, result: ReviewResult): Promise<boolean> {
   if (!supabase) return false;
-  
+
   if (result.action === "held") {
     // Don't modify held submissions
     return true;
   }
-  
+
   const updateData: Record<string, unknown> = {
     status: result.action,
-    [`${result.action}_at`]: new Date().toISOString(),
   };
-  
-  if (result.action === "rejected") {
-    updateData.rejection_reason = `[Auto-moderation] ${result.reason}`;
+
+  if (result.action === "approved") {
+    updateData.approved_at = new Date().toISOString();
+  } else if (result.action === "rejected") {
+    updateData.rejected_at = new Date().toISOString();
+    updateData.rejection_reason = result.reason;
   }
-  
-  const { error } = await supabase
-    .from("submissions")
-    .update(updateData)
-    .eq("id", result.id);
-  
+
+  const { error } = await supabase.from("submissions").update(updateData).eq("id", result.id);
+
   if (error) {
     console.error(`Failed to update submission ${result.id}:`, error);
     return false;
   }
-  
+
   return true;
 }
 
 // Main handler
 export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
+  const rl = checkRateLimit(`submissions:review:${ip}`, { windowMs: 60_000, max: 10 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+  // This endpoint doesn't require a request body, but still cap it to avoid abuse.
+  // (Reading consumes the stream, so do this only once.)
+  try {
+    await readTextWithLimit(request, 1_000);
+  } catch (err) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;
+    if (status === 413) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
+    // If it's invalid/empty, ignore.
+  }
+
   const auth = requireCronAuth(request);
   if (!auth.authorized) return auth.response;
 
   const supabase = getSupabaseAdmin();
-  
+
   if (!supabase) {
-    return NextResponse.json(
-      { error: "Database not configured" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }
-  
+
   // Fetch pending submissions
   const { data: pendingSubmissions, error: fetchError } = await supabase
     .from("submissions")
     .select("*")
     .eq("status", "pending")
     .order("created_at", { ascending: true });
-  
+
   if (fetchError) {
     console.error("Failed to fetch submissions:", fetchError);
-    return NextResponse.json(
-      { error: "Failed to fetch pending submissions" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch pending submissions" }, { status: 500 });
   }
-  
+
   if (!pendingSubmissions || pendingSubmissions.length === 0) {
     return NextResponse.json({
       success: true,
@@ -300,11 +308,11 @@ export async function POST(request: NextRequest) {
       results: [],
     });
   }
-  
+
   // Track approved URLs to catch duplicates within the batch
   const approvedUrlsInBatch = new Set<string>();
   const results: ReviewResult[] = [];
-  
+
   // Review each submission
   for (const submission of pendingSubmissions) {
     const mapped: Submission = {
@@ -317,41 +325,34 @@ export async function POST(request: NextRequest) {
       tags: submission.tags || [],
       status: submission.status,
     };
-    
+
     const result = await reviewSubmission(mapped, approvedUrlsInBatch);
     results.push(result);
-    
+
     // Apply decision
     const applied = await applyReviewDecision(supabase, result);
     if (!applied) {
       result.reason += " (failed to apply)";
     }
-    
+
     // Track approved URLs
     if (result.action === "approved") {
       approvedUrlsInBatch.add(mapped.url.toLowerCase().replace(/\/+$/, ""));
     }
   }
-  
+
   // Summary
   const summary = {
     total: results.length,
-    approved: results.filter(r => r.action === "approved").length,
-    rejected: results.filter(r => r.action === "rejected").length,
-    held: results.filter(r => r.action === "held").length,
+    approved: results.filter((r) => r.action === "approved").length,
+    rejected: results.filter((r) => r.action === "rejected").length,
+    held: results.filter((r) => r.action === "held").length,
   };
-  
-  console.log(`[Auto-review] Processed ${summary.total} submissions: ${summary.approved} approved, ${summary.rejected} rejected, ${summary.held} held`);
-  
+
   return NextResponse.json({
     success: true,
-    message: `Reviewed ${summary.total} submissions`,
+    message: "Automated review completed",
     summary,
     results,
   });
-}
-
-// Also support GET for manual triggering / testing
-export async function GET(request: NextRequest) {
-  return POST(request);
 }

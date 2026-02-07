@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
 import { promises as fs } from "fs";
 import path from "path";
 import { getSupabase } from "@/lib/supabase";
 import { checkAdminAuth } from "@/lib/admin-auth";
 
 const SUBMISSIONS_PATH = path.join(process.cwd(), "data", "submissions.json");
+const MAX_JSON_BYTES = 2_000;
 
 type Submission = {
   id: string;
@@ -38,10 +40,11 @@ async function writeSubmissions(submissions: Submission[]): Promise<void> {
 
 // ---------- Route handler ----------
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const ip = getClientIp(request);
+  const rl = checkRateLimit(`submissions:reject:${ip}`, { windowMs: 60_000, max: 30 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
   // Check authorization
   const authError = checkAdminAuth(request);
   if (authError) return authError;
@@ -51,9 +54,15 @@ export async function POST(
   // Optional body for rejection reason
   let body: { reason?: string } = {};
   try {
-    body = await request.json();
-  } catch {
-    // Body is optional
+    body = (await readJsonWithLimit(request, MAX_JSON_BYTES)) as typeof body;
+  } catch (err) {
+    // Body is optional. Treat missing/invalid JSON as empty body.
+    // But still enforce the size limit.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const status = typeof (err as any)?.status === "number" ? (err as any).status : 0;
+    if (status === 413) {
+      return NextResponse.json({ error: "Request body too large" }, { status: 413 });
+    }
   }
 
   const supabase = getSupabase();
@@ -67,17 +76,11 @@ export async function POST(
       .single();
 
     if (fetchError || !existing) {
-      return NextResponse.json(
-        { error: "Submission not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Submission not found" }, { status: 404 });
     }
 
     if (existing.status !== "pending") {
-      return NextResponse.json(
-        { error: `Submission already ${existing.status}` },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: `Submission already ${existing.status}` }, { status: 400 });
     }
 
     const updateData: Record<string, unknown> = {
@@ -89,17 +92,11 @@ export async function POST(
       updateData.rejection_reason = body.reason;
     }
 
-    const { error: updateError } = await supabase
-      .from("submissions")
-      .update(updateData)
-      .eq("id", id);
+    const { error: updateError } = await supabase.from("submissions").update(updateData).eq("id", id);
 
     if (updateError) {
       console.error("Supabase update error:", updateError);
-      return NextResponse.json(
-        { error: "Failed to update submission" },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Failed to update submission" }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -120,19 +117,13 @@ export async function POST(
   const index = submissions.findIndex((s) => s.id === id);
 
   if (index === -1) {
-    return NextResponse.json(
-      { error: "Submission not found" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "Submission not found" }, { status: 404 });
   }
 
   const submission = submissions[index];
 
   if (submission.status !== "pending") {
-    return NextResponse.json(
-      { error: `Submission already ${submission.status}` },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: `Submission already ${submission.status}` }, { status: 400 });
   }
 
   submission.status = "rejected";
