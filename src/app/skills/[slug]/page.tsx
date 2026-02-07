@@ -3,6 +3,7 @@ import { getSkills, getSkillBySlug } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
+import { SkillShareActions } from "@/components/skill-share-actions";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import Link from "next/link";
 
@@ -75,7 +76,7 @@ export default async function SkillPage({
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2 mb-6">
           {skill.tags.map((tag) => (
             <Badge
               key={tag}
@@ -86,6 +87,11 @@ export default async function SkillPage({
             </Badge>
           ))}
         </div>
+
+        {/* Share / copy */}
+        <section className="mb-8">
+          <SkillShareActions skillName={skill.name} slug={skill.slug} />
+        </section>
 
         {/* Description */}
         <section className="mb-8">
