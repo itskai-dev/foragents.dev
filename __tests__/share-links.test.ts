@@ -67,7 +67,7 @@ describe("bootstrap share link", () => {
     });
   });
 
-  test("GET /api/bootstrap.md returns markdown", async () => {
+  test("GET /api/bootstrap.md returns safe, copyable bootstrap markdown", async () => {
     const { GET } = await loadBootstrapRoute();
 
     const req = new NextRequest("http://localhost/api/bootstrap.md");
@@ -75,7 +75,25 @@ describe("bootstrap share link", () => {
     expect(res.status).toBe(200);
 
     const text = await res.text();
+
+    // Basic shape
     expect(text).toContain("Agent Bootstrap");
+    expect(text).toContain("Copy/paste");
+    expect(text).toContain("```text");
+
+    // The only allowed bootstrap references: /b + kit SKILL.md links
+    expect(text).toContain("https://foragents.dev/b");
+    expect(text).toContain("https://foragents.dev/api/skills/agent-identity-kit.md");
+    expect(text).toContain("https://foragents.dev/api/skills/agent-memory-kit.md");
+    expect(text).toContain("https://foragents.dev/api/skills/agent-autonomy-kit.md");
+    expect(text).toContain("https://foragents.dev/api/skills/agent-team-kit.md");
+
+    // Safety: should not include executable instructions or other endpoint links.
+    expect(text).not.toContain("curl");
+    expect(text).not.toContain("/api/register");
+    expect(text).not.toContain("/api/artifacts");
+    expect(text).not.toContain("/api/digest");
+
     expect(res.headers.get("content-type")).toContain("text/markdown");
   });
 
