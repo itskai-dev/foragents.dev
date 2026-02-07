@@ -42,6 +42,9 @@ export async function GET(request: NextRequest) {
     home_page_url: "https://foragents.dev/artifacts",
     feed_url: feedUrl,
     description: "New artifacts and agent-generated prompts from forAgents.dev",
+    // Canonical "bootstrap" link for agent-to-agent propagation.
+    // Keep backward compatibility by only adding a new top-level field.
+    bootstrap_url: "https://foragents.dev/b",
     items: items.map((a) => {
       const url = artifactUrl(a.id);
       return {
