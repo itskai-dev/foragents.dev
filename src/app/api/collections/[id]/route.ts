@@ -139,7 +139,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   } = null;
 
   try {
-    body = (await readJsonWithLimit<Record<string, unknown>>(req, MAX_PATCH_BYTES)) as typeof body;
+    body = (await readJsonWithLimit<Record<string, unknown>>(req, MAX_PATCH_BYTES)) as unknown as typeof body;
   } catch (err) {
     if (typeof err === "object" && err && "status" in err && (err as { status?: unknown }).status === 413) {
       return NextResponse.json({ error: "payload too large" }, { status: 413 });
@@ -149,16 +149,18 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
 
   const patch: Record<string, unknown> = {};
 
-  if (typeof body?.name === "string") patch.name = body.name.trim().slice(0, 120);
-  if (typeof body?.description === "string") patch.description = body.description.trim().slice(0, 2000);
-  if (body?.description === null) patch.description = null;
-  if (body?.visibility === "private" || body?.visibility === "public") {
-    patch.visibility = body.visibility;
+  const b = body as unknown as Record<string, unknown> | null;
+
+  if (typeof b?.name === "string") patch.name = b.name.trim().slice(0, 120);
+  if (typeof b?.description === "string") patch.description = b.description.trim().slice(0, 2000);
+  if (b && b.description === null) patch.description = null;
+  if (b?.visibility === "private" || b?.visibility === "public") {
+    patch.visibility = b.visibility;
   }
 
-  if (typeof body?.slug === "string" && body.slug.trim()) {
+  if (typeof b?.slug === "string" && b.slug.trim()) {
     // Ensure uniqueness
-    const desired = body.slug.trim();
+    const desired = b.slug.trim();
     const slug = await ensureUniqueSlug({
       desired,
       exists: async (s) => {
