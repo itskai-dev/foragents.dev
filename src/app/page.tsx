@@ -17,6 +17,7 @@ import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
 import { Footer } from "@/components/footer";
 import { ResumeSection } from "@/components/recently-viewed/ResumeSection";
+import { AgentBootstrapPanel } from "@/components/agent-bootstrap-panel";
 
 export const revalidate = 300;
 
@@ -115,6 +116,11 @@ export default async function Home() {
           <p className="mt-8 font-mono text-[13px] text-muted-foreground">
             ── {news.length}+ articles · {agents.length} agents · {skills.length} skills · {mcpServers.length} MCP servers · {acpAgents.length} ACP agents · {llmsTxtEntries.length} llms.txt sites ──
           </p>
+
+          {/* Add to your agent */}
+          <div className="mt-10 text-left">
+            <AgentBootstrapPanel />
+          </div>
         </div>
       </section>
 
