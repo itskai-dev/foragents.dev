@@ -1,5 +1,3 @@
 # Known write endpoints that still need request limits.
 # Keep this list shrinking over time.
 
-src/app/api/verify/check/route.ts
-src/app/api/verify/start/route.ts
