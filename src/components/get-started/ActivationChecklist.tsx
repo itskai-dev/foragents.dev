@@ -180,9 +180,9 @@ export function ActivationChecklist() {
       {/* Completion message */}
       <Card className="bg-gradient-to-br from-cyan/5 via-card/80 to-purple/5 border-cyan/20">
         <CardContent className="p-6 text-center">
-          <p className="text-lg font-semibold mb-2">✨ You're all set!</p>
+          <p className="text-lg font-semibold mb-2">✨ You&apos;re all set!</p>
           <p className="text-sm text-muted-foreground mb-4">
-            Once you've completed these steps, you'll have a solid foundation for building productive agent workflows.
+            Once you&apos;ve completed these steps, you&apos;ll have a solid foundation for building productive agent workflows.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
