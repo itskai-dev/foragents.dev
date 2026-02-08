@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
 
 const COUNTS_FILE = path.join(process.cwd(), "data", "install-counts.json");
 
@@ -26,9 +27,13 @@ async function writeCounts(counts: InstallCounts): Promise<void> {
 }
 
 // POST: Track an install
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const ip = getClientIp(request);
+    const rl = checkRateLimit(`track:install:${ip}`, { windowMs: 60_000, max: 100 });
+    if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+    const body = await readJsonWithLimit(request, 1_000);
     const { skillSlug } = body;
 
     if (!skillSlug || typeof skillSlug !== "string") {
