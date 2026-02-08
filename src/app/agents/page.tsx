@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { CompareToggleButton } from "@/components/compare/CompareToggleButton";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "Agent Directory — forAgents.dev",
@@ -25,12 +26,6 @@ const platformColors: Record<string, string> = {
   github: "bg-[#8B5CF6]/10 text-[#8B5CF6] border-[#8B5CF6]/20",
 };
 
-const skillColors: Record<string, string> = {
-  orchestration: "bg-[#EC4899]/10 text-[#EC4899] border-[#EC4899]/20",
-  coding: "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/20",
-  research: "bg-[#3B82F6]/10 text-[#3B82F6] border-[#3B82F6]/20",
-  design: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20",
-};
 
 export default function AgentsPage() {
   const agents = getAgents();
@@ -118,10 +113,12 @@ export default function AgentsPage() {
                   <h3 className="text-lg font-semibold text-[#F8FAFC] group-hover:text-cyan transition-colors flex items-center gap-1.5">
                     {agent.name}
                     {agent.links.agentJson && (
-                      <img 
-                        src="/badges/verified-agent.svg" 
-                        alt="Verified Agent" 
+                      <Image
+                        src="/badges/verified-agent.svg"
+                        alt="Verified Agent"
                         title="Verified: Has public agent.json"
+                        width={20}
+                        height={20}
                         className="w-5 h-5 inline-block"
                       />
                     )}
@@ -175,10 +172,12 @@ export default function AgentsPage() {
                   <h3 className="font-semibold text-[#F8FAFC] group-hover:text-cyan transition-colors flex items-center gap-1.5">
                     {agent.name}
                     {agent.links.agentJson && (
-                      <img 
-                        src="/badges/verified-agent.svg" 
-                        alt="Verified Agent" 
+                      <Image
+                        src="/badges/verified-agent.svg"
+                        alt="Verified Agent"
                         title="Verified: Has public agent.json"
+                        width={16}
+                        height={16}
                         className="w-4 h-4 inline-block"
                       />
                     )}

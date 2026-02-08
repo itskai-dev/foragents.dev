@@ -7,8 +7,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { getSkills, getCreators, getMcpServers, getAgents, getAcpAgents, getLlmsTxtEntries } from "@/lib/data";
+import { getSkills, getCreators, getMcpServers, getAgents, getAcpAgents } from "@/lib/data";
 import Link from "next/link";
+import Image from "next/image";
 import { UpgradeCTA } from "@/components/UpgradeCTA";
 
 export const revalidate = 300;
@@ -36,7 +37,6 @@ export default async function StatsPage() {
   const mcpServers = getMcpServers();
   const agents = getAgents();
   const acpAgents = getAcpAgents();
-  const llmsTxtEntries = getLlmsTxtEntries();
 
   // Calculate tag statistics
   const tagCounts = new Map<string, number>();
@@ -278,10 +278,12 @@ export default async function StatsPage() {
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
                     {skill.name}
                     {skill.author === "Team Reflectt" && (
-                      <img 
-                        src="/badges/verified-skill.svg" 
-                        alt="Verified Skill" 
+                      <Image
+                        src="/badges/verified-skill.svg"
+                        alt="Verified Skill"
                         title="Verified: Team Reflectt skill"
+                        width={20}
+                        height={20}
                         className="w-5 h-5 inline-block"
                       />
                     )}

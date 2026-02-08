@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata = {
   title: "Migrate to forAgents.dev — Switch from LangChain, AutoGen, CrewAI",

@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 interface Job {
   id: string;
   title: string;

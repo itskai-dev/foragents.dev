@@ -69,7 +69,7 @@ export default function ProfileSettingsPage() {
           });
         }
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load profile');
     } finally {
       setLoading(false);
@@ -99,7 +99,7 @@ export default function ProfileSettingsPage() {
         setSuccess('Profile updated successfully!');
         setTimeout(() => setSuccess(''), 3000);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to save profile');
     } finally {
       setSaving(false);

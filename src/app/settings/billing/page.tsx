@@ -33,7 +33,7 @@ export default function BillingSettingsPage() {
       } else {
         setSubscription(data);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to look up subscription');
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ export default function BillingSettingsPage() {
       } else {
         setError(data.error || 'Failed to open billing portal');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong');
     } finally {
       setLoading(false);

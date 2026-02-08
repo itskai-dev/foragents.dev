@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "Creator Directory — forAgents.dev",
@@ -86,10 +87,12 @@ export default function CreatorsPage() {
                     <h3 className="text-xl font-semibold text-[#F8FAFC] group-hover:text-cyan transition-colors flex items-center gap-2">
                       {creator.username}
                       {creator.verified && (
-                        <img 
-                          src="/badges/verified-skill.svg" 
-                          alt="Verified Creator" 
+                        <Image
+                          src="/badges/verified-skill.svg"
+                          alt="Verified Creator"
                           title="Verified: Team Reflectt"
+                          width={20}
+                          height={20}
                           className="w-5 h-5 inline-block"
                         />
                       )}

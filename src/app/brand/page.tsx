@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ColorSwatch } from "@/components/color-swatch";
-import { MobileNav } from "@/components/mobile-nav";
 
 export const metadata = {
   title: "Brand Guidelines — forAgents.dev",

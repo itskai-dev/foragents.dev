@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit, getClientIp, rateLimitResponse, readTextWithLimit } from '@/lib/requestLimits';
 import { requireCronAuth } from '@/lib/server/cron-auth';
 import { requireSupabaseAdmin } from '@/lib/server/supabase-admin';
-import { generateDailyDigest } from '@/lib/digest';
 
 /**
  * Daily digest cron job
@@ -44,31 +43,6 @@ export async function GET(req: NextRequest) {
         count: 0 
       });
     }
-
-    // Fetch new content from last 24h
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-
-    // Get new agents
-    const { data: newAgents } = await supabase
-      .from('agents')
-      .select('handle, name, description')
-      .gte('created_at', yesterday.toISOString())
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    // Get trending agents (by view count - placeholder for now)
-    const { data: trendingAgents } = await supabase
-      .from('agents')
-      .select('handle, name, description, avatar_url')
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    // TODO: Fetch new skills, tools, etc. when those tables exist
-
-    // Generate digest (email sending not implemented yet)
-    const digest = generateDailyDigest();
-    
     // TODO: Implement email sending
     // For now, just return the digest data
     const sentCount = 0;

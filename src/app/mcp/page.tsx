@@ -12,6 +12,7 @@ import { Separator } from "@/components/ui/separator";
 import { CopyButton } from "@/components/copy-button";
 import { getMcpServers } from "@/lib/data";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -34,18 +35,6 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
   "communication":  { bg: "bg-[#F59E0B]/10", text: "text-[#F59E0B]", border: "border-[#F59E0B]/20" },
 };
 
-function InstallCopyButton({ text }: { text: string }) {
-  return (
-    <CopyButton
-      text={text}
-      label="📋"
-      variant="ghost"
-      size="sm"
-      className="absolute top-2 right-2 text-[10px] font-mono text-muted-foreground hover:text-cyan transition-colors opacity-0 group-hover/cmd:opacity-100 h-auto p-1"
-      showIcon={false}
-    />
-  );
-}
 
 export default function McpPage() {
   const servers = getMcpServers();
@@ -186,10 +175,12 @@ export default function McpPage() {
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
                     {server.name}
                     {server.tags.includes("official") && (
-                      <img 
-                        src="/badges/verified-mcp.svg" 
-                        alt="Official MCP Server" 
+                      <Image
+                        src="/badges/verified-mcp.svg"
+                        alt="Official MCP Server"
                         title="Official: Maintained by MCP team"
+                        width={20}
+                        height={20}
                         className="w-5 h-5 inline-block"
                       />
                     )}

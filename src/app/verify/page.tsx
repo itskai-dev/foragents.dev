@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { VerifiedBadge } from '@/components/PremiumBadge';
 
 interface VerificationResult {
@@ -36,7 +37,7 @@ export default function VerifyPage() {
       const res = await fetch(`/api/verify?url=${encodeURIComponent(url.trim())}`);
       const data = await res.json();
       setResult(data);
-    } catch (err) {
+    } catch {
       setResult({
         valid: false,
         url: url.trim(),
@@ -181,10 +182,12 @@ export default function VerifyPage() {
                 </div>
                 <div className="mt-3 flex items-center gap-3">
                   <span className="text-xs text-slate-500">Preview:</span>
-                  <img 
-                    src={`/api/badge/${result.agent.handle}`} 
+                  <Image
+                    src={`/api/badge/${result.agent.handle}`}
                     alt="Badge preview"
-                    className="h-5"
+                    width={120}
+                    height={20}
+                    className="h-5 w-auto"
                   />
                 </div>
               </div>

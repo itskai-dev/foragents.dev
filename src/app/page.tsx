@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents, getRecentSubmissions, getCreators, type Skill } from "@/lib/data";
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
+import Image from "next/image";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NewsFeed } from "@/components/news-feed";
@@ -416,10 +417,12 @@ export default async function Home() {
                   <CardTitle className="text-lg group-hover:text-orange-500 transition-colors flex items-center gap-1.5 pr-12">
                     {skill.name}
                     {skill.author === "Team Reflectt" && (
-                      <img 
-                        src="/badges/verified-skill.svg" 
-                        alt="Verified Skill" 
+                      <Image
+                        src="/badges/verified-skill.svg"
+                        alt="Verified Skill"
                         title="Verified: Team Reflectt skill"
+                        width={20}
+                        height={20}
                         className="w-5 h-5 inline-block"
                       />
                     )}
@@ -494,10 +497,12 @@ export default async function Home() {
                       <CardTitle className="text-lg group-hover:text-purple transition-colors flex items-center gap-1.5">
                         {creator.username}
                         {creator.verified && (
-                          <img 
-                            src="/badges/verified-skill.svg" 
-                            alt="Verified Creator" 
+                          <Image
+                            src="/badges/verified-skill.svg"
+                            alt="Verified Creator"
                             title="Verified Creator"
+                            width={20}
+                            height={20}
                             className="w-5 h-5 inline-block"
                           />
                         )}
@@ -594,10 +599,12 @@ export default async function Home() {
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
                     {skill.name}
                     {skill.author === "Team Reflectt" && (
-                      <img 
-                        src="/badges/verified-skill.svg" 
-                        alt="Verified Skill" 
+                      <Image
+                        src="/badges/verified-skill.svg"
+                        alt="Verified Skill"
                         title="Verified: Team Reflectt skill"
+                        width={20}
+                        height={20}
                         className="w-5 h-5 inline-block"
                       />
                     )}
@@ -681,10 +688,12 @@ export default async function Home() {
                 <CardTitle className="text-lg group-hover:text-purple transition-colors flex items-center gap-1.5">
                   {server.name}
                   {server.tags.includes("official") && (
-                    <img 
-                      src="/badges/verified-mcp.svg" 
-                      alt="Official MCP Server" 
+                    <Image
+                      src="/badges/verified-mcp.svg"
+                      alt="Official MCP Server"
                       title="Official: Maintained by MCP team"
+                      width={20}
+                      height={20}
                       className="w-5 h-5 inline-block"
                     />
                   )}
@@ -764,10 +773,12 @@ export default async function Home() {
                       <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
                         {agent.name}
                         {agent.links.agentJson && (
-                          <img 
-                            src="/badges/verified-agent.svg" 
-                            alt="Verified Agent" 
+                          <Image
+                            src="/badges/verified-agent.svg"
+                            alt="Verified Agent"
                             title="Verified: Has public agent.json"
+                            width={20}
+                            height={20}
                             className="w-5 h-5 inline-block"
                           />
                         )}

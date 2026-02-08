@@ -1,9 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { PremiumBadge } from '@/components/PremiumBadge';
-import { Button } from '@/components/ui/button';
 
 interface CustomLink {
   label: string;
@@ -53,7 +52,7 @@ export default function PremiumProfileSettings() {
         setIsPremium(data.isPremium || false);
         setConfig(data.premiumConfig || config);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load profile');
     } finally {
       setLoading(false);
@@ -84,7 +83,7 @@ export default function PremiumProfileSettings() {
         setSuccess('Settings saved successfully!');
         setTimeout(() => setSuccess(''), 3000);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to save settings');
     } finally {
       setSaving(false);

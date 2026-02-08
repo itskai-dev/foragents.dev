@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -128,10 +129,12 @@ export default async function CreatorProfilePage({ params }: Props) {
                   {creator.username}
                 </h1>
                 {creator.verified && (
-                  <img 
-                    src="/badges/verified-skill.svg" 
-                    alt="Verified Creator" 
+                  <Image
+                    src="/badges/verified-skill.svg"
+                    alt="Verified Creator"
                     title="Verified: Team Reflectt"
+                    width={28}
+                    height={28}
                     className="w-7 h-7"
                   />
                 )}
@@ -205,10 +208,12 @@ export default async function CreatorProfilePage({ params }: Props) {
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
                     {skill.name}
                     {creator.verified && (
-                      <img 
-                        src="/badges/verified-skill.svg" 
-                        alt="Verified Skill" 
+                      <Image
+                        src="/badges/verified-skill.svg"
+                        alt="Verified Skill"
                         title="Verified: Team Reflectt skill"
+                        width={20}
+                        height={20}
                         className="w-5 h-5 inline-block"
                       />
                     )}
@@ -295,9 +300,11 @@ export default async function CreatorProfilePage({ params }: Props) {
         {creator.verified && (
           <div className="mt-6 p-4 rounded-lg bg-cyan/10 border border-cyan/20">
             <div className="flex items-center gap-2">
-              <img 
-                src="/badges/verified-skill.svg" 
-                alt="Verified" 
+              <Image
+                src="/badges/verified-skill.svg"
+                alt="Verified"
+                width={24}
+                height={24}
                 className="w-6 h-6"
               />
               <div>

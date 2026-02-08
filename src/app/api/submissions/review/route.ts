@@ -59,7 +59,7 @@ function isSpammyDescription(description: string): boolean {
 }
 
 // Check if URL already exists in directory
-function isDuplicateUrl(url: string, type: string): boolean {
+function isDuplicateUrl(url: string): boolean {
   const normalizedUrl = url.toLowerCase().replace(/\/+$/, "");
 
   // Check existing directory entries
@@ -174,7 +174,7 @@ async function reviewSubmission(submission: Submission, existingApprovedUrls: Se
 
   // Check 3: Duplicate URL
   const normalizedUrl = submission.url.toLowerCase().replace(/\/+$/, "");
-  if (isDuplicateUrl(submission.url, submission.type)) {
+  if (isDuplicateUrl(submission.url)) {
     issues.push("URL already exists in directory");
     shouldReject = true;
   } else if (existingApprovedUrls.has(normalizedUrl)) {

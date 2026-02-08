@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -226,10 +227,12 @@ export default function BookmarksPage() {
                         <CardTitle className="text-lg group-hover:text-[#06D6A0] transition-colors flex items-center gap-1.5">
                           {skill.name}
                           {skill.author === "Team Reflectt" && (
-                            <img 
-                              src="/badges/verified-skill.svg" 
-                              alt="Verified Skill" 
+                            <Image
+                              src="/badges/verified-skill.svg"
+                              alt="Verified Skill"
                               title="Verified: Team Reflectt skill"
+                              width={20}
+                              height={20}
                               className="w-5 h-5 inline-block"
                             />
                           )}
