@@ -109,11 +109,6 @@ export default function BadgesPage() {
 
   const [earnedCount, setEarnedCount] = useState(0);
 
-  useEffect(() => {
-    // Load badge progress from localStorage
-    loadBadgeProgress();
-  }, []);
-
   const loadBadgeProgress = () => {
     try {
       const savedProgress = localStorage.getItem("foragents-badges");
@@ -169,6 +164,12 @@ export default function BadgesPage() {
       console.error("Failed to unlock badge:", error);
     }
   };
+
+  useEffect(() => {
+    // Load badge progress from localStorage
+    loadBadgeProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const progressPercentage = Math.round((earnedCount / badges.length) * 100);
 
