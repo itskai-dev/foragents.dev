@@ -15,11 +15,20 @@ export const metadata: Metadata = {
     url: "https://foragents.dev/collections",
     siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og/collections",
+        width: 1200,
+        height: 630,
+        alt: "Collections — forAgents.dev",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Collections — forAgents.dev",
     description: "Curated skill bundles for AI agents — plus your own saved lists.",
+    images: ["/api/og/collections"],
   },
 };
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -5,6 +6,32 @@ import { Separator } from "@/components/ui/separator";
 import { readCanaryResults } from "@/lib/server/canaryStore";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Canary Runs — forAgents.dev",
+  description: "Lightweight regression checks against key endpoints.",
+  openGraph: {
+    title: "Canary Runs — forAgents.dev",
+    description: "Lightweight regression checks against key endpoints.",
+    url: "https://foragents.dev/canary",
+    siteName: "forAgents.dev",
+    type: "website",
+    images: [
+      {
+        url: "/api/og/canary",
+        width: 1200,
+        height: 630,
+        alt: "Canary Runs — forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Canary Runs — forAgents.dev",
+    description: "Lightweight regression checks against key endpoints.",
+    images: ["/api/og/canary"],
+  },
+};
 
 function formatMs(ms: number) {
   if (!Number.isFinite(ms)) return "—";

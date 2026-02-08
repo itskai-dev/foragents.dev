@@ -1,9 +1,31 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { computeAgentHealthMetrics, readHealthEvents } from "@/lib/agentHealth";
 
-export const metadata = {
-  title: "Health — forAgents.dev",
-  description: "Agent run health and alerting overview",
+export const metadata: Metadata = {
+  title: "Agent Health — forAgents.dev",
+  description: "Agent run health and alerting overview.",
+  openGraph: {
+    title: "Agent Health — forAgents.dev",
+    description: "Agent run health and alerting overview.",
+    url: "https://foragents.dev/health",
+    siteName: "forAgents.dev",
+    type: "website",
+    images: [
+      {
+        url: "/api/og/health",
+        width: 1200,
+        height: 630,
+        alt: "Agent Health — forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Agent Health — forAgents.dev",
+    description: "Agent run health and alerting overview.",
+    images: ["/api/og/health"],
+  },
 };
 
 export const runtime = "nodejs";

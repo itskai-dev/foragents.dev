@@ -14,6 +14,23 @@ export const metadata: Metadata = {
     description:
       "Browse top MCP servers: filesystem, search, databases, APIs, and communication tools.",
     url: "https://foragents.dev/mcp",
+    siteName: "forAgents.dev",
+    type: "website",
+    images: [
+      {
+        url: "/api/og/mcp",
+        width: 1200,
+        height: 630,
+        alt: "MCP Hub — MCP Server Directory | forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MCP Hub — MCP Server Directory | forAgents.dev",
+    description:
+      "Browse top MCP servers: filesystem, search, databases, APIs, and communication tools.",
+    images: ["/api/og/mcp"],
   },
 };
 

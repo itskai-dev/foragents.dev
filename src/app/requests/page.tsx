@@ -13,12 +13,21 @@ export const metadata: Metadata = {
     url: "https://foragents.dev/requests",
     siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og/requests",
+        width: 1200,
+        height: 630,
+        alt: "Request a Kit / Integration — forAgents.dev",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Request a Kit / Integration — forAgents.dev",
     description:
       "Suggest kits and integrations you'd like to see built for AI agents. Upvote existing requests to help prioritize.",
+    images: ["/api/og/requests"],
   },
 };
 
