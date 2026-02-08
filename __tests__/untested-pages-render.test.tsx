@@ -202,6 +202,9 @@ const mockAgent = {
   links: { agentJson: null, website: null, github: null },
   platforms: ["web"],
   category: "general",
+  skills: ["chat", "search"],
+  pricing: { model: "free" },
+  status: "active",
 };
 
 const mockCreator = {

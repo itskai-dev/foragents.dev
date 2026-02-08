@@ -264,7 +264,15 @@ export default async function CreatorProfilePage({ params }: Props) {
 
       {/* Stats Summary */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-bold mb-6">📊 Statistics</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold">📊 Statistics</h2>
+          <Link
+            href={`/creators/${encodeURIComponent(creator.username)}/stats`}
+            className="text-sm text-cyan hover:underline transition-colors"
+          >
+            View Full Analytics →
+          </Link>
+        </div>
         
         <div className="grid gap-4 md:grid-cols-3">
           <Card className="bg-card/50 border-cyan/20">
