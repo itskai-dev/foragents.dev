@@ -76,6 +76,23 @@ export default async function SkillPage({
           </p>
         </div>
 
+        {/* Compatibility Badges */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {skill.author === "Team Reflectt" && (
+            <Badge className="bg-gradient-to-r from-cyan to-electric-blue text-white border-0 font-semibold">
+              ✓ Verified
+            </Badge>
+          )}
+          <Badge className="bg-purple/20 text-purple border border-purple/30 font-semibold">
+            ⚡ OpenClaw Compatible
+          </Badge>
+          {skill.tags.includes("openclaw") && (
+            <Badge className="bg-cyan/20 text-cyan border border-cyan/30">
+              🖥️ Multi-Platform
+            </Badge>
+          )}
+        </div>
+
         {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-6">
           {skill.tags.map((tag) => (
