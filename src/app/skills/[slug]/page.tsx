@@ -39,8 +39,32 @@ export default async function SkillPage({
     skillRepoUrl: skill.repo_url,
   });
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": skill.name,
+    "description": skill.description,
+    "applicationCategory": "DeveloperApplication",
+    "author": {
+      "@type": "Person",
+      "name": skill.author
+    },
+    "keywords": skill.tags.join(", "),
+    "url": `https://foragents.dev/skills/${skill.slug}`,
+    "codeRepository": skill.repo_url,
+    "installUrl": skill.repo_url,
+    "softwareHelp": {
+      "@type": "CreativeWork",
+      "url": skill.repo_url
+    }
+  };
+
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
