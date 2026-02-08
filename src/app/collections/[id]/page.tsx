@@ -161,6 +161,44 @@ export default function CollectionDetailPage() {
     }
   }
 
+  async function downloadCard() {
+    if (!collection || collection.visibility !== "public") return;
+    try {
+      const cardUrl = `${window?.location?.origin || ""}/api/og/stack/${collection.id}`;
+      const response = await fetch(cardUrl);
+      if (!response.ok) throw new Error("Failed to generate card");
+      
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${collection.slug || collection.id}-card.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      setToast("Card downloaded!");
+      setTimeout(() => setToast(""), 2000);
+    } catch (e) {
+      setToast(e instanceof Error ? e.message : "Download failed");
+      setTimeout(() => setToast(""), 3000);
+    }
+  }
+
+  async function copyShareLink() {
+    if (!collection || collection.visibility !== "public") return;
+    try {
+      const shareUrl = `${publicUrl}?ref=stack-card&utm_source=share&utm_medium=card`;
+      await navigator.clipboard.writeText(shareUrl);
+      setToast("Share link copied!");
+      setTimeout(() => setToast(""), 2000);
+    } catch {
+      setToast("Copy failed.");
+      setTimeout(() => setToast(""), 2000);
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
@@ -212,7 +250,7 @@ export default function CollectionDetailPage() {
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <h2 className="font-semibold text-white">Settings</h2>
               {collection && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <Button
                     size="sm"
                     variant={collection.visibility === "public" ? "default" : "outline"}
@@ -223,6 +261,12 @@ export default function CollectionDetailPage() {
                   </Button>
                   <Button size="sm" variant="outline" onClick={copyLink} disabled={collection.visibility !== "public"}>
                     Copy link
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={downloadCard} disabled={collection.visibility !== "public" || loading}>
+                    📥 Download Card
+                  </Button>
+                  <Button size="sm" variant="outline" onClick={copyShareLink} disabled={collection.visibility !== "public"}>
+                    🔗 Copy Share Link
                   </Button>
                 </div>
               )}

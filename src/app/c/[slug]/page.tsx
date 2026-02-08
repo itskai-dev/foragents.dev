@@ -3,6 +3,84 @@ import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { MobileNav } from "@/components/mobile-nav";
 import { Footer } from "@/components/footer";
+import type { Metadata } from "next";
+
+async function fetchCollection(slug: string, base: string) {
+  const res = await fetch(`${base}/api/public/collections/${slug}`, {
+    cache: "no-store",
+  }).catch(() => null);
+
+  if (!res || !res.ok) return null;
+
+  const data = (await res.json()) as {
+    collection: { id: string; name: string; description: string | null; ownerHandle: string; slug: string };
+    items: Array<
+      | {
+          id: string;
+          itemType: "agent";
+          agentHandle: string;
+          agent?: { name: string; handle: string; avatar: string; profileUrl: string; description: string } | null;
+        }
+      | {
+          id: string;
+          itemType: "artifact";
+          artifactId: string;
+          artifact?: { id: string; title: string; url: string } | null;
+        }
+    >;
+  };
+
+  return data;
+}
+
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await props.params;
+  
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host");
+  const proto = h.get("x-forwarded-proto") || "http";
+  const base = host ? `${proto}://${host}` : (process.env.NEXT_PUBLIC_SITE_URL || "https://foragents.dev");
+
+  const data = await fetchCollection(slug, base);
+
+  if (!data) {
+    return {
+      title: "Collection Not Found — forAgents.dev",
+    };
+  }
+
+  const { collection } = data;
+  const description = collection.description || "A curated collection on forAgents.dev";
+  const ogImageUrl = `${base}/api/og/stack/${collection.id}`;
+
+  return {
+    title: `${collection.name} — forAgents.dev`,
+    description,
+    openGraph: {
+      title: collection.name,
+      description,
+      url: `${base}/c/${slug}`,
+      siteName: "forAgents.dev",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: collection.name,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: collection.name,
+      description,
+      images: [ogImageUrl],
+    },
+  };
+}
 
 export default async function PublicCollectionPage(props: {
   params: Promise<{ slug: string }>;
