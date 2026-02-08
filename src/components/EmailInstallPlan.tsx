@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import * as React from "react";
+import { X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface EmailInstallPlanProps {
   isOpen: boolean;
@@ -11,156 +12,139 @@ interface EmailInstallPlanProps {
   installCmd?: string;
 }
 
+const STORAGE_KEY = "foragents:email-install-plan";
+
 export function EmailInstallPlan({
   isOpen,
   onClose,
   skillSlug,
   installCmd,
 }: EmailInstallPlanProps) {
-  const [email, setEmail] = useState("");
-  const [toast, setToast] = useState("");
-  const modalRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [email, setEmail] = React.useState("");
+  const [showToast, setShowToast] = React.useState(false);
+  const labelId = React.useId();
 
-  const showToast = (message: string) => {
-    setToast(message);
-    setTimeout(() => setToast(""), 3000);
-  };
-
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+  React.useEffect(() => {
+    if (!isOpen) {
+      setEmail("");
+      setShowToast(false);
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
-        onClose();
-      }
-    };
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.addEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen, onClose]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email || !email.includes("@")) {
-      showToast("Please enter a valid email address");
-      return;
-    }
 
-    // Store intent in localStorage for later backend hookup
-    const emailIntent = {
-      email,
-      skillSlug,
-      installCmd,
-      timestamp: new Date().toISOString(),
-    };
+    if (!email.trim()) return;
 
+    // Store email in localStorage
     try {
-      const existingIntents = localStorage.getItem("emailInstallIntents");
-      const intents = existingIntents ? JSON.parse(existingIntents) : [];
-      intents.push(emailIntent);
-      localStorage.setItem("emailInstallIntents", JSON.stringify(intents));
+      const data = {
+        email: email.trim(),
+        timestamp: Date.now(),
+        skillSlug,
+        installCmd,
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     } catch (error) {
-      console.error("Failed to store email intent:", error);
+      console.error("Failed to store email:", error);
     }
 
-    showToast("Install plan will be sent to your email");
-    setEmail("");
-    
-    // Close modal after a short delay to show the toast
+    // Show success toast
+    setShowToast(true);
+
+    // Close modal after brief delay
     setTimeout(() => {
       onClose();
-    }, 1000);
+    }, 1500);
+  };
+
+  const handleNoThanks = () => {
+    onClose();
   };
 
   if (!isOpen) return null;
 
   return (
     <>
-      {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" />
-
-      {/* Modal */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
         <div
-          ref={modalRef}
-          className="bg-[#0a0a0a] border border-white/10 rounded-lg shadow-2xl max-w-md w-full p-6 relative"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="email-modal-title"
+          aria-labelledby={labelId}
+          className="w-full max-w-md"
         >
-          <h2
-            id="email-modal-title"
-            className="text-lg font-semibold text-[#F8FAFC] mb-2"
-          >
-            📧 Send this to my email
-          </h2>
-          <p className="text-sm text-white/60 mb-4">
-            We&apos;ll email you the install command so you can set it up later.
-          </p>
+          <div className="relative overflow-hidden rounded-xl border border-[#06D6A0]/20 bg-[#0a0a0a]">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#06D6A0]/10 via-transparent to-[#06D6A0]/10" />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Input
-                ref={inputRef}
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full"
-                required
-                aria-label="Email address"
-              />
-            </div>
-
-            <div className="flex gap-2 justify-end">
-              <Button
+            <div className="relative p-6">
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
                 onClick={onClose}
-                className="border-white/10 bg-white/5"
+                className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-md text-white/40 hover:text-white/70 hover:bg-white/5 transition-colors"
+                aria-label="Close"
               >
-                No thanks
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-cyan text-black hover:bg-cyan/90"
-              >
-                Send
-              </Button>
-            </div>
-          </form>
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
 
-          {/* Toast */}
-          {toast && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/90 text-white text-sm px-4 py-2 rounded-md whitespace-nowrap">
-              {toast}
+              <h2
+                id={labelId}
+                className="text-lg font-semibold text-white/90 mb-2"
+              >
+                Get your install plan
+              </h2>
+              <p className="text-sm text-white/60 mb-6">
+                We&apos;ll send you a step-by-step guide to install this skill.
+              </p>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="email-input" className="sr-only">
+                    Email address
+                  </label>
+                  <Input
+                    id="email-input"
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoFocus
+                    className="w-full"
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-[#06D6A0] text-black hover:bg-[#06D6A0]/90 font-semibold"
+                  >
+                    Send
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={handleNoThanks}
+                    variant="outline"
+                    className="flex-1 border-white/10 bg-white/5 text-white/70 hover:text-white/90 hover:border-white/20"
+                  >
+                    No thanks
+                  </Button>
+                </div>
+              </form>
             </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {/* Success Toast */}
+      {showToast && (
+        <div className="fixed bottom-4 right-4 z-[60] animate-in fade-in slide-in-from-bottom-2">
+          <div className="rounded-lg border border-[#06D6A0]/30 bg-[#0a0a0a] px-4 py-3 shadow-lg">
+            <p className="text-sm font-medium text-white/90">
+              ✓ Email saved! We&apos;ll send your install plan soon.
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
