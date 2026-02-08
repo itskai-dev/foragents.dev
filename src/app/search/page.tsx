@@ -86,16 +86,19 @@ export default function SearchPage() {
 
         {/* Search Input */}
         <div className="relative mb-8">
-          <input
           <label htmlFor="search-input" className="sr-only">
             Search for skills by name, description, or tags
           </label>
-            id="search-input" type="search"
+          <input
+            id="search-input"
+            type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for skills..."
             className="w-full h-12 px-4 pr-12 rounded-lg bg-card border border-white/10 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-cyan/50 focus:ring-1 focus:ring-cyan/20 font-mono text-sm transition-colors"
-            autoFocus aria-label="Search for skills" role="searchbox"
+            autoFocus
+            aria-label="Search for skills"
+            role="searchbox"
           />
           <div className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true">
             🔍
@@ -180,7 +183,7 @@ export default function SearchPage() {
             </p>
           </div>
         )}
-      </div>
+      </main>
 
       {/* Footer */}
       <Footer />
