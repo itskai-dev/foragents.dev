@@ -152,18 +152,6 @@ export default function UseCasesClient() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-              <span className="text-xs text-muted-foreground font-mono">
-                forAgents.dev
-              </span>
-            </Link>
-          </div>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20">

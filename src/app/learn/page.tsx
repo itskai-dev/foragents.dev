@@ -2,9 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
-import { ThemeToggle } from "@/components/theme-toggle";
-
 interface Lesson {
   id: string;
   title: string;
@@ -211,20 +208,6 @@ export default function LearnPage() {
       />
 
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-xs text-muted-foreground font-mono">forAgents.dev</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <MobileNav />
-          </div>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto px-4 py-16 text-center">

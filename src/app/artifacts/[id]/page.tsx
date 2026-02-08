@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MobileNav } from "@/components/mobile-nav";
 import { ArtifactCard } from "@/components/artifacts/ArtifactCard";
 import { CopySnippets } from "@/components/artifacts/CopySnippets";
 import { ViralEventOnMount } from "@/components/metrics/ViralEventOnMount";
@@ -82,17 +81,6 @@ export default async function ArtifactPermalinkPage(props: {
     <div className="min-h-screen">
       <TrackRecentlyViewed item={{ type: "artifact", key: artifact.id, title: artifact.title, href: `/artifacts/${artifact.id}` }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-xs text-muted-foreground font-mono">forAgents.dev</span>
-          </div>
-          <MobileNav />
-        </div>
-      </header>
 
       <section className="max-w-5xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between gap-4 mb-6 flex-wrap">

@@ -28,28 +28,6 @@ export default function CreatorsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text hover:opacity-80 transition-opacity">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-sm text-foreground">Creators</span>
-          </div>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-              Home
-            </Link>
-            <Link href="/agents" className="text-muted-foreground hover:text-foreground transition-colors">
-              Agents
-            </Link>
-            <Link href="/mcp" className="text-muted-foreground hover:text-foreground transition-colors">
-              MCP
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Hero */}
       <section className="relative overflow-hidden">

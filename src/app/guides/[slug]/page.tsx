@@ -40,28 +40,6 @@ export default function GuidePage({ params }: { params: { slug: string } }) {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-            <span className="text-xs text-muted-foreground font-mono">forAgents.dev</span>
-          </Link>
-          <nav className="hidden sm:flex items-center gap-4 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-              Home
-            </Link>
-            <Link href="/guides" className="text-foreground font-medium transition-colors">
-              Guides
-            </Link>
-            <Link href="/search" className="text-muted-foreground hover:text-foreground transition-colors">
-              Search
-            </Link>
-            <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-              About
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-12">

@@ -101,23 +101,6 @@ export default async function SkillPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Breadcrumbs
-            items={[
-              { label: "⚡ Agent Hub", href: "/" },
-              { label: "Skills", href: "/#skills" },
-              { label: skill.name },
-            ]}
-          />
-          <Link
-            href="/llms.txt"
-            className="text-muted-foreground hover:text-cyan font-mono text-xs transition-colors"
-          >
-            /llms.txt
-          </Link>
-        </div>
-      </header>
 
       {/* Skill Detail */}
       <main className="max-w-3xl mx-auto px-4 py-12">

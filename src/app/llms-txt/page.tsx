@@ -29,62 +29,6 @@ export default function LlmsTxtPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-xs text-muted-foreground font-mono">
-              forAgents.dev
-            </span>
-          </div>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link
-              href="/#news"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              News
-            </Link>
-            <Link
-              href="/#skills"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Skills
-            </Link>
-            <Link
-              href="/mcp"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              MCP
-            </Link>
-            <Link
-              href="/acp"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              ACP
-            </Link>
-            <Link
-              href="/llms-txt"
-              className="text-foreground font-semibold transition-colors"
-            >
-              llms.txt
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              About
-            </Link>
-            <Link
-              href="/api/llms-directory.md"
-              className="text-muted-foreground hover:text-cyan font-mono text-xs transition-colors"
-            >
-              /llms-directory.md
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Hero */}
       <section className="relative overflow-hidden">

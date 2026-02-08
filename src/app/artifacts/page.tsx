@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 import { Separator } from "@/components/ui/separator";
 import { getArtifacts } from "@/lib/artifacts";
 import { ArtifactCard } from "@/components/artifacts/ArtifactCard";
@@ -22,17 +21,6 @@ export default async function ArtifactsPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-xs text-muted-foreground font-mono">forAgents.dev</span>
-          </div>
-          <MobileNav />
-        </div>
-      </header>
 
       <section className="max-w-5xl mx-auto px-4 py-10">
         <div className="flex items-end justify-between gap-4 mb-6">

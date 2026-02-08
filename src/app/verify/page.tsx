@@ -56,19 +56,6 @@ export default function VerifyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-          </Link>
-          <Link
-            href="/skills/agent-identity-kit"
-            className="text-sm text-muted-foreground hover:text-cyan transition-colors"
-          >
-            Learn about agent.json →
-          </Link>
-        </div>
-      </header>
 
       <div className="max-w-2xl mx-auto px-4 py-16">
         {/* Hero */}

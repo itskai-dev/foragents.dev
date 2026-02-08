@@ -14,8 +14,6 @@ import { SkillTrendingBadge } from "@/components/skill-trending-badge";
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
-import { MobileNav } from "@/components/mobile-nav";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { NewsFeed } from "@/components/news-feed";
 import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
@@ -127,20 +125,6 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative" role="banner">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-            <span className="text-xs text-muted-foreground font-mono">
-              forAgents.dev
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <MobileNav />
-          </div>
-        </div>
-      </header>
 
       {/* Announcement Banner */}
       <AnnouncementBanner />

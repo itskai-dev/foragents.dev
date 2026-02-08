@@ -26,7 +26,6 @@ const platformColors: Record<string, string> = {
   github: "bg-[#8B5CF6]/10 text-[#8B5CF6] border-[#8B5CF6]/20",
 };
 
-
 export default function AgentsPage() {
   const agents = getAgents();
   const featuredAgents = getFeaturedAgents();
@@ -35,34 +34,6 @@ export default function AgentsPage() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text hover:opacity-80 transition-opacity">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-sm text-foreground">Agents</span>
-          </div>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-              Home
-            </Link>
-            <Link href="/mcp" className="text-muted-foreground hover:text-foreground transition-colors">
-              MCP
-            </Link>
-            <Link href="/acp" className="text-muted-foreground hover:text-foreground transition-colors">
-              ACP
-            </Link>
-            <Link href="/llms-txt" className="text-muted-foreground hover:text-foreground transition-colors">
-              llms.txt
-            </Link>
-            <Link href="/api/agents.md" className="text-muted-foreground hover:text-cyan font-mono text-xs transition-colors">
-              /agents.md
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Hero */}
       <section className="relative overflow-hidden">

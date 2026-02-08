@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -85,15 +84,6 @@ export default function CollectionsPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text">⚡ Agent Hub</Link>
-            <span className="text-xs text-muted-foreground font-mono">forAgents.dev</span>
-          </div>
-          <MobileNav />
-        </div>
-      </header>
 
       <section className="max-w-5xl mx-auto px-4 py-10">
         <div className="flex items-start justify-between gap-6 flex-wrap">

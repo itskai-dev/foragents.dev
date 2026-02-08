@@ -305,35 +305,6 @@ export default async function CreatorStatsPage({ params }: Props) {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Breadcrumbs
-            items={[
-              { label: "⚡ Agent Hub", href: "/" },
-              { label: "Creators", href: "/creators" },
-              {
-                label: creator.username,
-                href: `/creators/${encodeURIComponent(creator.username)}`,
-              },
-              { label: "Analytics" },
-            ]}
-          />
-          <nav className="flex items-center gap-4 text-sm">
-            <Link
-              href={`/creators/${encodeURIComponent(creator.username)}`}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Profile
-            </Link>
-            <Link
-              href="/creators"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              All Creators
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Page Header */}
       <section className="relative overflow-hidden border-b border-white/5">

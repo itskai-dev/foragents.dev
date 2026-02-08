@@ -89,31 +89,6 @@ export default async function CreatorProfilePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Breadcrumbs
-            items={[
-              { label: "⚡ Agent Hub", href: "/" },
-              { label: "Creators", href: "/creators" },
-              { label: creator.username },
-            ]}
-          />
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-              Home
-            </Link>
-            <Link href="/creators" className="text-muted-foreground hover:text-foreground transition-colors">
-              Creators
-            </Link>
-            <Link
-              href={`/creators/${encodeURIComponent(creator.username)}/stats`}
-              className="px-3 py-1.5 rounded-lg border border-cyan/30 bg-cyan/10 text-cyan hover:bg-cyan/20 transition-colors"
-            >
-              View Stats
-            </Link>
-          </nav>
-        </div>
-      </header>
 
       {/* Profile Header */}
       <section className="relative overflow-hidden">

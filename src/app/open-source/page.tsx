@@ -110,37 +110,6 @@ export default function OpenSourcePage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       {/* Mobile Nav */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold bg-gradient-to-r from-white via-[#06D6A0] to-white bg-clip-text text-transparent">
-              forAgents.dev
-            </span>
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/skills"
-              className="text-sm text-gray-400 hover:text-[#06D6A0] transition-colors hidden sm:inline-block"
-            >
-              Skills
-            </Link>
-            <Link
-              href="/docs"
-              className="text-sm text-gray-400 hover:text-[#06D6A0] transition-colors hidden sm:inline-block"
-            >
-              Docs
-            </Link>
-            <a
-              href="https://github.com/reflectt/foragents.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm px-3 py-1.5 rounded-lg border border-[#06D6A0]/30 text-[#06D6A0] hover:bg-[#06D6A0]/10 transition-colors"
-            >
-              GitHub
-            </a>
-          </nav>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-white/10">
