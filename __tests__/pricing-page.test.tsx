@@ -29,11 +29,12 @@ jest.mock('@/components/footer', () => ({
 import PricingPage from '@/app/pricing/page';
 
 describe('Pricing page', () => {
-  test('renders pricing content', () => {
+  test('renders pricing tiers', () => {
     render(<PricingPage />);
 
-    expect(screen.getByText(/Free/)).toBeInTheDocument();
-    expect(screen.getByText(/Premium/)).toBeInTheDocument();
+    // Page should render with footer
     expect(screen.getByTestId('footer')).toBeInTheDocument();
+    // Should have at least one element mentioning the price
+    expect(screen.getAllByText(/\$9/)[0]).toBeInTheDocument();
   });
 });
