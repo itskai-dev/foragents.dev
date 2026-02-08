@@ -2,22 +2,24 @@ import "server-only";
 
 import { promises as fs } from "fs";
 import path from "path";
+
 import { getSupabase } from "@/lib/supabase";
 import { decodeCursor, encodeCursor, isNewerThanCursor } from "@/lib/agentCursor";
+import {
+  compareEventTupleDesc,
+  decodeAgentInboxCursor,
+  encodeAgentInboxCursor,
+  extractMentionHandles,
+  isStrictlyOlderThanCursor,
+  normalizeHandle,
+  type AgentInboxEventItem,
+  type AgentInboxEventType,
+} from "@/lib/agentInboxEvents";
 import type { Artifact } from "@/lib/artifactsShared";
 import type { ArtifactComment, ArtifactRating } from "@/lib/server/artifactFeedback";
 
-export type AgentEventType = "comment.created" | "comment.replied" | "rating.created_or_updated";
-
-export type AgentEventItem = {
-  id: string;
-  type: AgentEventType;
-  created_at: string;
-  artifact_id: string;
-  recipient_handle?: string;
-  comment?: ArtifactComment;
-  rating?: ArtifactRating;
-};
+export type AgentEventType = AgentInboxEventType;
+export type AgentEventItem = AgentInboxEventItem<ArtifactComment, ArtifactRating>;
 
 const COMMENTS_PATH = path.join(process.cwd(), "data", "artifact_comments.json");
 const RATINGS_PATH = path.join(process.cwd(), "data", "artifact_ratings.json");
@@ -39,35 +41,11 @@ async function readJsonArrayFile<T>(p: string): Promise<T[]> {
   }
 }
 
-function makeCursor(created_at: string, id: string): string {
-  return Buffer.from(JSON.stringify({ created_at, id }), "utf-8").toString("base64url");
-}
-
-function parseCursor(cursor: string | null): { created_at: string; id: string } | null {
-  if (!cursor) return null;
-  try {
-    const json = Buffer.from(cursor, "base64url").toString("utf-8");
-    const parsed = JSON.parse(json) as { created_at?: unknown; id?: unknown };
-    if (typeof parsed?.created_at === "string" && typeof parsed?.id === "string") {
-      return { created_at: parsed.created_at, id: parsed.id };
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 function cmpTupleAsc(a: { created_at: string; id: string }, b: { created_at: string; id: string }): number {
   const ta = new Date(a.created_at).getTime();
   const tb = new Date(b.created_at).getTime();
   if (ta !== tb) return ta - tb;
   return a.id.localeCompare(b.id);
-}
-
-function isAfterCursor(tuple: { created_at: string; id: string }, cursor: { created_at: string; id: string } | null): boolean {
-  if (!cursor) return true;
-  const c = cmpTupleAsc(tuple, cursor);
-  return c > 0;
 }
 
 function toCommentEventId(comment: Pick<ArtifactComment, "id">): string {
@@ -78,43 +56,61 @@ function toRatingEventId(rating: Pick<ArtifactRating, "id">): string {
   return `rating:${rating.id}`;
 }
 
+function toMentionEventId(comment: Pick<ArtifactComment, "id">, handle: string): string {
+  return `mention:${comment.id}:${normalizeHandle(handle)}`;
+}
+
+function parseSinceIso(since: string | null | undefined): string | null {
+  if (!since) return null;
+  const t = new Date(since).getTime();
+  if (!Number.isFinite(t)) return null;
+  return new Date(t).toISOString();
+}
+
+/**
+ * Cursor-based pagination for an agent's inbox events.
+ *
+ * - Newest-first
+ * - Stable cursor (no duplicates)
+ * - Supports ?since=<ISO timestamp>
+ */
 export async function listAgentEvents(params: {
   agent_handle: string;
   cursor?: string | null;
   limit?: number;
+  since?: string | null;
   artifact_id?: string | null;
 }): Promise<{ items: AgentEventItem[]; next_cursor: string | null; updated_at: string }> {
   const limit = Math.min(100, Math.max(1, params.limit ?? 50));
-  const cursorTuple = parseCursor(params.cursor ?? null);
-  const agentHandle = (params.agent_handle ?? "").replace(/^@/, "");
+  const cursor = decodeAgentInboxCursor(params.cursor);
+  const sinceIso = parseSinceIso(params.since);
+
+  const agentHandleNorm = normalizeHandle(params.agent_handle).toLowerCase();
   const artifactFilter = params.artifact_id ?? null;
 
   const supabase = getSupabase();
   if (supabase) {
-    // Supabase-first. Keep logic simple: fetch a window of rows after cursor,
-    // then filter by recipient handle.
-    // NOTE: recipient_handle is based on artifact.author (handle) or parent-comment author.
-    const commentLimit = limit * 3;
-    const ratingLimit = limit * 3;
+    // Fetch windows from each source, then merge + paginate in-memory.
+    const windowSize = Math.min(500, Math.max(50, limit * 10));
 
     const events: AgentEventItem[] = [];
 
+    // -----------------
     // Comments
+    // -----------------
     let cq = supabase
       .from("artifact_comments")
       .select(
         "id, artifact_id, parent_id, kind, author_agent_id, author_handle, author_display_name, raw_md, body_md, body_text, status, created_at"
       )
       .eq("status", "visible")
-      .order("created_at", { ascending: true })
-      .order("id", { ascending: true })
-      .limit(commentLimit);
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .limit(windowSize);
+
     if (artifactFilter) cq = cq.eq("artifact_id", artifactFilter);
-    if (cursorTuple) {
-      cq = cq.or(
-        `created_at.gt.${cursorTuple.created_at},and(created_at.eq.${cursorTuple.created_at},id.gt.${cursorTuple.id})`
-      );
-    }
+    if (sinceIso) cq = cq.gte("created_at", sinceIso);
+    if (cursor) cq = cq.lte("created_at", cursor.created_at);
 
     const { data: cData, error: cErr } = await cq;
     if (cErr) {
@@ -171,13 +167,29 @@ export async function listAgentEvents(params: {
       }
 
       for (const c of comments) {
+        // Mentions
+        const mentionText = String(c.body_text ?? c.body_md ?? "");
+        const mentions = extractMentionHandles(mentionText).map((h) => normalizeHandle(h).toLowerCase());
+        if (mentions.includes(agentHandleNorm)) {
+          events.push({
+            id: toMentionEventId(c, agentHandleNorm),
+            type: "comment.mentioned",
+            created_at: c.created_at,
+            artifact_id: c.artifact_id,
+            recipient_handle: agentHandleNorm,
+            comment: c,
+            mention: { handle: agentHandleNorm, in_comment_id: c.id },
+          });
+        }
+
+        // Comments on your artifact or replies to your comment
         const type: AgentEventType = c.parent_id ? "comment.replied" : "comment.created";
         const recipient_handle = c.parent_id
           ? parentAuthorById.get(c.parent_id)?.author_handle ?? undefined
           : artifactsById.get(c.artifact_id)?.author;
 
         if (!recipient_handle) continue;
-        if (recipient_handle.replace(/^@/, "") !== agentHandle) continue;
+        if (normalizeHandle(recipient_handle).toLowerCase() !== agentHandleNorm) continue;
 
         events.push({
           id: toCommentEventId(c),
@@ -190,21 +202,19 @@ export async function listAgentEvents(params: {
       }
     }
 
+    // -----------------
     // Ratings
+    // -----------------
     let rq = supabase
       .from("artifact_ratings")
       .select("id, artifact_id, rater_agent_id, rater_handle, score, dims, raw_md, notes_md, created_at, updated_at")
-      .order("updated_at", { ascending: true })
-      .order("id", { ascending: true })
-      .limit(ratingLimit);
+      .order("updated_at", { ascending: false })
+      .order("id", { ascending: false })
+      .limit(windowSize);
 
     if (artifactFilter) rq = rq.eq("artifact_id", artifactFilter);
-
-    if (cursorTuple) {
-      // Cursor id is the event id (e.g. rating:rat_123). Strip prefix for the ratings table id compare.
-      const rawId = cursorTuple.id.replace(/^rating:/, "");
-      rq = rq.or(`updated_at.gt.${cursorTuple.created_at},and(updated_at.eq.${cursorTuple.created_at},id.gt.${rawId})`);
-    }
+    if (sinceIso) rq = rq.gte("updated_at", sinceIso);
+    if (cursor) rq = rq.lte("updated_at", cursor.created_at);
 
     const { data: rData, error: rErr } = await rq;
     if (rErr) {
@@ -247,7 +257,7 @@ export async function listAgentEvents(params: {
       for (const r of ratings) {
         const recipient_handle = artifactsById.get(r.artifact_id)?.author;
         if (!recipient_handle) continue;
-        if (recipient_handle.replace(/^@/, "") !== agentHandle) continue;
+        if (normalizeHandle(recipient_handle).toLowerCase() !== agentHandleNorm) continue;
 
         events.push({
           id: toRatingEventId(r),
@@ -260,8 +270,11 @@ export async function listAgentEvents(params: {
       }
     }
 
-    events.sort((a, b) => cmpTupleAsc({ created_at: a.created_at, id: a.id }, { created_at: b.created_at, id: b.id }));
-    const filtered = events.filter((e) => isAfterCursor({ created_at: e.created_at, id: e.id }, cursorTuple));
+    // Newest-first, stable tie-break by id
+    events.sort((a, b) => compareEventTupleDesc(a, b));
+
+    // Cursor filters items strictly older than the last item from previous page
+    const filtered = events.filter((e) => isStrictlyOlderThanCursor(e, cursor));
 
     const items = filtered.slice(0, limit);
     const hasMore = filtered.length > limit;
@@ -269,17 +282,21 @@ export async function listAgentEvents(params: {
 
     return {
       items,
-      next_cursor: hasMore && last ? makeCursor(last.created_at, last.id) : null,
+      next_cursor: hasMore && last ? encodeAgentInboxCursor({ created_at: last.created_at, id: last.id }) : null,
       updated_at: new Date().toISOString(),
     };
   }
 
+  // -----------------
   // File fallback
+  // -----------------
   const [artifacts, comments, ratings] = await Promise.all([
     readJsonArrayFile<Artifact>(ARTIFACTS_PATH),
     readJsonArrayFile<ArtifactComment>(COMMENTS_PATH),
     readJsonArrayFile<ArtifactRating>(RATINGS_PATH),
   ]);
+
+  const sinceT = sinceIso ? new Date(sinceIso).getTime() : null;
 
   const artifactsById = new Map<string, Artifact>();
   for (const a of artifacts) artifactsById.set(a.id, a);
@@ -292,12 +309,30 @@ export async function listAgentEvents(params: {
   for (const c of comments) {
     if ((c.status ?? "visible") !== "visible") continue;
     if (artifactFilter && c.artifact_id !== artifactFilter) continue;
+    if (sinceT !== null && new Date(c.created_at).getTime() < sinceT) continue;
+
+    // Mentions
+    const mentionText = String(c.body_text ?? c.body_md ?? "");
+    const mentions = extractMentionHandles(mentionText).map((h) => normalizeHandle(h).toLowerCase());
+    if (mentions.includes(agentHandleNorm)) {
+      events.push({
+        id: toMentionEventId(c, agentHandleNorm),
+        type: "comment.mentioned",
+        created_at: c.created_at,
+        artifact_id: c.artifact_id,
+        recipient_handle: agentHandleNorm,
+        comment: c,
+        mention: { handle: agentHandleNorm, in_comment_id: c.id },
+      });
+    }
 
     const type: AgentEventType = c.parent_id ? "comment.replied" : "comment.created";
-    const recipient_handle = c.parent_id ? commentsById.get(c.parent_id)?.author?.handle : artifactsById.get(c.artifact_id)?.author;
+    const recipient_handle = c.parent_id
+      ? commentsById.get(c.parent_id)?.author?.handle
+      : artifactsById.get(c.artifact_id)?.author;
 
     if (!recipient_handle) continue;
-    if (recipient_handle.replace(/^@/, "") !== agentHandle) continue;
+    if (normalizeHandle(recipient_handle).toLowerCase() !== agentHandleNorm) continue;
 
     events.push({
       id: toCommentEventId(c),
@@ -311,23 +346,25 @@ export async function listAgentEvents(params: {
 
   for (const r of ratings) {
     if (artifactFilter && r.artifact_id !== artifactFilter) continue;
+    const createdAt = r.updated_at;
+    if (sinceT !== null && new Date(createdAt).getTime() < sinceT) continue;
 
     const recipient_handle = artifactsById.get(r.artifact_id)?.author;
     if (!recipient_handle) continue;
-    if (recipient_handle.replace(/^@/, "") !== agentHandle) continue;
+    if (normalizeHandle(recipient_handle).toLowerCase() !== agentHandleNorm) continue;
 
     events.push({
       id: toRatingEventId(r),
       type: "rating.created_or_updated",
-      created_at: r.updated_at,
+      created_at: createdAt,
       artifact_id: r.artifact_id,
       recipient_handle,
       rating: r,
     });
   }
 
-  events.sort((a, b) => cmpTupleAsc({ created_at: a.created_at, id: a.id }, { created_at: b.created_at, id: b.id }));
-  const filtered = events.filter((e) => isAfterCursor({ created_at: e.created_at, id: e.id }, cursorTuple));
+  events.sort((a, b) => compareEventTupleDesc(a, b));
+  const filtered = events.filter((e) => isStrictlyOlderThanCursor(e, cursor));
 
   const items = filtered.slice(0, limit);
   const hasMore = filtered.length > limit;
@@ -335,7 +372,7 @@ export async function listAgentEvents(params: {
 
   return {
     items,
-    next_cursor: hasMore && last ? makeCursor(last.created_at, last.id) : null,
+    next_cursor: hasMore && last ? encodeAgentInboxCursor({ created_at: last.created_at, id: last.id }) : null,
     updated_at: new Date().toISOString(),
   };
 }

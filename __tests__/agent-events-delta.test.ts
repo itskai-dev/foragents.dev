@@ -21,7 +21,7 @@ async function writeJson(p: string, v: unknown) {
   await fs.writeFile(p, JSON.stringify(v, null, 2));
 }
 
-describe("GET /api/agents/[agentId]/events (delta cursor semantics) - file fallback", () => {
+describe("GET /api/agents/:id/events (cursor pagination, newest-first) - file fallback", () => {
   let origArtifacts: string | null = null;
   let origComments: string | null = null;
   let origRatings: string | null = null;
@@ -37,6 +37,14 @@ describe("GET /api/agents/[agentId]/events (delta cursor semantics) - file fallb
         title: "A1",
         body: "This is long enough",
         author: "alice",
+        tags: [],
+        created_at: "2026-02-05T00:00:00.000Z",
+      },
+      {
+        id: "art_2",
+        title: "A2",
+        body: "This is long enough",
+        author: "bob",
         tags: [],
         created_at: "2026-02-05T00:00:00.000Z",
       },
@@ -79,6 +87,18 @@ describe("GET /api/agents/[agentId]/events (delta cursor semantics) - file fallb
         status: "visible",
         created_at: "2026-02-05T00:00:03.000Z",
       },
+      {
+        id: "c4",
+        artifact_id: "art_2",
+        parent_id: null,
+        kind: "feedback",
+        body_md: "ping @alice",
+        body_text: "ping @alice",
+        raw_md: "---\nkind: feedback\n---\nping @alice",
+        author: { agent_id: "agent_dana", handle: "dana", display_name: "Dana" },
+        status: "visible",
+        created_at: "2026-02-05T00:00:03.500Z",
+      },
     ];
 
     const ratings: ArtifactRating[] = [
@@ -119,9 +139,12 @@ describe("GET /api/agents/[agentId]/events (delta cursor semantics) - file fallb
     }
   });
 
-  test("cursor advances with no duplicates (alice inbox)", async () => {
+  test("cursor advances with no duplicates (alice inbox, newest-first)", async () => {
     const first = await listAgentEvents({ agent_handle: "alice", cursor: null, limit: 2 });
     expect(first.items.length).toBe(2);
+
+    // newest first
+    expect(first.items[0]?.id).toBe("rating:r1");
 
     const ids1 = first.items.map((i) => i.id);
     expect(new Set(ids1).size).toBe(ids1.length);
@@ -139,6 +162,18 @@ describe("GET /api/agents/[agentId]/events (delta cursor semantics) - file fallb
 
     const combined = [...ids1, ...ids2];
     expect(combined).toEqual(allIds);
+  });
+
+  test("supports ?since filter (alice inbox)", async () => {
+    const res = await listAgentEvents({
+      agent_handle: "alice",
+      cursor: null,
+      limit: 50,
+      since: "2026-02-05T00:00:03.250Z",
+    });
+
+    // rating at 00:00:04 + mention at 00:00:03.5
+    expect(res.items.map((i) => i.id)).toEqual(["rating:r1", "mention:c4:alice"]);
   });
 
   test("reply event routes to parent comment author (bob inbox)", async () => {

@@ -18,6 +18,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ han
   const { searchParams } = new URL(request.url);
   const cursor = searchParams.get("cursor");
   const limitRaw = searchParams.get("limit");
+  const since = searchParams.get("since");
   const artifact_id = searchParams.get("artifact_id");
 
   const limit = limitRaw ? Number(limitRaw) : undefined;
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ han
   const res = await listAgentEvents({
     agent_handle: cleanAgentId,
     cursor,
+    since,
     limit: typeof limit === "number" && Number.isFinite(limit) ? limit : undefined,
     artifact_id,
   });
