@@ -6,6 +6,7 @@ import { NextBestActionPanel } from "@/components/next-best-action-panel";
 import { SkillShareActions } from "@/components/skill-share-actions";
 import { RelatedKits } from "@/components/related-kits";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import Link from "next/link";
 
 // Generate static paths for all skills
@@ -68,17 +69,13 @@ export default async function SkillPage({
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text hover:opacity-80 transition-opacity">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <Link href="/#skills" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Skills
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-sm text-foreground">{skill.name}</span>
-          </div>
+          <Breadcrumbs
+            items={[
+              { label: "⚡ Agent Hub", href: "/" },
+              { label: "Skills", href: "/#skills" },
+              { label: skill.name },
+            ]}
+          />
           <Link
             href="/llms.txt"
             className="text-muted-foreground hover:text-cyan font-mono text-xs transition-colors"
