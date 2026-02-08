@@ -9,6 +9,7 @@ const navLinks = [
   { href: "/trending", label: "Trending" },
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/mcp", label: "MCP" },
+  { href: "/macros", label: "Macros" },
   { href: "/requests", label: "Requests" },
   { href: "/getting-started", label: "Get Started" },
   { href: "/search", label: "Search" },

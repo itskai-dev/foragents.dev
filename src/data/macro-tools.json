@@ -1,0 +1,184 @@
+[
+  {
+    "id": "check-server-health",
+    "name": "Check Server Health",
+    "description": "Chain multiple MCP tools to get a comprehensive server status.",
+    "steps": [
+      {
+        "tool": "get-system-metrics",
+        "server": "prometheus-mcp",
+        "description": "Fetch CPU/memory/disk"
+      },
+      {
+        "tool": "get-recent-logs",
+        "server": "elasticsearch-mcp",
+        "description": "Pull last 100 error logs"
+      },
+      {
+        "tool": "get-active-processes",
+        "server": "system-mcp",
+        "description": "List top processes by CPU"
+      }
+    ],
+    "tags": ["devops", "monitoring"],
+    "author": "reflectt-team",
+    "createdAt": "2026-02-08",
+    "installs": 42
+  },
+  {
+    "id": "incident-triage",
+    "name": "Incident Triage (Sentry → Logs → Slack)",
+    "description": "Triage a production incident by pulling the latest Sentry issues, correlating with logs, and posting a concise update to the incident channel.",
+    "steps": [
+      {
+        "tool": "get-latest-issues",
+        "server": "sentry-mcp",
+        "description": "Fetch newest high-severity issues"
+      },
+      {
+        "tool": "search-logs",
+        "server": "elasticsearch-mcp",
+        "description": "Correlate stack traces with recent errors"
+      },
+      {
+        "tool": "post-message",
+        "server": "slack-mcp",
+        "description": "Post an incident update with links and next actions"
+      }
+    ],
+    "tags": ["devops", "incident", "communication"],
+    "author": "reflectt-team",
+    "createdAt": "2026-02-08",
+    "installs": 116
+  },
+  {
+    "id": "summarize-customer-feedback",
+    "name": "Summarize Customer Feedback",
+    "description": "Collect recent support tickets, cluster common themes, and publish a weekly summary to Notion.",
+    "steps": [
+      {
+        "tool": "list-recent-tickets",
+        "server": "zendesk-mcp",
+        "description": "Fetch tickets created in the last 7 days"
+      },
+      {
+        "tool": "extract-themes",
+        "server": "llm-tools-mcp",
+        "description": "Cluster issues into themes and sentiment"
+      },
+      {
+        "tool": "create-page",
+        "server": "notion-mcp",
+        "description": "Publish the summary with bullets and top quotes"
+      }
+    ],
+    "tags": ["product", "support", "data"],
+    "author": "community",
+    "createdAt": "2026-02-08",
+    "installs": 67
+  },
+  {
+    "id": "ship-release-notes",
+    "name": "Ship Release Notes",
+    "description": "Turn merged PRs into release notes, update the changelog, and announce in Slack.",
+    "steps": [
+      {
+        "tool": "list-merged-pull-requests",
+        "server": "github-mcp",
+        "description": "Fetch merged PRs since the last tag"
+      },
+      {
+        "tool": "generate-release-notes",
+        "server": "llm-tools-mcp",
+        "description": "Create user-facing notes grouped by area"
+      },
+      {
+        "tool": "post-message",
+        "server": "slack-mcp",
+        "description": "Announce the release with highlights and links"
+      }
+    ],
+    "tags": ["development", "communication", "release"],
+    "author": "reflectt-team",
+    "createdAt": "2026-02-08",
+    "installs": 153
+  },
+  {
+    "id": "onboard-new-repo",
+    "name": "Onboard a New Repository",
+    "description": "Create issue templates, add a CODEOWNERS file, set up CI checks, and open an onboarding PR.",
+    "steps": [
+      {
+        "tool": "create-files",
+        "server": "github-mcp",
+        "description": "Add issue templates, PR template, and CODEOWNERS"
+      },
+      {
+        "tool": "configure-workflows",
+        "server": "github-actions-mcp",
+        "description": "Set up CI checks (lint, tests, build)"
+      },
+      {
+        "tool": "open-pull-request",
+        "server": "github-mcp",
+        "description": "Open a PR with the onboarding changes"
+      }
+    ],
+    "tags": ["development", "github", "automation"],
+    "author": "community",
+    "createdAt": "2026-02-08",
+    "installs": 58
+  },
+  {
+    "id": "weekly-sales-report",
+    "name": "Weekly Sales Report",
+    "description": "Query sales data, compute weekly deltas, and update a Google Sheet with charts-ready numbers.",
+    "steps": [
+      {
+        "tool": "run-query",
+        "server": "postgres-mcp",
+        "description": "Pull weekly revenue, MRR, and churn"
+      },
+      {
+        "tool": "compute-deltas",
+        "server": "data-tools-mcp",
+        "description": "Calculate week-over-week change and segments"
+      },
+      {
+        "tool": "append-rows",
+        "server": "google-sheets-mcp",
+        "description": "Write the metrics to a reporting sheet"
+      }
+    ],
+    "tags": ["data", "analytics", "reporting"],
+    "author": "reflectt-team",
+    "createdAt": "2026-02-08",
+    "installs": 91
+  },
+  {
+    "id": "security-dependency-audit",
+    "name": "Security Dependency Audit",
+    "description": "Scan dependencies for known vulnerabilities, open a ticket, and create an upgrade PR.",
+    "steps": [
+      {
+        "tool": "scan-dependencies",
+        "server": "osv-mcp",
+        "description": "Check packages against OSV vulnerability DB"
+      },
+      {
+        "tool": "create-issue",
+        "server": "linear-mcp",
+        "description": "Create a remediation ticket with affected packages"
+      },
+      {
+        "tool": "open-pull-request",
+        "server": "github-mcp",
+        "description": "Propose version bumps and lockfile updates"
+      }
+    ],
+    "tags": ["security", "development", "automation"],
+    "author": "reflectt-team",
+    "createdAt": "2026-02-08",
+    "installs": 74
+  }
+]
