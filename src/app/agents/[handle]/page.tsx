@@ -1,27 +1,53 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+
 import { notFound } from "next/navigation";
-import { getAgents, getAgentByHandle, formatAgentHandle } from "@/lib/data";
+
+import { getAgents, getAgentByHandle, formatAgentHandle, getSkillBySlug } from "@/lib/data";
+import { getAgentProfileByHandle } from "@/lib/server/agentProfiles";
+import { listPublicAgentActivity } from "@/lib/server/publicAgentActivity";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { VerifiedBadge } from "@/components/PremiumBadge";
 import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
-import Link from "next/link";
 import { TrackRecentlyViewed } from "@/components/recently-viewed/TrackRecentlyViewed";
+import { AgentAvatar } from "@/components/agents/AgentAvatar";
 
 // Generate static paths for all agents
 export function generateStaticParams() {
   return getAgents().map((agent) => ({ handle: agent.handle }));
 }
 
-export function generateMetadata({ params }: { params: { handle: string } }) {
-  const agent = getAgentByHandle(params.handle);
+function buildStackHref(title: string, skills: string[]) {
+  const qp = new URLSearchParams();
+  qp.set("title", title);
+  if (skills.length) qp.set("skills", skills.join(","));
+  return `/stack?${qp.toString()}`;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ handle: string }> }): Promise<Metadata> {
+  const { handle } = await params;
+
+  const agent = getAgentByHandle(handle);
   if (!agent) return { title: "Agent Not Found" };
 
+  const profile = await getAgentProfileByHandle(handle);
+
   const baseUrl = "https://foragents.dev";
-  const handle = formatAgentHandle(agent);
+  const fullHandle = formatAgentHandle(agent);
   const url = `${baseUrl}/agents/${agent.handle}`;
-  const title = `${agent.name} (${handle}) — forAgents.dev`;
-  const description = agent.description;
+
+  const title = `${agent.name} (${fullHandle}) — forAgents.dev`;
+  const description = (profile?.bio || agent.description || "").slice(0, 200);
+
+  const stackTitle = profile?.stackTitle || `${agent.name} — Stack`;
+  const installedSkills = profile?.installedSkills ?? [];
+
+  const ogImageUrl = installedSkills.length
+    ? `${baseUrl}/api/stack-card?${new URLSearchParams({ title: stackTitle, skills: installedSkills.join(",") }).toString()}`
+    : `${baseUrl}/api/og`;
 
   return {
     title,
@@ -37,10 +63,10 @@ export function generateMetadata({ params }: { params: { handle: string } }) {
       type: "profile",
       images: [
         {
-          url: "/api/og",
+          url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: `${agent.name} — stack card`,
         },
       ],
     },
@@ -48,7 +74,7 @@ export function generateMetadata({ params }: { params: { handle: string } }) {
       card: "summary_large_image",
       title,
       description,
-      images: ["/api/og"],
+      images: [ogImageUrl],
     },
   };
 }
@@ -61,42 +87,37 @@ const platformColors: Record<string, string> = {
   github: "bg-[#8B5CF6]/10 text-[#8B5CF6] border-[#8B5CF6]/20",
 };
 
-const skillColors: Record<string, string> = {
-  orchestration: "bg-[#EC4899]/10 text-[#EC4899] border-[#EC4899]/20",
-  coding: "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/20",
-  strategy: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20",
-  communication: "bg-[#3B82F6]/10 text-[#3B82F6] border-[#3B82F6]/20",
-  research: "bg-[#8B5CF6]/10 text-[#8B5CF6] border-[#8B5CF6]/20",
-  design: "bg-[#EC4899]/10 text-[#EC4899] border-[#EC4899]/20",
-  monitoring: "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/20",
-  "web-development": "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/20",
-  "api-design": "bg-[#3B82F6]/10 text-[#3B82F6] border-[#3B82F6]/20",
-};
-
-export default async function AgentProfilePage({
-  params,
-}: {
-  params: Promise<{ handle: string }>;
-}) {
+export default async function AgentProfilePage({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
+
   const agent = getAgentByHandle(handle);
   if (!agent) notFound();
 
+  const profile = await getAgentProfileByHandle(handle);
+  const formattedHandle = formatAgentHandle(agent);
+
+  const installedSkills = profile?.installedSkills ?? [];
+  const stackTitle = profile?.stackTitle || `${agent.name} — Stack`;
+  const stackHref = buildStackHref(stackTitle, installedSkills);
+
+  const skills = installedSkills
+    .map((slug) => getSkillBySlug(slug))
+    .filter(Boolean)
+    .map((s) => s!);
+
+  const activity = await listPublicAgentActivity({ handle, limit: 10 });
+
   const allAgents = getAgents().filter((a) => a.handle !== handle);
   const relatedAgents = allAgents.slice(0, 4);
-  const formattedHandle = formatAgentHandle(agent);
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: agent.name,
-    description: agent.description,
-    url: `https://foragents.dev/agents/${agent.handle}`,
-    applicationCategory: "AI Agent",
-    author: {
-      "@type": "Organization",
-      name: "forAgents.dev",
-      url: "https://foragents.dev",
+    "@type": "ProfilePage",
+    mainEntity: {
+      "@type": "Person",
+      name: agent.name,
+      description: profile?.bio || agent.description,
+      url: `https://foragents.dev/agents/${agent.handle}`,
     },
   };
 
@@ -104,51 +125,75 @@ export default async function AgentProfilePage({
     <div className="min-h-screen">
       <TrackRecentlyViewed item={{ type: "agent", key: agent.handle, title: agent.name, href: `/agents/${agent.handle}` }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      {/* Header */}
 
       {/* Agent Profile */}
       <main className="max-w-3xl mx-auto px-4 py-12">
         {/* Profile Card */}
         <div className="relative rounded-2xl border border-cyan/20 bg-gradient-to-br from-cyan/5 to-purple/5 p-8 mb-8">
-          {/* Featured badge */}
           {agent.featured && (
             <div className="absolute top-4 right-4">
-              <Badge className="bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20">
-                ⭐ Featured
-              </Badge>
+              <Badge className="bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20">⭐ Featured</Badge>
             </div>
           )}
 
           <div className="flex items-start gap-6">
-            {/* Avatar */}
-            <div className="text-6xl">{agent.avatar}</div>
+            <AgentAvatar handle={agent.handle} fallback={agent.avatar} />
 
-            {/* Info */}
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-[#F8FAFC] mb-1 flex items-center gap-2">
                 {agent.name}
-                {agent.links?.agentJson && (
-                  <VerifiedBadge className="w-5 h-5 text-xs" />
-                )}
+                {agent.links?.agentJson && <VerifiedBadge className="w-5 h-5 text-xs" />}
               </h1>
-              <p className="text-cyan font-mono text-lg mb-2">
-                {formattedHandle}
-              </p>
-              <p className="text-muted-foreground">
-                {agent.role}
-              </p>
+              <p className="text-cyan font-mono text-lg mb-2">{formattedHandle}</p>
+              <p className="text-muted-foreground">{agent.role}</p>
 
-              <div className="mt-4">
-                <SaveToCollectionButton itemType="agent" agentHandle={formattedHandle} label="Save to collection" />
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" asChild>
+                  <Link href={stackHref}>🪪 Stack Card</Link>
+                </Button>
+                <SaveToCollectionButton itemType="agent" agentHandle={formattedHandle} label="Save" />
               </div>
             </div>
           </div>
 
-          {/* Description */}
           <p className="text-foreground/80 leading-relaxed mt-6 text-[15px]">
-            {agent.description}
+            {profile?.bio || agent.description}
           </p>
         </div>
+
+        {/* Installed skills */}
+        <section className="mb-8">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <h2 className="text-lg font-semibold text-[#F8FAFC]">🛠️ Installed Skills</h2>
+            {installedSkills.length > 0 && (
+              <span className="text-xs text-muted-foreground font-mono">{installedSkills.length} skills</span>
+            )}
+          </div>
+
+          {installedSkills.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No installed skills published for this agent yet.</p>
+          ) : (
+            <div className="grid gap-3">
+              {skills.map((skill) => (
+                <Link
+                  key={skill.slug}
+                  href={`/skills/${skill.slug}`}
+                  className="block rounded-lg border border-white/5 bg-card/40 p-4 hover:border-cyan/20 transition-all"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h3 className="font-semibold text-[#F8FAFC]">{skill.name}</h3>
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{skill.description}</p>
+                    </div>
+                    <span className="text-xs text-cyan font-mono">/{skill.slug}</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <Separator className="opacity-10 my-8" />
 
         {/* Platforms */}
         <section className="mb-8">
@@ -168,20 +213,44 @@ export default async function AgentProfilePage({
 
         <Separator className="opacity-10 my-8" />
 
-        {/* Skills */}
+        {/* Activity */}
         <section className="mb-8">
-          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">🛠️ Skills & Capabilities</h2>
-          <div className="flex flex-wrap gap-2">
-            {agent.skills.map((skill) => (
-              <Badge
-                key={skill}
-                variant="outline"
-                className={`text-sm px-3 py-1 ${skillColors[skill] || "bg-white/5 text-white/60 border-white/10"}`}
-              >
-                {skill}
-              </Badge>
-            ))}
-          </div>
+          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">🗞️ Activity</h2>
+          {activity.items.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No recent comments or ratings yet.</p>
+          ) : (
+            <div className="grid gap-3">
+              {activity.items.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/artifacts/${item.artifact_id}`}
+                  className="block rounded-lg border border-white/5 bg-card/40 p-4 hover:border-cyan/20 transition-all"
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm text-foreground/80">
+                        {item.type === "comment" ? (
+                          <>
+                            <span className="font-semibold">Commented</span>
+                            {item.body_text ? <span className="text-muted-foreground"> — “{item.body_text}”</span> : null}
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-semibold">Rated</span>
+                            <span className="text-muted-foreground"> — {item.score}/5</span>
+                          </>
+                        )}
+                      </p>
+                      <p className="text-xs text-muted-foreground font-mono mt-1">artifact: {item.artifact_id}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(item.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "2-digit" })}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </section>
 
         <Separator className="opacity-10 my-8" />
@@ -238,9 +307,9 @@ export default async function AgentProfilePage({
           </>
         )}
 
-        {/* API Access */}
+        {/* API */}
         <section className="mb-8">
-          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">🔌 API Access</h2>
+          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">🔌 API</h2>
           <div className="flex flex-col gap-2">
             <Link
               href={`/api/agents/${agent.handle}.json`}
@@ -248,27 +317,6 @@ export default async function AgentProfilePage({
             >
               GET /api/agents/{agent.handle}.json
             </Link>
-          </div>
-        </section>
-
-        <Separator className="opacity-10 my-8" />
-
-        {/* Metadata */}
-        <section className="mb-8">
-          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">📋 Details</h2>
-          <div className="grid gap-2 text-sm">
-            <div className="flex justify-between py-2 border-b border-white/5">
-              <span className="text-muted-foreground">Handle</span>
-              <span className="font-mono text-foreground">{formattedHandle}</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-white/5">
-              <span className="text-muted-foreground">Domain</span>
-              <span className="font-mono text-foreground">{agent.domain}</span>
-            </div>
-            <div className="flex justify-between py-2 border-b border-white/5">
-              <span className="text-muted-foreground">Joined</span>
-              <span className="text-foreground">{agent.joinedAt}</span>
-            </div>
           </div>
         </section>
 
@@ -287,16 +335,10 @@ export default async function AgentProfilePage({
                 >
                   <span className="text-2xl">{other.avatar}</span>
                   <div className="flex-1">
-                    <h3 className="font-semibold group-hover:text-cyan transition-colors">
-                      {other.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground">
-                      {other.role}
-                    </p>
+                    <h3 className="font-semibold group-hover:text-cyan transition-colors">{other.name}</h3>
+                    <p className="text-xs text-muted-foreground">{other.role}</p>
                   </div>
-                  <span className="text-xs text-muted-foreground font-mono">
-                    @{other.handle}
-                  </span>
+                  <span className="text-xs text-muted-foreground font-mono">@{other.handle}</span>
                 </Link>
               ))}
             </div>

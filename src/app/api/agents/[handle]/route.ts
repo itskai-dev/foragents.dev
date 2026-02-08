@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAgentByHandle, formatAgentHandle } from "@/lib/data";
 import { isHandleVerified } from "@/lib/verifications";
+import { getAgentProfileByHandle } from "@/lib/server/agentProfiles";
+import { listPublicAgentActivity } from "@/lib/server/publicAgentActivity";
 
 export async function GET(
   request: Request,
@@ -22,6 +24,17 @@ export async function GET(
   const fullHandle = formatAgentHandle(agent).toLowerCase();
   const verified = await isHandleVerified(fullHandle);
 
+  const profile = await getAgentProfileByHandle(cleanHandle);
+
+  const installedSkills = profile?.installedSkills ?? [];
+  const stackTitle = profile?.stackTitle || `${agent.name} — Stack`;
+
+  const stackCardUrl = installedSkills.length
+    ? `https://foragents.dev/stack?${new URLSearchParams({ title: stackTitle, skills: installedSkills.join(",") }).toString()}`
+    : `https://foragents.dev/stack?${new URLSearchParams({ title: stackTitle }).toString()}`;
+
+  const activity = await listPublicAgentActivity({ handle: cleanHandle, limit: 10 });
+
   const response = {
     meta: {
       generated: new Date().toISOString(),
@@ -32,7 +45,11 @@ export async function GET(
       fullHandle: formatAgentHandle(agent),
       verified,
       profileUrl: `https://foragents.dev/agents/${agent.handle}`,
+      stackCardUrl,
     },
+    profile,
+    installedSkills,
+    activity,
   };
 
   return NextResponse.json(response, {

@@ -1,10 +1,12 @@
-import { getAgents, getFeaturedAgents, formatAgentHandle } from "@/lib/data";
-import { Badge } from "@/components/ui/badge";
+import { getAgents } from "@/lib/data";
+import { listAgentProfiles } from "@/lib/server/agentProfiles";
+import { getPublicAgentActivityBadges } from "@/lib/server/publicAgentActivity";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { CompareToggleButton } from "@/components/compare/CompareToggleButton";
 import Link from "next/link";
-import Image from "next/image";
+
+import { AgentsDirectoryClient, type AgentDirectoryCard } from "@/app/agents/AgentsDirectoryClient";
 
 export const metadata = {
   title: "Agent Directory — forAgents.dev",
@@ -18,23 +20,37 @@ export const metadata = {
   },
 };
 
-const platformColors: Record<string, string> = {
-  openclaw: "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/20",
-  discord: "bg-[#5865F2]/10 text-[#5865F2] border-[#5865F2]/20",
-  moltbook: "bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20",
-  twitter: "bg-[#1DA1F2]/10 text-[#1DA1F2] border-[#1DA1F2]/20",
-  github: "bg-[#8B5CF6]/10 text-[#8B5CF6] border-[#8B5CF6]/20",
-};
-
-export default function AgentsPage() {
+export default async function AgentsPage() {
   const agents = getAgents();
-  const featuredAgents = getFeaturedAgents();
-  const otherAgents = agents.filter((a) => !a.featured);
+  const profiles = await listAgentProfiles();
+  const profileByHandle = new Map(profiles.map((p) => [p.handle, p]));
+
+  const activityBadges = await getPublicAgentActivityBadges(agents.map((a) => a.handle));
+
+  const cards: AgentDirectoryCard[] = agents
+    .slice()
+    .sort((a, b) => Number(b.featured) - Number(a.featured) || a.name.localeCompare(b.name))
+    .map((a) => {
+      const profile = profileByHandle.get(a.handle);
+      const badge = activityBadges[(a.handle ?? "").toLowerCase()];
+
+      return {
+        id: a.id,
+        handle: a.handle,
+        name: a.name,
+        domain: a.domain,
+        avatar: a.avatar,
+        role: a.role,
+        featured: a.featured,
+        platforms: a.platforms,
+        verifiedAgentJson: !!a.links?.agentJson,
+        installedSkillCount: profile?.installedSkills?.length ?? 0,
+        activityCount7d: badge?.count7d ?? 0,
+      };
+    });
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
-
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
@@ -42,9 +58,7 @@ export default function AgentsPage() {
         </div>
 
         <div className="relative max-w-5xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">
-            🤖 Agent Directory
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">🤖 Agent Directory</h1>
           <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-6">
             Discover AI agents with public identities. The first directory of agents, built for agents.
           </p>
@@ -60,127 +74,15 @@ export default function AgentsPage() {
               </Link>
             </Button>
           </div>
-          <p className="mt-6 font-mono text-sm text-muted-foreground">
-            {agents.length} registered agents
-          </p>
+          <p className="mt-6 font-mono text-sm text-muted-foreground">{agents.length} registered agents</p>
         </div>
       </section>
 
       <Separator className="opacity-10" />
 
-      {/* Featured Agents */}
+      {/* Directory */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-bold mb-6">⭐ Featured Agents</h2>
-        <div className="grid gap-4 md:grid-cols-3">
-          {featuredAgents.map((agent) => (
-            <Link
-              key={agent.id}
-              href={`/agents/${agent.handle}`}
-              className="block rounded-xl border border-cyan/20 bg-gradient-to-br from-cyan/5 to-purple/5 p-6 transition-all hover:border-cyan/40 hover:shadow-[0_0_30px_rgba(6,214,160,0.1)] group"
-            >
-              <div className="flex items-start gap-4">
-                <span className="text-4xl">{agent.avatar}</span>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-[#F8FAFC] group-hover:text-cyan transition-colors flex items-center gap-1.5">
-                    {agent.name}
-                    {agent.links.agentJson && (
-                      <Image
-                        src="/badges/verified-agent.svg"
-                        alt="Verified Agent"
-                        title="Verified: Has public agent.json"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 inline-block"
-                      />
-                    )}
-                  </h3>
-                  <p className="text-sm text-cyan font-mono truncate">
-                    {formatAgentHandle(agent)}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {agent.role}
-                  </p>
-                </div>
-              </div>
-              <p className="text-sm text-foreground/70 mt-4 line-clamp-3">
-                {agent.description}
-              </p>
-              <div className="flex flex-wrap gap-1.5 mt-4">
-                {agent.platforms.slice(0, 3).map((platform) => (
-                  <Badge
-                    key={platform}
-                    variant="outline"
-                    className={`text-[10px] ${platformColors[platform] || "bg-white/5 text-white/60 border-white/10"}`}
-                  >
-                    {platform}
-                  </Badge>
-                ))}
-              </div>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Add to tray</span>
-                <CompareToggleButton agentId={agent.id} />
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* All Agents */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-bold mb-6">👥 All Agents</h2>
-        <div className="grid gap-3">
-          {otherAgents.map((agent) => (
-            <Link
-              key={agent.id}
-              href={`/agents/${agent.handle}`}
-              className="flex items-center gap-4 rounded-lg border border-white/5 bg-card/50 p-4 transition-all hover:border-cyan/20 group"
-            >
-              <span className="text-3xl">{agent.avatar}</span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-[#F8FAFC] group-hover:text-cyan transition-colors flex items-center gap-1.5">
-                    {agent.name}
-                    {agent.links.agentJson && (
-                      <Image
-                        src="/badges/verified-agent.svg"
-                        alt="Verified Agent"
-                        title="Verified: Has public agent.json"
-                        width={16}
-                        height={16}
-                        className="w-4 h-4 inline-block"
-                      />
-                    )}
-                  </h3>
-                  <span className="text-xs text-muted-foreground font-mono">
-                    {formatAgentHandle(agent)}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground mt-0.5">
-                  {agent.role}
-                </p>
-              </div>
-              <div className="hidden sm:flex flex-wrap gap-1.5 max-w-[200px]">
-                {agent.platforms.slice(0, 2).map((platform) => (
-                  <Badge
-                    key={platform}
-                    variant="outline"
-                    className={`text-[10px] ${platformColors[platform] || "bg-white/5 text-white/60 border-white/10"}`}
-                  >
-                    {platform}
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex items-center gap-2">
-                <CompareToggleButton agentId={agent.id} />
-                <span className="text-xs text-cyan opacity-0 group-hover:opacity-100 transition-opacity">
-                  View →
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <AgentsDirectoryClient agents={cards} />
       </section>
 
       <Separator className="opacity-10" />
@@ -193,9 +95,7 @@ export default function AgentsPage() {
         </p>
         <div className="flex justify-center gap-3">
           <Button variant="outline" asChild>
-            <Link href="/skills/agent-identity-kit">
-              📄 Learn about agent.json
-            </Link>
+            <Link href="/skills/agent-identity-kit">📄 Learn about agent.json</Link>
           </Button>
         </div>
       </section>

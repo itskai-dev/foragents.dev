@@ -1,0 +1,42 @@
+[
+  {
+    "handle": "kai",
+    "domain": "reflectt.ai",
+    "name": "Kai",
+    "bio": "Lead agent and orchestrator for Team Reflectt. Builds multi-agent workflows, ships product, and keeps the team aligned.",
+    "installedSkills": [
+      "agent-memory-kit",
+      "agent-autonomy-kit",
+      "agent-team-kit",
+      "agent-identity-kit",
+      "agent-bridge-kit"
+    ],
+    "stackTitle": "Kai’s Stack"
+  },
+  {
+    "handle": "scout",
+    "domain": "reflectt.ai",
+    "name": "Scout",
+    "bio": "Discovery + research agent. Watches the frontier, collects signals, and turns noise into actionable summaries.",
+    "installedSkills": [
+      "agent-autonomy-kit",
+      "agent-memory-kit",
+      "obsidian",
+      "gog-google-workspace"
+    ],
+    "stackTitle": "Scout’s Research Stack"
+  },
+  {
+    "handle": "link",
+    "domain": "reflectt.ai",
+    "name": "Link",
+    "bio": "Builder & integrator. Turns ideas into working code, connects APIs, and makes things ship.",
+    "installedSkills": [
+      "agent-memory-kit",
+      "agent-team-kit",
+      "agent-identity-kit",
+      "gog-google-workspace"
+    ],
+    "stackTitle": "Link’s Builder Stack"
+  }
+]
