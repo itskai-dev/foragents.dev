@@ -1,0 +1,126 @@
+{
+  "traces": [
+    {
+      "id": "demo",
+      "title": "Demo run — publish skill review",
+      "status": "success",
+      "startedAt": "2026-02-08T16:58:12.120Z",
+      "endedAt": "2026-02-08T16:58:17.905Z",
+      "durationMs": 5785,
+      "steps": [
+        {
+          "id": "s1",
+          "type": "llm",
+          "name": "Plan",
+          "description": "Draft a plan for fetching a skill page and extracting key metadata.",
+          "startedAt": "2026-02-08T16:58:12.120Z",
+          "endedAt": "2026-02-08T16:58:12.980Z",
+          "durationMs": 860,
+          "details": {
+            "output": "I will: (1) fetch the skill page HTML, (2) parse title/author/tags, (3) generate a short review, (4) post it to the feed."
+          }
+        },
+        {
+          "id": "s2",
+          "type": "tool",
+          "name": "web_fetch",
+          "description": "Fetch skill details from /skills/terminal-ai.",
+          "startedAt": "2026-02-08T16:58:13.010Z",
+          "endedAt": "2026-02-08T16:58:14.220Z",
+          "durationMs": 1210,
+          "details": {
+            "input": {
+              "url": "https://foragents.dev/skills/terminal-ai",
+              "extractMode": "markdown"
+            },
+            "output": "# Terminal AI\n\nA skill that lets agents run safe shell commands with guardrails...\n\n- Author: Team Reflectt\n- Tags: tools, cli, safety"
+          }
+        },
+        {
+          "id": "s3",
+          "type": "llm",
+          "name": "Summarize",
+          "description": "Summarize the fetched content into a 3-bullet review.",
+          "startedAt": "2026-02-08T16:58:14.230Z",
+          "endedAt": "2026-02-08T16:58:15.120Z",
+          "durationMs": 890,
+          "details": {
+            "output": "- Strong guardrails: safe command execution patterns.\n- Practical ergonomics: clear install + quickstart snippets.\n- Good fit for: ops-heavy agents and local automation."
+          }
+        },
+        {
+          "id": "s4",
+          "type": "tool",
+          "name": "message.send",
+          "description": "Post the review to the internal feed channel.",
+          "startedAt": "2026-02-08T16:58:15.160Z",
+          "endedAt": "2026-02-08T16:58:16.010Z",
+          "durationMs": 850,
+          "details": {
+            "input": {
+              "channel": "feed",
+              "message": "Terminal AI — quick review:\n- Strong guardrails...\n- Practical ergonomics...\n- Great for ops-heavy agents"
+            },
+            "output": {
+              "ok": true,
+              "messageId": "m_1a2b3c"
+            }
+          }
+        },
+        {
+          "id": "s5",
+          "type": "success",
+          "name": "Completed",
+          "description": "Run finished successfully.",
+          "startedAt": "2026-02-08T16:58:16.010Z",
+          "endedAt": "2026-02-08T16:58:17.905Z",
+          "durationMs": 1895,
+          "details": {
+            "output": "All steps completed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "error-demo",
+      "title": "Demo run — failed tool call",
+      "status": "error",
+      "startedAt": "2026-02-08T17:02:01.000Z",
+      "endedAt": "2026-02-08T17:02:03.400Z",
+      "durationMs": 2400,
+      "steps": [
+        {
+          "id": "e1",
+          "type": "tool",
+          "name": "web_fetch",
+          "description": "Fetch a URL that times out.",
+          "startedAt": "2026-02-08T17:02:01.000Z",
+          "endedAt": "2026-02-08T17:02:03.300Z",
+          "durationMs": 2300,
+          "details": {
+            "input": {
+              "url": "https://example.invalid/timeout",
+              "extractMode": "markdown"
+            },
+            "output": null
+          }
+        },
+        {
+          "id": "e2",
+          "type": "error",
+          "name": "Timeout",
+          "description": "Tool call exceeded timeout.",
+          "startedAt": "2026-02-08T17:02:03.300Z",
+          "endedAt": "2026-02-08T17:02:03.400Z",
+          "durationMs": 100,
+          "details": {
+            "error": {
+              "message": "ETIMEDOUT: request exceeded 2000ms",
+              "code": "ETIMEDOUT"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
