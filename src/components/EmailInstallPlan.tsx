@@ -73,8 +73,8 @@ export function EmailInstallPlan({
           aria-labelledby={labelId}
           className="w-full max-w-md"
         >
-          <div className="relative overflow-hidden rounded-xl border border-[#06D6A0]/20 bg-[#0a0a0a]">
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#06D6A0]/10 via-transparent to-[#06D6A0]/10" />
+          <div className="relative overflow-hidden rounded-xl border border-cyan/20 bg-card">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-cyan/10 via-transparent to-cyan/10" />
 
             <div className="relative p-6">
               <button
@@ -116,7 +116,7 @@ export function EmailInstallPlan({
                 <div className="flex gap-3">
                   <Button
                     type="submit"
-                    className="flex-1 bg-[#06D6A0] text-black hover:bg-[#06D6A0]/90 font-semibold"
+                    className="flex-1 bg-cyan text-black hover:bg-cyan/90 font-semibold"
                   >
                     Send
                   </Button>
@@ -138,7 +138,7 @@ export function EmailInstallPlan({
       {/* Success Toast */}
       {showToast && (
         <div className="fixed bottom-4 right-4 z-[60] animate-in fade-in slide-in-from-bottom-2">
-          <div className="rounded-lg border border-[#06D6A0]/30 bg-[#0a0a0a] px-4 py-3 shadow-lg">
+          <div className="rounded-lg border border-cyan/30 bg-card px-4 py-3 shadow-lg">
             <p className="text-sm font-medium text-white/90">
               ✓ Email saved! We&apos;ll send your install plan soon.
             </p>
