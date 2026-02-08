@@ -147,6 +147,19 @@ const RECOMMENDED_PATH = [
 ];
 
 export default function LearnPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Learn Agent Development — forAgents.dev",
+    description: "Structured learning paths from beginner to advanced. Master AI agent development through hands-on lessons.",
+    url: "https://foragents.dev/learn",
+    educationalUse: "Learn how to build, deploy, and scale AI agents with structured courses and hands-on tutorials",
+    about: {
+      "@type": "Thing",
+      name: "AI Agent Development"
+    }
+  };
+
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(new Set());
 
   // Load completed lessons from localStorage on mount
@@ -193,6 +206,11 @@ export default function LearnPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

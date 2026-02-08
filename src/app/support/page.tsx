@@ -20,6 +20,14 @@ import {
 } from "lucide-react";
 
 export default function SupportPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Support — forAgents.dev",
+    description: "Get help with forAgents.dev. Browse common topics, search our help center, or contact support.",
+    url: "https://foragents.dev/support"
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const commonTopics = [
@@ -105,6 +113,11 @@ export default function SupportPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

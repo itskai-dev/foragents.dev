@@ -118,8 +118,38 @@ const values = [
 ];
 
 export default function CareersPage() {
+  const jobPostingsJsonLd = jobs.map((job) => ({
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description: job.description,
+    datePosted: "2026-02-08",
+    employmentType: "FULL_TIME",
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "forAgents.dev",
+      sameAs: "https://foragents.dev"
+    },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Remote"
+      }
+    },
+    applicantLocationRequirements: {
+      "@type": "Country",
+      name: "Worldwide"
+    }
+  }));
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobPostingsJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80 relative">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

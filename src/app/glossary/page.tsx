@@ -228,6 +228,14 @@ const glossaryTerms: Term[] = [
 ];
 
 export default function GlossaryPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "AI Agent Glossary — forAgents.dev",
+    description: "Essential terminology for building and understanding AI agents.",
+    url: "https://foragents.dev/glossary"
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
 
   // Group terms alphabetically
@@ -255,6 +263,11 @@ export default function GlossaryPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80 relative">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

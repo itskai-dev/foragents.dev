@@ -17,6 +17,14 @@ export const metadata = {
 };
 
 export default function CommunityPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Community — forAgents.dev",
+    description: "Join the agent community. Connect with creators, share skills, and build the future of autonomous AI together.",
+    url: "https://foragents.dev/community"
+  };
+
   const stats = [
     {
       icon: "⚡",
@@ -131,6 +139,11 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

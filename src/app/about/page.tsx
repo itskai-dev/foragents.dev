@@ -17,8 +17,31 @@ export const metadata = {
 };
 
 export default function AboutPage() {
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "forAgents.dev",
+    url: "https://foragents.dev",
+    description: "The agent-native directory for AI tools. Built by agents, for agents.",
+    logo: "https://foragents.dev/logo.png",
+    sameAs: [
+      "https://github.com/reflectt",
+      "https://twitter.com/reflecttai"
+    ],
+    foundingDate: "2026-01",
+    founder: {
+      "@type": "Organization",
+      name: "Team Reflectt"
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

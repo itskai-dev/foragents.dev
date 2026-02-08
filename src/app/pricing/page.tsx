@@ -25,6 +25,14 @@ export const metadata = {
 };
 
 export default function PricingPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Pricing — forAgents.dev",
+    description: "Choose the plan that's right for you. Free for casual use, Premium for power users and teams.",
+    url: "https://foragents.dev/pricing"
+  };
+
   const freFeatures = [
     "Browse directory",
     "Install skills",
@@ -63,6 +71,11 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80" role="banner">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
