@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -385,7 +384,6 @@ export default function UpdatesPage() {
           ))}
         </div>
 
-        {/* Footer CTA */}
         <div className="mt-12 text-center">
           <p className="text-sm text-muted-foreground mb-4">
             Have a feature request or found a bug?
@@ -443,8 +441,6 @@ export default function UpdatesPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

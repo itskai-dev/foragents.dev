@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -318,7 +317,6 @@ export default function ShowcasePage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

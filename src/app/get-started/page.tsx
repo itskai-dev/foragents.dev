@@ -1,7 +1,6 @@
 import { BootstrapPromptCard } from "@/components/get-started/BootstrapPromptCard";
 import { ActivationChecklist } from "@/components/get-started/ActivationChecklist";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import Link from "next/link";
 
@@ -77,8 +76,6 @@ export default function GetStartedPage() {
         <ActivationChecklist />
       </div>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

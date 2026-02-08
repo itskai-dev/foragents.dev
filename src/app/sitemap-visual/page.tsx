@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Visual Sitemap — forAgents.dev",
@@ -224,8 +223,6 @@ export default function SitemapVisualPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

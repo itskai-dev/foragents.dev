@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { Download, Mail, Twitter, Github, Linkedin, ExternalLink } from "lucide-react";
 
 export const metadata = {
@@ -302,7 +301,6 @@ export default function PressPage() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

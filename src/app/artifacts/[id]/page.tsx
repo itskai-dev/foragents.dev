@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { ArtifactCard } from "@/components/artifacts/ArtifactCard";
 import { CopySnippets } from "@/components/artifacts/CopySnippets";
 import { ViralEventOnMount } from "@/components/metrics/ViralEventOnMount";
@@ -134,7 +133,6 @@ export default async function ArtifactPermalinkPage(props: {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

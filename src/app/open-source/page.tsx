@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Open Source — forAgents.dev",
@@ -346,8 +345,6 @@ export default function OpenSourcePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -388,8 +387,6 @@ export default function PlaygroundPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

@@ -16,7 +16,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { NewsFeed } from "@/components/news-feed";
 import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
-import { Footer } from "@/components/footer";
 import { ResumeSection } from "@/components/recently-viewed/ResumeSection";
 import { AgentBootstrapPanel } from "@/components/agent-bootstrap-panel";
 import { NewsletterSignup } from "@/components/newsletter-signup";
@@ -952,8 +951,6 @@ export default async function Home() {
         <NewsletterSignup />
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

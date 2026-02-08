@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -357,7 +356,6 @@ export default function CollectionDetailPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

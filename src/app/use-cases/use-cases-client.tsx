@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 
 type Category = "All" | "Development" | "Productivity" | "Communication" | "Data";
 
@@ -291,8 +290,6 @@ export default function UseCasesClient() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

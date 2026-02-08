@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { ShareButton } from "@/components/share-button";
 import type { Metadata } from "next";
 
@@ -188,7 +187,6 @@ export default async function PublicCollectionPage(props: {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

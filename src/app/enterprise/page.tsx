@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Footer } from "@/components/footer";
 import { 
   Shield, 
   Users, 
@@ -269,7 +268,6 @@ export default function EnterprisePage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

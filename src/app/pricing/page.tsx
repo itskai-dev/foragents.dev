@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 import { Check } from "lucide-react";
 
 export const metadata = {
@@ -296,8 +295,6 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

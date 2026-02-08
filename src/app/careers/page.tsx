@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 
 interface Job {
@@ -239,7 +238,6 @@ export default function CareersPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

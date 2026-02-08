@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Footer } from "@/components/footer";
 import { Shield, Lock, Eye, FileCheck, Award, AlertTriangle } from "lucide-react";
 
 export default function SecurityPage() {
@@ -281,7 +280,6 @@ export default function SecurityPage() {
         </Card>
       </section>
 
-      <Footer />
     </div>
   );
 }

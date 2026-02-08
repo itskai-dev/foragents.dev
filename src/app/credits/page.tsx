@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 
 export const metadata = {
@@ -420,8 +419,6 @@ export default function CreditsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

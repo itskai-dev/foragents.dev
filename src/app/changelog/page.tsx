@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { NewsletterSignup } from "@/components/newsletter-signup";
@@ -150,8 +149,6 @@ export default function ChangelogPage() {
         <NewsletterSignup />
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

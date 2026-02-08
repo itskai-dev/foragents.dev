@@ -2,7 +2,6 @@ import { getCreators } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 import Link from "next/link";
 
 export const metadata = {
@@ -170,8 +169,6 @@ export default function CreatorsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

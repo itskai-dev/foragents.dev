@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { getSkills, getCreators, getMcpServers, getAgents, getAcpAgents, getLlmsTxtEntries } from "@/lib/data";
 import Link from "next/link";
-import { Footer } from "@/components/footer";
 import { UpgradeCTA } from "@/components/UpgradeCTA";
 
 export const revalidate = 300;
@@ -413,8 +412,6 @@ export default async function StatsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

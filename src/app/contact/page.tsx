@@ -6,7 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Footer } from "@/components/footer";
 import { Mail, Github, Twitter } from "lucide-react";
 
 export default function ContactPage() {
@@ -278,7 +277,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

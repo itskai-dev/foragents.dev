@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 
 type ResourceType = "Guide" | "Video" | "Docs" | "Tool";
@@ -354,7 +353,6 @@ export default function ResourcesPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

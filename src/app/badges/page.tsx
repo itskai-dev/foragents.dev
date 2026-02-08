@@ -12,7 +12,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 
 type BadgeData = {
   id: string;
@@ -366,8 +365,6 @@ export default function BadgesPage() {
         )}
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

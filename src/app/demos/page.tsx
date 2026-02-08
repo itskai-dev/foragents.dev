@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Demos — forAgents.dev",
@@ -256,8 +255,6 @@ export default function DemosPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

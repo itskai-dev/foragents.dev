@@ -1,7 +1,6 @@
 import { getCreatorByUsername, getCreators, type Skill } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ShareStatsButton } from "@/components/share-stats-button";
 import Link from "next/link";
@@ -426,8 +425,6 @@ export default async function CreatorStatsPage({ params }: Props) {
 
       <Separator className="opacity-10" />
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

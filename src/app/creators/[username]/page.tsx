@@ -2,7 +2,6 @@ import { getCreatorByUsername, getCreators } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -312,8 +311,6 @@ export default async function CreatorProfilePage({ params }: Props) {
         )}
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

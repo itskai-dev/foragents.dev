@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 
 type Term = {
   id: string;
@@ -403,8 +402,6 @@ export default function GlossaryPage() {
         )}
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

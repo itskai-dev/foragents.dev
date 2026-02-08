@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Footer } from "@/components/footer";
 
 interface Lesson {
   id: string;
@@ -459,7 +458,6 @@ export default function LearnPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Events — forAgents.dev",
@@ -350,8 +349,6 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

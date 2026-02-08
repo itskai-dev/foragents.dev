@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import skillsData from "@/data/skills.json";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { UpgradeCTA } from "@/components/UpgradeCTA";
 
 type Skill = {
@@ -192,8 +191,6 @@ export default function SearchPage() {
         )}
       </main>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

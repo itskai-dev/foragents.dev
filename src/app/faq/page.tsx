@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
 import styles from "./faq.module.css";
 
@@ -413,7 +412,6 @@ export default function FaqPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

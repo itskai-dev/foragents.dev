@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { InstallCount } from "@/components/InstallCount";
 
 export const revalidate = 300;
@@ -227,8 +226,6 @@ export default function TrendingPage() {
         </p>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

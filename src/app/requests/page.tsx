@@ -9,7 +9,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Request a Kit — forAgents.dev",
@@ -282,8 +281,6 @@ export default function RequestsPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { InstallCount } from "@/components/InstallCount";
 
 type Skill = {
@@ -326,8 +325,6 @@ export default function BookmarksPage() {
         )}
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

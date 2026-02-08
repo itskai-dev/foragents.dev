@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
-import { Footer } from "@/components/footer";
 import { Separator } from "@/components/ui/separator";
 import { getArtifacts } from "@/lib/artifacts";
 import { ArtifactCard } from "@/components/artifacts/ArtifactCard";
@@ -62,7 +61,6 @@ export default async function ArtifactsPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }

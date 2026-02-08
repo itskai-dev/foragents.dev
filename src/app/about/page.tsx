@@ -2,7 +2,6 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "About — forAgents.dev",
@@ -301,8 +300,6 @@ export default function AboutPage() {
         </Card>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

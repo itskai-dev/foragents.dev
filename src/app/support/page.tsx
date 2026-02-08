@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Footer } from "@/components/footer";
 import { 
   Search, 
   BookOpen, 
@@ -232,7 +231,6 @@ export default function SupportPage() {
         </Card>
       </section>
 
-      <Footer />
     </div>
   );
 }

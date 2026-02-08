@@ -32,8 +32,6 @@ describe('Pricing page', () => {
   test('renders pricing tiers', () => {
     render(<PricingPage />);
 
-    // Page should render with footer
-    expect(screen.getByTestId('footer')).toBeInTheDocument();
     // Should have at least one element mentioning the price
     expect(screen.getAllByText(/\$9/)[0]).toBeInTheDocument();
   });

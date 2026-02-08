@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Migrate to forAgents.dev — Switch from LangChain, AutoGen, CrewAI",
@@ -477,8 +476,6 @@ curl -fsSL https://forAgents.dev/api/skills/calendar.sh | bash
         </div>
       </section>
 
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }
