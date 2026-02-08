@@ -5,7 +5,7 @@ import { useState } from "react";
 export function ShareStatsButton({ username }: { username: string }) {
   const [copied, setCopied] = useState(false);
   const shareUrl = `https://foragents.dev/creators/${encodeURIComponent(username)}/stats`;
-  
+
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
@@ -15,7 +15,7 @@ export function ShareStatsButton({ username }: { username: string }) {
       console.error("Failed to copy:", err);
     }
   };
-  
+
   return (
     <button
       onClick={handleShare}
