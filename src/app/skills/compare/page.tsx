@@ -6,6 +6,18 @@ import SkillComparePageClient from "@/components/compare/SkillComparePageClient"
 export const metadata = {
   title: "Compare Skills — forAgents.dev",
   description: "Compare 2-3 skills side-by-side on forAgents.dev",
+  openGraph: {
+    title: "Compare Skills — forAgents.dev",
+    description: "Compare 2-3 skills side-by-side on forAgents.dev",
+    url: "https://foragents.dev/skills/compare",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Compare Skills — forAgents.dev",
+    description: "Compare 2-3 skills side-by-side on forAgents.dev",
+  },
 };
 
 export default function SkillComparePage({

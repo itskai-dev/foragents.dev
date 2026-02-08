@@ -13,6 +13,23 @@ import { Footer } from "@/components/footer";
 
 export const revalidate = 300;
 
+export const metadata = {
+  title: "Ecosystem Stats — forAgents.dev",
+  description: "Real-time statistics from the forAgents.dev ecosystem. Track skills, creators, agents, and more.",
+  openGraph: {
+    title: "Ecosystem Stats — forAgents.dev",
+    description: "Real-time statistics from the forAgents.dev ecosystem. Track skills, creators, agents, and more.",
+    url: "https://foragents.dev/stats",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ecosystem Stats — forAgents.dev",
+    description: "Real-time statistics from the forAgents.dev ecosystem. Track skills, creators, agents, and more.",
+  },
+};
+
 export default async function StatsPage() {
   const skills = getSkills();
   const creators = getCreators();

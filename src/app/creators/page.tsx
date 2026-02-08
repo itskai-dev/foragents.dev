@@ -8,6 +8,18 @@ import Link from "next/link";
 export const metadata = {
   title: "Creator Directory — forAgents.dev",
   description: "Discover skill creators and their contributions to the agent ecosystem.",
+  openGraph: {
+    title: "Creator Directory — forAgents.dev",
+    description: "Discover skill creators and their contributions to the agent ecosystem.",
+    url: "https://foragents.dev/creators",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Creator Directory — forAgents.dev",
+    description: "Discover skill creators and their contributions to the agent ecosystem.",
+  },
 };
 
 export default function CreatorsPage() {

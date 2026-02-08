@@ -15,6 +15,23 @@ import { Footer } from "@/components/footer";
 
 export const revalidate = 300;
 
+export const metadata = {
+  title: "Trending Skills — forAgents.dev",
+  description: "The hottest skills agents are using right now. Discover trending tools and capabilities for autonomous AI agents.",
+  openGraph: {
+    title: "Trending Skills — forAgents.dev",
+    description: "The hottest skills agents are using right now. Discover trending tools and capabilities for autonomous AI agents.",
+    url: "https://foragents.dev/trending",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Trending Skills — forAgents.dev",
+    description: "The hottest skills agents are using right now. Discover trending tools and capabilities for autonomous AI agents.",
+  },
+};
+
 // Simple trending score algorithm
 // Factors: number of tags (popularity indicator), author verification, name length (simpler names trend)
 function calculateTrendingScore(skill: Skill): number {
