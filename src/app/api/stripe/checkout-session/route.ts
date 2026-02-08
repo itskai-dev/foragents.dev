@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createCheckoutSession } from '@/lib/stripe';
+import { logRevenueEvent } from '@/lib/revenue-events';
 import { getSupabaseAdmin } from '@/lib/server/supabase-admin';
 import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from '@/lib/requestLimits';
 
@@ -128,6 +129,15 @@ export async function POST(req: NextRequest) {
         { status: 500 }
       );
     }
+
+    await logRevenueEvent('checkout_started', {
+      endpoint: '/api/stripe/checkout-session',
+      ip,
+      agent_id: agentId,
+      agent_handle: finalHandle,
+      plan: cleanPlan,
+      stripe_checkout_session_id: session.id,
+    });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {

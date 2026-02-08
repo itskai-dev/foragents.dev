@@ -12,6 +12,10 @@
 # local premium fallback store (created at runtime when Supabase isn't configured)
 /data/premium-state.json
 /data/install-counts.json
+
+# revenue ops local log
+/data/revenue-events.json
+
 !.yarn/versions
 
 # testing

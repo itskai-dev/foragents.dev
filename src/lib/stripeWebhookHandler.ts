@@ -6,6 +6,7 @@ import {
   setAgentPremiumByHandleFile,
 } from '@/lib/premiumStore';
 import { mapSubscriptionStatus } from '@/lib/stripe';
+import { logRevenueEvent } from '@/lib/revenue-events';
 
 export async function handleStripeWebhookEvent({
   event,
@@ -13,16 +14,25 @@ export async function handleStripeWebhookEvent({
 }: {
   event: Stripe.Event;
   supabase: SupabaseClient | null;
-}): Promise<{ ok: true } | { ok: false; error: string }> {
+}): Promise<{ ok: true; alreadyProcessed?: boolean } | { ok: false; error: string }> {
   // Idempotency
   const alreadyProcessed = await isStripeEventProcessed({ supabase, eventId: event.id });
-  if (alreadyProcessed) return { ok: true };
+  if (alreadyProcessed) return { ok: true, alreadyProcessed: true };
 
   try {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
         await handleCheckoutComplete(session, supabase);
+
+        await logRevenueEvent('entitlement_granted', {
+          source_event_type: event.type,
+          stripe_event_id: event.id,
+          agent_id: session.metadata?.agentId ?? null,
+          agent_handle: session.metadata?.agentHandle ?? null,
+          stripe_customer_id: (session.customer as string) || null,
+        });
+
         break;
       }
 
@@ -51,7 +61,7 @@ export async function handleStripeWebhookEvent({
     }
 
     await markStripeEventProcessed({ supabase, event });
-    return { ok: true };
+    return { ok: true, alreadyProcessed: false };
   } catch (err: unknown) {
     console.error('Stripe webhook event handling failed:', err);
     return { ok: false, error: 'Webhook handler failed' };
@@ -144,6 +154,18 @@ async function handleSubscriptionChange(
         .eq('stripe_customer_id', customerId);
     }
 
+    if (isActive) {
+      await logRevenueEvent('entitlement_granted', {
+        source: 'subscription_change',
+        stripe_subscription_id: subscription.id,
+        stripe_customer_id: customerId,
+        agent_id: agentId ?? null,
+        agent_handle: agentHandle ?? null,
+        status: mappedStatus,
+        current_period_end: currentPeriodEndIso,
+      });
+    }
+
     return;
   }
 
@@ -155,6 +177,18 @@ async function handleSubscriptionChange(
       stripeCustomerId: customerId,
       stripeSubscriptionId: subscription.id,
       status: mappedStatus,
+    });
+  }
+
+  if (isActive) {
+    await logRevenueEvent('entitlement_granted', {
+      source: 'subscription_change',
+      stripe_subscription_id: subscription.id,
+      stripe_customer_id: customerId,
+      agent_id: agentId ?? null,
+      agent_handle: agentHandle ?? null,
+      status: mappedStatus,
+      current_period_end: currentPeriodEndIso,
     });
   }
 }
