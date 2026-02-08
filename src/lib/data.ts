@@ -5,6 +5,7 @@ import llmsTxtData from "@/data/llms-txt.json";
 import agentsData from "@/data/agents.json";
 import acpAgentsData from "@/data/acp-agents.json";
 import { getSupabase } from "@/lib/supabase";
+import { getVerificationInfo, isVerified, type VerifiedSkillInfo } from "@/lib/verification";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -33,6 +34,10 @@ export type Skill = {
   // Computed fields (not present in the bundled JSON by default)
   trendingScore?: number;
   trendingBadge?: TrendingBadgeKind | null;
+
+  // Verification (derived from data/verified-skills.json)
+  verified?: boolean;
+  verification?: VerifiedSkillInfo | null;
 };
 
 export function getNews(tag?: string): NewsItem[] {
@@ -156,12 +161,22 @@ export function llmsTxtToMarkdown(entries: LlmsTxtEntry[]): string {
   return lines.join("\n");
 }
 
+function withVerification(skill: Skill): Skill {
+  const info = getVerificationInfo(skill.slug);
+  return {
+    ...skill,
+    verified: !!info,
+    verification: info,
+  };
+}
+
 export function getSkills(): Skill[] {
-  return skillsData as Skill[];
+  return (skillsData as Skill[]).map(withVerification);
 }
 
 export function getSkillBySlug(slug: string): Skill | undefined {
-  return (skillsData as Skill[]).find((s) => s.slug === slug);
+  const base = (skillsData as Skill[]).find((s) => s.slug === slug);
+  return base ? withVerification(base) : undefined;
 }
 
 export function newsToMarkdown(items: NewsItem[]): string {

@@ -1,0 +1,37 @@
+[
+  {
+    "slug": "agent-memory-kit",
+    "verifiedAt": "2026-02-08",
+    "verifiedBy": "reflectt-team",
+    "reason": "Core kit maintained by the forAgents.dev team. CI is passing and the repo is actively monitored.",
+    "badges": ["verified", "maintained"]
+  },
+  {
+    "slug": "agent-autonomy-kit",
+    "verifiedAt": "2026-02-08",
+    "verifiedBy": "reflectt-team",
+    "reason": "Core kit maintained by the forAgents.dev team. CI is passing and the repo is actively monitored.",
+    "badges": ["verified", "maintained"]
+  },
+  {
+    "slug": "agent-team-kit",
+    "verifiedAt": "2026-02-08",
+    "verifiedBy": "reflectt-team",
+    "reason": "Core kit maintained by the forAgents.dev team. CI is passing and the repo is actively monitored.",
+    "badges": ["verified", "maintained"]
+  },
+  {
+    "slug": "agent-identity-kit",
+    "verifiedAt": "2026-02-08",
+    "verifiedBy": "reflectt-team",
+    "reason": "Core kit maintained by the forAgents.dev team. CI is passing and the repo is actively monitored.",
+    "badges": ["verified", "maintained"]
+  },
+  {
+    "slug": "agent-bridge-kit",
+    "verifiedAt": "2026-02-08",
+    "verifiedBy": "reflectt-team",
+    "reason": "Core kit maintained by the forAgents.dev team. CI is passing and the repo is actively monitored.",
+    "badges": ["verified", "maintained"]
+  }
+]

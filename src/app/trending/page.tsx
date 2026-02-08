@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getSkills } from "@/lib/data";
 import { getTrendingSkillsWithBadges } from "@/lib/server/trendingSkills";
 import { SkillTrendingBadge } from "@/components/skill-trending-badge";
+import { VerifiedSkillBadge } from "@/components/verified-badge";
 import {
   Card,
   CardContent,
@@ -116,18 +116,9 @@ export default async function TrendingPage() {
                 )}
                 
                 <CardHeader>
-                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5 pr-12">
-                    {skill.name}
-                    {skill.author === "Team Reflectt" && (
-                      <Image
-                        src="/badges/verified-skill.svg"
-                        alt="Verified Skill"
-                        title="Verified: Team Reflectt skill"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 inline-block"
-                      />
-                    )}
+                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-2 pr-12">
+                    <span className="truncate">{skill.name}</span>
+                    <VerifiedSkillBadge info={skill.verification ?? null} mode="icon" />
                   </CardTitle>
 
                   {skill.trendingBadge && (
