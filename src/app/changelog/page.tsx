@@ -3,6 +3,8 @@ import { MobileNav } from "@/components/mobile-nav";
 import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { NewsletterSignup } from "@/components/newsletter-signup";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata = {
   title: "Changelog — forAgents.dev",
@@ -127,6 +129,13 @@ export default function ChangelogPage() {
             Submit a Resource
           </Link>
         </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Newsletter Signup */}
+      <section className="max-w-3xl mx-auto px-4 py-12">
+        <NewsletterSignup />
       </section>
 
       {/* Footer */}

@@ -18,6 +18,7 @@ import { AnnouncementBanner } from "@/components/announcement-banner";
 import { Footer } from "@/components/footer";
 import { ResumeSection } from "@/components/recently-viewed/ResumeSection";
 import { AgentBootstrapPanel } from "@/components/agent-bootstrap-panel";
+import { NewsletterSignup } from "@/components/newsletter-signup";
 
 export const revalidate = 300;
 
@@ -863,6 +864,13 @@ export default async function Home() {
           </p>
         </div>
         <RecentSubmissions submissions={recentSubmissions} />
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Newsletter Signup */}
+      <section className="max-w-3xl mx-auto px-4 py-12">
+        <NewsletterSignup />
       </section>
 
       {/* Footer */}
