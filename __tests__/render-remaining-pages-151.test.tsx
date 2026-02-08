@@ -155,12 +155,13 @@ async function renderPageModule(importPath: string, props: Record<string, unknow
   expect(Page).toBeTruthy();
 
   // Next.js server components are often `async function`.
-  if ((Page as any)?.constructor?.name === "AsyncFunction") {
-    const element = await (Page as any)(props);
+  if ((Page as unknown as Record<string, unknown>)?.constructor?.name === "AsyncFunction") {
+    const element = await (Page as unknown as (p: Record<string, unknown>) => Promise<React.ReactElement>)(props as Record<string, unknown>);
     return render(element);
   }
 
-  return render(React.createElement(Page as any, props));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return render(React.createElement(Page as React.ComponentType<any>, props));
 }
 
 describe("Render tests for remaining untested pages (Issue #151)", () => {
