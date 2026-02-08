@@ -61,11 +61,11 @@ export default function StatsLoading() {
         <div className="h-8 w-48 bg-white/5 rounded mb-6 animate-pulse" />
         <div className="bg-card/50 border border-white/5 rounded-lg p-8 animate-pulse">
           <div className="flex flex-wrap gap-3 justify-center">
-            {[...Array(20)].map((_, i) => (
+            {[85, 120, 95, 110, 75, 130, 90, 105, 125, 80, 115, 100, 70, 135, 95, 120, 85, 110, 100, 90].map((width, i) => (
               <div
                 key={i}
                 className="h-6 bg-white/5 rounded"
-                style={{ width: `${60 + Math.random() * 80}px` }}
+                style={{ width: `${width}px` }}
               />
             ))}
           </div>
