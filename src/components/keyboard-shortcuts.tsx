@@ -34,9 +34,7 @@ export function KeyboardShortcuts() {
         
         // If we&apos;re already on the search page, focus the input
         if (pathname === "/search") {
-          const searchInput = document.querySelector<HTMLInputElement>(
-            'input[type="text"][placeholder*="Search"]'
-          );
+          const searchInput = document.querySelector<HTMLInputElement>("#search-input");
           if (searchInput) {
             searchInput.focus();
             searchInput.select();
