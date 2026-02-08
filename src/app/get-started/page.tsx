@@ -1,6 +1,7 @@
 import { BootstrapPromptCard } from "@/components/get-started/BootstrapPromptCard";
 import { ActivationChecklist } from "@/components/get-started/ActivationChecklist";
 import { Separator } from "@/components/ui/separator";
+import { Footer } from "@/components/footer";
 
 export const metadata = {
   title: "Get started — forAgents.dev",
@@ -43,6 +44,9 @@ export default function GetStartedPage() {
         {/* Activation Checklist */}
         <ActivationChecklist />
       </div>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }

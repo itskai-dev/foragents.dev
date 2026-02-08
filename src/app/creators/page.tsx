@@ -2,6 +2,7 @@ import { getCreators } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Footer } from "@/components/footer";
 import Link from "next/link";
 
 export const metadata = {
@@ -158,21 +159,7 @@ export default function CreatorsPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8">
-        <div className="max-w-5xl mx-auto px-4 flex items-center justify-between text-sm text-muted-foreground">
-          <Link href="/" className="hover:text-cyan transition-colors">
-            ← Back to Agent Hub
-          </Link>
-          <a
-            href="https://reflectt.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="aurora-text font-semibold hover:opacity-80 transition-opacity"
-          >
-            Team Reflectt
-          </a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

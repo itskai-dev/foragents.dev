@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import skillsData from "@/data/skills.json";
 import { Badge } from "@/components/ui/badge";
+import { Footer } from "@/components/footer";
 
 type Skill = {
   id: string;
@@ -179,40 +180,7 @@ export default function SearchPage() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8">
-        <div className="max-w-3xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <span>Built by</span>
-            <a
-              href="https://reflectt.ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="aurora-text font-semibold hover:opacity-80 transition-opacity"
-            >
-              Team Reflectt
-            </a>
-          </div>
-          <div className="flex items-center gap-4 font-mono text-xs">
-            <a href="/llms.txt" className="hover:text-cyan transition-colors">
-              llms.txt
-            </a>
-            <a
-              href="/api/feed.md"
-              className="hover:text-cyan transition-colors"
-            >
-              feed.md
-            </a>
-            <a
-              href="https://github.com/reflectt"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-cyan transition-colors"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
