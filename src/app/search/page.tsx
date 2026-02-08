@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import skillsData from "@/data/skills.json";
 import { Badge } from "@/components/ui/badge";
+import { SkillTrendingBadge } from "@/components/skill-trending-badge";
+import type { TrendingBadgeKind } from "@/lib/trendingTypes";
 import { UpgradeCTA } from "@/components/UpgradeCTA";
 
 type Skill = {
@@ -20,6 +22,36 @@ type Skill = {
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const skills = skillsData as Skill[];
+
+  const [trendingBySlug, setTrendingBySlug] = useState<Record<string, TrendingBadgeKind | null>>({});
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function fetchTrending() {
+      try {
+        const res = await fetch("/api/trending/skills");
+        if (!res.ok) return;
+        const data = (await res.json()) as {
+          skills?: Array<{ slug: string; trendingBadge: TrendingBadgeKind | null }>;
+        };
+
+        const map: Record<string, TrendingBadgeKind | null> = {};
+        for (const s of data.skills ?? []) {
+          map[s.slug] = s.trendingBadge;
+        }
+
+        if (!cancelled) setTrendingBySlug(map);
+      } catch {
+        // Best-effort; ignore.
+      }
+    }
+
+    void fetchTrending();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Client-side filtering
   const filteredSkills = useMemo(() => {
@@ -127,10 +159,11 @@ export default function SearchPage() {
                 href={`/skills/${skill.slug}`}
                 className="block rounded-lg border border-[#1A1F2E] bg-card/50 p-6 hover:border-cyan/20 transition-all group"
               >
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-start justify-between mb-2 gap-3">
                   <h2 className="text-xl font-semibold text-[#F8FAFC] group-hover:text-cyan transition-colors">
                     {skill.name}
                   </h2>
+                  <SkillTrendingBadge badge={trendingBySlug[skill.slug]} />
                 </div>
                 
                 <p className="text-sm text-foreground/80 mb-4 leading-relaxed">

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getSkills, type Skill } from "@/lib/data";
+import { getSkills } from "@/lib/data";
+import { getTrendingSkillsWithBadges } from "@/lib/server/trendingSkills";
+import { SkillTrendingBadge } from "@/components/skill-trending-badge";
 import {
   Card,
   CardContent,
@@ -44,42 +46,8 @@ export const metadata = {
   },
 };
 
-// Simple trending score algorithm
-// Factors: number of tags (popularity indicator), author verification, name length (simpler names trend)
-function calculateTrendingScore(skill: Skill): number {
-  let score = 0;
-  
-  // More tags = more relevant/popular (weight: 10)
-  score += skill.tags.length * 10;
-  
-  // Verified authors get a boost (weight: 20)
-  if (skill.author === "Team Reflectt") {
-    score += 20;
-  }
-  
-  // Shorter names are catchier (weight: inverse of length)
-  score += Math.max(0, 50 - skill.name.length);
-  
-  // Add slight randomness for variety (weight: 0-15)
-  score += Math.random() * 15;
-  
-  return score;
-}
-
-function getTrendingSkills(): (Skill & { trendingScore: number })[] {
-  const skills = getSkills();
-  
-  // Calculate scores and sort
-  const withScores = skills.map(skill => ({
-    ...skill,
-    trendingScore: calculateTrendingScore(skill),
-  }));
-  
-  return withScores.sort((a, b) => b.trendingScore - a.trendingScore);
-}
-
-export default function TrendingPage() {
-  const trendingSkills = getTrendingSkills();
+export default async function TrendingPage() {
+  const trendingSkills = await getTrendingSkillsWithBadges(getSkills());
 
   return (
     <div className="min-h-screen">
@@ -161,6 +129,13 @@ export default function TrendingPage() {
                       />
                     )}
                   </CardTitle>
+
+                  {skill.trendingBadge && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <SkillTrendingBadge badge={skill.trendingBadge} />
+                    </div>
+                  )}
+
                   <CardDescription className="text-xs flex items-center gap-2">
                     <span>by {skill.author}</span>
                     <span className="text-white/20">•</span>
@@ -221,8 +196,7 @@ export default function TrendingPage() {
       <section className="max-w-3xl mx-auto px-4 py-12 text-center">
         <h2 className="text-xl font-bold mb-3">How Trending Works</h2>
         <p className="text-muted-foreground text-sm max-w-lg mx-auto">
-          Skills are ranked by a combination of factors including tag count (indicating scope and versatility), 
-          author verification, and name simplicity. The algorithm is intentionally simple and transparent.
+          Skills are ranked by a weighted score that emphasizes installs, considers page views, and boosts recent activity using time decay. Community engagement (comments + ratings) also contributes.
         </p>
       </section>
 

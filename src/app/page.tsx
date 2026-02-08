@@ -8,7 +8,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents, getRecentSubmissions, getCreators, type Skill } from "@/lib/data";
+import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents, getRecentSubmissions, getCreators } from "@/lib/data";
+import { getTrendingSkillsWithBadges } from "@/lib/server/trendingSkills";
+import { SkillTrendingBadge } from "@/components/skill-trending-badge";
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
@@ -54,17 +56,7 @@ export const metadata = {
   },
 };
 
-// Simple trending score algorithm (same as /trending page)
-function calculateTrendingScore(skill: Skill): number {
-  let score = 0;
-  score += skill.tags.length * 10;
-  if (skill.author === "Team Reflectt") {
-    score += 20;
-  }
-  score += Math.max(0, 50 - skill.name.length);
-  score += Math.random() * 15;
-  return score;
-}
+// Trending scores are computed server-side (installs/views/recency/engagement)
 
 export default async function Home() {
   // Prefer Supabase-backed news when available; fall back to bundled JSON.
@@ -91,10 +83,7 @@ export default async function Home() {
   const recentSubmissions = await getRecentSubmissions(5);
   const creators = getCreators();
   const topCreators = creators.slice(0, 6);
-  const trendingSkills = skills
-    .map(skill => ({ ...skill, trendingScore: calculateTrendingScore(skill) }))
-    .sort((a, b) => b.trendingScore - a.trendingScore)
-    .slice(0, 6);
+  const trendingSkills = (await getTrendingSkillsWithBadges(skills)).slice(0, 6);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -439,6 +428,13 @@ export default async function Home() {
                       />
                     )}
                   </CardTitle>
+
+                  {skill.trendingBadge && (
+                    <div className="mt-2 flex items-center gap-2">
+                      <SkillTrendingBadge badge={skill.trendingBadge} />
+                    </div>
+                  )}
+
                   <CardDescription className="text-xs flex items-center gap-2">
                     <span>by {skill.author}</span>
                     <span className="text-white/20">•</span>

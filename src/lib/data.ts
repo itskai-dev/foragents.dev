@@ -18,6 +18,8 @@ export type NewsItem = {
   published_at: string;
 };
 
+import type { TrendingBadgeKind } from "@/lib/trendingTypes";
+
 export type Skill = {
   id: string;
   slug: string;
@@ -27,6 +29,10 @@ export type Skill = {
   install_cmd: string;
   repo_url: string;
   tags: string[];
+
+  // Computed fields (not present in the bundled JSON by default)
+  trendingScore?: number;
+  trendingBadge?: TrendingBadgeKind | null;
 };
 
 export function getNews(tag?: string): NewsItem[] {

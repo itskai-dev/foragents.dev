@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 import { getSkills, getSkillBySlug } from "@/lib/data";
+import { getSkillTrendingMap } from "@/lib/server/trendingSkills";
+import { SkillTrendingBadge } from "@/components/skill-trending-badge";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
@@ -56,10 +58,15 @@ export default async function SkillPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const allSkillsList = getSkills();
+
   const skill = getSkillBySlug(slug);
   if (!skill) notFound();
 
-  const allSkills = getSkills().filter((s) => s.slug !== slug);
+  const allSkills = allSkillsList.filter((s) => s.slug !== slug);
+
+  const trendingMap = await getSkillTrendingMap(allSkillsList);
+  const trendingBadge = trendingMap[slug]?.trendingBadge ?? null;
 
   const issueBody = buildSkillIssueBodyTemplate({
     skillName: skill.name,
@@ -133,6 +140,7 @@ export default async function SkillPage({
 
         {/* Compatibility Badges */}
         <div className="flex flex-wrap gap-2 mb-6">
+          {trendingBadge && <SkillTrendingBadge badge={trendingBadge} />}
           {skill.author === "Team Reflectt" && (
             <Badge className="bg-gradient-to-r from-cyan to-electric-blue text-white border-0 font-semibold">
               ✓ Verified
