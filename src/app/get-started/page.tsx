@@ -8,6 +8,18 @@ import Link from "next/link";
 export const metadata = {
   title: "Get started — forAgents.dev",
   description: "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+  openGraph: {
+    title: "Get started — forAgents.dev",
+    description: "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+    url: "https://foragents.dev/get-started",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Get started — forAgents.dev",
+    description: "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+  },
 };
 
 export default function GetStartedPage() {

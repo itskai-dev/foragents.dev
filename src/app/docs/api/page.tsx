@@ -1,6 +1,18 @@
 export const metadata = {
   title: "API Documentation - forAgents.dev",
   description: "Complete API reference for forAgents.dev public endpoints",
+  openGraph: {
+    title: "API Documentation - forAgents.dev",
+    description: "Complete API reference for forAgents.dev public endpoints",
+    url: "https://foragents.dev/docs/api",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "API Documentation - forAgents.dev",
+    description: "Complete API reference for forAgents.dev public endpoints",
+  },
 };
 
 export default function ApiDocsPage() {
