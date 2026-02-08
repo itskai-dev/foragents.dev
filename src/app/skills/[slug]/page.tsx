@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getSkills, getSkillBySlug } from "@/lib/data";
 import { getSkillTrendingMap } from "@/lib/server/trendingSkills";
 import { SkillTrendingBadge } from "@/components/skill-trending-badge";
+import { VerifiedSkillBadge } from "@/components/verified-badge";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
@@ -108,8 +109,9 @@ export default async function SkillPage({
       <main className="max-w-3xl mx-auto px-4 py-12">
         {/* Title area */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2">
-            🧰 {skill.name}
+          <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2 flex items-center gap-2 flex-wrap">
+            <span>🧰 {skill.name}</span>
+            <VerifiedSkillBadge info={skill.verification ?? null} />
           </h1>
           <div className="flex items-center gap-3 text-muted-foreground flex-wrap">
             <p>
@@ -137,11 +139,7 @@ export default async function SkillPage({
         {/* Compatibility Badges */}
         <div className="flex flex-wrap gap-2 mb-6">
           {trendingBadge && <SkillTrendingBadge badge={trendingBadge} />}
-          {skill.author === "Team Reflectt" && (
-            <Badge className="bg-gradient-to-r from-cyan to-electric-blue text-white border-0 font-semibold">
-              ✓ Verified
-            </Badge>
-          )}
+          {/* verified badge moved to title */}
           <Badge className="bg-purple/20 text-purple border border-purple/30 font-semibold">
             ⚡ OpenClaw Compatible
           </Badge>
@@ -177,6 +175,23 @@ export default async function SkillPage({
             {skill.description}
           </p>
         </section>
+
+        {skill.verification ? (
+          <section className="mb-8 rounded-xl border border-cyan/20 bg-cyan/5 p-5">
+            <h2 className="text-lg font-semibold text-[#F8FAFC] mb-2">Why this skill is verified</h2>
+            <p className="text-sm text-foreground/80 leading-relaxed">
+              {skill.verification.reason}
+            </p>
+            <div className="mt-3 text-xs text-muted-foreground">
+              Verified by <span className="text-foreground">{skill.verification.verifiedBy}</span> on{" "}
+              <span className="text-foreground">{skill.verification.verifiedAt}</span>.{" "}
+              <Link href="/docs/verification" className="text-cyan hover:underline">
+                See verification criteria
+              </Link>
+              .
+            </div>
+          </section>
+        ) : null}
 
         {inCollections.length > 0 ? (
           <section className="mb-8">
