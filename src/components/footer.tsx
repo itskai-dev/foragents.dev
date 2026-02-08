@@ -75,6 +75,12 @@ export function Footer() {
               pricing
             </a>
             <a
+              href="/faq"
+              className="hover:text-cyan transition-colors"
+            >
+              faq
+            </a>
+            <a
               href="/docs/api"
               className="hover:text-cyan transition-colors"
             >

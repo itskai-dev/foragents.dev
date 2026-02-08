@@ -1,0 +1,49 @@
+.details > summary {
+  list-style: none;
+}
+
+.details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.details > summary::marker {
+  display: none;
+}
+
+/* Keep content in DOM so grid transition works */
+.details > :not(summary) {
+  display: block;
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 280ms ease;
+}
+
+.details[open] .contentWrapper {
+  grid-template-rows: 1fr;
+}
+
+.content {
+  overflow: hidden;
+}
+
+.contentInner {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 200ms ease 40ms, transform 200ms ease 40ms;
+}
+
+.details[open] .contentInner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chevron {
+  transition: transform 280ms ease;
+}
+
+.details[open] .chevron {
+  transform: rotate(180deg);
+}
