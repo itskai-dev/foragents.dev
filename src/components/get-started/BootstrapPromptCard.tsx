@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/copy-button";
 
 const BOOTSTRAP_PROMPT = `Go to https://foragents.dev/b`;
 
@@ -9,17 +9,6 @@ export function BootstrapPromptCard() {
   const [copied, setCopied] = useState<string | null>(null);
 
   const prompt = useMemo(() => BOOTSTRAP_PROMPT, []);
-
-  async function copy() {
-    try {
-      await navigator.clipboard.writeText(prompt);
-      setCopied("Copied");
-      window.setTimeout(() => setCopied(null), 1200);
-    } catch {
-      setCopied("Copy failed");
-      window.setTimeout(() => setCopied(null), 1200);
-    }
-  }
 
   return (
     <section className="rounded-xl border border-white/10 bg-card/30 p-6">
@@ -30,9 +19,22 @@ export function BootstrapPromptCard() {
         </div>
         <div className="flex items-center gap-3">
           {copied && <div className="text-xs font-mono text-cyan">{copied}</div>}
-          <Button variant="outline" size="sm" className="font-mono" onClick={copy}>
-            Copy prompt
-          </Button>
+          <CopyButton
+            text={prompt}
+            label="Copy prompt"
+            variant="outline"
+            size="sm"
+            className="font-mono"
+            showIcon={false}
+            onCopySuccess={() => {
+              setCopied("Copied");
+              window.setTimeout(() => setCopied(null), 1200);
+            }}
+            onCopyError={() => {
+              setCopied("Copy failed");
+              window.setTimeout(() => setCopied(null), 1200);
+            }}
+          />
         </div>
       </div>
 

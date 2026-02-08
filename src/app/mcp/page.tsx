@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -8,6 +9,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { CopyButton } from "@/components/copy-button";
 import { getMcpServers } from "@/lib/data";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -32,15 +34,16 @@ const categoryColors: Record<string, { bg: string; text: string; border: string 
   "communication":  { bg: "bg-[#F59E0B]/10", text: "text-[#F59E0B]", border: "border-[#F59E0B]/20" },
 };
 
-function CopyButton({ text }: { text: string }) {
+function InstallCopyButton({ text }: { text: string }) {
   return (
-    <button
-      data-copy={text}
-      className="absolute top-2 right-2 text-[10px] font-mono text-muted-foreground hover:text-cyan transition-colors opacity-0 group-hover/cmd:opacity-100 cursor-pointer"
-      title="Copy install command"
-    >
-      📋
-    </button>
+    <CopyButton
+      text={text}
+      label="📋"
+      variant="ghost"
+      size="sm"
+      className="absolute top-2 right-2 text-[10px] font-mono text-muted-foreground hover:text-cyan transition-colors opacity-0 group-hover/cmd:opacity-100 h-auto p-1"
+      showIcon={false}
+    />
   );
 }
 

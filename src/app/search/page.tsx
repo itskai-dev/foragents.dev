@@ -5,6 +5,7 @@ import Link from "next/link";
 import skillsData from "@/data/skills.json";
 import { Badge } from "@/components/ui/badge";
 import { Footer } from "@/components/footer";
+import { PremiumCTA } from "@/components/PremiumCTA";
 
 type Skill = {
   id: string;

@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { CopyButton } from "@/components/copy-button";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -72,16 +73,6 @@ const CHECKLIST_STEPS: ChecklistStep[] = [
 export function ActivationChecklist() {
   const [copiedStep, setCopiedStep] = useState<number | null>(null);
 
-  async function copyCommand(step: number, code: string) {
-    try {
-      await navigator.clipboard.writeText(code);
-      setCopiedStep(step);
-      window.setTimeout(() => setCopiedStep(null), 1200);
-    } catch {
-      // Silently fail if clipboard API not available
-    }
-  }
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -138,14 +129,18 @@ export function ActivationChecklist() {
                     {step.example.code}
                   </pre>
                   {step.example.code.includes("git clone") && (
-                    <Button
+                    <CopyButton
+                      text={step.example.code}
+                      label={copiedStep === step.number ? "Copied" : "Copy"}
                       variant="outline"
                       size="sm"
                       className="absolute top-2 right-2 text-xs opacity-0 group-hover/code:opacity-100 transition-opacity"
-                      onClick={() => copyCommand(step.number, step.example!.code)}
-                    >
-                      {copiedStep === step.number ? "✓ Copied" : "Copy"}
-                    </Button>
+                      showIcon={false}
+                      onCopySuccess={() => {
+                        setCopiedStep(step.number);
+                        window.setTimeout(() => setCopiedStep(null), 1200);
+                      }}
+                    />
                   )}
                 </div>
               </div>

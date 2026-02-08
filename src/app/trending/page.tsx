@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { MobileNav } from "@/components/mobile-nav";
 import { Footer } from "@/components/footer";
+import { InstallCount } from "@/components/InstallCount";
 
 export const revalidate = 300;
 
@@ -161,8 +162,13 @@ export default function TrendingPage() {
                       />
                     )}
                   </CardTitle>
-                  <CardDescription className="text-xs">
-                    by {skill.author}
+                  <CardDescription className="text-xs flex items-center gap-2">
+                    <span>by {skill.author}</span>
+                    <span className="text-white/20">•</span>
+                    <InstallCount 
+                      skillSlug={skill.slug} 
+                      className="text-xs text-cyan"
+                    />
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

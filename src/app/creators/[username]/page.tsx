@@ -28,9 +28,33 @@ export async function generateMetadata({ params }: Props) {
     };
   }
 
+  const description = `View ${creator.username}&apos;s skills and contributions: ${creator.skillCount} skills published with ${creator.totalTags} total tags.`;
+  const ogImageUrl = `https://foragents.dev/api/og/creator/${encodeURIComponent(creator.username)}`;
+
   return {
     title: `${creator.username} — Creator Profile — forAgents.dev`,
-    description: `View ${creator.username}'s skills and contributions: ${creator.skillCount} skills published with ${creator.totalTags} total tags.`,
+    description,
+    openGraph: {
+      title: `${creator.username} — Creator Profile — forAgents.dev`,
+      description,
+      url: `https://foragents.dev/creators/${encodeURIComponent(creator.username)}`,
+      siteName: "forAgents.dev",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${creator.username} - Creator Profile on forAgents.dev`,
+        },
+      ],
+      type: "profile",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${creator.username} — Creator Profile — forAgents.dev`,
+      description,
+      images: [ogImageUrl],
+    },
   };
 }
 

@@ -10,12 +10,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { buildGitHubNewIssueUrl, parseGitHubRepo } from "@/lib/reportIssue";
+import { EmailInstallPlan } from "@/components/EmailInstallPlan";
 
 type Props = {
   installCmd?: string | null;
   repoUrl?: string | null;
   issueTitle: string;
   issueBody: string;
+  skillSlug?: string;
 };
 
 async function copyToClipboard(text: string): Promise<boolean> {
@@ -67,6 +69,7 @@ export function NextBestActionPanel({
   repoUrl,
   issueTitle,
   issueBody,
+  skillSlug,
 }: Props) {
   const repo = React.useMemo(() => parseGitHubRepo(repoUrl), [repoUrl]);
 
@@ -82,13 +85,33 @@ export function NextBestActionPanel({
   const primaryLabel = repo ? "View on GitHub ↗" : "View repository ↗";
 
   const [copyLabel, setCopyLabel] = React.useState("Copy install command");
+  const [showEmailModal, setShowEmailModal] = React.useState(false);
 
   const onCopyInstall = async () => {
     if (!primaryInstallCmd) return;
     const ok = await copyToClipboard(primaryInstallCmd);
     setCopyLabel(ok ? "Copied" : "Copy failed");
     window.setTimeout(() => setCopyLabel("Copy install command"), 1500);
-    if (!ok) window.prompt("Copy the install command:", primaryInstallCmd);
+    
+    if (ok) {
+      // Track install if skillSlug is provided
+      if (skillSlug) {
+        try {
+          await fetch("/api/track/install", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ skillSlug }),
+          });
+        } catch (error) {
+          console.error("Failed to track install:", error);
+        }
+      }
+      
+      // Show email modal after successful copy
+      setShowEmailModal(true);
+    } else {
+      window.prompt("Copy the install command:", primaryInstallCmd);
+    }
   };
 
   return (
@@ -145,6 +168,13 @@ export function NextBestActionPanel({
           ) : null}
         </div>
       </CardContent>
+      
+      <EmailInstallPlan
+        isOpen={showEmailModal}
+        onClose={() => setShowEmailModal(false)}
+        skillSlug={skillSlug}
+        installCmd={primaryInstallCmd ?? undefined}
+      />
     </Card>
   );
 }

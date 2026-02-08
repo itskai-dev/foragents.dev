@@ -4,30 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
-async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    try {
-      const el = document.createElement("textarea");
-      el.value = text;
-      el.setAttribute("readonly", "");
-      el.style.position = "fixed";
-      el.style.top = "-1000px";
-      el.style.left = "-1000px";
-      document.body.appendChild(el);
-      el.focus();
-      el.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(el);
-      return ok;
-    } catch {
-      return false;
-    }
-  }
-}
+import { CopyButton } from "@/components/copy-button";
 
 function buildStarterPrompt(baseUrl: string) {
   return [
@@ -56,25 +33,6 @@ export function AgentBootstrapPanel({ baseUrl }: Props) {
   const origin = typeof window !== "undefined" ? window.location.origin : null;
   const resolvedBase = (baseUrl ?? origin ?? "https://foragents.dev").replace(/\/$/, "");
 
-  const [copyBootstrapLabel, setCopyBootstrapLabel] = React.useState("Copy /b URL");
-  const [copyPromptLabel, setCopyPromptLabel] = React.useState("Copy starter prompt");
-
-  const onCopyBootstrap = async () => {
-    const text = `${resolvedBase}/b`;
-    const ok = await copyToClipboard(text);
-    setCopyBootstrapLabel(ok ? "Copied" : "Copy failed");
-    window.setTimeout(() => setCopyBootstrapLabel("Copy /b URL"), 1500);
-    if (!ok) window.prompt("Copy this URL:", text);
-  };
-
-  const onCopyPrompt = async () => {
-    const text = buildStarterPrompt(resolvedBase);
-    const ok = await copyToClipboard(text);
-    setCopyPromptLabel(ok ? "Copied" : "Copy failed");
-    window.setTimeout(() => setCopyPromptLabel("Copy starter prompt"), 1500);
-    if (!ok) window.prompt("Copy this prompt:", text);
-  };
-
   return (
     <Card className="border-cyan/20 bg-gradient-to-br from-cyan/5 via-card/80 to-purple/5">
       <CardHeader className="pb-4">
@@ -91,12 +49,24 @@ export function AgentBootstrapPanel({ baseUrl }: Props) {
 
       <CardContent>
         <div className="flex flex-wrap items-center gap-2">
-          <Button type="button" size="sm" className="bg-cyan text-black hover:bg-cyan/90" onClick={onCopyBootstrap}>
-            {copyBootstrapLabel}
-          </Button>
-          <Button type="button" size="sm" variant="outline" className="border-white/10 bg-white/5" onClick={onCopyPrompt}>
-            {copyPromptLabel}
-          </Button>
+          <CopyButton
+            text={`${resolvedBase}/b`}
+            label="Copy /b URL"
+            variant="default"
+            size="sm"
+            className="bg-cyan text-black hover:bg-cyan/90"
+            showIcon={false}
+            onCopyError={() => window.prompt("Copy this URL:", `${resolvedBase}/b`)}
+          />
+          <CopyButton
+            text={buildStarterPrompt(resolvedBase)}
+            label="Copy starter prompt"
+            variant="outline"
+            size="sm"
+            className="border-white/10 bg-white/5"
+            showIcon={false}
+            onCopyError={() => window.prompt("Copy this prompt:", buildStarterPrompt(resolvedBase))}
+          />
           <Button asChild type="button" size="sm" variant="ghost" className="text-cyan hover:bg-cyan/10">
             <a href={`${resolvedBase}/b`} target="_blank" rel="noopener noreferrer">
               Open /b ↗

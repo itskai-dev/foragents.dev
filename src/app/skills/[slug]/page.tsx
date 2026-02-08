@@ -7,6 +7,7 @@ import { SkillShareActions } from "@/components/skill-share-actions";
 import { RelatedKits } from "@/components/related-kits";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { InstallCount } from "@/components/InstallCount";
 import Link from "next/link";
 
 // Generate static paths for all skills
@@ -17,9 +18,33 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const skill = getSkillBySlug(params.slug);
   if (!skill) return { title: "Skill Not Found" };
+  
+  const ogImageUrl = `https://foragents.dev/api/og/skill/${skill.slug}`;
+  
   return {
     title: `${skill.name} — forAgents.dev`,
     description: skill.description,
+    openGraph: {
+      title: `${skill.name} — forAgents.dev`,
+      description: skill.description,
+      url: `https://foragents.dev/skills/${skill.slug}`,
+      siteName: "forAgents.dev",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${skill.name} - ${skill.description}`,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${skill.name} — forAgents.dev`,
+      description: skill.description,
+      images: [ogImageUrl],
+    },
   };
 }
 
@@ -92,9 +117,16 @@ export default async function SkillPage({
           <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2">
             🧰 {skill.name}
           </h1>
-          <p className="text-muted-foreground">
-            by <span className="text-foreground">{skill.author}</span>
-          </p>
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <p>
+              by <span className="text-foreground">{skill.author}</span>
+            </p>
+            <span className="text-white/20">•</span>
+            <InstallCount 
+              skillSlug={skill.slug} 
+              className="text-sm text-cyan"
+            />
+          </div>
         </div>
 
         {/* Compatibility Badges */}
@@ -147,6 +179,7 @@ export default async function SkillPage({
             repoUrl={skill.repo_url}
             issueTitle={`forAgents.dev: ${skill.name} (${skill.slug})`}
             issueBody={issueBody}
+            skillSlug={skill.slug}
           />
         </section>
 
