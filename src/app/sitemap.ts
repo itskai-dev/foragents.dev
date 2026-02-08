@@ -15,30 +15,80 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Key landing pages
   const staticPages: MetadataRoute.Sitemap = [
+    // Homepage
     { url: baseUrl, lastModified: now, changeFrequency: "daily", priority: 1.0 },
+    
+    // Key pages - daily updates
     { url: `${baseUrl}/trending`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/agents`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/creators`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/artifacts`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${baseUrl}/skills`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${baseUrl}/search`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${baseUrl}/get-started`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${baseUrl}/getting-started`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    
+    // Frequently updated pages
     { url: `${baseUrl}/requests`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
     { url: `${baseUrl}/news`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
-    { url: `${baseUrl}/skills`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
-    { url: `${baseUrl}/collections`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
-    { url: `${baseUrl}/search`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
-    { url: `${baseUrl}/changelog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/stats`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
-    { url: `${baseUrl}/compare`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/mcp`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/acp`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
     { url: `${baseUrl}/llms-txt`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    
+    // Content pages - weekly updates
+    { url: `${baseUrl}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/changelog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/resources`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/guides`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
     { url: `${baseUrl}/updates`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/releases`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/whats-new`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/learn`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/glossary`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/use-cases`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/showcase`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/testimonials`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/events`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/demos`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    
+    // Feature pages
+    { url: `${baseUrl}/collections`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/compare`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/bookmarks`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/settings`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/playground`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/integrations`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/feeds`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/status`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/badges`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/get-started`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
-    { url: `${baseUrl}/getting-started`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/submit`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/subscribe`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    
+    // Static pages - monthly updates
     { url: `${baseUrl}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/privacy`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/terms`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/accessibility`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/security`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/support`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/faq`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/brand`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/press`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/careers`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/enterprise`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/open-source`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/governance`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/credits`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/newsletter`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/history`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/roadmap`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/verify`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/sitemap-visual`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${baseUrl}/migrate`, lastModified: now, changeFrequency: "monthly", priority: 0.5 },
   ];
 
   // Dynamic agent pages
