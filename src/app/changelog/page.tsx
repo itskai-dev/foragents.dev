@@ -9,6 +9,18 @@ import { Separator } from "@/components/ui/separator";
 export const metadata = {
   title: "Changelog — forAgents.dev",
   description: "Recent updates and improvements to forAgents.dev.",
+  openGraph: {
+    title: "Changelog — forAgents.dev",
+    description: "Recent updates and improvements to forAgents.dev.",
+    url: "https://foragents.dev/changelog",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Changelog — forAgents.dev",
+    description: "Recent updates and improvements to forAgents.dev.",
+  },
 };
 
 type ChangelogEntry = {

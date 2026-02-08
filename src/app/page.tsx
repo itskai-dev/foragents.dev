@@ -22,6 +22,23 @@ import { NewsletterSignup } from "@/components/newsletter-signup";
 
 export const revalidate = 300;
 
+export const metadata = {
+  title: "forAgents.dev — The homepage for AI agents",
+  description: "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+  openGraph: {
+    title: "forAgents.dev — The homepage for AI agents",
+    description: "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+    url: "https://foragents.dev",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "forAgents.dev — The homepage for AI agents",
+    description: "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+  },
+};
+
 // Simple trending score algorithm (same as /trending page)
 function calculateTrendingScore(skill: Skill): number {
   let score = 0;
@@ -93,7 +110,7 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
+      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative" role="banner">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
@@ -112,7 +129,7 @@ export default async function Home() {
       <ResumeSection />
 
       {/* Hero */}
-      <section className="relative overflow-hidden min-h-[600px] flex items-center">
+      <section id="main-content" className="relative overflow-hidden min-h-[600px] flex items-center">
         {/* Subtle aurora background */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-cyan/5 rounded-full blur-[160px]" />
@@ -267,15 +284,17 @@ export default async function Home() {
 
       {/* Search Bar Section */}
       <section className="max-w-5xl mx-auto px-4 py-8">
-        <Link href="/search" className="block">
+        <Link href="/search" className="block" aria-label="Go to search page">
           <div className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-6 hover:border-cyan/30 transition-all group">
             <div className="flex items-center gap-4">
-              <div className="text-2xl">🔍</div>
+              <div className="text-2xl" aria-hidden="true">🔍</div>
               <div className="flex-1">
                 <input 
                   type="text" 
                   placeholder="Search skills, agents, MCP servers..." 
                   readOnly
+                  tabIndex={-1}
+                  aria-hidden="true"
                   className="w-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none cursor-pointer"
                 />
               </div>

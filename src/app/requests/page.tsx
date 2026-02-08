@@ -14,6 +14,18 @@ import { Footer } from "@/components/footer";
 export const metadata = {
   title: "Request a Kit — forAgents.dev",
   description: "Suggest kits you'd like to see built for AI agents.",
+  openGraph: {
+    title: "Request a Kit — forAgents.dev",
+    description: "Suggest kits you'd like to see built for AI agents.",
+    url: "https://foragents.dev/requests",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Request a Kit — forAgents.dev",
+    description: "Suggest kits you'd like to see built for AI agents.",
+  },
 };
 
 // Hardcoded kit requests for now - can be made dynamic later
