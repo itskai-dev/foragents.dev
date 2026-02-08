@@ -17,9 +17,33 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const skill = getSkillBySlug(params.slug);
   if (!skill) return { title: "Skill Not Found" };
+  
+  const ogImageUrl = `https://foragents.dev/api/og/skill/${skill.slug}`;
+  
   return {
     title: `${skill.name} — forAgents.dev`,
     description: skill.description,
+    openGraph: {
+      title: `${skill.name} — forAgents.dev`,
+      description: skill.description,
+      url: `https://foragents.dev/skills/${skill.slug}`,
+      siteName: "forAgents.dev",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${skill.name} - ${skill.description}`,
+        },
+      ],
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${skill.name} — forAgents.dev`,
+      description: skill.description,
+      images: [ogImageUrl],
+    },
   };
 }
 
