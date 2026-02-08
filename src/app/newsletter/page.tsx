@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -95,19 +94,6 @@ function formatDate(dateStr: string): string {
 export default function NewsletterPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-            <span className="text-xs text-muted-foreground font-mono">
-              forAgents.dev
-            </span>
-          </Link>
-          <MobileNav />
-        </div>
-      </header>
-
       {/* Subscribe Hero Section */}
       <section className="max-w-3xl mx-auto px-4 py-16">
         <div className="text-center mb-8">

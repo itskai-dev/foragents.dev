@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 import styles from "./faq.module.css";
 
 export const metadata = {
@@ -322,19 +321,6 @@ export default function FaqPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-
-      {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-            <span className="text-xs text-muted-foreground font-mono">
-              forAgents.dev
-            </span>
-          </Link>
-          <MobileNav />
-        </div>
-      </header>
 
       <main id="main-content" className="max-w-3xl mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-2">

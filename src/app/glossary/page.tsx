@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 
 type Term = {
   id: string;
@@ -266,19 +265,6 @@ export default function GlossaryPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
       />
-
-      {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
-            <span className="text-xs text-gray-400 font-mono">
-              forAgents.dev
-            </span>
-          </Link>
-          <MobileNav />
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="max-w-4xl mx-auto px-6 py-12">

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { MobileNav } from "@/components/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -135,20 +134,6 @@ export default function PlaygroundPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80 relative">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold text-[#06D6A0] hover:opacity-80 transition-opacity">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-sm text-foreground">API Playground</span>
-          </div>
-          <MobileNav />
-        </div>
-      </header>
-
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0">

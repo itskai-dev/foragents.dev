@@ -10,7 +10,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { MobileNav } from "@/components/mobile-nav";
 import { InstallCount } from "@/components/InstallCount";
 
 export const revalidate = 300;
@@ -71,20 +70,6 @@ export default function TrendingPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="text-lg font-bold aurora-text hover:opacity-80 transition-opacity">
-              ⚡ Agent Hub
-            </Link>
-            <span className="text-muted-foreground">/</span>
-            <span className="text-sm text-foreground">Trending</span>
-          </div>
-          <MobileNav />
-        </div>
-      </header>
-
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
