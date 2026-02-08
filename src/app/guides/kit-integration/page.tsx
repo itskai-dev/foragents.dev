@@ -24,7 +24,6 @@ function Section({
 export default function KitIntegrationGuidePage() {
   return (
     <div className="min-h-screen">
-      {/* Header */}
 
       {/* Content */}
       <article className="max-w-3xl mx-auto px-4 py-12 prose prose-invert prose-cyan">

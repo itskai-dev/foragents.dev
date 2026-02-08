@@ -92,7 +92,6 @@ export default function PricingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
       />
 
-      {/* Header */}
 
       {/* Hero */}
       <section className="relative overflow-hidden py-20">

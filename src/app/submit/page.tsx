@@ -476,7 +476,6 @@ export default function SubmitPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 py-12">

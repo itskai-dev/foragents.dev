@@ -125,7 +125,6 @@ export default function StatusPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
 
       {/* Overall Status Banner */}
       <section className="relative overflow-hidden">

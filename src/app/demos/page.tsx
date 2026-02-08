@@ -63,7 +63,6 @@ const difficultyColors = {
 export default function DemosPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[300px] flex items-center">

@@ -18,7 +18,6 @@ export const metadata = {
 export default function GovernancePage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[400px] flex items-center">

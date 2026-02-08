@@ -146,7 +146,6 @@ export default function ApiPlaygroundPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-foreground">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-4 aurora-text">
             API Playground

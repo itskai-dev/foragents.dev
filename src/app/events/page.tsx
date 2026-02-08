@@ -258,7 +258,6 @@ export default function EventsPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd) }}
       />
 
-      {/* Header */}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[400px] flex items-center">

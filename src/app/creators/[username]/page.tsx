@@ -88,7 +88,6 @@ export default async function CreatorProfilePage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* Header */}
 
       {/* Profile Header */}
       <section className="relative overflow-hidden">

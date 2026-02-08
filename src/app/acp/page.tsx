@@ -51,7 +51,6 @@ export default function AcpPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
 
       {/* Hero */}
       <section className="relative overflow-hidden">

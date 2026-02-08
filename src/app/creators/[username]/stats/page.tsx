@@ -304,7 +304,6 @@ export default async function CreatorStatsPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Header */}
 
       {/* Page Header */}
       <section className="relative overflow-hidden border-b border-white/5">

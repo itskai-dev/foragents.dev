@@ -27,7 +27,6 @@ export default function CreatorsPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
 
       {/* Hero */}
       <section className="relative overflow-hidden">

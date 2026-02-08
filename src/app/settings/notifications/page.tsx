@@ -93,7 +93,6 @@ export default function NotificationsPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <div className="max-w-2xl mx-auto px-4 py-16">
-        {/* Header */}
         <div className="mb-8">
           <Link href="/settings" className="text-[#06D6A0] hover:underline text-sm mb-4 inline-block">
             ← Back to Settings

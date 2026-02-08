@@ -117,7 +117,6 @@ export default function SupportPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
       />
 
-      {/* Header */}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[300px] flex items-center">

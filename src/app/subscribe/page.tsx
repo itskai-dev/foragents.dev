@@ -53,7 +53,6 @@ export default function SubscribePage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-4xl mx-auto px-4 py-16">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">
             Upgrade to <span className="text-cyan-400">Premium</span> ✨

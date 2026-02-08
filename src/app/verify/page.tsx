@@ -55,7 +55,6 @@ export default function VerifyPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
-      {/* Header */}
 
       <div className="max-w-2xl mx-auto px-4 py-16">
         {/* Hero */}

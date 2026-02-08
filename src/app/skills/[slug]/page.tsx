@@ -103,7 +103,6 @@ export default async function SkillPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* Header */}
 
       {/* Skill Detail */}
       <main className="max-w-3xl mx-auto px-4 py-12">

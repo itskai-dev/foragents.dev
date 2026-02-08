@@ -65,7 +65,6 @@ export default function BillingSettingsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-2xl mx-auto px-4 py-16">
-        {/* Header */}
         <div className="mb-8">
           <Link href="/settings" className="text-cyan-400 hover:underline text-sm mb-4 inline-block">
             ← Back to Settings

@@ -143,7 +143,6 @@ export default function CommunityPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
       />
 
-      {/* Header */}
 
       {/* Hero Section */}
       <section className="relative overflow-hidden min-h-[400px] flex items-center">

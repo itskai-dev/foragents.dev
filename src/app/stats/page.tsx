@@ -88,7 +88,6 @@ export default async function StatsPage() {
 
   return (
     <div className="min-h-screen">
-      {/* Header */}
 
       {/* Hero */}
       <section className="relative overflow-hidden">

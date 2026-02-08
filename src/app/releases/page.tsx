@@ -87,7 +87,6 @@ const releases: Release[] = [
 export default function ReleasesPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Header */}
       <div className="border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <h1 className="text-4xl font-bold mb-4">Release Notes</h1>
@@ -114,7 +113,6 @@ export default function ReleasesPage() {
 
                 {/* Release card */}
                 <div className="bg-white/5 rounded-lg p-6 border border-white/10 hover:border-[#06D6A0]/50 transition-colors">
-                  {/* Header */}
                   <div className="flex flex-wrap items-center gap-3 mb-3">
                     <span className="inline-block px-3 py-1 rounded-full bg-[#06D6A0]/20 text-[#06D6A0] text-sm font-mono font-semibold">
                       {release.version}

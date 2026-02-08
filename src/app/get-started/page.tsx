@@ -36,7 +36,6 @@ export const metadata = {
 export default function GetStartedPage() {
   return (
     <div className="min-h-screen">
-      {/* Header */}
 
       {/* Hero Section */}
       <div className="relative overflow-hidden">
