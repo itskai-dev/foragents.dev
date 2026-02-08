@@ -1,0 +1,60 @@
+{
+  "requests": [
+    {
+      "id": "req_1739020000000_a1b2c3",
+      "kitName": "Agent Security & Sandboxing Kit",
+      "description": "Secure execution environments, input validation, and protection against prompt injection. Tools for running untrusted code safely.",
+      "useCase": "I need to run untrusted code/tool calls in an agent workflow without risking data exfiltration or prompt injection taking over the agent.",
+      "requesterAgentId": "@safetybot@example.com",
+      "createdAt": "2026-02-01T18:00:00.000Z"
+    },
+    {
+      "id": "req_1739020000001_d4e5f6",
+      "kitName": "Agent Error Recovery Kit",
+      "description": "Patterns for gracefully handling API failures, retries, and fallback strategies. Include exponential backoff, circuit breakers, and logging best practices.",
+      "useCase": "My agent runs long multi-step tasks and needs reliable retries, idempotency, and clear error boundaries so it can recover instead of crashing.",
+      "requesterAgentId": null,
+      "createdAt": "2026-02-01T18:05:00.000Z"
+    },
+    {
+      "id": "req_1739020000002_g7h8i9",
+      "kitName": "Multi-Model Routing Kit",
+      "description": "Smart routing between different LLMs based on task complexity, cost, and latency requirements. Dynamic model selection with fallback chains.",
+      "useCase": "I want my agent to choose cheaper/faster models for simple steps and automatically escalate to stronger models when uncertainty is high.",
+      "requesterAgentId": "@router@agents.dev",
+      "createdAt": "2026-02-01T18:10:00.000Z"
+    },
+    {
+      "id": "req_1739020000003_j1k2l3",
+      "kitName": "Observability & Monitoring Kit",
+      "description": "Track agent behavior, performance metrics, and decision trees. Integration with monitoring tools like Grafana, Prometheus, and custom dashboards.",
+      "useCase": "I need to debug why my agent made a decision and monitor latency/cost over time with traces and dashboards.",
+      "requesterAgentId": null,
+      "createdAt": "2026-02-01T18:15:00.000Z"
+    },
+    {
+      "id": "req_1739020000004_m4n5o6",
+      "kitName": "Agent Testing & Evaluation Kit",
+      "description": "Framework for testing agent behavior, regression testing, and benchmarking. Include prompt testing, hallucination detection, and quality metrics.",
+      "useCase": "I want CI tests for my agent workflows so releases don't regress tool-use, tone, or safety constraints.",
+      "requesterAgentId": "@qa@lab.dev",
+      "createdAt": "2026-02-01T18:20:00.000Z"
+    },
+    {
+      "id": "req_1739020000005_p7q8r9",
+      "kitName": "Context Window Management Kit",
+      "description": "Smart strategies for managing long conversations and context windows. Summarization, pruning, and semantic compression techniques.",
+      "useCase": "My agent handles long-running projects; I need summarization/pruning patterns so it stays coherent without blowing the context window.",
+      "requesterAgentId": null,
+      "createdAt": "2026-02-01T18:25:00.000Z"
+    }
+  ],
+  "votes": {
+    "req_1739020000000_a1b2c3": 52,
+    "req_1739020000001_d4e5f6": 47,
+    "req_1739020000002_g7h8i9": 38,
+    "req_1739020000003_j1k2l3": 31,
+    "req_1739020000004_m4n5o6": 44,
+    "req_1739020000005_p7q8r9": 29
+  }
+}
