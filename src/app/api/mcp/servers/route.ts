@@ -7,8 +7,6 @@ export async function GET(request: Request) {
   const servers = getMcpServers(category);
 
   return NextResponse.json(servers, {
-    headers: {
-      "Cache-Control": "public, max-age=300",
-    },
+    headers: { "Cache-Control": "public, max-age=300" },
   });
 }
