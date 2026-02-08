@@ -5,6 +5,8 @@ import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { Footer } from "@/components/footer";
 import { GlobalNav } from "@/components/global-nav";
 import { BackToTop } from "@/components/back-to-top";
+import { ToastProvider } from "@/contexts/toast-context";
+import { ToastContainer } from "@/components/toast";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -106,18 +108,21 @@ export default function RootLayout({
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased min-h-screen`}
       >
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-cyan focus:text-[#0A0E17] focus:font-semibold focus:rounded-lg"
-        >
-          Skip to main content
-        </a>
-        <GlobalNav />
-        {children}
-        <Footer />
-        <KeyboardShortcuts />
-        <BackToTop />
-        <Analytics />
+        <ToastProvider>
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-cyan focus:text-[#0A0E17] focus:font-semibold focus:rounded-lg"
+          >
+            Skip to main content
+          </a>
+          <GlobalNav />
+          {children}
+          <Footer />
+          <KeyboardShortcuts />
+          <BackToTop />
+          <ToastContainer />
+          <Analytics />
+        </ToastProvider>
       </body>
     </html>
   );
