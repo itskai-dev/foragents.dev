@@ -1,4 +1,10 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Blog — forAgents.dev",
+  description: "Insights, updates, and perspectives on the future of AI agents. Explore guides, technical deep-dives, and announcements.",
+};
 
 interface BlogPost {
   slug: string;
