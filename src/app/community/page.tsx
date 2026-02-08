@@ -1,0 +1,340 @@
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Footer } from "@/components/footer";
+
+export const metadata = {
+  title: "Community — forAgents.dev",
+  description: "Join the agent community. Connect with creators, share skills, and build the future of autonomous AI together.",
+  openGraph: {
+    title: "Community — forAgents.dev",
+    description: "Join the agent community. Connect with creators, share skills, and build the future of autonomous AI together.",
+    url: "https://foragents.dev/community",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+};
+
+export default function CommunityPage() {
+  const stats = [
+    {
+      icon: "⚡",
+      label: "Total Skills",
+      value: "150+",
+      description: "Published skills",
+    },
+    {
+      icon: "👥",
+      label: "Active Creators",
+      value: "80+",
+      description: "Contributing developers",
+    },
+    {
+      icon: "📥",
+      label: "Weekly Installs",
+      value: "2.4k",
+      description: "Across all skills",
+    },
+    {
+      icon: "💬",
+      label: "Discord Members",
+      value: "500+",
+      description: "Active community",
+    },
+  ];
+
+  const contributions = [
+    {
+      icon: "🚀",
+      title: "Submit a Skill",
+      description: "Share your agent tools with the community. Help others build faster.",
+      link: "/submit",
+      linkText: "Submit Now →",
+    },
+    {
+      icon: "🐛",
+      title: "Report Bugs",
+      description: "Found an issue? Help us improve by reporting bugs on GitHub.",
+      link: "https://github.com/reflectt/foragents.dev/issues",
+      linkText: "Open Issue →",
+      external: true,
+    },
+    {
+      icon: "📚",
+      title: "Improve Docs",
+      description: "Contribute to documentation and help new users get started.",
+      link: "https://github.com/reflectt/foragents.dev/tree/main/docs",
+      linkText: "View Docs →",
+      external: true,
+    },
+    {
+      icon: "💬",
+      title: "Join Discord",
+      description: "Connect with other builders, get help, and share ideas.",
+      link: "https://discord.gg/foragents",
+      linkText: "Join Server →",
+      external: true,
+    },
+  ];
+
+  const featuredMembers = [
+    {
+      name: "Alex Chen",
+      role: "Core Contributor",
+      avatar: "🎨",
+      skills: 12,
+      description: "Building the next generation of agent tools",
+      badge: "Top Creator",
+    },
+    {
+      name: "Sam Rivera",
+      role: "Community Lead",
+      avatar: "🌟",
+      skills: 8,
+      description: "Helping agents discover and share knowledge",
+      badge: "Community Hero",
+    },
+    {
+      name: "Jordan Kim",
+      role: "Skill Developer",
+      avatar: "⚡",
+      skills: 15,
+      description: "Specializing in AI automation workflows",
+      badge: "Most Popular",
+    },
+    {
+      name: "Taylor Morgan",
+      role: "Documentation",
+      avatar: "📖",
+      skills: 5,
+      description: "Making agent development accessible to everyone",
+      badge: "Educator",
+    },
+    {
+      name: "Casey Lin",
+      role: "Beta Tester",
+      avatar: "🔬",
+      skills: 7,
+      description: "Early adopter testing cutting-edge features",
+      badge: "Pioneer",
+    },
+    {
+      name: "Drew Patel",
+      role: "Integration Expert",
+      avatar: "🔌",
+      skills: 10,
+      description: "Connecting agents across platforms",
+      badge: "Innovator",
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a]">
+      {/* Header */}
+      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-lg font-bold aurora-text">⚡ Agent Hub</span>
+            <span className="text-xs text-muted-foreground font-mono">
+              forAgents.dev
+            </span>
+          </Link>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden min-h-[400px] flex items-center">
+        {/* Subtle aurora background */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
+          <div className="absolute top-1/3 left-1/3 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple/3 rounded-full blur-[120px]" />
+        </div>
+
+        <div className="relative max-w-3xl mx-auto px-4 py-20 text-center">
+          <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
+            Join the Agent Community
+          </h1>
+          <p className="text-xl text-foreground/80 mb-2">
+            Connect with creators building the future of autonomous AI
+          </p>
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Stats Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {stats.map((stat, index) => (
+            <Card
+              key={index}
+              className="bg-card/50 border-white/5 hover:border-[#06D6A0]/20 transition-all group"
+            >
+              <CardContent className="pt-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
+                    {stat.icon}
+                  </div>
+                  <div className="text-3xl font-bold text-[#06D6A0] mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm font-semibold text-foreground mb-1">
+                    {stat.label}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {stat.description}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Ways to Contribute Section */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-3">Ways to Contribute</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Whether you&apos;re a developer, designer, or enthusiast, there&apos;s a place for you in our community
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {contributions.map((contribution, index) => (
+            <div
+              key={index}
+              className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-6 hover:border-[#06D6A0]/30 transition-all group"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#06D6A0]/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative">
+                <div className="text-3xl mb-4">{contribution.icon}</div>
+                <h3 className="text-xl font-bold mb-2">{contribution.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {contribution.description}
+                </p>
+                {contribution.external ? (
+                  <a
+                    href={contribution.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#06D6A0] hover:underline"
+                  >
+                    {contribution.linkText}
+                  </a>
+                ) : (
+                  <Link
+                    href={contribution.link}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#06D6A0] hover:underline"
+                  >
+                    {contribution.linkText}
+                  </Link>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Community Showcase */}
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-3">Featured Community Members</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Meet the creators building amazing tools and helping shape the agent ecosystem
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featuredMembers.map((member, index) => (
+            <Card
+              key={index}
+              className="bg-card/50 border-white/5 hover:border-[#06D6A0]/20 transition-all group"
+            >
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="text-4xl">{member.avatar}</div>
+                    <div>
+                      <CardTitle className="text-lg mb-1">
+                        {member.name}
+                      </CardTitle>
+                      <p className="text-xs text-muted-foreground">
+                        {member.role}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="text-xs bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
+                  >
+                    {member.badge}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  {member.description}
+                </p>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="text-[#06D6A0]">⚡</span>
+                  <span>{member.skills} skills published</span>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Discord CTA */}
+      <section className="max-w-3xl mx-auto px-4 py-16">
+        <div className="relative overflow-hidden rounded-2xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/5 via-card/80 to-purple/5">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#06D6A0]/10 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple/10 rounded-full blur-[60px]" />
+
+          <div className="relative p-8 md:p-12 text-center">
+            <div className="text-5xl mb-4">💬</div>
+            <h2 className="text-3xl font-bold mb-4">Join Our Discord</h2>
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+              Connect with 500+ developers, share ideas, get help, and be part of the agent revolution. Our community is active, friendly, and always ready to help.
+            </p>
+
+            <div className="space-y-3 mb-8">
+              <div className="flex items-center justify-center gap-2 text-sm">
+                <span className="text-[#06D6A0]">✓</span>
+                <span className="text-muted-foreground">Real-time support and collaboration</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-sm">
+                <span className="text-[#06D6A0]">✓</span>
+                <span className="text-muted-foreground">Early access to new features</span>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-sm">
+                <span className="text-[#06D6A0]">✓</span>
+                <span className="text-muted-foreground">Weekly community events and AMAs</span>
+              </div>
+            </div>
+
+            <a
+              href="https://discord.gg/foragents"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-bold text-base hover:brightness-110 transition-all shadow-lg shadow-[#06D6A0]/20"
+            >
+              Join Discord Server ↗
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+}
