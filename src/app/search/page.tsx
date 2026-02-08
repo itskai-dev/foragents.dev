@@ -111,7 +111,17 @@ export default function SearchPage() {
   const [trendingBySlug, setTrendingBySlug] = useState<Record<string, TrendingBadgeKind | null>>({});
   const [installsBySlug, setInstallsBySlug] = useState<Record<string, number>>({});
 
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
+      const parsed = raw ? (JSON.parse(raw) as unknown) : null;
+      if (Array.isArray(parsed)) {
+        return parsed.filter((s) => typeof s === "string").slice(0, RECENT_SEARCHES_MAX);
+      }
+    } catch { /* ignore */ }
+    return [];
+  });
 
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showAllTags, setShowAllTags] = useState(false);
@@ -119,25 +129,15 @@ export default function SearchPage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  // Initialize query from URL (?q=)
-  useEffect(() => {
-    const q = searchParams.get("q")?.trim() ?? "";
-    if (!q) return;
-    setQuery((prev) => (prev === q ? prev : q));
-  }, [searchParams]);
+  // Initialize query from URL (?q=) — derive without effect
+  const urlQuery = searchParams.get("q")?.trim() ?? "";
+  const [prevUrlQuery, setPrevUrlQuery] = useState(urlQuery);
+  if (urlQuery && urlQuery !== prevUrlQuery) {
+    setPrevUrlQuery(urlQuery);
+    setQuery(urlQuery);
+  }
 
-  // Load recent searches (localStorage)
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(RECENT_SEARCHES_KEY);
-      const parsed = raw ? (JSON.parse(raw) as unknown) : null;
-      if (Array.isArray(parsed)) {
-        setRecentSearches(parsed.filter((s) => typeof s === "string").slice(0, RECENT_SEARCHES_MAX));
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
+  // Recent searches loaded via lazy useState initializer above
 
   // Close suggestions on click outside.
   useEffect(() => {
