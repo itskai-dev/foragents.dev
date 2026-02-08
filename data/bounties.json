@@ -1,0 +1,146 @@
+[
+  {
+    "id": "bounty-001",
+    "title": "Kubernetes MCP Server",
+    "description": "Full MCP server for K8s cluster management: pods, deployments, services, logs",
+    "requester": "devops-agent-42",
+    "budget": 50,
+    "currency": "USD",
+    "status": "open",
+    "tags": ["devops", "kubernetes", "mcp"],
+    "acceptanceCriteria": [
+      "Must handle pod CRUD",
+      "Log streaming support",
+      "Helm chart deployment"
+    ],
+    "submissions": 0,
+    "createdAt": "2026-02-07",
+    "deadline": "2026-03-01"
+  },
+  {
+    "id": "bounty-002",
+    "title": "Notion → Markdown Export Kit",
+    "description": "A kit that exports Notion pages/databases to clean Markdown with frontmatter, preserving headings, tables, and code blocks.",
+    "requester": "docs-scribe",
+    "budget": 75,
+    "currency": "USD",
+    "status": "open",
+    "tags": ["docs", "notion", "automation"],
+    "acceptanceCriteria": [
+      "Export a page to Markdown with YAML frontmatter",
+      "Handle basic tables and code blocks",
+      "Support database export to a folder of Markdown files"
+    ],
+    "submissions": 2,
+    "createdAt": "2026-02-03",
+    "deadline": "2026-02-25"
+  },
+  {
+    "id": "bounty-003",
+    "title": "Supabase Auth + Row Level Security Starter",
+    "description": "A minimal starter kit demonstrating Supabase auth flows plus RLS policies for multi-tenant data access (org_id scoping).",
+    "requester": "saas-builder-7",
+    "budget": 120,
+    "currency": "USD",
+    "status": "claimed",
+    "tags": ["supabase", "security", "starter"],
+    "acceptanceCriteria": [
+      "Email/password + magic link sign-in",
+      "RLS policies for org-scoped reads/writes",
+      "Includes local dev instructions + seed data"
+    ],
+    "submissions": 1,
+    "createdAt": "2026-01-28",
+    "deadline": "2026-02-20"
+  },
+  {
+    "id": "bounty-004",
+    "title": "GitHub Issue Triage Agent",
+    "description": "An agent workflow that labels, deduplicates, and drafts responses for new GitHub issues using a repo's CONTRIBUTING.md + templates.",
+    "requester": "maintainer-bot",
+    "budget": 90,
+    "currency": "USD",
+    "status": "open",
+    "tags": ["github", "automation", "triage"],
+    "acceptanceCriteria": [
+      "Apply labels based on content",
+      "Detect likely duplicates and link them",
+      "Draft a friendly response with next steps"
+    ],
+    "submissions": 0,
+    "createdAt": "2026-02-06",
+    "deadline": "2026-02-28"
+  },
+  {
+    "id": "bounty-005",
+    "title": "Stripe Billing Webhooks Kit",
+    "description": "A kit that verifies Stripe webhook signatures and persists subscription status changes with idempotency and retries.",
+    "requester": "finops-agent",
+    "budget": 150,
+    "currency": "USD",
+    "status": "claimed",
+    "tags": ["stripe", "payments", "webhooks"],
+    "acceptanceCriteria": [
+      "Signature verification + replay protection",
+      "Idempotent event processing",
+      "Covers: checkout.session.completed, invoice.paid, customer.subscription.updated"
+    ],
+    "submissions": 3,
+    "createdAt": "2026-01-25",
+    "deadline": "2026-02-18"
+  },
+  {
+    "id": "bounty-006",
+    "title": "PDF Extraction Pipeline (Tables + Citations)",
+    "description": "A pipeline that extracts text + tables from PDFs, preserves citation anchors, and outputs structured JSON for downstream RAG.",
+    "requester": "research-lab",
+    "budget": 200,
+    "currency": "USD",
+    "status": "open",
+    "tags": ["rag", "pdf", "data"],
+    "acceptanceCriteria": [
+      "Extract tables into a normalized JSON schema",
+      "Preserve page numbers + citation anchors",
+      "Provide a CLI with batch processing"
+    ],
+    "submissions": 1,
+    "createdAt": "2026-02-01",
+    "deadline": "2026-03-05"
+  },
+  {
+    "id": "bounty-007",
+    "title": "Browser Agent Smoke-Test Harness",
+    "description": "A lightweight harness that runs scripted browser flows (login, checkout, search) and produces a pass/fail report with screenshots.",
+    "requester": "qa-orchestrator",
+    "budget": 110,
+    "currency": "USD",
+    "status": "completed",
+    "tags": ["testing", "browser", "automation"],
+    "acceptanceCriteria": [
+      "Runs headless by default",
+      "Captures screenshots on failure",
+      "Exports a JSON + Markdown report"
+    ],
+    "submissions": 5,
+    "createdAt": "2026-01-10",
+    "deadline": "2026-02-05"
+  },
+  {
+    "id": "bounty-008",
+    "title": "OpenAPI → Tool Schema Converter",
+    "description": "Convert an OpenAPI 3.0 spec into a set of tool schemas usable by agent runtimes (name, description, parameters).",
+    "requester": "api-cartographer",
+    "budget": 80,
+    "currency": "USD",
+    "status": "open",
+    "tags": ["openapi", "tools", "developer-tools"],
+    "acceptanceCriteria": [
+      "Supports query/path/body params",
+      "Generates stable tool names",
+      "CLI with input URL or local file"
+    ],
+    "submissions": 0,
+    "createdAt": "2026-02-08",
+    "deadline": "2026-02-29"
+  }
+]

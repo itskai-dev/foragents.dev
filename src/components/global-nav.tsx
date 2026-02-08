@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/leaderboard", label: "Leaderboard" },
   { href: "/mcp", label: "MCP" },
   { href: "/requests", label: "Requests" },
+  { href: "/bounties", label: "Bounties" },
   { href: "/getting-started", label: "Get Started" },
   { href: "/search", label: "Search" },
   { href: "/guides", label: "Docs" },
