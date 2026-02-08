@@ -1,246 +1,353 @@
+import Link from "next/link";
+import { Footer } from "@/components/footer";
+
+export const metadata = {
+  title: "Open Source — forAgents.dev",
+  description: "forAgents.dev is open source. Explore our repos, contribute to the community, and help shape the future of agent development.",
+  openGraph: {
+    title: "Open Source — forAgents.dev",
+    description: "forAgents.dev is open source. Explore our repos, contribute to the community, and help shape the future of agent development.",
+    url: "https://foragents.dev/open-source",
+    siteName: "forAgents.dev",
+    type: "website",
+  },
+};
+
 export default function OpenSourcePage() {
-  const contributeCards = [
+  const repos = [
     {
-      title: 'Report Issues',
-      description: 'Found a bug or have a feature request? Let us know on GitHub.',
-      icon: '🐛',
-      link: 'https://github.com/reflectt/foragents.dev/issues/new',
+      name: "foragents.dev",
+      description: "The agent-native directory. Machine-readable endpoints, clean markdown feeds, and tools built for autonomous AI.",
+      language: "TypeScript",
+      stars: "1.2k",
+      link: "https://github.com/reflectt/foragents.dev",
     },
     {
-      title: 'Submit PRs',
-      description: 'Fix bugs, add features, or improve existing code.',
-      icon: '🔧',
-      link: 'https://github.com/reflectt/foragents.dev/pulls',
+      name: "agent-team-kit",
+      description: "Multi-agent coordination framework. Build agent teams that work together, share context, and solve complex problems.",
+      language: "TypeScript",
+      stars: "856",
+      link: "https://github.com/reflectt/agent-team-kit",
     },
     {
-      title: 'Add Skills',
-      description: 'Contribute new agent skills to expand the ecosystem.',
-      icon: '⚡',
-      link: 'https://github.com/reflectt/foragents.dev/tree/main/skills',
+      name: "openclaw",
+      description: "Open source agent runtime. Desktop + mobile coordination, browser control, and skill execution for AI agents.",
+      language: "TypeScript",
+      stars: "2.4k",
+      link: "https://github.com/reflectt/openclaw",
     },
     {
-      title: 'Improve Docs',
-      description: 'Help make our documentation clearer and more comprehensive.',
-      icon: '📚',
-      link: 'https://github.com/reflectt/foragents.dev/tree/main/docs',
-    },
-  ];
-
-  const goodFirstIssues = [
-    {
-      id: 1,
-      title: 'Add dark mode toggle animation',
-      labels: ['good first issue', 'enhancement'],
-      link: '#',
+      name: "skills-registry",
+      description: "Community-contributed agent skills. Browse, fork, and submit reusable capabilities for AI agents.",
+      language: "Markdown",
+      stars: "423",
+      link: "https://github.com/reflectt/skills-registry",
     },
     {
-      id: 2,
-      title: 'Fix typo in contribution guidelines',
-      labels: ['good first issue', 'documentation'],
-      link: '#',
+      name: "agent-protocol",
+      description: "Standardized communication protocol for multi-agent systems. JSON-based messaging with async support.",
+      language: "TypeScript",
+      stars: "691",
+      link: "https://github.com/reflectt/agent-protocol",
     },
     {
-      id: 3,
-      title: 'Improve mobile responsiveness on skills page',
-      labels: ['good first issue', 'help wanted'],
-      link: '#',
-    },
-    {
-      id: 4,
-      title: 'Add more examples to README',
-      labels: ['documentation', 'help wanted'],
-      link: '#',
-    },
-    {
-      id: 5,
-      title: 'Update dependencies to latest versions',
-      labels: ['good first issue', 'maintenance'],
-      link: '#',
-    },
-    {
-      id: 6,
-      title: 'Add unit tests for utility functions',
-      labels: ['good first issue', 'testing'],
-      link: '#',
+      name: "llms-txt",
+      description: "Machine-readable documentation format. Let agents discover your API without scraping HTML.",
+      language: "Markdown",
+      stars: "1.8k",
+      link: "https://github.com/reflectt/llms-txt",
     },
   ];
 
-  const stats = [
-    { label: 'Stars', value: '1,234' },
-    { label: 'Forks', value: '256' },
-    { label: 'Contributors', value: '42' },
+  const contributionSteps = [
+    {
+      step: "1",
+      title: "Fork",
+      description: "Fork the repository you want to contribute to. This creates your own copy where you can make changes.",
+      icon: "🍴",
+    },
+    {
+      step: "2",
+      title: "Branch",
+      description: "Create a new branch for your feature or fix. Keep it focused and give it a descriptive name.",
+      icon: "🌿",
+    },
+    {
+      step: "3",
+      title: "PR",
+      description: "Submit a pull request with your changes. Include a clear description of what you&apos;ve built and why.",
+      icon: "📬",
+    },
+    {
+      step: "4",
+      title: "Review",
+      description: "Work with maintainers during code review. We&apos;re here to help polish your contribution.",
+      icon: "👀",
+    },
   ];
 
-  const labelColors: Record<string, string> = {
-    'good first issue': 'bg-green-500/20 text-green-400 border-green-500/30',
-    'help wanted': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-    'documentation': 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-    'enhancement': 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30',
-    'maintenance': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    'testing': 'bg-pink-500/20 text-pink-400 border-pink-500/30',
+  const contributors = [
+    { emoji: "🤖", name: "Agent Alpha" },
+    { emoji: "🦾", name: "Bot Builder" },
+    { emoji: "⚡", name: "Speed Coder" },
+    { emoji: "🎨", name: "Design Agent" },
+    { emoji: "🔧", name: "Fix Master" },
+    { emoji: "📚", name: "Doc Writer" },
+    { emoji: "🚀", name: "Ship Fast" },
+    { emoji: "💡", name: "Idea Generator" },
+    { emoji: "🔍", name: "Bug Hunter" },
+    { emoji: "🌟", name: "Star Contributor" },
+    { emoji: "🛠️", name: "Tool Builder" },
+    { emoji: "🎯", name: "Goal Setter" },
+  ];
+
+  const languageColors: Record<string, string> = {
+    TypeScript: "bg-[#3178c6]/20 text-[#3178c6] border-[#3178c6]/30",
+    Markdown: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+    Python: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+    JavaScript: "bg-[#f7df1e]/20 text-[#f7df1e] border-[#f7df1e]/30",
   };
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Mobile Nav */}
+      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-[#0a0a0a]/80">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-lg font-bold bg-gradient-to-r from-white via-[#06D6A0] to-white bg-clip-text text-transparent">
+              forAgents.dev
+            </span>
+          </Link>
+          <nav className="flex items-center gap-4">
+            <Link
+              href="/skills"
+              className="text-sm text-gray-400 hover:text-[#06D6A0] transition-colors hidden sm:inline-block"
+            >
+              Skills
+            </Link>
+            <Link
+              href="/docs"
+              className="text-sm text-gray-400 hover:text-[#06D6A0] transition-colors hidden sm:inline-block"
+            >
+              Docs
+            </Link>
+            <a
+              href="https://github.com/reflectt/foragents.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm px-3 py-1.5 rounded-lg border border-[#06D6A0]/30 text-[#06D6A0] hover:bg-[#06D6A0]/10 transition-colors"
+            >
+              GitHub
+            </a>
+          </nav>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-white/10">
         <div className="absolute inset-0 bg-gradient-to-br from-[#06D6A0]/10 via-transparent to-transparent" />
-        <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-32">
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <div className="text-center">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-[#06D6A0] to-white bg-clip-text text-transparent">
-              forAgents.dev is Open Source
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-white via-[#06D6A0] to-white bg-clip-text text-transparent">
+              Open Source at forAgents.dev
             </h1>
-            <p className="text-xl sm:text-2xl text-gray-400 max-w-3xl mx-auto">
-              Built by the community, for the community. Join us in shaping the future of agent development.
+            <p className="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto">
+              Built by the community, for the community. Join us in shaping the future of AI agent development.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Why Open Source */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
-          Why Open Source?
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white/5 border border-white/10 rounded-lg p-8 hover:border-[#06D6A0]/50 transition-colors">
-            <div className="text-4xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold mb-3 text-[#06D6A0]">Transparency</h3>
+      {/* Our Commitment */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Our Commitment</h2>
+          <p className="text-gray-400 max-w-3xl mx-auto text-base sm:text-lg">
+            We believe open source is the foundation of trustworthy AI. Every line of code, every API endpoint, every tool we build is transparent, auditable, and free for anyone to use, modify, and improve.
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 hover:border-[#06D6A0]/50 transition-colors">
+            <div className="text-4xl mb-4">🔓</div>
+            <h3 className="text-xl font-semibold mb-3 text-[#06D6A0]">Transparency First</h3>
             <p className="text-gray-400">
-              Every line of code is visible. No black boxes, no hidden agendas. See exactly how your agents work.
+              No black boxes. See exactly how our tools work, from API routes to agent coordination logic.
             </p>
           </div>
-          <div className="bg-white/5 border border-white/10 rounded-lg p-8 hover:border-[#06D6A0]/50 transition-colors">
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 hover:border-[#06D6A0]/50 transition-colors">
             <div className="text-4xl mb-4">🤝</div>
-            <h3 className="text-xl font-semibold mb-3 text-[#06D6A0]">Community Trust</h3>
+            <h3 className="text-xl font-semibold mb-3 text-[#06D6A0]">Community Built</h3>
             <p className="text-gray-400">
-              Open source builds trust through peer review, security audits, and collaborative improvement.
+              Contributions from developers worldwide make our platform better every day. Your code matters.
             </p>
           </div>
-          <div className="bg-white/5 border border-white/10 rounded-lg p-8 hover:border-[#06D6A0]/50 transition-colors">
-            <div className="text-4xl mb-4">🚀</div>
-            <h3 className="text-xl font-semibold mb-3 text-[#06D6A0]">Faster Innovation</h3>
+          <div className="bg-white/5 border border-white/10 rounded-lg p-6 sm:p-8 hover:border-[#06D6A0]/50 transition-colors">
+            <div className="text-4xl mb-4">⚡</div>
+            <h3 className="text-xl font-semibold mb-3 text-[#06D6A0]">Innovation Velocity</h3>
             <p className="text-gray-400">
-              Hundreds of minds are better than one. Community contributions accelerate development and innovation.
+              Open collaboration accelerates progress. Hundreds of minds building together move faster than one.
             </p>
           </div>
         </div>
       </section>
 
-      {/* How to Contribute */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-white/10">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
-          How to Contribute
-        </h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {contributeCards.map((card) => (
-            <a
-              key={card.title}
-              href={card.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white/5 border border-white/10 rounded-lg p-6 hover:border-[#06D6A0] hover:bg-white/10 transition-all group"
-            >
-              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform">
-                {card.icon}
-              </div>
-              <h3 className="text-lg font-semibold mb-2 text-[#06D6A0]">
-                {card.title}
-              </h3>
-              <p className="text-gray-400 text-sm">
-                {card.description}
-              </p>
-            </a>
-          ))}
+      {/* Featured Repos */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 border-t border-white/10">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Featured Repositories</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Explore our open source projects. Fork them, contribute to them, build on top of them.
+          </p>
         </div>
-      </section>
-
-      {/* Good First Issues */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-white/10">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-center">
-          Good First Issues
-        </h2>
-        <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-          New to the project? Start here! These issues are perfect for first-time contributors.
-        </p>
-        <div className="grid md:grid-cols-2 gap-4">
-          {goodFirstIssues.map((issue) => (
-            <a
-              key={issue.id}
-              href={issue.link}
-              className="bg-white/5 border border-white/10 rounded-lg p-5 hover:border-[#06D6A0]/50 hover:bg-white/10 transition-all"
-            >
-              <h3 className="text-lg font-medium mb-3">{issue.title}</h3>
-              <div className="flex flex-wrap gap-2">
-                {issue.labels.map((label) => (
-                  <span
-                    key={label}
-                    className={`px-3 py-1 rounded-full text-xs font-medium border ${
-                      labelColors[label] || 'bg-gray-500/20 text-gray-400 border-gray-500/30'
-                    }`}
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* GitHub Stats */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-white/10">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center">
-          GitHub Stats
-        </h2>
-        <div className="grid sm:grid-cols-3 gap-8">
-          {stats.map((stat) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {repos.map((repo) => (
             <div
-              key={stat.label}
-              className="bg-gradient-to-br from-[#06D6A0]/10 to-transparent border border-[#06D6A0]/30 rounded-lg p-8 text-center"
+              key={repo.name}
+              className="bg-white/5 border border-white/10 rounded-lg p-6 hover:border-[#06D6A0]/50 hover:bg-white/10 transition-all group"
             >
-              <div className="text-5xl font-bold text-[#06D6A0] mb-2">
-                {stat.value}
+              <div className="flex items-start justify-between mb-3">
+                <h3 className="text-lg font-semibold text-white group-hover:text-[#06D6A0] transition-colors">
+                  {repo.name}
+                </h3>
+                <div className="flex items-center gap-1 text-yellow-400 text-sm">
+                  <span>⭐</span>
+                  <span>{repo.stars}</span>
+                </div>
               </div>
-              <div className="text-gray-400 text-lg">{stat.label}</div>
+              <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+                {repo.description}
+              </p>
+              <div className="flex items-center justify-between">
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium border ${
+                    languageColors[repo.language] || "bg-gray-500/20 text-gray-400 border-gray-500/30"
+                  }`}
+                >
+                  {repo.language}
+                </span>
+                <a
+                  href={repo.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-[#06D6A0] hover:underline inline-flex items-center gap-1"
+                >
+                  View on GitHub
+                  <span className="text-xs">↗</span>
+                </a>
+              </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* License */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-white/10">
-        <div className="bg-white/5 border border-white/10 rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">MIT License</h2>
+      {/* How to Contribute */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 border-t border-white/10">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">How to Contribute</h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            forAgents.dev is free and open source software licensed under the MIT License. 
-            You&apos;re free to use, modify, and distribute it as you see fit.
+            New to open source? We&apos;ve got you covered. Follow these four simple steps.
           </p>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {contributionSteps.map((step) => (
+            <div
+              key={step.step}
+              className="relative bg-white/5 border border-white/10 rounded-lg p-6 hover:border-[#06D6A0]/50 transition-colors"
+            >
+              <div className="absolute top-4 right-4 text-6xl font-bold text-white/5">
+                {step.step}
+              </div>
+              <div className="relative">
+                <div className="text-5xl mb-4">{step.icon}</div>
+                <h3 className="text-xl font-semibold mb-2 text-[#06D6A0]">
+                  {step.title}
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <a
+            href="https://github.com/reflectt/foragents.dev/blob/main/CONTRIBUTING.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-[#06D6A0] hover:underline"
+          >
+            Read our full contribution guide
+            <span className="text-sm">→</span>
+          </a>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="max-w-6xl mx-auto px-6 py-20 border-t border-white/10">
+      {/* Contributors */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 border-t border-white/10">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Our Contributors</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Thank you to all the amazing people who make forAgents.dev possible. {contributors.length}+ contributors and growing!
+          </p>
+        </div>
+        <div className="flex flex-wrap justify-center gap-4 mb-8">
+          {contributors.map((contributor, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 text-3xl sm:text-4xl bg-white/5 border border-white/10 rounded-full hover:border-[#06D6A0]/50 hover:scale-110 transition-all cursor-pointer"
+              title={contributor.name}
+            >
+              {contributor.emoji}
+            </div>
+          ))}
+        </div>
         <div className="text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
-            Ready to Contribute?
-          </h2>
-          <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-            Join our community and help build the future of agent development.
+          <p className="text-sm text-gray-400 mb-4">
+            Want to see your name here?
           </p>
           <a
             href="https://github.com/reflectt/foragents.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 bg-[#06D6A0] hover:bg-[#05c794] text-black font-semibold px-8 py-4 rounded-lg transition-colors text-lg"
+            className="inline-flex items-center gap-2 bg-[#06D6A0] hover:bg-[#05c794] text-black font-semibold px-6 py-3 rounded-lg transition-colors"
           >
-            <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-            </svg>
-            Star us on GitHub
+            Start Contributing Today
           </a>
         </div>
       </section>
+
+      {/* License */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-20 border-t border-white/10">
+        <div className="bg-gradient-to-br from-[#06D6A0]/10 to-transparent border border-[#06D6A0]/30 rounded-lg p-8 sm:p-12 text-center">
+          <div className="text-5xl mb-4">📜</div>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">MIT License</h2>
+          <p className="text-gray-400 max-w-2xl mx-auto mb-6">
+            forAgents.dev is licensed under the MIT License. You&apos;re free to use, modify, distribute, and build commercial products on top of our code. No strings attached.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href="https://github.com/reflectt/foragents.dev/blob/main/LICENSE"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#06D6A0] text-[#06D6A0] hover:bg-[#06D6A0]/10 transition-colors"
+            >
+              Read the License
+              <span className="text-sm">↗</span>
+            </a>
+            <a
+              href="https://opensource.org/licenses/MIT"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-gray-400 hover:text-[#06D6A0] transition-colors"
+            >
+              Learn more about MIT License →
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
