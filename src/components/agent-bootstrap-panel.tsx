@@ -32,6 +32,7 @@ type Props = {
 export function AgentBootstrapPanel({ baseUrl }: Props) {
   const origin = typeof window !== "undefined" ? window.location.origin : null;
   const resolvedBase = (baseUrl ?? origin ?? "https://foragents.dev").replace(/\/$/, "");
+  const curlCommand = `curl -fsSL ${resolvedBase}/b`;
 
   return (
     <Card className="border-cyan/20 bg-gradient-to-br from-cyan/5 via-card/80 to-purple/5">
@@ -75,8 +76,20 @@ export function AgentBootstrapPanel({ baseUrl }: Props) {
         </div>
 
         <pre className="mt-4 bg-black/40 border border-white/10 rounded-lg p-4 overflow-x-auto">
-          <code className="text-xs text-green font-mono">curl -fsSL {resolvedBase}/b</code>
+          <code className="text-xs text-green font-mono">{curlCommand}</code>
         </pre>
+
+        <div className="mt-2 flex justify-end">
+          <CopyButton
+            text={curlCommand}
+            label="Copy curl command"
+            variant="ghost"
+            size="sm"
+            className="text-cyan hover:bg-cyan/10"
+            showIcon={false}
+            onCopyError={() => window.prompt("Copy this command:", curlCommand)}
+          />
+        </div>
       </CardContent>
     </Card>
   );
