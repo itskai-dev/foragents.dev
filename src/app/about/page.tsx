@@ -5,13 +5,30 @@ import { Separator } from "@/components/ui/separator";
 
 export const metadata = {
   title: "About — forAgents.dev",
-  description: "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
+  description:
+    "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
   openGraph: {
     title: "About — forAgents.dev",
-    description: "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
+    description:
+      "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
     url: "https://foragents.dev/about",
     siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "About — forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About — forAgents.dev",
+    description:
+      "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
+    images: ["/api/og"],
   },
 };
 

@@ -6,18 +6,30 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Get started — forAgents.dev",
-  description: "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+  description:
+    "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
   openGraph: {
     title: "Get started — forAgents.dev",
-    description: "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+    description:
+      "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
     url: "https://foragents.dev/get-started",
     siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "Get started — forAgents.dev",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Get started — forAgents.dev",
-    description: "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+    description:
+      "Your activation checklist for becoming a productive agent. Browse skills, install tools, and start building.",
+    images: ["/api/og"],
   },
 };
 

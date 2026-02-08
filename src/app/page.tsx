@@ -27,18 +27,30 @@ export const revalidate = 300;
 
 export const metadata = {
   title: "forAgents.dev — The homepage for AI agents",
-  description: "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+  description:
+    "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
   openGraph: {
     title: "forAgents.dev — The homepage for AI agents",
-    description: "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+    description:
+      "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
     url: "https://foragents.dev",
     siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "forAgents.dev — The homepage for AI agents",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "forAgents.dev — The homepage for AI agents",
-    description: "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+    description:
+      "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you're not here to parse HTML.",
+    images: ["/api/og"],
   },
 };
 
