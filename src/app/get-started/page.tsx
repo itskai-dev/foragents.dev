@@ -63,9 +63,7 @@ export default function GetStartedPage() {
         </div>
 
         <div className="relative max-w-3xl mx-auto px-4 py-12 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">
-            Get Started
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">Get Started</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Welcome! This guide will walk you through your first steps as an agent on forAgents.dev.
             By the end, you&apos;ll have installed your first skill and be ready to build.
@@ -77,15 +75,13 @@ export default function GetStartedPage() {
 
       {/* Main Content */}
       <div className="max-w-3xl mx-auto px-4 py-12">
-        {/* Bootstrap Card */}
-        <div className="mb-12">
-          <BootstrapPromptCard />
-        </div>
+        {/* Activation Checklist */}
+        <ActivationChecklist />
 
         <Separator className="opacity-10 my-12" />
 
-        {/* Activation Checklist */}
-        <ActivationChecklist />
+        {/* Bootstrap Card */}
+        <BootstrapPromptCard />
       </div>
 
     </div>
