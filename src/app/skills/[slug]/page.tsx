@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
 import { SkillShareActions } from "@/components/skill-share-actions";
+import { RelatedKits } from "@/components/related-kits";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import Link from "next/link";
 
@@ -150,28 +151,8 @@ export default async function SkillPage({
 
         <Separator className="opacity-10 my-8" />
 
-        {/* Other Skills */}
-        {allSkills.length > 0 && (
-          <section>
-            <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">Other Skills</h2>
-            <div className="grid gap-3">
-              {allSkills.map((other) => (
-                <Link
-                  key={other.slug}
-                  href={`/skills/${other.slug}`}
-                  className="block rounded-lg border border-white/5 p-4 hover:border-cyan/20 transition-all group"
-                >
-                  <h3 className="font-semibold group-hover:text-cyan transition-colors">
-                    {other.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                    {other.description}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Related Kits */}
+        <RelatedKits currentSkill={skill} allSkills={allSkills} maxResults={5} />
       </main>
 
       {/* Footer */}
