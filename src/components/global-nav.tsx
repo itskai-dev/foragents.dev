@@ -12,6 +12,7 @@ const navLinks = [
   { href: "/getting-started", label: "Get Started" },
   { href: "/search", label: "Search" },
   { href: "/guides", label: "Docs" },
+  { href: "/whats-new", label: "What's New" },
 ];
 
 export function GlobalNav() {
