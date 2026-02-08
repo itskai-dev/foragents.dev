@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { headers } from "next/headers";
 import { MobileNav } from "@/components/mobile-nav";
 import { Footer } from "@/components/footer";
+import { ShareButton } from "@/components/share-button";
 import type { Metadata } from "next";
 
 async function fetchCollection(slug: string, base: string) {
@@ -134,14 +135,17 @@ export default async function PublicCollectionPage(props: {
       </header>
 
       <section className="max-w-5xl mx-auto px-4 py-10">
-        <div>
-          <h1 className="text-3xl font-bold">{collection.name}</h1>
-          {collection.description ? (
-            <p className="text-sm text-muted-foreground mt-2 max-w-2xl">{collection.description}</p>
-          ) : null}
-          <p className="text-xs text-slate-500 mt-3">
-            Curated by <span className="font-mono text-slate-300">{collection.ownerHandle}</span>
-          </p>
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h1 className="text-3xl font-bold">{collection.name}</h1>
+            {collection.description ? (
+              <p className="text-sm text-muted-foreground mt-2 max-w-2xl">{collection.description}</p>
+            ) : null}
+            <p className="text-xs text-slate-500 mt-3">
+              Curated by <span className="font-mono text-slate-300">{collection.ownerHandle}</span>
+            </p>
+          </div>
+          <ShareButton collectionName={collection.name} slug={slug} />
         </div>
 
         <div className="mt-8 grid gap-2">
