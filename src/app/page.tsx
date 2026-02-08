@@ -291,10 +291,10 @@ export default async function Home() {
               <div className="flex-1">
                 <input 
                   type="text" 
-                  placeholder="Search skills, agents, MCP servers..." tabIndex={-1} aria-hidden="true" 
-                  readOnly
+                  placeholder="Search skills, agents, MCP servers..."
                   tabIndex={-1}
                   aria-hidden="true"
+                  readOnly
                   className="w-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none cursor-pointer"
                 />
               </div>
