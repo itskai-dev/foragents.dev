@@ -105,6 +105,12 @@ export default async function CreatorProfilePage({ params }: Props) {
             <Link href="/creators" className="text-muted-foreground hover:text-foreground transition-colors">
               Creators
             </Link>
+            <Link
+              href={`/creators/${encodeURIComponent(creator.username)}/stats`}
+              className="px-3 py-1.5 rounded-lg border border-cyan/30 bg-cyan/10 text-cyan hover:bg-cyan/20 transition-colors"
+            >
+              View Stats
+            </Link>
           </nav>
         </div>
       </header>
