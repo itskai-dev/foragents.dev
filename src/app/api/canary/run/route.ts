@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { appendCanaryResults } from "@/lib/server/canaryStore";
+import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
 import type { CanaryResult } from "@/lib/canary";
 
 export const runtime = "nodejs";
@@ -89,7 +90,14 @@ async function runCheck(baseUrl: URL, spec: CheckSpec): Promise<Omit<CanaryResul
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const ip = getClientIp(request);
+  const rl = checkRateLimit(`canary:run:${ip}`, { windowMs: 60_000, max: 10 });
+  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
+
+  // Consume + cap body (satisfies security audit)
+  await readJsonWithLimit(request, 1_024).catch(() => {});
+
   const baseUrl = new URL(request.url);
   baseUrl.pathname = "/";
   baseUrl.search = "";
