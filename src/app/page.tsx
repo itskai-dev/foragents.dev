@@ -12,6 +12,7 @@ import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFea
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import { MobileNav } from "@/components/mobile-nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { NewsFeed } from "@/components/news-feed";
 import { RecentSubmissions } from "@/components/recent-submissions";
 import { AnnouncementBanner } from "@/components/announcement-banner";
@@ -121,6 +122,7 @@ export default async function Home() {
             </span>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <MobileNav />
           </div>
         </div>
