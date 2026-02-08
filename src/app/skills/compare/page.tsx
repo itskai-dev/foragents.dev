@@ -1,42 +1,51 @@
 import { Suspense } from "react";
-import { getSkills, type Skill } from "@/lib/data";
+
+import { getSkills } from "@/lib/data";
 import { parseCompareIdsParam } from "@/lib/compare";
-import SkillComparePageClient from "@/components/compare/SkillComparePageClient";
+import CompareSkillsPageClient from "@/components/compare/CompareSkillsPageClient";
 
 export const metadata = {
-  title: "Compare Skills — forAgents.dev",
-  description: "Compare 2-3 skills side-by-side on forAgents.dev",
+  title: "Compare skills — forAgents.dev",
+  description: "Compare up to 4 skills/kits side-by-side on forAgents.dev",
   openGraph: {
-    title: "Compare Skills — forAgents.dev",
-    description: "Compare 2-3 skills side-by-side on forAgents.dev",
+    title: "Compare skills — forAgents.dev",
+    description: "Compare up to 4 skills/kits side-by-side on forAgents.dev",
     url: "https://foragents.dev/skills/compare",
     siteName: "forAgents.dev",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Compare Skills — forAgents.dev",
-    description: "Compare 2-3 skills side-by-side on forAgents.dev",
-  },
 };
 
+function firstParam(v: string | string[] | undefined): string | undefined {
+  if (typeof v === "string") return v;
+  if (Array.isArray(v)) return v[0];
+  return undefined;
+}
+
+/**
+ * Legacy route: /skills/compare
+ *
+ * Canonical compare route is now /compare?skills=slug,slug
+ * This page remains as an alias to avoid breaking old links.
+ */
 export default function SkillComparePage({
   searchParams,
 }: {
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
-  const aParam =
-    typeof searchParams?.a === "string"
-      ? searchParams.a
-      : Array.isArray(searchParams?.a)
-        ? searchParams?.a[0]
-        : undefined;
+  const allSkills = getSkills();
 
+  const skillsParam = firstParam(searchParams?.skills);
+  const slugs = parseCompareIdsParam(skillsParam);
+
+  // Legacy: /skills/compare?a=<skillIds>
+  const aParam = firstParam(searchParams?.a);
   const ids = parseCompareIdsParam(aParam);
 
-  const skills = getSkills();
-  const byId = new Map<string, Skill>(skills.map((sk) => [sk.id, sk]));
-  const resolved = ids.map((id) => byId.get(id) || null);
+  const byIdToSlug = new Map(allSkills.map((s) => [s.id, s.slug] as const));
+  const mappedFromIds = ids.map((id) => byIdToSlug.get(id)).filter(Boolean) as string[];
+
+  const initialSlugs = slugs.length ? slugs : mappedFromIds;
 
   return (
     <div className="min-h-screen">
@@ -47,11 +56,7 @@ export default function SkillComparePage({
           </div>
         }
       >
-        <SkillComparePageClient 
-          initialIds={ids} 
-          initialSkills={resolved}
-          allSkills={skills}
-        />
+        <CompareSkillsPageClient initialSlugs={initialSlugs} allSkills={allSkills} />
       </Suspense>
     </div>
   );

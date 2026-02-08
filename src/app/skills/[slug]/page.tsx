@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
 import { SkillShareActions } from "@/components/skill-share-actions";
+import { AddSkillToCompareButton } from "@/components/add-skill-to-compare-button";
 import { RelatedKits } from "@/components/related-kits";
 import { CompatibilityMatrix } from "@/components/compatibility-matrix";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
@@ -183,7 +184,10 @@ export default async function SkillPage({
 
         {/* Share / copy */}
         <section className="mb-8">
-          <SkillShareActions skillName={skill.name} slug={skill.slug} />
+          <div className="flex flex-wrap items-center gap-2">
+            <SkillShareActions skillName={skill.name} slug={skill.slug} />
+            <AddSkillToCompareButton slug={skill.slug} />
+          </div>
         </section>
 
         {/* Description */}
