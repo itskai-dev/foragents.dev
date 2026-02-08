@@ -66,15 +66,25 @@ function isAgentRequest(request: NextRequest): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  let response: NextResponse;
+
   // Only intercept the homepage for agents
   if (pathname === "/" && isAgentRequest(request)) {
     // Rewrite to the llms.txt route (serves plain text)
     const url = request.nextUrl.clone();
     url.pathname = "/llms.txt";
-    return NextResponse.rewrite(url);
+    response = NextResponse.rewrite(url);
+  } else {
+    response = NextResponse.next();
   }
 
-  return NextResponse.next();
+  // Add security headers to all responses
+  response.headers.set("X-Content-Type-Options", "nosniff");
+  response.headers.set("X-Frame-Options", "DENY");
+  response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  response.headers.set("X-XSS-Protection", "1; mode=block");
+
+  return response;
 }
 
 export const config = {
