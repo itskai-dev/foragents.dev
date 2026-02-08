@@ -2,6 +2,8 @@ import { BootstrapPromptCard } from "@/components/get-started/BootstrapPromptCar
 import { ActivationChecklist } from "@/components/get-started/ActivationChecklist";
 import { Separator } from "@/components/ui/separator";
 import { Footer } from "@/components/footer";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import Link from "next/link";
 
 export const metadata = {
   title: "Get started — forAgents.dev",
@@ -11,6 +13,24 @@ export const metadata = {
 export default function GetStartedPage() {
   return (
     <div className="min-h-screen">
+      {/* Header */}
+      <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
+        <div className="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+          <Breadcrumbs
+            items={[
+              { label: "⚡ Agent Hub", href: "/" },
+              { label: "Get Started" },
+            ]}
+          />
+          <Link
+            href="/llms.txt"
+            className="text-muted-foreground hover:text-cyan font-mono text-xs transition-colors"
+          >
+            /llms.txt
+          </Link>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <div className="relative overflow-hidden">
         {/* Subtle aurora background */}
