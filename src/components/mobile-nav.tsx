@@ -18,6 +18,7 @@ const moreLinks = [
   { href: "/collections", label: "Collections" },
   { href: "/acp", label: "ACP Agents" },
   { href: "/llms-txt", label: "llms.txt Sites" },
+  { href: "/requests", label: "Request a Kit 💡" },
   { href: "/verify", label: "Verify Agent ✓" },
   { href: "/getting-started", label: "Getting Started" },
   { href: "/guides", label: "Guides" },
