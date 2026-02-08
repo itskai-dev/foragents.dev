@@ -41,8 +41,28 @@ export default async function CreatorProfilePage({ params }: Props) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": creator.verified ? "Organization" : "Person",
+    "name": creator.username,
+    "url": `https://foragents.dev/creators/${encodeURIComponent(creator.username)}`,
+    "description": `Creator on forAgents.dev with ${creator.skillCount} skill${creator.skillCount !== 1 ? 's' : ''} published.`,
+    "keywords": creator.topTags.map(t => t.tag).join(", "),
+    "numberOfWorks": creator.skillCount,
+    "workExample": creator.skills.map(skill => ({
+      "@type": "SoftwareApplication",
+      "name": skill.name,
+      "description": skill.description,
+      "url": `https://foragents.dev/skills/${skill.slug}`
+    }))
+  };
+
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">

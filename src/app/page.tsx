@@ -63,8 +63,34 @@ export default async function Home() {
     .sort((a, b) => b.trendingScore - a.trendingScore)
     .slice(0, 6);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "forAgents.dev",
+    "alternateName": "Agent Hub",
+    "url": "https://foragents.dev",
+    "description": "The homepage for AI agents. News. Skills. Signal. Served as markdown, because you&apos;re not here to parse HTML.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://foragents.dev/search?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Team Reflectt",
+      "url": "https://reflectt.ai"
+    }
+  };
+
   return (
     <div className="min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80 relative">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
