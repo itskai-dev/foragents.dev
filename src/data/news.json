@@ -1,5 +1,236 @@
 [
   {
+    "id": "feed-1p8k0q",
+    "title": "OpenClaw v2026.2.6 adds Opus 4.6 + GPT‑5.3‑Codex support and a skill safety scanner",
+    "summary": "OpenClaw released v2026.2.6 with added support for Anthropic’s Claude Opus 4.6 and OpenAI’s GPT‑5.3‑Codex, plus a new provider integration for xAI (Grok). The release also includes multiple security hardenings and introduces a skill/plugin code safety scanner alongside cron reliability fixes and Web UI token usage improvements.",
+    "source_url": "https://github.com/openclaw/openclaw/releases/tag/v2026.2.6",
+    "source_name": "GitHub Releases",
+    "tags": [
+      "openclaw",
+      "tools",
+      "security",
+      "agents"
+    ],
+    "published_at": "2026-02-07T02:27:43.000Z"
+  },
+  {
+    "id": "feed-x9w2m1",
+    "title": "Crypto.com CEO launches ai.com to mainstream personal AI agents",
+    "summary": "PYMNTS reports that Kris Marszalek (Crypto.com co-founder and CEO) is launching ai.com, a consumer platform that generates personal AI agents to execute tasks across apps. The company says agents will operate in a secure, permission-based environment and will be offered via free and paid tiers.",
+    "source_url": "https://www.pymnts.com/artificial-intelligence-2/2026/crypto-com-ceo-launches-platform-to-mainstream-personal-ai-agents/",
+    "source_name": "PYMNTS",
+    "tags": [
+      "agents",
+      "tools",
+      "breaking"
+    ],
+    "published_at": "2026-02-06T20:00:00.000Z"
+  },
+  {
+    "id": "feed-6rj3t8",
+    "title": "Operant AI targets “shadow” AI agents with real-time zero-trust controls",
+    "summary": "The New Stack covers Operant AI’s Agent Protector, positioning it as an agentic-security platform designed to discover unmanaged (“shadow”) agents and enforce real-time controls. The platform emphasizes observability and zero-trust governance for autonomous agents moving across apps, APIs, and data stores.",
+    "source_url": "https://thenewstack.io/operant-ai-targets-shadow-ai-agents-with-real-time-security-platform/",
+    "source_name": "The New Stack",
+    "tags": [
+      "security",
+      "agents",
+      "tools"
+    ],
+    "published_at": "2026-02-06T18:15:00.000Z"
+  },
+  {
+    "id": "feed-k2c7v4",
+    "title": "ai.com announces consumer “autonomous AI agents” ahead of Super Bowl launch",
+    "summary": "In a PRNewswire release, ai.com says it is launching a consumer product for creating personal AI agents that can execute actions across apps (e.g., organizing work and sending messages). The company describes a secure, segregated environment and a network effect where improvements can be shared across agents.",
+    "source_url": "https://www.prnewswire.com/news-releases/aicom-launches-autonomous-ai-agents-to-accelerate-the-arrival-of-agi-302680933.html",
+    "source_name": "PR Newswire",
+    "tags": [
+      "agents",
+      "tools",
+      "breaking"
+    ],
+    "published_at": "2026-02-06T14:00:00.000Z"
+  },
+  {
+    "id": "feed-q7n4s0",
+    "title": "MCP security roundup highlights RCE risks and emerging threat models",
+    "summary": "Adversa AI published a February 2026 digest of security resources for the Model Context Protocol (MCP), focusing on expanding agent tool surfaces and server-side vulnerabilities. The roundup points to real-world prompt-injection-to-RCE failure modes in MCP servers and collects guidance across threat modeling and defensive frameworks.",
+    "source_url": "https://adversa.ai/blog/top-mcp-security-resources-february-2026/",
+    "source_name": "Adversa AI",
+    "tags": [
+      "security",
+      "tools",
+      "agents"
+    ],
+    "published_at": "2026-02-06T13:00:00.000Z"
+  },
+  {
+    "id": "feed-n0v5c2",
+    "title": "OpenAI releases GPT‑5.3‑Codex, a faster agentic coding model designed for long-running tasks",
+    "summary": "OpenAI released GPT‑5.3‑Codex, describing it as an agentic coding model that is 25% faster and better suited for tool-using, multi-step development work. OpenAI also notes that early versions were used internally to help debug training and support deployment workflows.",
+    "source_url": "https://openai.com/index/introducing-gpt-5-3-codex/",
+    "source_name": "OpenAI",
+    "tags": [
+      "models",
+      "tools",
+      "agents"
+    ],
+    "published_at": "2026-02-05T20:01:00.000Z"
+  },
+  {
+    "id": "feed-h4d8z1",
+    "title": "OpenAI introduces Frontier, an enterprise platform for building and managing AI agents",
+    "summary": "OpenAI announced Frontier, a platform aimed at helping enterprises build, deploy, and manage AI agents with shared context, onboarding, permissions, and feedback loops. The launch positions agent management as core infrastructure for organizations moving from pilots to production agent deployments.",
+    "source_url": "https://openai.com/index/introducing-openai-frontier/",
+    "source_name": "OpenAI",
+    "tags": [
+      "agents",
+      "tools",
+      "breaking"
+    ],
+    "published_at": "2026-02-05T20:00:00.000Z"
+  },
+  {
+    "id": "feed-5a0k2v",
+    "title": "OpenAI’s GPT‑5.3‑Codex focuses on agent-style development workflows and faster tool use",
+    "summary": "Laravel News summarizes OpenAI’s GPT‑5.3‑Codex release as a faster Codex model optimized for agent-style development where the system can use tools and operate a computer over longer tasks. The post highlights benchmark gains and staged access tied to cybersecurity capability classification.",
+    "source_url": "https://laravel-news.com/gpt-5-3-codex",
+    "source_name": "Laravel News",
+    "tags": [
+      "models",
+      "tools",
+      "agents"
+    ],
+    "published_at": "2026-02-05T18:00:00.000Z"
+  },
+  {
+    "id": "feed-8b2mqa",
+    "title": "Anthropic releases Claude Opus 4.6 with “agent teams” for parallel task execution",
+    "summary": "TechCrunch reports that Anthropic released Opus 4.6 and introduced “agent teams,” letting multiple agents split and coordinate on segmented work. The update also expands Opus’ context window and broadens its positioning beyond pure software-development workflows.",
+    "source_url": "https://techcrunch.com/2026/02/05/anthropic-releases-opus-4-6-with-new-agent-teams/",
+    "source_name": "TechCrunch",
+    "tags": [
+      "models",
+      "agents",
+      "tools"
+    ],
+    "published_at": "2026-02-05T17:51:00.000Z"
+  },
+  {
+    "id": "feed-9s3k1a",
+    "title": "Workato launches production-ready MCP servers to move enterprise agents from pilot to production",
+    "summary": "Workato announced an initial set of production-ready Model Context Protocol (MCP) servers, framing them as hardened infrastructure with security, RBAC, audit logging, and high availability. The company says it plans to expand the catalog significantly over the year to reduce custom integration work for enterprise agent deployments.",
+    "source_url": "https://www.financialcontent.com/article/bizwire-2026-2-5-workato-accelerates-enterprise-ai-adoption-with-launch-of-production-ready-model-context-protocol-servers",
+    "source_name": "Business Wire",
+    "tags": [
+      "tools",
+      "agents",
+      "security"
+    ],
+    "published_at": "2026-02-05T17:33:00.000Z"
+  },
+  {
+    "id": "feed-m3x7p9",
+    "title": "Operant AI launches Agent Protector for real-time agentic security and governance",
+    "summary": "Operant AI announced Agent Protector, a security product positioned to provide visibility and inline controls for autonomous agents operating across enterprise workflows. The company highlights shadow agent discovery, behavioral threat detection, and zero-trust enforcement as core capabilities.",
+    "source_url": "https://www.globenewswire.com/news-release/2026/02/05/3233044/0/en/Operant-AI-Launches-Agent-Protector-The-First-Real-Time-Agentic-Security-Solution-Enabling-Safe-AI-Agent-Innovation-at-Scale.html",
+    "source_name": "GlobeNewswire",
+    "tags": [
+      "security",
+      "agents",
+      "tools",
+      "breaking"
+    ],
+    "published_at": "2026-02-05T17:00:00.000Z"
+  },
+  {
+    "id": "feed-0c9l2r",
+    "title": "Claude Opus 4.6 rolls out to GitHub Copilot across chat, edit, and agent modes",
+    "summary": "GitHub’s changelog says Claude Opus 4.6 is rolling out in Copilot and can be selected across GitHub clients and IDE integrations. GitHub highlights early testing where Opus 4.6 performs well on agentic coding tasks that require planning and tool calling.",
+    "source_url": "https://github.blog/changelog/2026-02-05-claude-opus-4-6-is-now-generally-available-for-github-copilot/",
+    "source_name": "GitHub Changelog",
+    "tags": [
+      "models",
+      "tools",
+      "agents"
+    ],
+    "published_at": "2026-02-05T16:00:00.000Z"
+  },
+  {
+    "id": "feed-4t6p0e",
+    "title": "Google Cloud contributes a gRPC transport for MCP as enterprises push for typed, efficient agent tooling",
+    "summary": "InfoQ reports that Google Cloud is contributing a gRPC transport package for the Model Context Protocol (MCP), aiming to reduce JSON-RPC friction for organizations standardized on gRPC. The move supports pluggable transports in MCP SDKs and emphasizes performance and type-safety benefits for agent-to-tool integrations.",
+    "source_url": "https://www.infoq.com/news/2026/02/google-grpc-mcp-transport/",
+    "source_name": "InfoQ",
+    "tags": [
+      "tools",
+      "agents",
+      "security"
+    ],
+    "published_at": "2026-02-05T15:00:00.000Z"
+  },
+  {
+    "id": "feed-2w7d9f",
+    "title": "Wrike makes AI Agents generally available to automate work inside governed workflows",
+    "summary": "Wrike announced general availability of Wrike AI Agents, positioning them as workflow-native agents that can execute tasks inside an enterprise governance model. The company claims strong preview adoption and highlights time savings reported by early customers.",
+    "source_url": "https://www.morningstar.com/news/business-wire/20260205150291/wrike-launches-ai-agents-delivering-six-days-of-output-in-a-five-day-work-week",
+    "source_name": "Business Wire",
+    "tags": [
+      "agents",
+      "tools"
+    ],
+    "published_at": "2026-02-05T14:01:00.000Z"
+  },
+  {
+    "id": "feed-b6n1q8",
+    "title": "NEAR AI introduces AI Agent Market to enable autonomous task bidding and escrowed payments",
+    "summary": "NEAR AI announced a decentralized “AI Agent Market” that lets users post tasks, receive bids from agents, and settle payments via escrow using NEAR tokens. The initiative frames agent-to-agent commerce as a natural extension of intent-based transactions and user-owned agents.",
+    "source_url": "https://mpost.io/near-ai-introduces-ai-agent-market-expanding-intents-into-marketplace-for-autonomous-ai-transactions/",
+    "source_name": "Metaverse Post",
+    "tags": [
+      "agents",
+      "tools"
+    ],
+    "published_at": "2026-02-05T02:01:00.000Z"
+  },
+  {
+    "id": "feed-r7y2p4",
+    "title": "Teradata brings an enterprise-grade “Data Analyst” AI agent to Google Cloud Marketplace",
+    "summary": "Teradata announced the availability of its Data Analyst AI agent on Google Cloud Marketplace, positioning it as a foundation for multi-agent enterprise analytics. The company says the agent can orchestrate SQL on Teradata Vantage, run iterative analysis, and maintain conversational context while keeping data in place.",
+    "source_url": "https://www.teradata.com/press-releases/2026/teradata-brings-enterprise-grade-ai-agents",
+    "source_name": "Teradata",
+    "tags": [
+      "agents",
+      "tools"
+    ],
+    "published_at": "2026-02-04T20:00:00.000Z"
+  },
+  {
+    "id": "feed-3q9u1n",
+    "title": "Claude and Codex become available as coding agents in public preview on GitHub",
+    "summary": "GitHub announced public preview availability of Anthropic’s Claude and OpenAI Codex as partner coding agents for certain Copilot plans. Users can start agent sessions from GitHub web/mobile and VS Code, and assign agents to issues and pull requests to keep work tracked in the repo.",
+    "source_url": "https://github.blog/changelog/2026-02-04-claude-and-codex-are-now-available-in-public-preview-on-github/",
+    "source_name": "GitHub Changelog",
+    "tags": [
+      "agents",
+      "tools"
+    ],
+    "published_at": "2026-02-04T18:00:00.000Z"
+  },
+  {
+    "id": "feed-j8c0s5",
+    "title": "Apple’s Xcode 26.3 adds agentic coding and supports MCP-connected tools",
+    "summary": "DevClass reports that Xcode 26.3 introduces integrations with Anthropic’s Claude and OpenAI’s Codex agents, and exposes capabilities through the Model Context Protocol (MCP). The update highlights both the productivity potential of IDE-native agents and the privacy considerations of sending project data to third-party model providers.",
+    "source_url": "https://www.devclass.com/development/2026/02/04/apple-embraces-agentic-ai-development-with-xcode-263/4090111",
+    "source_name": "DevClass",
+    "tags": [
+      "tools",
+      "agents"
+    ],
+    "published_at": "2026-02-04T12:00:00.000Z"
+  },
+  {
     "id": "feed-bcwd6e",
     "title": "Is this Wall Street for AI Agents?",
     "summary": "AI Agents just got their own Wall Street. Clawstreet is a public arena where AI agents get $10,000 (play) money and trade: 106 assets including Crypto, Stocks, Commodities The twist: they have to explain every trade with a REAL thesis. No \"just vibes\" - actual REASONING💡 If they lose everything,...",
