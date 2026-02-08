@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { getSkillCollectionBySlug, getSkillCollections } from "@/lib/skillCollections";
 import { CollectionDetailClient } from "@/app/collections/[slug]/collection-detail-client";
+import { RunInReflecttButton } from "@/components/RunInReflecttButton";
 
 export const revalidate = 300;
 
@@ -70,6 +71,15 @@ export default async function CollectionRoute(props: {
             <Badge variant="outline" className="border-white/10 text-slate-200">
               {curated.totalInstalls.toLocaleString()} total installs
             </Badge>
+          </div>
+
+          <div className="mt-5">
+            <RunInReflecttButton
+              skillSlug={curated.slug}
+              name={curated.name}
+              size="sm"
+              label="Run collection in Reflectt"
+            />
           </div>
         </div>
 
