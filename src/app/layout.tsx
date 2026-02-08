@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { KeyboardShortcuts } from "@/components/keyboard-shortcuts";
 import { Footer } from "@/components/footer";
 import { GlobalNav } from "@/components/global-nav";
+import { BackToTop } from "@/components/back-to-top";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -115,6 +116,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <KeyboardShortcuts />
+        <BackToTop />
         <Analytics />
       </body>
     </html>
