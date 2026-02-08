@@ -8,6 +8,7 @@ import { RelatedKits } from "@/components/related-kits";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { InstallCount } from "@/components/InstallCount";
+import { SkillPageClient } from "@/components/skill-page-client";
 import Link from "next/link";
 
 // Generate static paths for all skills
@@ -224,6 +225,11 @@ export default async function SkillPage({
 
         {/* Related Kits */}
         <RelatedKits currentSkill={skill} allSkills={allSkills} maxResults={5} />
+
+        <Separator className="opacity-10 my-8" />
+
+        {/* Recently Viewed */}
+        <SkillPageClient slug={skill.slug} name={skill.name} />
       </main>
 
       {/* Footer */}
