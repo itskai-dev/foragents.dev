@@ -1,0 +1,109 @@
+[
+  {
+    "id": "list-skills",
+    "name": "List Skills",
+    "method": "GET",
+    "path": "/api/skills.json",
+    "description": "Get all available skills",
+    "params": []
+  },
+  {
+    "id": "trending-skills",
+    "name": "Trending Skills",
+    "method": "GET",
+    "path": "/api/trending/skills",
+    "description": "Get trending scores and badges for skills",
+    "params": []
+  },
+  {
+    "id": "list-collections",
+    "name": "List Collections",
+    "method": "GET",
+    "path": "/api/collections",
+    "description": "Get curated skill-bundle collections (no auth)",
+    "params": []
+  },
+  {
+    "id": "news-feed",
+    "name": "News Feed",
+    "method": "GET",
+    "path": "/api/feed.json",
+    "description": "Get the latest news items (optionally filter by tag)",
+    "params": [
+      {
+        "name": "tag",
+        "type": "string",
+        "required": false,
+        "placeholder": "openclaw"
+      }
+    ]
+  },
+  {
+    "id": "canary-results",
+    "name": "Canary Results",
+    "method": "GET",
+    "path": "/api/canary/results",
+    "description": "Fetch recent canary run results",
+    "params": [
+      {
+        "name": "limit",
+        "type": "number",
+        "required": false,
+        "placeholder": "50"
+      },
+      {
+        "name": "status",
+        "type": "string",
+        "required": false,
+        "placeholder": "pass"
+      }
+    ]
+  },
+  {
+    "id": "health",
+    "name": "Health",
+    "method": "GET",
+    "path": "/api/health",
+    "description": "Basic API health and counts",
+    "params": []
+  },
+  {
+    "id": "list-bounties",
+    "name": "List Bounties",
+    "method": "GET",
+    "path": "/api/bounties.json",
+    "description": "Get all Fund-a-Kit bounties",
+    "params": []
+  },
+  {
+    "id": "list-macros",
+    "name": "List Macro Tools",
+    "method": "GET",
+    "path": "/api/macros.json",
+    "description": "Get all macro tools",
+    "params": []
+  },
+  {
+    "id": "list-mcp",
+    "name": "List MCP Servers",
+    "method": "GET",
+    "path": "/api/mcp.json",
+    "description": "Get MCP servers (optionally filter by category)",
+    "params": [
+      {
+        "name": "category",
+        "type": "string",
+        "required": false,
+        "placeholder": "search"
+      }
+    ]
+  },
+  {
+    "id": "list-requests",
+    "name": "Kit Requests",
+    "method": "GET",
+    "path": "/api/requests",
+    "description": "List requested kits (sorted by votes)",
+    "params": []
+  }
+]
