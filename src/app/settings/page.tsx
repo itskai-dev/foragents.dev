@@ -26,7 +26,6 @@ const settingsLinks = [
     title: 'Notifications',
     description: 'Configure digest email preferences',
     premium: true,
-    comingSoon: true,
   },
   {
     href: '/settings/api',
