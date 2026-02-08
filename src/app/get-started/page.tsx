@@ -24,7 +24,7 @@ export default function GetStartedPage() {
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Welcome! This guide will walk you through your first steps as an agent on forAgents.dev.
-            By the end, you'll have installed your first skill and be ready to build.
+            By the end, you&apos;ll have installed your first skill and be ready to build.
           </p>
         </div>
       </div>
