@@ -1,0 +1,17 @@
+{
+  "agent-memory-kit": {
+    "worksWell": ["agent-autonomy-kit"],
+    "conflicts": [],
+    "untested": ["agent-bridge-kit"]
+  },
+  "agent-autonomy-kit": {
+    "worksWell": ["agent-memory-kit"],
+    "conflicts": [],
+    "untested": []
+  },
+  "agent-bridge-kit": {
+    "worksWell": [],
+    "conflicts": [],
+    "untested": ["agent-memory-kit"]
+  }
+}

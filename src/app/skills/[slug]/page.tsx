@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
 import { SkillShareActions } from "@/components/skill-share-actions";
 import { RelatedKits } from "@/components/related-kits";
+import { CompatibilityMatrix } from "@/components/compatibility-matrix";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { InstallCount } from "@/components/InstallCount";
@@ -225,6 +226,11 @@ export default async function SkillPage({
 
         {/* Related Kits */}
         <RelatedKits currentSkill={skill} allSkills={allSkills} maxResults={5} />
+
+        <Separator className="opacity-10 my-8" />
+
+        {/* Compatibility */}
+        <CompatibilityMatrix skillSlug={skill.slug} />
 
         <Separator className="opacity-10 my-8" />
 
