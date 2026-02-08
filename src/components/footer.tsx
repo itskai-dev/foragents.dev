@@ -75,6 +75,12 @@ export function Footer() {
               pricing
             </a>
             <a
+              href="/changelog"
+              className="hover:text-cyan transition-colors"
+            >
+              changelog
+            </a>
+            <a
               href="/updates"
               className="hover:text-cyan transition-colors"
             >
