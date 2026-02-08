@@ -1,12 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Footer } from "@/components/footer";
 import { MobileNav } from "@/components/mobile-nav";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
 
-type ResourceType = "Guide" | "Video" | "Docs" | "Tool" | "Blog";
+type ResourceType = "Guide" | "Video" | "Docs" | "Tool";
 
 type Resource = {
   id: string;
@@ -14,206 +13,209 @@ type Resource = {
   description: string;
   url: string;
   type: ResourceType;
+  section: string;
 };
 
-const resources: Record<string, Resource[]> = {
-  "Getting Started": [
-    {
-      id: "agent-basics",
-      title: "Building Your First AI Agent",
-      description:
-        "A comprehensive introduction to AI agent development, covering architecture patterns, prompt engineering, and tool integration fundamentals.",
-      url: "https://docs.anthropic.com/claude/docs/building-with-claude",
-      type: "Guide",
-    },
-    {
-      id: "mcp-intro",
-      title: "Model Context Protocol: The Complete Guide",
-      description:
-        "Learn how to use MCP to give agents structured access to data sources, tools, and external services with standardized interfaces.",
-      url: "https://modelcontextprotocol.io/introduction",
-      type: "Docs",
-    },
-    {
-      id: "agent-quickstart",
-      title: "Agent Development Quickstart (15min)",
-      description:
-        "A fast-paced video walkthrough showing you how to scaffold, configure, and deploy your first conversational agent in under 15 minutes.",
-      url: "https://www.youtube.com/watch?v=example",
-      type: "Video",
-    },
-  ],
-  Documentation: [
-    {
-      id: "anthropic-docs",
-      title: "Anthropic Claude Documentation",
-      description:
-        "Official documentation for Claude API, including prompt engineering best practices, function calling, streaming, and vision capabilities.",
-      url: "https://docs.anthropic.com/",
-      type: "Docs",
-    },
-    {
-      id: "openai-agents",
-      title: "OpenAI Agents & Assistants API",
-      description:
-        "Build stateful agents with the Assistants API — supports code interpreter, retrieval, and custom function calling out of the box.",
-      url: "https://platform.openai.com/docs/assistants/overview",
-      type: "Docs",
-    },
-    {
-      id: "langchain-docs",
-      title: "LangChain Agent Framework",
-      description:
-        "Documentation for LangChain&apos;s agent toolkit — chains, memory, callbacks, and over 100 integrations for building production agents.",
-      url: "https://python.langchain.com/docs/modules/agents/",
-      type: "Docs",
-    },
-    {
-      id: "mcp-spec",
-      title: "MCP Protocol Specification",
-      description:
-        "Technical specification for Model Context Protocol — schema definitions, transport layers, and implementation guidelines for servers and clients.",
-      url: "https://spec.modelcontextprotocol.io/",
-      type: "Docs",
-    },
-  ],
-  Tutorials: [
-    {
-      id: "rag-tutorial",
-      title: "Building a RAG Agent from Scratch",
-      description:
-        "Step-by-step guide to building a retrieval-augmented generation system with vector embeddings, semantic search, and context injection.",
-      url: "https://www.anthropic.com/tutorials/rag-agent",
-      type: "Guide",
-    },
-    {
-      id: "function-calling",
-      title: "Mastering Function Calling & Tool Use",
-      description:
-        "Learn how to give your agent access to APIs, databases, and custom functions — with error handling, retries, and validation strategies.",
-      url: "https://cookbook.openai.com/examples/how_to_call_functions_with_chat_models",
-      type: "Guide",
-    },
-    {
-      id: "multi-agent-systems",
-      title: "Multi-Agent Coordination Tutorial",
-      description:
-        "Build a system where multiple specialized agents collaborate — task delegation, message passing, and consensus mechanisms explained.",
-      url: "https://www.deeplearning.ai/short-courses/multi-ai-agent-systems/",
-      type: "Video",
-    },
-    {
-      id: "agent-eval",
-      title: "Evaluating & Testing AI Agents",
-      description:
-        "Practical guide to agent evaluation — creating test suites, measuring accuracy, debugging hallucinations, and building evals that scale.",
-      url: "https://hamel.dev/blog/posts/evals/",
-      type: "Blog",
-    },
-  ],
-  "Tools & Libraries": [
-    {
-      id: "openclaw",
-      title: "OpenClaw Agent Runtime",
-      description:
-        "Production-ready agent runtime with tool orchestration, session management, browser control, and cross-platform node communication built-in.",
-      url: "https://openclaw.com/",
-      type: "Tool",
-    },
-    {
-      id: "langchain-lib",
-      title: "LangChain (Python/JS)",
-      description:
-        "The most popular agent framework — abstractions for chains, memory, retrieval, callbacks, and integrations with 100+ LLM providers.",
-      url: "https://github.com/langchain-ai/langchain",
-      type: "Tool",
-    },
-    {
-      id: "autogen",
-      title: "Microsoft AutoGen",
-      description:
-        "Framework for building multi-agent conversational systems — agents can chat with each other, delegate tasks, and collaborate autonomously.",
-      url: "https://github.com/microsoft/autogen",
-      type: "Tool",
-    },
-    {
-      id: "semantic-kernel",
-      title: "Semantic Kernel SDK",
-      description:
-        "Microsoft&apos;s lightweight SDK for orchestrating AI — native C#, Python, and Java support with plugin architecture and memory connectors.",
-      url: "https://github.com/microsoft/semantic-kernel",
-      type: "Tool",
-    },
-    {
-      id: "instructor",
-      title: "Instructor (Structured Outputs)",
-      description:
-        "Python library for reliable structured outputs from LLMs — uses Pydantic schemas to guarantee type-safe, validated responses every time.",
-      url: "https://github.com/jxnl/instructor",
-      type: "Tool",
-    },
-  ],
-  "Community Content": [
-    {
-      id: "latent-space",
-      title: "Latent Space Podcast",
-      description:
-        "Weekly podcast covering agent frameworks, new model releases, and interviews with builders pushing the boundaries of AI engineering.",
-      url: "https://www.latent.space/podcast",
-      type: "Video",
-    },
-    {
-      id: "agent-patterns",
-      title: "Common Agent Design Patterns",
-      description:
-        "Blog series breaking down proven architectures — ReAct, Chain-of-Thought, Tree of Thoughts, Reflexion, and when to use each approach.",
-      url: "https://lilianweng.github.io/posts/2023-06-23-agent/",
-      type: "Blog",
-    },
-    {
-      id: "swyx-agents",
-      title: "The AI Engineer&apos;s Guide to Agents",
-      description:
-        "swyx&apos;s comprehensive overview of the agent landscape — tools, mental models, and the shift from prompt engineering to agent engineering.",
-      url: "https://www.latent.space/p/ai-engineer-agents",
-      type: "Blog",
-    },
-    {
-      id: "hamel-agents",
-      title: "What We Learned Building Real Agents",
-      description:
-        "Hamel Husain&apos;s honest retrospective on production agent deployments — what worked, what didn&apos;t, and lessons learned the hard way.",
-      url: "https://hamel.dev/blog/posts/prompt/",
-      type: "Blog",
-    },
-  ],
-};
+const resources: Resource[] = [
+  // Getting Started
+  {
+    id: "intro-to-agents",
+    title: "Introduction to AI Agents",
+    description:
+      "A comprehensive beginner&apos;s guide covering the fundamentals of AI agents, their architecture, and common use cases.",
+    url: "https://example.com/intro-agents",
+    type: "Guide",
+    section: "Getting Started",
+  },
+  {
+    id: "building-first-agent",
+    title: "Building Your First Agent",
+    description:
+      "Step-by-step tutorial for creating a simple AI agent from scratch, covering setup, basic capabilities, and deployment.",
+    url: "https://example.com/first-agent",
+    type: "Guide",
+    section: "Getting Started",
+  },
+  {
+    id: "agent-quickstart-video",
+    title: "Agent Development Quickstart",
+    description:
+      "15-minute video walkthrough of setting up your development environment and creating a basic conversational agent.",
+    url: "https://example.com/quickstart-video",
+    type: "Video",
+    section: "Getting Started",
+  },
+  // Documentation
+  {
+    id: "openclaw-docs",
+    title: "OpenClaw Documentation",
+    description:
+      "Official documentation for OpenClaw, the agentic runtime platform. Includes API reference, tool guides, and examples.",
+    url: "https://openclaw.com/docs",
+    type: "Docs",
+    section: "Documentation",
+  },
+  {
+    id: "anthropic-claude-api",
+    title: "Anthropic Claude API Reference",
+    description:
+      "Complete API documentation for Claude, including model capabilities, prompt engineering best practices, and code examples.",
+    url: "https://docs.anthropic.com/claude/reference",
+    type: "Docs",
+    section: "Documentation",
+  },
+  {
+    id: "mcp-protocol",
+    title: "Model Context Protocol (MCP) Spec",
+    description:
+      "Technical specification for the Model Context Protocol, enabling standardized communication between agents and data sources.",
+    url: "https://modelcontextprotocol.io/docs",
+    type: "Docs",
+    section: "Documentation",
+  },
+  {
+    id: "openai-agents-guide",
+    title: "OpenAI Assistants API Guide",
+    description:
+      "Official guide to building agents with OpenAI&apos;s Assistants API, including function calling and retrieval patterns.",
+    url: "https://platform.openai.com/docs/assistants",
+    type: "Docs",
+    section: "Documentation",
+  },
+  // Tutorials
+  {
+    id: "tool-use-tutorial",
+    title: "Mastering Tool Use in Agents",
+    description:
+      "Deep dive into implementing tool calling, handling responses, error recovery, and chaining multiple tools together.",
+    url: "https://example.com/tool-use",
+    type: "Guide",
+    section: "Tutorials",
+  },
+  {
+    id: "agent-memory-patterns",
+    title: "Building Agent Memory Systems",
+    description:
+      "Tutorial on implementing short-term and long-term memory for agents, including vector databases and retrieval strategies.",
+    url: "https://example.com/memory-patterns",
+    type: "Guide",
+    section: "Tutorials",
+  },
+  {
+    id: "multi-agent-systems",
+    title: "Designing Multi-Agent Systems",
+    description:
+      "Learn how to coordinate multiple specialized agents, handle inter-agent communication, and manage distributed workflows.",
+    url: "https://example.com/multi-agent",
+    type: "Guide",
+    section: "Tutorials",
+  },
+  {
+    id: "deploying-agents-video",
+    title: "Production Deployment Strategies",
+    description:
+      "Video tutorial covering deployment patterns, scaling considerations, monitoring, and cost optimization for production agents.",
+    url: "https://example.com/deploy-video",
+    type: "Video",
+    section: "Tutorials",
+  },
+  // Tools & Libraries
+  {
+    id: "langchain",
+    title: "LangChain Framework",
+    description:
+      "Popular Python/JavaScript framework for building LLM-powered applications with chains, agents, and memory abstractions.",
+    url: "https://langchain.com",
+    type: "Tool",
+    section: "Tools & Libraries",
+  },
+  {
+    id: "autogen",
+    title: "Microsoft AutoGen",
+    description:
+      "Open-source framework for building multi-agent conversational systems with customizable agent roles and capabilities.",
+    url: "https://microsoft.github.io/autogen",
+    type: "Tool",
+    section: "Tools & Libraries",
+  },
+  {
+    id: "crewai",
+    title: "CrewAI",
+    description:
+      "Framework for orchestrating role-playing, autonomous AI agents that collaborate on complex tasks with defined workflows.",
+    url: "https://crewai.com",
+    type: "Tool",
+    section: "Tools & Libraries",
+  },
+  {
+    id: "semantic-kernel",
+    title: "Semantic Kernel",
+    description:
+      "Microsoft&apos;s SDK for integrating LLMs into applications, featuring plugins, planners, and multi-language support.",
+    url: "https://github.com/microsoft/semantic-kernel",
+    type: "Tool",
+    section: "Tools & Libraries",
+  },
+  // Community Content
+  {
+    id: "agent-engineering-blog",
+    title: "The Agent Engineering Blog",
+    description:
+      "Weekly insights on agent architecture patterns, debugging techniques, and real-world case studies from production deployments.",
+    url: "https://example.com/agent-blog",
+    type: "Guide",
+    section: "Community Content",
+  },
+  {
+    id: "building-reliable-agents",
+    title: "Building Reliable Agents at Scale",
+    description:
+      "Conference talk exploring strategies for testing, monitoring, and maintaining agent reliability in production environments.",
+    url: "https://example.com/reliable-agents-talk",
+    type: "Video",
+    section: "Community Content",
+  },
+  {
+    id: "agent-ux-patterns",
+    title: "UX Patterns for Agent Interactions",
+    description:
+      "Blog post series examining user experience design principles specific to conversational agents and tool-augmented workflows.",
+    url: "https://example.com/agent-ux",
+    type: "Guide",
+    section: "Community Content",
+  },
+];
 
-const allTypes: ResourceType[] = ["Guide", "Video", "Docs", "Tool", "Blog"];
+const sections = [
+  "Getting Started",
+  "Documentation",
+  "Tutorials",
+  "Tools & Libraries",
+  "Community Content",
+];
+
+const typeColors: Record<ResourceType, string> = {
+  Guide: "bg-cyan/10 text-cyan border-cyan/20",
+  Video: "bg-purple/10 text-purple border-purple/20",
+  Docs: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  Tool: "bg-green-500/10 text-green-400 border-green-500/20",
+};
 
 export default function ResourcesPage() {
-  const [selectedType, setSelectedType] = useState<ResourceType | "All">("All");
+  const [filterType, setFilterType] = useState<ResourceType | "All">("All");
 
-  const filteredResources = Object.entries(resources).reduce(
-    (acc, [category, items]) => {
-      const filtered =
-        selectedType === "All"
-          ? items
-          : items.filter((item) => item.type === selectedType);
-      if (filtered.length > 0) {
-        acc[category] = filtered;
-      }
+  const filteredResources =
+    filterType === "All"
+      ? resources
+      : resources.filter((r) => r.type === filterType);
+
+  const groupedResources = sections.reduce(
+    (acc, section) => {
+      acc[section] = filteredResources.filter((r) => r.section === section);
       return acc;
     },
     {} as Record<string, Resource[]>
   );
-
-  const totalCount =
-    selectedType === "All"
-      ? Object.values(resources).flat().length
-      : Object.values(resources)
-          .flat()
-          .filter((r) => r.type === selectedType).length;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -230,149 +232,125 @@ export default function ResourcesPage() {
         </div>
       </header>
 
-      <main id="main-content" className="max-w-4xl mx-auto px-4 py-12">
-        {/* Page Header */}
+      <main id="main-content" className="max-w-5xl mx-auto px-4 py-12">
+        {/* Header Section */}
         <div className="mb-10">
-          <h1 className="text-4xl font-bold mb-3">
-            Learning <span className="text-[#06D6A0]">Resources</span>
+          <h1 className="text-4xl font-bold mb-2">
+            Learning <span style={{ color: "#06D6A0" }}>Resources</span>
           </h1>
-          <p className="text-lg text-muted-foreground">
-            Curated guides, docs, tutorials, and tools to help you build better
-            AI agents.
+          <p className="text-xl text-muted-foreground">
+            Curated guides, documentation, and tools for building better agents.
           </p>
         </div>
 
-        {/* Filter Controls */}
-        <div className="mb-8 flex flex-wrap items-center gap-2">
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap gap-2 mb-8">
           <button
-            onClick={() => setSelectedType("All")}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              selectedType === "All"
-                ? "bg-[#06D6A0] text-black"
-                : "bg-white/5 text-muted-foreground hover:bg-white/10"
+            onClick={() => setFilterType("All")}
+            className={`px-4 py-2 rounded-lg border transition-all ${
+              filterType === "All"
+                ? "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
+                : "bg-white/5 text-muted-foreground border-white/10 hover:border-white/20"
             }`}
           >
-            All ({Object.values(resources).flat().length})
+            All
           </button>
-          {allTypes.map((type) => {
-            const count = Object.values(resources)
-              .flat()
-              .filter((r) => r.type === type).length;
+          {(["Guide", "Video", "Docs", "Tool"] as ResourceType[]).map((type) => (
+            <button
+              key={type}
+              onClick={() => setFilterType(type)}
+              className={`px-4 py-2 rounded-lg border transition-all ${
+                filterType === type
+                  ? typeColors[type]
+                  : "bg-white/5 text-muted-foreground border-white/10 hover:border-white/20"
+              }`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+
+        {/* Resources by Section */}
+        <div className="space-y-12">
+          {sections.map((section) => {
+            const sectionResources = groupedResources[section];
+            if (sectionResources.length === 0) return null;
+
             return (
-              <button
-                key={type}
-                onClick={() => setSelectedType(type)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  selectedType === type
-                    ? "bg-[#06D6A0] text-black"
-                    : "bg-white/5 text-muted-foreground hover:bg-white/10"
-                }`}
-              >
-                {type} ({count})
-              </button>
+              <section key={section}>
+                <h2 className="text-2xl font-bold mb-4">{section}</h2>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {sectionResources.map((resource) => (
+                    <a
+                      key={resource.id}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block p-5 rounded-xl border border-white/10 bg-card/50 hover:border-[#06D6A0]/50 hover:bg-card/70 transition-all group"
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <h3 className="font-semibold text-base group-hover:text-[#06D6A0] transition-colors">
+                          {resource.title}
+                        </h3>
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font-medium border shrink-0 ${
+                            typeColors[resource.type]
+                          }`}
+                        >
+                          {resource.type}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {resource.description}
+                      </p>
+                      <div className="mt-3 flex items-center gap-1 text-xs text-[#06D6A0] font-mono">
+                        Visit resource
+                        <span className="group-hover:translate-x-1 transition-transform">
+                          →
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </section>
             );
           })}
         </div>
 
-        {/* Results Count */}
-        <p className="text-sm text-muted-foreground mb-6">
-          Showing {totalCount} resource{totalCount !== 1 ? "s" : ""}
-          {selectedType !== "All" && ` in ${selectedType}`}
-        </p>
-
-        {/* Resource Sections */}
-        <div className="space-y-12">
-          {Object.entries(filteredResources).map(([category, items]) => (
-            <section key={category}>
-              <h2 className="text-2xl font-bold mb-5 flex items-center gap-3">
-                <span className="text-white">{category}</span>
-                <span className="text-sm text-muted-foreground font-normal">
-                  ({items.length})
-                </span>
-              </h2>
-
-              <div className="grid gap-4">
-                {items.map((resource) => (
-                  <a
-                    key={resource.id}
-                    href={resource.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block rounded-xl border border-white/10 bg-white/[0.02] p-5 hover:border-[#06D6A0]/50 hover:bg-white/[0.05] transition-all"
-                  >
-                    <div className="flex items-start justify-between gap-4 mb-2">
-                      <h3 className="text-lg font-semibold text-white group-hover:text-[#06D6A0] transition-colors">
-                        {resource.title}
-                      </h3>
-                      <Badge
-                        variant="outline"
-                        className="shrink-0 border-[#06D6A0]/30 text-[#06D6A0] bg-[#06D6A0]/10"
-                      >
-                        {resource.type}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {resource.description}
-                    </p>
-                    <div className="mt-3 flex items-center gap-2 text-xs text-[#06D6A0] font-mono">
-                      <span>View resource</span>
-                      <svg
-                        className="w-3 h-3 group-hover:translate-x-0.5 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-
-        {/* No Results State */}
-        {Object.keys(filteredResources).length === 0 && (
+        {/* Empty State */}
+        {filteredResources.length === 0 && (
           <div className="text-center py-16">
-            <p className="text-muted-foreground text-lg mb-4">
-              No resources found for &ldquo;{selectedType}&rdquo;
+            <p className="text-muted-foreground text-lg">
+              No resources found for this filter.
             </p>
             <button
-              onClick={() => setSelectedType("All")}
-              className="text-[#06D6A0] hover:underline text-sm"
+              onClick={() => setFilterType("All")}
+              className="mt-4 text-[#06D6A0] hover:underline"
             >
-              Show all resources
+              Clear filter
             </button>
           </div>
         )}
 
-        {/* CTA Section */}
-        <div className="mt-16 rounded-xl border border-white/10 bg-gradient-to-br from-[#06D6A0]/5 via-white/[0.02] to-purple-500/5 p-8">
-          <h2 className="text-2xl font-bold mb-3">Want to contribute?</h2>
-          <p className="text-muted-foreground mb-5">
-            Know a great resource that&apos;s missing? Submit a skill, tool, or
-            guide to help the community learn and build better agents.
+        {/* CTA */}
+        <div className="mt-16 rounded-xl border border-white/10 bg-gradient-to-br from-[#06D6A0]/5 via-card/70 to-purple/5 p-6">
+          <h2 className="text-lg font-bold">Want to contribute?</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Know a great resource that&apos;s missing? Submit it via{" "}
+            <Link href="/submit" className="text-[#06D6A0] hover:underline">
+              /submit
+            </Link>{" "}
+            or open a PR on{" "}
+            <a
+              href="https://github.com/reflectt/foragents.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#06D6A0] hover:underline"
+            >
+              GitHub
+            </a>
+            .
           </p>
-          <div className="flex flex-wrap items-center gap-4">
-            <Link
-              href="/submit"
-              className="px-6 py-2.5 bg-[#06D6A0] text-black font-semibold rounded-lg hover:bg-[#05c294] transition-colors"
-            >
-              Submit a Resource
-            </Link>
-            <Link
-              href="/guides"
-              className="px-6 py-2.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/5 transition-colors"
-            >
-              Browse Guides
-            </Link>
-          </div>
         </div>
       </main>
 
