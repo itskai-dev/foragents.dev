@@ -5,6 +5,7 @@ import type { McpServer, McpServerCategory } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/copy-button";
+import { RunInReflecttButton } from "@/components/RunInReflecttButton";
 
 const categoryStyles: Record<McpServerCategory, { bg: string; text: string; border: string }> = {
   "file-system": { bg: "bg-[#F59E0B]/10", text: "text-[#F59E0B]", border: "border-[#F59E0B]/20" },
@@ -179,6 +180,13 @@ export function McpHubClient({ servers }: { servers: McpServer[] }) {
                       />
                     </div>
 
+                    <RunInReflecttButton
+                      skillSlug={server.slug}
+                      name={server.name}
+                      size="xs"
+                      className="mb-3"
+                    />
+
                     <div className="flex flex-wrap gap-1">
                       {compat.map((tag) => (
                         <Badge
@@ -256,6 +264,13 @@ export function McpHubClient({ servers }: { servers: McpServer[] }) {
                       className="absolute top-1.5 right-1.5 h-8 w-8 text-white/70 hover:text-white"
                     />
                   </div>
+
+                  <RunInReflecttButton
+                    skillSlug={server.slug}
+                    name={server.name}
+                    size="xs"
+                    className="mb-3"
+                  />
 
                   <div className="flex flex-wrap gap-1">
                     {compat.map((tag) => (

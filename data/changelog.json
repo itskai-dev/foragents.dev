@@ -1,6 +1,48 @@
 [
   {
     "date": "2026-02-08",
+    "title": "Skill Collections",
+    "description": "Five curated collections are now live at /collections.",
+    "category": "feature",
+    "link": "/collections"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Reliability Leaderboard",
+    "description": "A new leaderboard shows daily canary scorecards to track reliability over time.",
+    "category": "feature",
+    "link": "/leaderboard"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Run in Reflectt deep-links",
+    "description": "Skill, collection, and MCP pages now include \"Run in Reflectt\" links for one-click launch.",
+    "category": "improvement",
+    "link": "/skills"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "OG images for new pages",
+    "description": "All newly added pages now ship with dedicated Open Graph images for clean sharing.",
+    "category": "improvement",
+    "link": "/api/og"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "100% render test coverage",
+    "description": "Render tests now cover every page route (87/87).",
+    "category": "improvement",
+    "link": "/changelog"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "News feed refresh",
+    "description": "News feed updated with 18 new articles.",
+    "category": "improvement",
+    "link": "/news"
+  },
+  {
+    "date": "2026-02-08",
     "title": "MCP Hub directory is live",
     "description": "Browse a curated directory of Model Context Protocol (MCP) servers with install commands, categories, and compatibility hints.",
     "category": "feature",

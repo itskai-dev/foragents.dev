@@ -1,0 +1,1060 @@
+{
+  "scorecards": [
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-08",
+      "passRate": 0.98,
+      "avgLatencyMs": 920,
+      "testsRun": 50,
+      "testsPassed": 49,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-08",
+      "passRate": 0.96,
+      "avgLatencyMs": 1100,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": ["heartbeat-runner intermittently times out"],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-08",
+      "passRate": 0.94,
+      "avgLatencyMs": 1350,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": ["lane handoff fixture failing in zsh"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-08",
+      "passRate": 0.97,
+      "avgLatencyMs": 840,
+      "testsRun": 40,
+      "testsPassed": 39,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-08",
+      "passRate": 0.92,
+      "avgLatencyMs": 1600,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": ["node pairing retries increased"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-08",
+      "passRate": 0.99,
+      "avgLatencyMs": 780,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-08",
+      "passRate": 0.95,
+      "avgLatencyMs": 1020,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-08",
+      "passRate": 0.93,
+      "avgLatencyMs": 2100,
+      "testsRun": 30,
+      "testsPassed": 28,
+      "regressions": ["gmail search endpoint returning 500s"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-08",
+      "passRate": 0.97,
+      "avgLatencyMs": 1250,
+      "testsRun": 60,
+      "testsPassed": 58,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-08",
+      "passRate": 1,
+      "avgLatencyMs": 540,
+      "testsRun": 25,
+      "testsPassed": 25,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-08",
+      "passRate": 0.98,
+      "avgLatencyMs": 890,
+      "testsRun": 45,
+      "testsPassed": 44,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-08",
+      "passRate": 0.96,
+      "avgLatencyMs": 1450,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-08",
+      "passRate": 0.9,
+      "avgLatencyMs": 2300,
+      "testsRun": 40,
+      "testsPassed": 36,
+      "regressions": ["rate-limit handling regressed"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-08",
+      "passRate": 0.95,
+      "avgLatencyMs": 1700,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-08",
+      "passRate": 0.91,
+      "avgLatencyMs": 1900,
+      "testsRun": 35,
+      "testsPassed": 32,
+      "regressions": ["image pipeline flaky on large inputs"],
+      "trend": "stable"
+    },
+
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-07",
+      "passRate": 0.96,
+      "avgLatencyMs": 980,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-07",
+      "passRate": 0.95,
+      "avgLatencyMs": 1180,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-07",
+      "passRate": 0.96,
+      "avgLatencyMs": 1280,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-07",
+      "passRate": 0.96,
+      "avgLatencyMs": 860,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-07",
+      "passRate": 0.94,
+      "avgLatencyMs": 1500,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-07",
+      "passRate": 0.98,
+      "avgLatencyMs": 800,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-07",
+      "passRate": 0.96,
+      "avgLatencyMs": 990,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-07",
+      "passRate": 0.96,
+      "avgLatencyMs": 1980,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-07",
+      "passRate": 0.96,
+      "avgLatencyMs": 1320,
+      "testsRun": 60,
+      "testsPassed": 58,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-07",
+      "passRate": 0.99,
+      "avgLatencyMs": 560,
+      "testsRun": 25,
+      "testsPassed": 25,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-07",
+      "passRate": 0.98,
+      "avgLatencyMs": 910,
+      "testsRun": 45,
+      "testsPassed": 44,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-07",
+      "passRate": 0.94,
+      "avgLatencyMs": 1580,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-07",
+      "passRate": 0.92,
+      "avgLatencyMs": 2150,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-07",
+      "passRate": 0.94,
+      "avgLatencyMs": 1720,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-07",
+      "passRate": 0.92,
+      "avgLatencyMs": 1850,
+      "testsRun": 35,
+      "testsPassed": 32,
+      "regressions": [],
+      "trend": "stable"
+    },
+
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-06",
+      "passRate": 0.95,
+      "avgLatencyMs": 1040,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-06",
+      "passRate": 0.94,
+      "avgLatencyMs": 1260,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-06",
+      "passRate": 0.98,
+      "avgLatencyMs": 1220,
+      "testsRun": 50,
+      "testsPassed": 49,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-06",
+      "passRate": 0.96,
+      "avgLatencyMs": 900,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-06",
+      "passRate": 0.95,
+      "avgLatencyMs": 1480,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-06",
+      "passRate": 0.98,
+      "avgLatencyMs": 820,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-06",
+      "passRate": 0.95,
+      "avgLatencyMs": 1030,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-06",
+      "passRate": 0.95,
+      "avgLatencyMs": 2020,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-06",
+      "passRate": 0.95,
+      "avgLatencyMs": 1400,
+      "testsRun": 60,
+      "testsPassed": 57,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-06",
+      "passRate": 0.98,
+      "avgLatencyMs": 580,
+      "testsRun": 25,
+      "testsPassed": 24,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-06",
+      "passRate": 0.97,
+      "avgLatencyMs": 980,
+      "testsRun": 45,
+      "testsPassed": 44,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-06",
+      "passRate": 0.93,
+      "avgLatencyMs": 1640,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-06",
+      "passRate": 0.93,
+      "avgLatencyMs": 2050,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-06",
+      "passRate": 0.93,
+      "avgLatencyMs": 1780,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-06",
+      "passRate": 0.93,
+      "avgLatencyMs": 1820,
+      "testsRun": 35,
+      "testsPassed": 33,
+      "regressions": [],
+      "trend": "improving"
+    },
+
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-05",
+      "passRate": 0.94,
+      "avgLatencyMs": 1100,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-05",
+      "passRate": 0.93,
+      "avgLatencyMs": 1320,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-05",
+      "passRate": 0.98,
+      "avgLatencyMs": 1200,
+      "testsRun": 50,
+      "testsPassed": 49,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-05",
+      "passRate": 0.95,
+      "avgLatencyMs": 910,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-05",
+      "passRate": 0.95,
+      "avgLatencyMs": 1460,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-05",
+      "passRate": 0.97,
+      "avgLatencyMs": 840,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-05",
+      "passRate": 0.95,
+      "avgLatencyMs": 1040,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-05",
+      "passRate": 0.94,
+      "avgLatencyMs": 2080,
+      "testsRun": 30,
+      "testsPassed": 28,
+      "regressions": ["drive permissions edge-case failing"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-05",
+      "passRate": 0.95,
+      "avgLatencyMs": 1420,
+      "testsRun": 60,
+      "testsPassed": 57,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-05",
+      "passRate": 0.98,
+      "avgLatencyMs": 590,
+      "testsRun": 25,
+      "testsPassed": 24,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-05",
+      "passRate": 0.96,
+      "avgLatencyMs": 1020,
+      "testsRun": 45,
+      "testsPassed": 43,
+      "regressions": [],
+      "trend": "declining"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-05",
+      "passRate": 0.92,
+      "avgLatencyMs": 1720,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-05",
+      "passRate": 0.92,
+      "avgLatencyMs": 2100,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-05",
+      "passRate": 0.92,
+      "avgLatencyMs": 1820,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "declining"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-05",
+      "passRate": 0.92,
+      "avgLatencyMs": 1850,
+      "testsRun": 35,
+      "testsPassed": 32,
+      "regressions": [],
+      "trend": "stable"
+    },
+
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-04",
+      "passRate": 0.93,
+      "avgLatencyMs": 1160,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": ["semantic summarizer edge-case failure"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-04",
+      "passRate": 0.92,
+      "avgLatencyMs": 1380,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-04",
+      "passRate": 0.99,
+      "avgLatencyMs": 1180,
+      "testsRun": 50,
+      "testsPassed": 50,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-04",
+      "passRate": 0.95,
+      "avgLatencyMs": 920,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-04",
+      "passRate": 0.96,
+      "avgLatencyMs": 1440,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-04",
+      "passRate": 0.98,
+      "avgLatencyMs": 860,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-04",
+      "passRate": 0.94,
+      "avgLatencyMs": 1060,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "declining"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-04",
+      "passRate": 0.95,
+      "avgLatencyMs": 2060,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-04",
+      "passRate": 0.94,
+      "avgLatencyMs": 1480,
+      "testsRun": 60,
+      "testsPassed": 56,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-04",
+      "passRate": 0.97,
+      "avgLatencyMs": 620,
+      "testsRun": 25,
+      "testsPassed": 24,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-04",
+      "passRate": 0.97,
+      "avgLatencyMs": 980,
+      "testsRun": 45,
+      "testsPassed": 44,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-04",
+      "passRate": 0.91,
+      "avgLatencyMs": 1800,
+      "testsRun": 50,
+      "testsPassed": 45,
+      "regressions": [],
+      "trend": "declining"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-04",
+      "passRate": 0.93,
+      "avgLatencyMs": 2050,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-04",
+      "passRate": 0.93,
+      "avgLatencyMs": 1780,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-04",
+      "passRate": 0.9,
+      "avgLatencyMs": 1920,
+      "testsRun": 35,
+      "testsPassed": 31,
+      "regressions": ["large prompt decode regression"],
+      "trend": "declining"
+    },
+
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-03",
+      "passRate": 0.94,
+      "avgLatencyMs": 1120,
+      "testsRun": 50,
+      "testsPassed": 47,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-03",
+      "passRate": 0.91,
+      "avgLatencyMs": 1420,
+      "testsRun": 50,
+      "testsPassed": 45,
+      "regressions": ["task queue persistence intermittently drops"],
+      "trend": "declining"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-03",
+      "passRate": 0.98,
+      "avgLatencyMs": 1220,
+      "testsRun": 50,
+      "testsPassed": 49,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-03",
+      "passRate": 0.94,
+      "avgLatencyMs": 930,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-03",
+      "passRate": 0.95,
+      "avgLatencyMs": 1460,
+      "testsRun": 50,
+      "testsPassed": 48,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-03",
+      "passRate": 0.97,
+      "avgLatencyMs": 900,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-03",
+      "passRate": 0.95,
+      "avgLatencyMs": 1040,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-03",
+      "passRate": 0.96,
+      "avgLatencyMs": 1980,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-03",
+      "passRate": 0.94,
+      "avgLatencyMs": 1500,
+      "testsRun": 60,
+      "testsPassed": 56,
+      "regressions": [],
+      "trend": "declining"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-03",
+      "passRate": 0.96,
+      "avgLatencyMs": 640,
+      "testsRun": 25,
+      "testsPassed": 24,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-03",
+      "passRate": 0.98,
+      "avgLatencyMs": 950,
+      "testsRun": 45,
+      "testsPassed": 44,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-03",
+      "passRate": 0.92,
+      "avgLatencyMs": 1750,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-03",
+      "passRate": 0.94,
+      "avgLatencyMs": 2000,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "improving"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-03",
+      "passRate": 0.92,
+      "avgLatencyMs": 1820,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-03",
+      "passRate": 0.92,
+      "avgLatencyMs": 1880,
+      "testsRun": 35,
+      "testsPassed": 32,
+      "regressions": [],
+      "trend": "stable"
+    },
+
+    {
+      "agentId": "agent-memory-kit",
+      "date": "2026-02-02",
+      "passRate": 0.92,
+      "avgLatencyMs": 1200,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-autonomy-kit",
+      "date": "2026-02-02",
+      "passRate": 0.9,
+      "avgLatencyMs": 1460,
+      "testsRun": 50,
+      "testsPassed": 45,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-team-kit",
+      "date": "2026-02-02",
+      "passRate": 0.97,
+      "avgLatencyMs": 1260,
+      "testsRun": 50,
+      "testsPassed": 49,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-identity-kit",
+      "date": "2026-02-02",
+      "passRate": 0.93,
+      "avgLatencyMs": 960,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "agent-bridge-kit",
+      "date": "2026-02-02",
+      "passRate": 0.93,
+      "avgLatencyMs": 1520,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "spotify-player",
+      "date": "2026-02-02",
+      "passRate": 0.96,
+      "avgLatencyMs": 920,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "obsidian",
+      "date": "2026-02-02",
+      "passRate": 0.94,
+      "avgLatencyMs": 1080,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "gog-google-workspace",
+      "date": "2026-02-02",
+      "passRate": 0.96,
+      "avgLatencyMs": 1960,
+      "testsRun": 30,
+      "testsPassed": 29,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "coding-agent",
+      "date": "2026-02-02",
+      "passRate": 0.95,
+      "avgLatencyMs": 1460,
+      "testsRun": 60,
+      "testsPassed": 57,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "weather",
+      "date": "2026-02-02",
+      "passRate": 0.96,
+      "avgLatencyMs": 650,
+      "testsRun": 25,
+      "testsPassed": 24,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "github-skill",
+      "date": "2026-02-02",
+      "passRate": 0.97,
+      "avgLatencyMs": 990,
+      "testsRun": 45,
+      "testsPassed": 44,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "summarize",
+      "date": "2026-02-02",
+      "passRate": 0.92,
+      "avgLatencyMs": 1760,
+      "testsRun": 50,
+      "testsPassed": 46,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "bird-twitter",
+      "date": "2026-02-02",
+      "passRate": 0.95,
+      "avgLatencyMs": 1980,
+      "testsRun": 40,
+      "testsPassed": 38,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "notion-skill",
+      "date": "2026-02-02",
+      "passRate": 0.92,
+      "avgLatencyMs": 1840,
+      "testsRun": 40,
+      "testsPassed": 37,
+      "regressions": [],
+      "trend": "stable"
+    },
+    {
+      "agentId": "nano-banana-pro",
+      "date": "2026-02-02",
+      "passRate": 0.91,
+      "avgLatencyMs": 1940,
+      "testsRun": 35,
+      "testsPassed": 32,
+      "regressions": [],
+      "trend": "stable"
+    }
+  ]
+}

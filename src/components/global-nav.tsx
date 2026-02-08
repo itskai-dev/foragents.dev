@@ -7,11 +7,13 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { href: "/skills", label: "Skills" },
   { href: "/trending", label: "Trending" },
+  { href: "/leaderboard", label: "Leaderboard" },
   { href: "/mcp", label: "MCP" },
   { href: "/requests", label: "Requests" },
   { href: "/getting-started", label: "Get Started" },
   { href: "/search", label: "Search" },
   { href: "/guides", label: "Docs" },
+  { href: "/changelog", label: "Changelog" },
   { href: "/whats-new", label: "What's New" },
 ];
 

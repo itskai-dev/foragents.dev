@@ -14,7 +14,10 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { InstallCount } from "@/components/InstallCount";
 import { SkillPageClient } from "@/components/skill-page-client";
 import { getCollectionsForSkill } from "@/lib/skillCollections";
+import { RunInReflecttButton } from "@/components/RunInReflecttButton";
 import Link from "next/link";
+import { ReliabilityScorecard } from "@/components/reliability-scorecard";
+import { aggregateScorecards, readCanaryScorecards } from "@/lib/server/canaryScorecardStore";
 
 // Generate static paths for all skills
 export function generateStaticParams() {
@@ -66,6 +69,15 @@ export default async function SkillPage({
   if (!skill) notFound();
 
   const inCollections = await getCollectionsForSkill(skill.slug);
+
+  const allScorecards = await readCanaryScorecards();
+  const latestDateForSkill = allScorecards
+    .filter((s) => s.agentId === skill.slug)
+    .reduce<string | null>((max, s) => (max && max > s.date ? max : s.date), null);
+
+  const latestScorecard = latestDateForSkill
+    ? aggregateScorecards(skill.slug, allScorecards, latestDateForSkill, latestDateForSkill)
+    : null;
 
   const allSkills = allSkillsList.filter((s) => s.slug !== slug);
 
@@ -163,6 +175,12 @@ export default async function SkillPage({
           ))}
         </div>
 
+        {latestScorecard ? (
+          <section id="reliability" className="mb-8">
+            <ReliabilityScorecard scorecard={latestScorecard} skillHref={`/skills/${skill.slug}`} />
+          </section>
+        ) : null}
+
         {/* Share / copy */}
         <section className="mb-8">
           <SkillShareActions skillName={skill.name} slug={skill.slug} />
@@ -226,7 +244,10 @@ export default async function SkillPage({
 
         {/* Install */}
         <section className="mb-8">
-          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-3">Install</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-3">
+            <h2 className="text-lg font-semibold text-[#F8FAFC]">Install</h2>
+            <RunInReflecttButton skillSlug={skill.slug} name={skill.name} size="sm" />
+          </div>
           <div className="relative group">
             <pre className="bg-black/40 border border-white/10 rounded-lg p-4 overflow-x-auto">
               <code className="text-sm text-green font-mono">

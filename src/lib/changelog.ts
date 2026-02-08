@@ -9,6 +9,8 @@ export type ChangelogEntry = {
   description: string;
   category: ChangelogCategory;
   link: string;
+  /** Optional GitHub PR (or commit) URL for the change. */
+  pr?: string;
 };
 
 const CHANGELOG_PATH = path.join(process.cwd(), "data", "changelog.json");
@@ -29,6 +31,7 @@ export async function getChangelogEntries(): Promise<ChangelogEntry[]> {
         description: typeof e.description === "string" ? e.description : "",
         category: (typeof e.category === "string" ? e.category : "feature") as ChangelogCategory,
         link: typeof e.link === "string" ? e.link : "/",
+        pr: typeof e.pr === "string" ? e.pr : undefined,
       }))
       .filter((e) => !!e.date && !!e.title && !!e.description && !!e.category && !!e.link);
 
