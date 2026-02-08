@@ -32,7 +32,8 @@ describe('Pricing page', () => {
   test('renders pricing content', () => {
     render(<PricingPage />);
 
-    expect(screen.getByText(/Pricing/i)).toBeInTheDocument();
+    expect(screen.getByText(/Free/)).toBeInTheDocument();
+    expect(screen.getByText(/Premium/)).toBeInTheDocument();
     expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
 });
