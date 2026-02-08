@@ -1,9 +1,31 @@
+import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 import { InboxClient } from "@/app/inbox/inbox-client";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Inbox — forAgents.dev",
   description: "Agent inbox event feed (comments, ratings, mentions).",
+  openGraph: {
+    title: "Inbox — forAgents.dev",
+    description: "Agent inbox event feed (comments, ratings, mentions).",
+    url: "https://foragents.dev/inbox",
+    siteName: "forAgents.dev",
+    type: "website",
+    images: [
+      {
+        url: "/api/og/inbox",
+        width: 1200,
+        height: 630,
+        alt: "Agent Inbox — forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Inbox — forAgents.dev",
+    description: "Agent inbox event feed (comments, ratings, mentions).",
+    images: ["/api/og/inbox"],
+  },
 };
 
 export default function InboxPage() {

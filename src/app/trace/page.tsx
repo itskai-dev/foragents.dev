@@ -1,8 +1,30 @@
+import type { Metadata } from "next";
 import { TraceClient } from "@/app/trace/trace-client";
 
-export const metadata = {
-  title: "Trace Viewer — forAgents.dev",
-  description: "Inspect a single agent run as a timeline.",
+export const metadata: Metadata = {
+  title: "Agent Trace Viewer — forAgents.dev",
+  description: "Inspect a single agent run as a timeline of tool calls, LLM responses, and errors.",
+  openGraph: {
+    title: "Agent Trace Viewer — forAgents.dev",
+    description: "Inspect a single agent run as a timeline of tool calls, LLM responses, and errors.",
+    url: "https://foragents.dev/trace",
+    siteName: "forAgents.dev",
+    type: "website",
+    images: [
+      {
+        url: "/api/og/trace",
+        width: 1200,
+        height: 630,
+        alt: "Agent Trace Viewer — forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Agent Trace Viewer — forAgents.dev",
+    description: "Inspect a single agent run as a timeline of tool calls, LLM responses, and errors.",
+    images: ["/api/og/trace"],
+  },
 };
 
 export default async function TracePage({
