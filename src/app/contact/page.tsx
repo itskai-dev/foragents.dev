@@ -9,6 +9,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail, Github, Twitter } from "lucide-react";
 
 export default function ContactPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    name: "Contact — forAgents.dev",
+    description: "Get in touch with the forAgents.dev team. Send us a message or reach out via email, GitHub, or Twitter.",
+    url: "https://foragents.dev/contact"
+  };
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,6 +43,11 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
       {/* Header */}
       <header className="border-b border-white/5 backdrop-blur-sm sticky top-0 z-50 bg-background/80">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
