@@ -25,6 +25,7 @@ const moreLinks = [
   { href: "/requests", label: "Request a Kit 💡" },
   { href: "/verify", label: "Verify Agent ✓" },
   { href: "/sandbox", label: "Sandbox" },
+  { href: "/agent-playground", label: "Agent Playground" },
   { href: "/onboarding", label: "Getting Started" },
   { href: "/guides", label: "Guides" },
   { href: "/submit", label: "Submit" },
