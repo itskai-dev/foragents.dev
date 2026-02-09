@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-export type ChangelogCategory = "feature" | "improvement" | "fix";
+export type ChangelogCategory = "feature" | "improvement" | "fix" | "docs" | "refactor" | "test";
 
 export type ChangelogEntry = {
   date: string; // YYYY-MM-DD
@@ -13,9 +13,44 @@ export type ChangelogEntry = {
   pr?: string;
 };
 
+export type GeneratedChangelogEntry = {
+  date: string;
+  title: string;
+  prNumber: number;
+  prUrl: string;
+  category: Exclude<ChangelogCategory, "improvement">;
+  author: string;
+};
+
 const CHANGELOG_PATH = path.join(process.cwd(), "data", "changelog.json");
+const GENERATED_CHANGELOG_PATH = path.join(process.cwd(), "src", "data", "changelog-generated.json");
+
+/**
+ * Convert generated entry to standard changelog entry
+ */
+function convertGeneratedEntry(entry: GeneratedChangelogEntry): ChangelogEntry {
+  return {
+    date: entry.date,
+    title: entry.title,
+    description: `By @${entry.author}`,
+    category: entry.category,
+    link: entry.prUrl,
+    pr: entry.prUrl,
+  };
+}
 
 export async function getChangelogEntries(): Promise<ChangelogEntry[]> {
+  const manualEntries = await getManualChangelogEntries();
+  const generatedEntries = await getGeneratedChangelogEntries();
+
+  // Merge and sort by date
+  const allEntries = [...manualEntries, ...generatedEntries];
+  return allEntries.sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+}
+
+async function getManualChangelogEntries(): Promise<ChangelogEntry[]> {
   try {
     const raw = await fs.readFile(CHANGELOG_PATH, "utf-8");
     const parsed = JSON.parse(raw) as unknown;
@@ -35,15 +70,28 @@ export async function getChangelogEntries(): Promise<ChangelogEntry[]> {
       }))
       .filter((e) => !!e.date && !!e.title && !!e.description && !!e.category && !!e.link);
 
-    // Sort newest first (stable within same date).
-    return entries.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    return entries;
+  } catch {
+    return [];
+  }
+}
+
+async function getGeneratedChangelogEntries(): Promise<ChangelogEntry[]> {
+  try {
+    const raw = await fs.readFile(GENERATED_CHANGELOG_PATH, "utf-8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+
+    return parsed
+      .filter((e) => e && typeof e === "object")
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((e: any) => convertGeneratedEntry(e as GeneratedChangelogEntry))
+      .filter((e) => !!e.date && !!e.title);
   } catch {
     return [];
   }
 }
 
 export function isChangelogCategory(value: string | null): value is ChangelogCategory {
-  return value === "feature" || value === "improvement" || value === "fix";
+  return value === "feature" || value === "improvement" || value === "fix" || value === "docs" || value === "refactor" || value === "test";
 }
