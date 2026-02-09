@@ -1,0 +1,470 @@
+{
+  "layers": [
+    {
+      "id": "episodic",
+      "name": "Episodic Memory",
+      "summary": "Stores what happened in past interactions: user requests, tool calls, outcomes, and timelines.",
+      "question": "What happened?"
+    },
+    {
+      "id": "semantic",
+      "name": "Semantic Memory",
+      "summary": "Stores durable facts, entities, and concepts the agent should know across sessions.",
+      "question": "What do I know?"
+    },
+    {
+      "id": "procedural",
+      "name": "Procedural Memory",
+      "summary": "Stores how the agent performs tasks: workflows, heuristics, and execution playbooks.",
+      "question": "How do I do things?"
+    }
+  ],
+  "patterns": [
+    {
+      "slug": "session-memory",
+      "name": "Session Memory",
+      "description": "Keep short-lived context in the active runtime so the agent can stay coherent during a single conversation.",
+      "complexity": "simple",
+      "bestFor": "Multi-turn conversations and immediate context tracking",
+      "storageType": "In-memory state (RAM, context object)",
+      "comparison": {
+        "persistence": "low",
+        "search": "low",
+        "cost": "low",
+        "complexity": "low",
+        "scalability": "low"
+      },
+      "architectureFlow": [
+        "User message arrives in orchestrator",
+        "Agent appends turn to session context buffer",
+        "Planner reads recent turns + tool outcomes",
+        "Responder generates answer using latest context",
+        "Session buffer expires when conversation ends"
+      ],
+      "implementationGuide": {
+        "summary": "Use a bounded ring buffer with token-aware trimming.",
+        "steps": [
+          "Create a per-session state object keyed by sessionId",
+          "Append each user/assistant/tool turn",
+          "Trim history to max tokens or max turns",
+          "Inject trimmed context into prompt builder"
+        ],
+        "codeExample": {
+          "language": "typescript",
+          "code": "type Turn = { role: 'user' | 'assistant' | 'tool'; content: string; ts: number };\n\nconst sessions = new Map<string, Turn[]>();\nconst MAX_TURNS = 20;\n\nexport function appendTurn(sessionId: string, turn: Turn) {\n  const current = sessions.get(sessionId) ?? [];\n  const next = [...current, turn].slice(-MAX_TURNS);\n  sessions.set(sessionId, next);\n}\n\nexport function getContext(sessionId: string) {\n  return sessions.get(sessionId) ?? [];\n}"
+        }
+      },
+      "pros": [
+        "Fast and easy to implement",
+        "No external infrastructure required",
+        "Excellent for conversational continuity"
+      ],
+      "cons": [
+        "Lost on restart",
+        "Limited retrieval/search capabilities",
+        "Not suitable for long-term personalization"
+      ],
+      "whenToUse": [
+        "Chat assistants",
+        "Short workflows completed in one session",
+        "Prototype agents"
+      ],
+      "whenNotToUse": [
+        "Cross-session personalization",
+        "Large knowledge retrieval",
+        "Compliance-heavy audit retention"
+      ],
+      "realWorldExamples": [
+        "OpenAI Agents SDK conversation state",
+        "LangGraph short-term memory in thread state"
+      ]
+    },
+    {
+      "slug": "persistent-files",
+      "name": "Persistent Files",
+      "description": "Store durable memory in JSON, Markdown, or SQLite files to preserve state across sessions.",
+      "complexity": "simple",
+      "bestFor": "User preferences, lightweight profiles, and durable logs",
+      "storageType": "File system (JSON/MD/SQLite)",
+      "comparison": {
+        "persistence": "high",
+        "search": "medium",
+        "cost": "low",
+        "complexity": "low",
+        "scalability": "medium"
+      },
+      "architectureFlow": [
+        "Agent receives new fact or preference",
+        "Serializer validates and normalizes payload",
+        "Writer persists to memory file or SQLite table",
+        "Future sessions load memory during bootstrap",
+        "Optional compaction removes stale entries"
+      ],
+      "implementationGuide": {
+        "summary": "Model memory as typed records and version files.",
+        "steps": [
+          "Define a schema for user memory",
+          "Load file at startup with safe fallback",
+          "Write updates atomically (temp + rename)",
+          "Add migration/version field for format changes"
+        ],
+        "codeExample": {
+          "language": "typescript",
+          "code": "import { promises as fs } from 'node:fs';\n\ninterface UserPrefs {\n  userId: string;\n  timezone?: string;\n  style?: 'concise' | 'detailed';\n}\n\nexport async function savePrefs(prefs: UserPrefs) {\n  const file = `./memory/users/${prefs.userId}.json`;\n  await fs.mkdir('./memory/users', { recursive: true });\n  await fs.writeFile(file, JSON.stringify(prefs, null, 2), 'utf8');\n}\n\nexport async function loadPrefs(userId: string): Promise<UserPrefs | null> {\n  try {\n    const raw = await fs.readFile(`./memory/users/${userId}.json`, 'utf8');\n    return JSON.parse(raw) as UserPrefs;\n  } catch {\n    return null;\n  }\n}"
+        }
+      },
+      "pros": [
+        "Durable and transparent",
+        "Simple debugging and backups",
+        "Low operating cost"
+      ],
+      "cons": [
+        "Limited concurrent writes",
+        "Search degrades with volume",
+        "Needs data hygiene discipline"
+      ],
+      "whenToUse": [
+        "Small to medium agent deployments",
+        "Preference storage and audit trails",
+        "Bootstrap stage before DB infra"
+      ],
+      "whenNotToUse": [
+        "High-throughput multi-tenant systems",
+        "Large semantic search workloads",
+        "Strict consistency across many workers"
+      ],
+      "realWorldExamples": [
+        "AutoGPT state files",
+        "Custom assistants using local JSON memory"
+      ]
+    },
+    {
+      "slug": "vector-store",
+      "name": "Vector Store",
+      "description": "Embed text and retrieve semantically similar memories for recall beyond keyword matching.",
+      "complexity": "moderate",
+      "bestFor": "Knowledge retrieval and long context recall",
+      "storageType": "Embedding DB (Pinecone, Weaviate, pgvector, Qdrant)",
+      "comparison": {
+        "persistence": "high",
+        "search": "high",
+        "cost": "medium",
+        "complexity": "medium",
+        "scalability": "high"
+      },
+      "architectureFlow": [
+        "Ingestion pipeline chunks source documents",
+        "Embedding model converts chunks to vectors",
+        "Vector DB indexes vectors + metadata",
+        "At query time, retrieve top-k nearest chunks",
+        "Re-rank and inject context into LLM prompt"
+      ],
+      "implementationGuide": {
+        "summary": "Use metadata filters and re-ranking to improve precision.",
+        "steps": [
+          "Chunk content with overlap",
+          "Embed chunks with a stable model",
+          "Store vectors with metadata (source, userId, timestamp)",
+          "Query by vector similarity + metadata filters",
+          "Optional re-rank with cross-encoder before generation"
+        ],
+        "codeExample": {
+          "language": "typescript",
+          "code": "const queryEmbedding = await embed(query);\n\nconst matches = await vectorDb.search({\n  vector: queryEmbedding,\n  topK: 5,\n  filter: { userId },\n});\n\nconst context = matches.map((m) => m.metadata.text).join('\\n---\\n');\nconst prompt = `Answer using only the context below:\\n${context}`;"
+        }
+      },
+      "pros": [
+        "Strong semantic retrieval",
+        "Scales to large corpora",
+        "Supports retrieval-augmented generation"
+      ],
+      "cons": [
+        "Embedding and infra costs",
+        "Requires tuning chunking/retrieval",
+        "Potential recall drift without evaluation"
+      ],
+      "whenToUse": [
+        "Documentation assistants",
+        "Large memory archives",
+        "Cross-session knowledge recall"
+      ],
+      "whenNotToUse": [
+        "Tiny memory sets with exact key lookups",
+        "Ultra-low-latency local-only setups",
+        "Cases requiring strict relational guarantees"
+      ],
+      "realWorldExamples": [
+        "LangChain RetrievalQA with vector DB backends",
+        "LlamaIndex vector index retrievers"
+      ]
+    },
+    {
+      "slug": "knowledge-graph",
+      "name": "Knowledge Graph",
+      "description": "Represent entities and relationships so agents can reason over connected facts and provenance.",
+      "complexity": "advanced",
+      "bestFor": "Entity-centric memory and multi-hop reasoning",
+      "storageType": "Graph DB (Neo4j, Neptune, Memgraph)",
+      "comparison": {
+        "persistence": "high",
+        "search": "high",
+        "cost": "high",
+        "complexity": "high",
+        "scalability": "high"
+      },
+      "architectureFlow": [
+        "Extractor identifies entities and relationships from interactions",
+        "Normalizer resolves aliases and deduplicates nodes",
+        "Graph store persists nodes/edges with timestamps",
+        "Query engine traverses graph paths for relevant context",
+        "Reasoner composes responses with cited relationships"
+      ],
+      "implementationGuide": {
+        "summary": "Use schema constraints and entity resolution to avoid graph sprawl.",
+        "steps": [
+          "Define core node and edge types",
+          "Build ingestion that extracts entities from text",
+          "Apply entity resolution before upsert",
+          "Query using graph traversals for context retrieval",
+          "Periodically prune low-confidence or stale edges"
+        ],
+        "codeExample": {
+          "language": "typescript",
+          "code": "await neo4j.run(\n  `MERGE (u:User {id: $userId})\n   MERGE (p:Preference {name: $pref})\n   MERGE (u)-[r:PREFERS]->(p)\n   SET r.updatedAt = datetime()`\n, { userId, pref: 'concise responses' });\n\nconst result = await neo4j.run(\n  `MATCH (u:User {id: $userId})-[:PREFERS]->(p) RETURN p.name AS pref`,\n  { userId }\n);"
+        }
+      },
+      "pros": [
+        "Excellent relationship modeling",
+        "Supports explainable memory paths",
+        "Powerful for complex domains"
+      ],
+      "cons": [
+        "Higher implementation complexity",
+        "Operational overhead",
+        "Can over-engineer simple use cases"
+      ],
+      "whenToUse": [
+        "Enterprise knowledge systems",
+        "Complex customer/account relationships",
+        "Investigative and compliance workflows"
+      ],
+      "whenNotToUse": [
+        "Simple chat bots",
+        "Low-volume personal assistants",
+        "Teams without graph expertise"
+      ],
+      "realWorldExamples": [
+        "Microsoft GraphRAG-style pipelines",
+        "Neo4j-backed enterprise copilots"
+      ]
+    },
+    {
+      "slug": "conversation-summarization",
+      "name": "Conversation Summarization",
+      "description": "Compress long dialogues into compact summaries so context remains manageable and affordable.",
+      "complexity": "moderate",
+      "bestFor": "Long-running chats with token limits",
+      "storageType": "Summary documents in DB/files + optional vector index",
+      "comparison": {
+        "persistence": "high",
+        "search": "medium",
+        "cost": "low",
+        "complexity": "medium",
+        "scalability": "high"
+      },
+      "architectureFlow": [
+        "Conversation reaches threshold (turns/tokens)",
+        "Summarizer condenses prior turns into structured summary",
+        "Summary persisted with recency metadata",
+        "Prompt builder uses summary + recent raw turns",
+        "Periodic refresh keeps summary accurate"
+      ],
+      "implementationGuide": {
+        "summary": "Prefer structured summaries: goals, decisions, unresolved items.",
+        "steps": [
+          "Define summary schema (facts, goals, blockers)",
+          "Trigger summarization every N turns",
+          "Store summaries with version and timestamp",
+          "Inject only latest summary plus recent messages"
+        ],
+        "codeExample": {
+          "language": "typescript",
+          "code": "if (turnCount % 12 === 0) {\n  const summary = await llm.summarize({\n    transcript: fullTranscript,\n    format: 'facts, decisions, unresolved',\n  });\n\n  await memoryStore.saveSummary(sessionId, summary);\n}\n\nconst promptContext = [await memoryStore.getLatestSummary(sessionId), ...recentTurns]\n  .filter(Boolean)\n  .join('\\n');"
+        }
+      },
+      "pros": [
+        "Reduces token usage",
+        "Improves long-context stability",
+        "Simple way to preserve continuity"
+      ],
+      "cons": [
+        "Risk of summary hallucinations",
+        "Information can be lost during compression",
+        "Needs periodic quality checks"
+      ],
+      "whenToUse": [
+        "Support assistants with long conversations",
+        "Budget-constrained deployments",
+        "Agents with strict context windows"
+      ],
+      "whenNotToUse": [
+        "Scenarios needing exact transcript fidelity",
+        "Highly legal/forensic records without audit trail",
+        "Very short interactions"
+      ],
+      "realWorldExamples": [
+        "LangChain ConversationSummaryMemory",
+        "Custom support bots with rolling summaries"
+      ]
+    },
+    {
+      "slug": "tool-result-caching",
+      "name": "Tool Result Caching",
+      "description": "Cache deterministic tool outputs to avoid repeated expensive operations and improve response time.",
+      "complexity": "moderate",
+      "bestFor": "API-heavy agents and repeated lookups",
+      "storageType": "KV cache (Redis, in-memory LRU, edge cache)",
+      "comparison": {
+        "persistence": "medium",
+        "search": "low",
+        "cost": "low",
+        "complexity": "medium",
+        "scalability": "high"
+      },
+      "architectureFlow": [
+        "Agent prepares normalized tool request",
+        "Cache key generated from tool + params",
+        "Cache lookup checks fresh entry",
+        "On miss: execute tool, store result with TTL",
+        "On hit: return cached value and skip tool call"
+      ],
+      "implementationGuide": {
+        "summary": "Cache only idempotent calls and include TTL + invalidation.",
+        "steps": [
+          "Define stable key normalization",
+          "Add read-through cache wrapper around tool",
+          "Set TTL by data volatility",
+          "Invalidate on write events or webhook updates"
+        ],
+        "codeExample": {
+          "language": "typescript",
+          "code": "const key = `weather:${city.toLowerCase()}`;\nconst cached = await redis.get(key);\nif (cached) return JSON.parse(cached);\n\nconst fresh = await weatherApi.getForecast(city);\nawait redis.set(key, JSON.stringify(fresh), { EX: 600 });\nreturn fresh;"
+        }
+      },
+      "pros": [
+        "Lower latency and API spend",
+        "Reduces third-party rate-limit pressure",
+        "Easy to apply incrementally"
+      ],
+      "cons": [
+        "Stale data risk",
+        "Cache invalidation complexity",
+        "Limited value for highly dynamic data"
+      ],
+      "whenToUse": [
+        "Frequently repeated tool calls",
+        "Read-heavy workflows",
+        "Cost-sensitive production agents"
+      ],
+      "whenNotToUse": [
+        "Real-time mission-critical freshness",
+        "Sensitive results requiring immediate revocation",
+        "Unique one-off tool invocations"
+      ],
+      "realWorldExamples": [
+        "Helicone response caching",
+        "Custom Redis wrappers in function-calling agents"
+      ]
+    }
+  ],
+  "recipes": [
+    {
+      "slug": "remember-user-preferences",
+      "title": "Remember user preferences",
+      "problem": "The agent forgets tone, format, and user defaults after each session.",
+      "solutionPattern": "Persistent Files",
+      "codeSnippet": "const prefs = await loadPrefs(userId);\nif (prefs?.style === 'concise') prompt = `Respond concisely.\\n${prompt}`;\nawait savePrefs({ userId, style: 'concise', timezone: 'America/Vancouver' });",
+      "tips": [
+        "Store explicit user consent for saved preferences",
+        "Separate mutable preferences from immutable profile data"
+      ]
+    },
+    {
+      "slug": "track-conversation-context",
+      "title": "Track conversation context",
+      "problem": "Long chats lose relevant earlier details.",
+      "solutionPattern": "Session Memory + Conversation Summarization",
+      "codeSnippet": "appendTurn(sessionId, { role: 'user', content: message, ts: Date.now() });\nif (shouldSummarize(sessionId)) await refreshSummary(sessionId);\nconst context = await buildPromptContext(sessionId);",
+      "tips": [
+        "Keep recent raw turns plus one structured summary",
+        "Add confidence score to summaries"
+      ]
+    },
+    {
+      "slug": "learn-from-mistakes",
+      "title": "Learn from mistakes",
+      "problem": "The agent repeats failed tool strategies.",
+      "solutionPattern": "Procedural Memory in Persistent Files",
+      "codeSnippet": "await appendRunbook({\n  trigger: 'tool_timeout',\n  fix: 'retry_with_backoff_then_fallback',\n  evidence: incidentId\n});\nplanner.injectRunbooks(await loadRunbooks());",
+      "tips": [
+        "Only promote lessons after validation",
+        "Record both failure mode and successful mitigation"
+      ]
+    },
+    {
+      "slug": "build-a-knowledge-base",
+      "title": "Build a knowledge base",
+      "problem": "The agent needs to answer from large internal docs.",
+      "solutionPattern": "Vector Store",
+      "codeSnippet": "const chunks = chunkMarkdown(docs);\nconst embeddings = await embedMany(chunks);\nawait vectorDb.upsert(chunks.map((text, i) => ({ text, vector: embeddings[i] })));",
+      "tips": [
+        "Track source/version metadata for every chunk",
+        "Evaluate retrieval quality with benchmark queries"
+      ]
+    },
+    {
+      "slug": "cache-expensive-operations",
+      "title": "Cache expensive operations",
+      "problem": "Frequent repeated API calls increase latency and costs.",
+      "solutionPattern": "Tool Result Caching",
+      "codeSnippet": "return withCache(`price:${sku}`, 300, async () => {\n  return await pricingApi.lookup(sku);\n});",
+      "tips": [
+        "Cache only deterministic or safely stale operations",
+        "Use shorter TTL for volatile domains"
+      ]
+    },
+    {
+      "slug": "cross-session-continuity",
+      "title": "Cross-session continuity",
+      "problem": "Users expect the agent to pick up where they left off.",
+      "solutionPattern": "Persistent Files + Summaries",
+      "codeSnippet": "const summary = await memoryStore.getLatestSummary(userId);\nconst prefs = await loadPrefs(userId);\nconst system = renderSystemPrompt({ summary, prefs });",
+      "tips": [
+        "Persist summaries with timestamps",
+        "Offer users controls to reset memory"
+      ]
+    },
+    {
+      "slug": "team-shared-memory",
+      "title": "Team shared memory",
+      "problem": "Multiple agents need shared context without duplication.",
+      "solutionPattern": "Knowledge Graph + Vector Store",
+      "codeSnippet": "await graph.upsertTaskRelation({ projectId, ownerAgent: 'planner', status: 'blocked' });\nconst refs = await vectorDb.search({ query: 'project blockers', filter: { projectId } });",
+      "tips": [
+        "Use access control metadata by team/project",
+        "Publish write events for downstream sync"
+      ]
+    },
+    {
+      "slug": "memory-garbage-collection",
+      "title": "Memory garbage collection",
+      "problem": "Memory stores accumulate stale, low-value, or duplicate data.",
+      "solutionPattern": "Lifecycle policies across all patterns",
+      "codeSnippet": "await memoryStore.deleteWhere({\n  lastAccessedBefore: daysAgo(90),\n  confidenceBelow: 0.4\n});\nawait memoryStore.compact();",
+      "tips": [
+        "Define retention tiers by memory type",
+        "Log deletions for auditability"
+      ]
+    }
+  ]
+}
