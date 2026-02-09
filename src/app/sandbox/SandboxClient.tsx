@@ -329,7 +329,7 @@ export default function SandboxClient() {
 
               {!validation && endpointTests.length === 0 ? (
                 <div className="text-sm text-muted-foreground">
-                  Click "Validate" to check your configuration or "Test Endpoints" to verify URLs.
+                  Click &ldquo;Validate&rdquo; to check your configuration or &ldquo;Test Endpoints&rdquo; to verify URLs.
                 </div>
               ) : null}
 

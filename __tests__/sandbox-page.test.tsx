@@ -78,7 +78,8 @@ describe('Sandbox page', () => {
     fireEvent.click(validateButton);
 
     // Should show validation error
-    expect(screen.getByText(/Invalid JSON/i)).toBeInTheDocument();
+    expect(screen.getByText(/Invalid Configuration/i)).toBeInTheDocument();
+    expect(screen.getByText(/Expected property name/i)).toBeInTheDocument();
   });
 
   test('validates required fields', () => {
@@ -94,6 +95,8 @@ describe('Sandbox page', () => {
     // Should show missing field errors
     expect(screen.getByText(/Missing required field: version/i)).toBeInTheDocument();
     expect(screen.getByText(/Missing required field: description/i)).toBeInTheDocument();
+    // Check that errors section exists
+    expect(screen.getByText(/Invalid Configuration/i)).toBeInTheDocument();
   });
 
   test('shows success for valid configuration', () => {
@@ -112,8 +115,8 @@ describe('Sandbox page', () => {
     fireEvent.change(textarea, { target: { value: validConfig } });
     fireEvent.click(validateButton);
 
-    // Should show success message
-    expect(screen.getByText(/Valid Configuration|All required fields/i)).toBeInTheDocument();
+    // Should show valid with warnings (since no capabilities/endpoints)
+    expect(screen.getByText(/Valid with Warnings/i)).toBeInTheDocument();
   });
 
   test('loads template when selected', () => {
