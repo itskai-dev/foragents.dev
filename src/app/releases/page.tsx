@@ -1,5 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { Rss, AlertTriangle, FileText } from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import releasesData from '@/data/releases.json';
 
 export const metadata: Metadata = {
   title: 'Release Notes | forAgents',
@@ -13,139 +23,187 @@ export const metadata: Metadata = {
   },
 };
 
+interface ReleaseChanges {
+  added: string[];
+  changed: string[];
+  fixed: string[];
+  removed: string[];
+}
+
 interface Release {
   version: string;
   date: string;
-  title: string;
-  changes: string[];
-  contributors: number;
+  summary: string;
+  breaking: boolean;
+  migrationGuide?: string;
+  changes: ReleaseChanges;
 }
 
-const releases: Release[] = [
-  {
-    version: 'v1.0.0',
-    date: 'February 8, 2026',
-    title: 'The Big Launch',
-    contributors: 12,
-    changes: [
-      '30+ pages of comprehensive content',
-      'Skills directory with advanced filtering and search',
-      'Real-time news feed for AI agent developments',
-      'Creator profiles showcasing skill authors',
-      'Advanced search functionality',
-      'Compare skills side-by-side',
-      'Trending skills dashboard',
-      'Curated collections',
-      'Blog platform',
-      'Comprehensive FAQ section',
-      'User testimonials',
-      'Getting started guides',
-      'Pricing page',
-      'About page',
-      'Contact page',
-      'Privacy policy',
-      'Terms of service',
-      'Public roadmap',
-      'Community hub',
-      'Integrations directory',
-      'Skills showcase',
-      'API playground',
-      'Status page',
-      'Open source repository links',
-      'Notification preferences',
-      'Changelog tracking',
-    ],
-  },
-  {
-    version: 'v0.9.0',
-    date: 'February 7, 2026',
-    title: 'Feature Sprint',
-    contributors: 8,
-    changes: [
-      'Loading skeletons for improved perceived performance',
-      'Breadcrumb navigation throughout the site',
-      'Keyboard shortcuts for power users',
-      'JSON-LD structured data for better SEO',
-      'Complete SEO sitemap',
-      'Newsletter signup functionality',
-    ],
-  },
-  {
-    version: 'v0.8.0',
-    date: 'February 6, 2026',
-    title: 'Foundation',
-    contributors: 5,
-    changes: [
-      'Initial skills directory implementation',
-      'Homepage design and layout',
-      'Basic pages and routing structure',
-      'Dark theme foundation',
-      'Component library setup',
-    ],
-  },
-];
+const releases: Release[] = releasesData;
+
+const ChangeSection = ({ title, items, icon }: { title: string; items: string[]; icon: string }) => {
+  if (items.length === 0) return null;
+
+  const iconMap: Record<string, string> = {
+    added: '✨',
+    changed: '🔄',
+    fixed: '🐛',
+    removed: '🗑️',
+  };
+
+  return (
+    <div className="mb-6 last:mb-0">
+      <h4 className="text-sm font-semibold text-white/80 mb-3 flex items-center gap-2">
+        <span className="text-lg">{iconMap[icon]}</span>
+        {title}
+      </h4>
+      <ul className="space-y-2">
+        {items.map((item, index) => (
+          <li key={index} className="flex items-start gap-3 text-white/70 text-sm">
+            <span className="text-[#06D6A0] mt-1 flex-shrink-0">•</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default function ReleasesPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="border-b border-white/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <h1 className="text-4xl font-bold mb-4">Release Notes</h1>
-          <p className="text-white/60 text-lg">
-            Track the evolution of forAgents.dev through our version history
-          </p>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="text-4xl font-bold mb-4">Release Notes</h1>
+              <p className="text-white/60 text-lg">
+                Track the evolution of forAgents.dev through our version history
+              </p>
+            </div>
+            <Link
+              href="/releases/rss.xml"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:border-[#06D6A0]/50 transition-colors text-sm"
+            >
+              <Rss className="w-4 h-4" />
+              RSS Feed
+            </Link>
+          </div>
         </div>
       </div>
 
-      {/* Timeline */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-[19px] top-8 bottom-8 w-px bg-white/10" />
+        <Accordion type="multiple" className="space-y-6" defaultValue={[releases[0].version]}>
+          {releases.map((release, index) => {
+            const isLatest = index === 0;
+            const changeCount = 
+              release.changes.added.length +
+              release.changes.changed.length +
+              release.changes.fixed.length +
+              release.changes.removed.length;
 
-          {/* Releases */}
-          <div className="space-y-12">
-            {releases.map((release) => (
-              <div key={release.version} className="relative pl-12">
-                {/* Timeline dot */}
-                <div className="absolute left-0 top-1 w-10 h-10 rounded-full bg-[#06D6A0] flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-[#0a0a0a]" />
-                </div>
+            return (
+              <AccordionItem
+                key={release.version}
+                value={release.version}
+                className="border-none"
+              >
+                <Card className="bg-white/5 border-white/10 hover:border-[#06D6A0]/30 transition-colors">
+                  <CardHeader className="pb-3">
+                    <AccordionTrigger className="hover:no-underline py-0">
+                      <div className="flex flex-col items-start gap-3 w-full text-left pr-4">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge 
+                            variant="outline" 
+                            className="bg-[#06D6A0]/20 text-[#06D6A0] border-[#06D6A0]/30 font-mono font-semibold"
+                          >
+                            v{release.version}
+                          </Badge>
+                          {isLatest && (
+                            <Badge 
+                              variant="outline" 
+                              className="bg-blue-500/20 text-blue-400 border-blue-500/30"
+                            >
+                              Latest
+                            </Badge>
+                          )}
+                          {release.breaking && (
+                            <Badge 
+                              variant="outline" 
+                              className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 flex items-center gap-1"
+                            >
+                              <AlertTriangle className="w-3 h-3" />
+                              Breaking Changes
+                            </Badge>
+                          )}
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold mb-1">{release.summary}</h2>
+                          <div className="flex items-center gap-3 text-sm text-white/50">
+                            <span>{new Date(release.date).toLocaleDateString('en-US', { 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}</span>
+                            <span>•</span>
+                            <span>{changeCount} change{changeCount !== 1 ? 's' : ''}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                  </CardHeader>
+                  <AccordionContent>
+                    <CardContent className="pt-0 pb-6">
+                      {release.breaking && release.migrationGuide && (
+                        <div className="mb-6 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                          <div className="flex items-start gap-3">
+                            <AlertTriangle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                            <div>
+                              <p className="text-sm text-yellow-200 mb-2">
+                                This release includes breaking changes that may require updates to your integration.
+                              </p>
+                              <Link 
+                                href={release.migrationGuide}
+                                className="inline-flex items-center gap-2 text-sm text-yellow-400 hover:text-yellow-300 underline"
+                              >
+                                <FileText className="w-4 h-4" />
+                                View Migration Guide
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      )}
 
-                {/* Release card */}
-                <div className="bg-white/5 rounded-lg p-6 border border-white/10 hover:border-[#06D6A0]/50 transition-colors">
-                  <div className="flex flex-wrap items-center gap-3 mb-3">
-                    <span className="inline-block px-3 py-1 rounded-full bg-[#06D6A0]/20 text-[#06D6A0] text-sm font-mono font-semibold">
-                      {release.version}
-                    </span>
-                    <span className="text-white/60 text-sm">{release.date}</span>
-                    <span className="text-white/40 text-sm">
-                      • {release.contributors} contributor{release.contributors !== 1 ? 's' : ''}
-                    </span>
-                  </div>
+                      <div className="space-y-6">
+                        <ChangeSection
+                          title="Added"
+                          items={release.changes.added}
+                          icon="added"
+                        />
+                        <ChangeSection
+                          title="Changed"
+                          items={release.changes.changed}
+                          icon="changed"
+                        />
+                        <ChangeSection
+                          title="Fixed"
+                          items={release.changes.fixed}
+                          icon="fixed"
+                        />
+                        <ChangeSection
+                          title="Removed"
+                          items={release.changes.removed}
+                          icon="removed"
+                        />
+                      </div>
+                    </CardContent>
+                  </AccordionContent>
+                </Card>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
 
-                  {/* Title */}
-                  <h2 className="text-2xl font-bold mb-4">{release.title}</h2>
-
-                  {/* Changes */}
-                  <ul className="space-y-2">
-                    {release.changes.map((change, changeIndex) => (
-                      <li
-                        key={changeIndex}
-                        className="flex items-start gap-3 text-white/80"
-                      >
-                        <span className="text-[#06D6A0] mt-1.5 flex-shrink-0">•</span>
-                        <span>{change}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Footer note */}
         <div className="mt-16 text-center text-white/40 text-sm">
           <p>
             More releases coming soon. Follow our{' '}

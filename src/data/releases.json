@@ -1,0 +1,175 @@
+[
+  {
+    "version": "2.4.0",
+    "date": "2026-02-08",
+    "summary": "Enhanced skill filtering and performance improvements",
+    "breaking": false,
+    "changes": {
+      "added": [
+        "Advanced filtering options for skills directory",
+        "Performance metrics dashboard for skill authors",
+        "Bulk skill import from GitHub repositories",
+        "Real-time collaboration indicators in skill editor"
+      ],
+      "changed": [
+        "Improved search algorithm with fuzzy matching",
+        "Updated UI for skill comparison view",
+        "Optimized database queries for faster page loads"
+      ],
+      "fixed": [
+        "Fixed pagination issue in skills directory",
+        "Resolved memory leak in WebSocket connections",
+        "Fixed mobile navigation overflow on small screens"
+      ],
+      "removed": []
+    }
+  },
+  {
+    "version": "2.3.1",
+    "date": "2026-02-05",
+    "summary": "Critical bug fixes and stability improvements",
+    "breaking": false,
+    "changes": {
+      "added": [],
+      "changed": [
+        "Enhanced error messages for failed skill installations",
+        "Improved loading states across all pages"
+      ],
+      "fixed": [
+        "Fixed authentication redirect loop on /settings",
+        "Resolved RSS feed XML validation errors",
+        "Fixed skill version comparison display",
+        "Corrected timezone handling in release dates"
+      ],
+      "removed": []
+    }
+  },
+  {
+    "version": "2.3.0",
+    "date": "2026-02-01",
+    "summary": "Community features and social integration",
+    "breaking": false,
+    "changes": {
+      "added": [
+        "User profiles with customizable avatars",
+        "Skill rating and review system",
+        "Community discussion forums",
+        "Social sharing for skills and collections",
+        "Email notifications for followed skills"
+      ],
+      "changed": [
+        "Redesigned homepage with featured skills section",
+        "Updated navigation structure for better discoverability"
+      ],
+      "fixed": [
+        "Fixed broken links in documentation",
+        "Resolved issue with skill tags not saving"
+      ],
+      "removed": [
+        "Deprecated legacy API v1 endpoints (use v2 instead)"
+      ]
+    }
+  },
+  {
+    "version": "2.0.0",
+    "date": "2026-01-15",
+    "summary": "Major platform overhaul with new API architecture",
+    "breaking": true,
+    "migrationGuide": "/docs/migration/v2",
+    "changes": {
+      "added": [
+        "Complete API v2 with GraphQL support",
+        "TypeScript SDK for skill development",
+        "Automated testing framework for skills",
+        "Skill versioning and rollback capabilities",
+        "Plugin system for extending platform functionality"
+      ],
+      "changed": [
+        "Completely rewritten skill execution engine",
+        "New authentication system with OAuth2 support",
+        "Redesigned admin dashboard",
+        "Updated pricing tiers and billing system"
+      ],
+      "fixed": [
+        "Major security vulnerability in skill sandboxing",
+        "Performance issues with large skill catalogs"
+      ],
+      "removed": [
+        "Legacy REST API v1 (deprecated since v1.8)",
+        "Old skill manifest format (use SKILL.json instead)",
+        "Flash-based skill previews"
+      ]
+    }
+  },
+  {
+    "version": "1.8.2",
+    "date": "2026-01-08",
+    "summary": "Final v1.x maintenance release",
+    "breaking": false,
+    "changes": {
+      "added": [
+        "Migration tool for v2.0 preparation"
+      ],
+      "changed": [
+        "Extended v1 API deprecation timeline to March 2026"
+      ],
+      "fixed": [
+        "Critical security patch for authentication bypass",
+        "Fixed data export functionality",
+        "Resolved caching issues in skill registry"
+      ],
+      "removed": []
+    }
+  },
+  {
+    "version": "1.8.0",
+    "date": "2025-12-20",
+    "summary": "Winter update with holiday features",
+    "breaking": false,
+    "changes": {
+      "added": [
+        "Skill collections and playlists",
+        "Export skills to JSON/YAML formats",
+        "Dark mode improvements with custom themes",
+        "Keyboard shortcuts reference page",
+        "Accessibility improvements (WCAG 2.1 AA compliant)"
+      ],
+      "changed": [
+        "Improved mobile responsiveness",
+        "Updated skill editor with syntax highlighting",
+        "Enhanced search with filters and sorting"
+      ],
+      "fixed": [
+        "Fixed skill installation on Windows systems",
+        "Resolved timezone issues in scheduled tasks",
+        "Fixed duplicate skill listings in search results"
+      ],
+      "removed": []
+    }
+  },
+  {
+    "version": "1.5.0",
+    "date": "2025-11-30",
+    "summary": "Performance and reliability improvements",
+    "breaking": false,
+    "changes": {
+      "added": [
+        "Skill analytics and usage statistics",
+        "API rate limiting dashboard",
+        "Webhook support for skill events",
+        "Automated skill testing in CI/CD pipelines"
+      ],
+      "changed": [
+        "Optimized database indexes for 3x faster queries",
+        "Improved caching strategy",
+        "Updated dependencies to latest stable versions"
+      ],
+      "fixed": [
+        "Fixed race condition in concurrent skill execution",
+        "Resolved memory leaks in long-running skills",
+        "Fixed broken skill preview images"
+      ],
+      "removed": []
+    }
+  }
+]
