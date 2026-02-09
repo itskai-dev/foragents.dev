@@ -39,6 +39,7 @@ const navLinks = [
   { href: "/changelog", label: "Changelog" },
   { href: "/whats-new", label: "What's New" },
   { href: "/roadmap", label: "Roadmap" },
+  { href: "/pricing", label: "Pricing" },
 ];
 
 export function GlobalNav() {
