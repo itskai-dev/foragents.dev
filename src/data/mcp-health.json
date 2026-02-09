@@ -1,0 +1,571 @@
+[
+  {
+    "id": "mcp-github",
+    "slug": "github",
+    "name": "GitHub MCP Server",
+    "category": "dev tools",
+    "description": "Repository, issues, PRs, and Actions access for agent workflows.",
+    "status": "operational",
+    "uptimePercent": 99.97,
+    "avgLatencyMs": 182,
+    "lastChecked": "2026-02-09T22:40:00.000Z",
+    "sla": {
+      "uptime": "99.9% uptime",
+      "latency": "Avg: 182ms"
+    },
+    "version": "2.4.1",
+    "mcpVersion": "2026.1",
+    "uptime30d": [100, 100, 99.8, 100, 100, 100, 99.7, 100, 100, 100, 100, 99.9, 100, 100, 99.8, 100, 100, 100, 99.6, 99.9, 100, 100, 100, 99.9, 100, 100, 100, 100, 99.9, 100],
+    "responseTime7d": [176, 181, 190, 184, 178, 182, 182],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "partial"
+    },
+    "incidents": [
+      {
+        "date": "2026-01-21T08:12:00.000Z",
+        "title": "Webhook signature validation regression",
+        "severity": "medium",
+        "description": "Push event ingestion dropped for 17 minutes in eu-west region.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": [
+      {
+        "date": "2026-01-15T00:00:00.000Z",
+        "title": "Deprecated legacy issue.timeline scope",
+        "impact": "medium",
+        "actionRequired": "Use issue.events.read scope in client manifests before v2.5."
+      }
+    ]
+  },
+  {
+    "id": "mcp-slack",
+    "slug": "slack",
+    "name": "Slack MCP Server",
+    "category": "productivity",
+    "description": "Channels, threads, reactions, and app-home automations.",
+    "status": "operational",
+    "uptimePercent": 99.91,
+    "avgLatencyMs": 265,
+    "lastChecked": "2026-02-09T22:39:00.000Z",
+    "sla": {
+      "uptime": "99.9% uptime",
+      "latency": "Avg: 265ms"
+    },
+    "version": "1.18.0",
+    "mcpVersion": "2026.1",
+    "uptime30d": [99.9, 100, 100, 99.8, 99.7, 100, 100, 100, 100, 99.9, 99.9, 99.8, 100, 100, 100, 99.7, 100, 100, 100, 99.9, 100, 99.8, 100, 100, 99.9, 100, 100, 99.8, 99.9, 100],
+    "responseTime7d": [241, 248, 266, 271, 262, 269, 265],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "partial",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "partial"
+    },
+    "incidents": [
+      {
+        "date": "2026-01-28T14:31:00.000Z",
+        "title": "Rate-limit spike on conversations.history",
+        "severity": "low",
+        "description": "Burst traffic caused intermittent 429 responses for 9 minutes.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-notion",
+    "slug": "notion",
+    "name": "Notion MCP Server",
+    "category": "productivity",
+    "description": "Page, database, and comments operations for workspace agents.",
+    "status": "degraded",
+    "uptimePercent": 99.62,
+    "avgLatencyMs": 398,
+    "lastChecked": "2026-02-09T22:37:00.000Z",
+    "sla": {
+      "uptime": "99.5% uptime",
+      "latency": "Avg: 398ms"
+    },
+    "version": "1.11.3",
+    "mcpVersion": "2026.1",
+    "uptime30d": [99.7, 99.8, 99.9, 99.9, 99.8, 99.7, 99.6, 99.5, 99.8, 99.9, 99.6, 99.7, 99.8, 99.4, 99.5, 99.7, 99.8, 99.6, 99.7, 99.8, 99.7, 99.5, 99.6, 99.7, 99.8, 99.8, 99.6, 99.7, 99.8, 99.7],
+    "responseTime7d": [342, 351, 398, 421, 406, 393, 398],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [
+      {
+        "date": "2026-02-02T06:20:00.000Z",
+        "title": "Search endpoint timeout in APAC",
+        "severity": "medium",
+        "description": "Query latency rose above 2s for 23 minutes.",
+        "resolved": true
+      },
+      {
+        "date": "2026-02-08T19:05:00.000Z",
+        "title": "Partial sync lag",
+        "severity": "low",
+        "description": "Incremental database sync delayed by 3-5 minutes.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": [
+      {
+        "date": "2026-02-01T00:00:00.000Z",
+        "title": "Rich text mention payload normalized",
+        "impact": "low",
+        "actionRequired": "Handle mention.user and mention.page objects under rich_text[].mention consistently."
+      }
+    ]
+  },
+  {
+    "id": "mcp-supabase",
+    "slug": "supabase",
+    "name": "Supabase MCP Server",
+    "category": "cloud",
+    "description": "Postgres, Auth, Storage, and Edge Function orchestration.",
+    "status": "operational",
+    "uptimePercent": 99.95,
+    "avgLatencyMs": 205,
+    "lastChecked": "2026-02-09T22:38:00.000Z",
+    "sla": {
+      "uptime": "99.9% uptime",
+      "latency": "Avg: 205ms"
+    },
+    "version": "3.2.0",
+    "mcpVersion": "2026.1",
+    "uptime30d": [100, 99.9, 100, 100, 100, 100, 99.8, 100, 100, 100, 100, 99.9, 100, 100, 99.9, 99.9, 100, 100, 100, 99.9, 100, 100, 99.8, 99.9, 100, 100, 100, 100, 99.9, 100],
+    "responseTime7d": [199, 207, 214, 209, 203, 206, 205],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "stable"
+    },
+    "incidents": [],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-postgres",
+    "slug": "postgres",
+    "name": "Postgres MCP Server",
+    "category": "data",
+    "description": "Query, schema introspection, and migration-safe access.",
+    "status": "operational",
+    "uptimePercent": 99.88,
+    "avgLatencyMs": 226,
+    "lastChecked": "2026-02-09T22:36:00.000Z",
+    "sla": {
+      "uptime": "99.8% uptime",
+      "latency": "Avg: 226ms"
+    },
+    "version": "2.9.4",
+    "mcpVersion": "2025.4",
+    "uptime30d": [99.9, 99.8, 99.9, 100, 99.9, 99.8, 99.8, 99.9, 99.9, 99.8, 99.9, 99.8, 99.7, 99.8, 99.9, 99.8, 99.9, 99.9, 100, 99.8, 99.9, 99.8, 99.9, 99.8, 99.8, 99.9, 99.9, 99.8, 99.9, 99.8],
+    "responseTime7d": [214, 219, 231, 238, 226, 224, 226],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "partial",
+      "VS Code Copilot": "stable"
+    },
+    "incidents": [
+      {
+        "date": "2026-01-26T11:10:00.000Z",
+        "title": "Connection pool saturation",
+        "severity": "low",
+        "description": "Transient queueing on high-concurrency tenant pools.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-stripe",
+    "slug": "stripe",
+    "name": "Stripe MCP Server",
+    "category": "cloud",
+    "description": "Payments, subscriptions, events, and customer operations.",
+    "status": "operational",
+    "uptimePercent": 99.93,
+    "avgLatencyMs": 248,
+    "lastChecked": "2026-02-09T22:35:00.000Z",
+    "sla": {
+      "uptime": "99.9% uptime",
+      "latency": "Avg: 248ms"
+    },
+    "version": "1.7.9",
+    "mcpVersion": "2026.1",
+    "uptime30d": [99.9, 100, 100, 99.9, 99.8, 99.8, 100, 99.9, 100, 100, 99.9, 100, 99.8, 99.9, 100, 99.9, 99.9, 99.8, 99.9, 100, 99.9, 99.8, 99.9, 99.9, 99.8, 99.9, 100, 99.8, 99.9, 99.9],
+    "responseTime7d": [236, 243, 251, 259, 247, 246, 248],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "partial",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [],
+    "breakingChanges": [
+      {
+        "date": "2026-01-30T00:00:00.000Z",
+        "title": "PaymentIntent status enum aligned",
+        "impact": "medium",
+        "actionRequired": "Replace requires_source with requires_payment_method in flow guards."
+      }
+    ]
+  },
+  {
+    "id": "mcp-linear",
+    "slug": "linear",
+    "name": "Linear MCP Server",
+    "category": "productivity",
+    "description": "Issue triage, project updates, and sprint automation.",
+    "status": "operational",
+    "uptimePercent": 99.84,
+    "avgLatencyMs": 272,
+    "lastChecked": "2026-02-09T22:34:00.000Z",
+    "sla": {
+      "uptime": "99.8% uptime",
+      "latency": "Avg: 272ms"
+    },
+    "version": "1.4.0",
+    "mcpVersion": "2025.4",
+    "uptime30d": [99.8, 99.9, 99.9, 99.8, 99.7, 99.8, 99.9, 99.8, 99.8, 99.7, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.8, 99.7, 99.8, 99.9, 99.8, 99.8, 99.9, 99.8, 99.9, 99.8, 99.8, 99.9, 99.8, 99.8],
+    "responseTime7d": [261, 266, 279, 286, 275, 269, 272],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [
+      {
+        "date": "2026-02-04T10:45:00.000Z",
+        "title": "GraphQL edge cache stale reads",
+        "severity": "low",
+        "description": "Recently closed issues appeared open for up to 4 minutes.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-vercel",
+    "slug": "vercel",
+    "name": "Vercel MCP Server",
+    "category": "cloud",
+    "description": "Deployments, preview URLs, logs, and environment controls.",
+    "status": "operational",
+    "uptimePercent": 99.9,
+    "avgLatencyMs": 233,
+    "lastChecked": "2026-02-09T22:39:30.000Z",
+    "sla": {
+      "uptime": "99.9% uptime",
+      "latency": "Avg: 233ms"
+    },
+    "version": "2.0.6",
+    "mcpVersion": "2026.1",
+    "uptime30d": [99.9, 99.9, 100, 99.9, 99.8, 99.9, 99.9, 100, 99.9, 99.8, 99.9, 99.9, 100, 99.9, 99.8, 99.9, 99.9, 100, 99.8, 99.9, 99.9, 99.8, 99.9, 99.9, 100, 99.9, 99.8, 99.9, 99.9, 100],
+    "responseTime7d": [222, 229, 240, 245, 237, 232, 233],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "stable"
+    },
+    "incidents": [],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-aws",
+    "slug": "aws",
+    "name": "AWS MCP Server",
+    "category": "cloud",
+    "description": "IAM-scoped cloud operations across S3, Lambda, and ECS.",
+    "status": "degraded",
+    "uptimePercent": 99.58,
+    "avgLatencyMs": 421,
+    "lastChecked": "2026-02-09T22:32:00.000Z",
+    "sla": {
+      "uptime": "99.5% uptime",
+      "latency": "Avg: 421ms"
+    },
+    "version": "0.28.2",
+    "mcpVersion": "2025.4",
+    "uptime30d": [99.4, 99.5, 99.6, 99.7, 99.5, 99.6, 99.7, 99.5, 99.4, 99.6, 99.7, 99.6, 99.5, 99.4, 99.6, 99.7, 99.6, 99.5, 99.4, 99.6, 99.7, 99.6, 99.5, 99.4, 99.6, 99.7, 99.6, 99.5, 99.6, 99.7],
+    "responseTime7d": [389, 401, 423, 446, 429, 417, 421],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "partial",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [
+      {
+        "date": "2026-02-07T03:15:00.000Z",
+        "title": "STS token propagation delay",
+        "severity": "medium",
+        "description": "Cross-account role assumptions intermittently failed for 31 minutes.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": [
+      {
+        "date": "2026-01-22T00:00:00.000Z",
+        "title": "IAM policy template v3",
+        "impact": "high",
+        "actionRequired": "Regenerate least-privilege policy docs before upgrading to v0.29."
+      }
+    ]
+  },
+  {
+    "id": "mcp-gcp",
+    "slug": "gcp",
+    "name": "Google Cloud MCP Server",
+    "category": "cloud",
+    "description": "Cloud Run, BigQuery, and Vertex operations for agents.",
+    "status": "operational",
+    "uptimePercent": 99.86,
+    "avgLatencyMs": 301,
+    "lastChecked": "2026-02-09T22:31:00.000Z",
+    "sla": {
+      "uptime": "99.8% uptime",
+      "latency": "Avg: 301ms"
+    },
+    "version": "1.3.7",
+    "mcpVersion": "2026.1",
+    "uptime30d": [99.8, 99.8, 99.9, 99.8, 99.7, 99.8, 99.9, 99.8, 99.9, 99.8, 99.8, 99.9, 99.8, 99.7, 99.8, 99.9, 99.8, 99.9, 99.8, 99.8, 99.9, 99.8, 99.7, 99.8, 99.9, 99.8, 99.9, 99.8, 99.8, 99.9],
+    "responseTime7d": [288, 296, 307, 318, 304, 297, 301],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "partial"
+    },
+    "incidents": [],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-datadog",
+    "slug": "datadog",
+    "name": "Datadog MCP Server",
+    "category": "dev tools",
+    "description": "Monitor, logs, traces, and SLO diagnostics.",
+    "status": "operational",
+    "uptimePercent": 99.89,
+    "avgLatencyMs": 274,
+    "lastChecked": "2026-02-09T22:30:00.000Z",
+    "sla": {
+      "uptime": "99.8% uptime",
+      "latency": "Avg: 274ms"
+    },
+    "version": "1.12.2",
+    "mcpVersion": "2026.1",
+    "uptime30d": [99.8, 99.9, 99.9, 99.8, 99.9, 99.8, 99.9, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8, 99.9, 99.9, 99.8, 99.9, 99.8, 99.9, 99.8],
+    "responseTime7d": [262, 268, 279, 288, 277, 271, 274],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "partial"
+    },
+    "incidents": [],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-snowflake",
+    "slug": "snowflake",
+    "name": "Snowflake MCP Server",
+    "category": "data",
+    "description": "Warehouse queries, stage management, and data products.",
+    "status": "operational",
+    "uptimePercent": 99.81,
+    "avgLatencyMs": 356,
+    "lastChecked": "2026-02-09T22:29:00.000Z",
+    "sla": {
+      "uptime": "99.8% uptime",
+      "latency": "Avg: 356ms"
+    },
+    "version": "1.0.9",
+    "mcpVersion": "2025.4",
+    "uptime30d": [99.8, 99.8, 99.9, 99.8, 99.8, 99.7, 99.8, 99.9, 99.8, 99.8, 99.7, 99.8, 99.9, 99.8, 99.7, 99.8, 99.9, 99.8, 99.8, 99.7, 99.8, 99.9, 99.8, 99.8, 99.7, 99.8, 99.9, 99.8, 99.8, 99.7],
+    "responseTime7d": [344, 352, 361, 372, 365, 358, 356],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "partial",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [
+      {
+        "date": "2026-01-29T17:42:00.000Z",
+        "title": "Temporary stage listing failure",
+        "severity": "low",
+        "description": "List stage API returned intermittent 500s for 6 minutes.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-hubspot",
+    "slug": "hubspot",
+    "name": "HubSpot MCP Server",
+    "category": "productivity",
+    "description": "CRM records, pipelines, and engagement sync.",
+    "status": "degraded",
+    "uptimePercent": 99.41,
+    "avgLatencyMs": 462,
+    "lastChecked": "2026-02-09T22:28:00.000Z",
+    "sla": {
+      "uptime": "99.0% uptime",
+      "latency": "Avg: 462ms"
+    },
+    "version": "0.21.5",
+    "mcpVersion": "2025.1",
+    "uptime30d": [99.2, 99.3, 99.4, 99.5, 99.4, 99.3, 99.4, 99.5, 99.4, 99.3, 99.4, 99.5, 99.4, 99.3, 99.4, 99.5, 99.4, 99.3, 99.4, 99.5, 99.4, 99.3, 99.4, 99.5, 99.4, 99.3, 99.4, 99.5, 99.4, 99.3],
+    "responseTime7d": [439, 447, 468, 482, 471, 459, 462],
+    "compatibility": {
+      "Claude Desktop": "partial",
+      "Cursor": "partial",
+      "Windsurf": "unsupported",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [
+      {
+        "date": "2026-02-03T15:18:00.000Z",
+        "title": "CRM object write retries",
+        "severity": "medium",
+        "description": "Upsert operations exceeded retry threshold for 18 minutes.",
+        "resolved": true
+      }
+    ],
+    "breakingChanges": [
+      {
+        "date": "2026-02-05T00:00:00.000Z",
+        "title": "Association API v4 default",
+        "impact": "medium",
+        "actionRequired": "Pin apiVersion=v3 for legacy relationship traversal behavior."
+      }
+    ]
+  },
+  {
+    "id": "mcp-salesforce",
+    "slug": "salesforce",
+    "name": "Salesforce MCP Server",
+    "category": "productivity",
+    "description": "SOQL query, object mutations, and case routing.",
+    "status": "operational",
+    "uptimePercent": 99.75,
+    "avgLatencyMs": 338,
+    "lastChecked": "2026-02-09T22:27:00.000Z",
+    "sla": {
+      "uptime": "99.7% uptime",
+      "latency": "Avg: 338ms"
+    },
+    "version": "1.6.8",
+    "mcpVersion": "2025.4",
+    "uptime30d": [99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8, 99.7, 99.8],
+    "responseTime7d": [324, 331, 344, 357, 346, 336, 338],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "partial",
+      "Windsurf": "partial",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-redis",
+    "slug": "redis",
+    "name": "Redis MCP Server",
+    "category": "data",
+    "description": "Low-latency key-value operations and pub/sub controls.",
+    "status": "operational",
+    "uptimePercent": 99.98,
+    "avgLatencyMs": 94,
+    "lastChecked": "2026-02-09T22:41:00.000Z",
+    "sla": {
+      "uptime": "99.95% uptime",
+      "latency": "Avg: 94ms"
+    },
+    "version": "2.2.1",
+    "mcpVersion": "2026.1",
+    "uptime30d": [100, 100, 100, 100, 99.9, 100, 100, 100, 100, 100, 100, 99.9, 100, 100, 100, 100, 100, 99.9, 100, 100, 100, 100, 99.9, 100, 100, 100, 100, 100, 99.9, 100],
+    "responseTime7d": [88, 91, 98, 102, 95, 92, 94],
+    "compatibility": {
+      "Claude Desktop": "stable",
+      "Cursor": "stable",
+      "Windsurf": "stable",
+      "OpenAI Agents SDK": "stable",
+      "VS Code Copilot": "stable"
+    },
+    "incidents": [],
+    "breakingChanges": []
+  },
+  {
+    "id": "mcp-clickhouse",
+    "slug": "clickhouse",
+    "name": "ClickHouse MCP Server",
+    "category": "data",
+    "description": "Analytics queries, table ops, and ingestion diagnostics.",
+    "status": "outage",
+    "uptimePercent": 97.84,
+    "avgLatencyMs": 903,
+    "lastChecked": "2026-02-09T22:25:00.000Z",
+    "sla": {
+      "uptime": "98.0% uptime",
+      "latency": "Avg: 903ms"
+    },
+    "version": "0.9.2",
+    "mcpVersion": "2025.1",
+    "uptime30d": [99.1, 99.2, 99.0, 98.9, 98.7, 98.8, 98.9, 98.5, 98.2, 98.1, 98.4, 98.6, 98.3, 98.0, 97.9, 97.8, 97.6, 97.4, 97.3, 97.1, 97.2, 97.0, 96.8, 96.9, 96.7, 96.5, 96.4, 96.6, 96.3, 96.2],
+    "responseTime7d": [611, 689, 742, 801, 928, 975, 903],
+    "compatibility": {
+      "Claude Desktop": "partial",
+      "Cursor": "partial",
+      "Windsurf": "unsupported",
+      "OpenAI Agents SDK": "partial",
+      "VS Code Copilot": "unsupported"
+    },
+    "incidents": [
+      {
+        "date": "2026-02-08T04:05:00.000Z",
+        "title": "Cluster coordinator instability",
+        "severity": "high",
+        "description": "Coordinator failover loops caused widespread query failures.",
+        "resolved": false
+      }
+    ],
+    "breakingChanges": [
+      {
+        "date": "2026-01-19T00:00:00.000Z",
+        "title": "Removed legacy SQL dialect mode",
+        "impact": "high",
+        "actionRequired": "Set dialect=ansi in client config and update cast syntax before 0.10."
+      }
+    ]
+  }
+]
