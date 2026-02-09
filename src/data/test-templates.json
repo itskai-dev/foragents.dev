@@ -1,0 +1,353 @@
+{
+  "categories": [
+    {
+      "id": "unit",
+      "name": "Unit Tests",
+      "description": "Test individual agent functions and utilities",
+      "icon": "🧪",
+      "color": "#06D6A0"
+    },
+    {
+      "id": "integration",
+      "name": "Integration Tests",
+      "description": "Test agent interactions with external services",
+      "icon": "🔗",
+      "color": "#3B82F6"
+    },
+    {
+      "id": "e2e",
+      "name": "End-to-End Tests",
+      "description": "Test complete agent workflows",
+      "icon": "🎯",
+      "color": "#8B5CF6"
+    },
+    {
+      "id": "stress",
+      "name": "Stress Tests",
+      "description": "Test agent performance under load",
+      "icon": "⚡",
+      "color": "#F59E0B"
+    }
+  ],
+  "templates": [
+    {
+      "id": "memory-persistence",
+      "name": "Memory Persistence",
+      "category": "unit",
+      "description": "Validates that agent memory correctly persists across sessions and can be retrieved",
+      "difficulty": "beginner",
+      "estimatedDuration": "2-5 min",
+      "steps": [
+        "Initialize agent with empty memory",
+        "Store key-value pairs in memory",
+        "Simulate session restart",
+        "Verify stored data is retrievable",
+        "Test memory search and filtering"
+      ],
+      "assertions": [
+        "Memory persists after restart",
+        "Data integrity maintained",
+        "Search returns correct results",
+        "Memory limits respected"
+      ],
+      "tags": ["memory", "persistence", "storage"]
+    },
+    {
+      "id": "tool-calling",
+      "name": "Tool Calling",
+      "category": "integration",
+      "description": "Tests agent's ability to correctly identify, select, and execute tools with proper parameters",
+      "difficulty": "intermediate",
+      "estimatedDuration": "5-10 min",
+      "steps": [
+        "Present agent with task requiring tool use",
+        "Verify tool selection is appropriate",
+        "Check parameter extraction accuracy",
+        "Execute tool and capture output",
+        "Validate response handling"
+      ],
+      "assertions": [
+        "Correct tool selected",
+        "Parameters properly formatted",
+        "Tool executes successfully",
+        "Output parsed correctly",
+        "Error handling works"
+      ],
+      "tags": ["tools", "function-calling", "parameters"]
+    },
+    {
+      "id": "error-recovery",
+      "name": "Error Recovery",
+      "category": "unit",
+      "description": "Ensures agent can gracefully handle and recover from various error conditions",
+      "difficulty": "intermediate",
+      "estimatedDuration": "3-7 min",
+      "steps": [
+        "Trigger network timeout error",
+        "Inject malformed API response",
+        "Simulate rate limit error",
+        "Test invalid input handling",
+        "Verify recovery strategies"
+      ],
+      "assertions": [
+        "Errors caught appropriately",
+        "Retry logic activates",
+        "Fallback mechanisms work",
+        "Error messages clear",
+        "State remains consistent"
+      ],
+      "tags": ["error-handling", "resilience", "recovery"]
+    },
+    {
+      "id": "multi-turn-conversation",
+      "name": "Multi-Turn Conversation",
+      "category": "e2e",
+      "description": "Tests agent's ability to maintain context across multiple conversation turns",
+      "difficulty": "intermediate",
+      "estimatedDuration": "8-12 min",
+      "steps": [
+        "Start conversation with initial query",
+        "Send follow-up referencing prior context",
+        "Inject topic change mid-conversation",
+        "Return to original topic",
+        "Verify context retention throughout"
+      ],
+      "assertions": [
+        "Context maintained across turns",
+        "Pronouns resolved correctly",
+        "Topic changes handled",
+        "Long conversations don't degrade",
+        "Memory footprint reasonable"
+      ],
+      "tags": ["conversation", "context", "multi-turn"]
+    },
+    {
+      "id": "timeout-handling",
+      "name": "Timeout Handling",
+      "category": "stress",
+      "description": "Validates agent behavior when operations exceed time limits",
+      "difficulty": "advanced",
+      "estimatedDuration": "5-8 min",
+      "steps": [
+        "Set aggressive timeout limits",
+        "Execute slow operations",
+        "Verify timeout triggers",
+        "Check partial results handling",
+        "Test timeout recovery"
+      ],
+      "assertions": [
+        "Timeouts detected accurately",
+        "Operations cancelled cleanly",
+        "Partial progress saved",
+        "Timeout errors reported",
+        "Retry logic respects limits"
+      ],
+      "tags": ["timeout", "performance", "limits"]
+    },
+    {
+      "id": "rate-limiting",
+      "name": "Rate Limiting",
+      "category": "integration",
+      "description": "Tests agent's compliance with API rate limits and backoff strategies",
+      "difficulty": "advanced",
+      "estimatedDuration": "10-15 min",
+      "steps": [
+        "Configure strict rate limits",
+        "Execute burst of requests",
+        "Verify rate limit detection",
+        "Check backoff implementation",
+        "Test request queuing"
+      ],
+      "assertions": [
+        "Rate limits respected",
+        "429 errors handled",
+        "Exponential backoff works",
+        "Request queue managed",
+        "No dropped requests"
+      ],
+      "tags": ["rate-limiting", "api", "throttling"]
+    },
+    {
+      "id": "auth-flow",
+      "name": "Authentication Flow",
+      "category": "integration",
+      "description": "Validates complete authentication and authorization workflows",
+      "difficulty": "intermediate",
+      "estimatedDuration": "6-10 min",
+      "steps": [
+        "Attempt unauthenticated request",
+        "Execute OAuth flow",
+        "Verify token acquisition",
+        "Test token refresh",
+        "Handle expired credentials"
+      ],
+      "assertions": [
+        "Unauth requests blocked",
+        "OAuth flow completes",
+        "Tokens stored securely",
+        "Refresh works automatically",
+        "Expired tokens handled"
+      ],
+      "tags": ["auth", "oauth", "security"]
+    },
+    {
+      "id": "data-validation",
+      "name": "Data Validation",
+      "category": "unit",
+      "description": "Ensures agent properly validates and sanitizes input/output data",
+      "difficulty": "beginner",
+      "estimatedDuration": "4-6 min",
+      "steps": [
+        "Submit valid data formats",
+        "Inject malformed data",
+        "Test boundary conditions",
+        "Verify sanitization",
+        "Check type coercion"
+      ],
+      "assertions": [
+        "Valid data accepted",
+        "Invalid data rejected",
+        "Error messages descriptive",
+        "No injection vulnerabilities",
+        "Type safety maintained"
+      ],
+      "tags": ["validation", "sanitization", "security"]
+    },
+    {
+      "id": "concurrent-operations",
+      "name": "Concurrent Operations",
+      "category": "stress",
+      "description": "Tests agent handling of parallel operations and race conditions",
+      "difficulty": "advanced",
+      "estimatedDuration": "12-18 min",
+      "steps": [
+        "Launch multiple operations simultaneously",
+        "Verify isolation between operations",
+        "Test shared resource access",
+        "Check for race conditions",
+        "Validate result consistency"
+      ],
+      "assertions": [
+        "Operations don't interfere",
+        "Resources locked properly",
+        "No race conditions",
+        "Results deterministic",
+        "Performance acceptable"
+      ],
+      "tags": ["concurrency", "parallelism", "performance"]
+    },
+    {
+      "id": "streaming-responses",
+      "name": "Streaming Responses",
+      "category": "e2e",
+      "description": "Validates agent's streaming response handling and chunked data processing",
+      "difficulty": "intermediate",
+      "estimatedDuration": "7-10 min",
+      "steps": [
+        "Initiate streaming request",
+        "Process incoming chunks",
+        "Handle stream interruption",
+        "Test backpressure handling",
+        "Verify complete data received"
+      ],
+      "assertions": [
+        "Chunks processed in order",
+        "No data loss",
+        "Interruptions handled",
+        "Backpressure applied",
+        "Stream completes properly"
+      ],
+      "tags": ["streaming", "realtime", "chunks"]
+    }
+  ],
+  "testRuns": [
+    {
+      "id": "run-001",
+      "timestamp": "2026-02-08T14:32:00Z",
+      "config": {
+        "model": "claude-sonnet-4",
+        "timeout": 30000,
+        "retries": 3,
+        "environment": "staging"
+      },
+      "results": {
+        "total": 10,
+        "passed": 8,
+        "failed": 1,
+        "skipped": 1,
+        "duration": 2847,
+        "coverage": 87.5
+      },
+      "tests": [
+        { "templateId": "memory-persistence", "status": "passed", "duration": 234 },
+        { "templateId": "tool-calling", "status": "passed", "duration": 456 },
+        { "templateId": "error-recovery", "status": "failed", "duration": 189 },
+        { "templateId": "multi-turn-conversation", "status": "passed", "duration": 723 },
+        { "templateId": "timeout-handling", "status": "passed", "duration": 312 },
+        { "templateId": "rate-limiting", "status": "passed", "duration": 891 },
+        { "templateId": "auth-flow", "status": "passed", "duration": 534 },
+        { "templateId": "data-validation", "status": "passed", "duration": 198 },
+        { "templateId": "concurrent-operations", "status": "skipped", "duration": 0 },
+        { "templateId": "streaming-responses", "status": "passed", "duration": 310 }
+      ]
+    },
+    {
+      "id": "run-002",
+      "timestamp": "2026-02-07T09:15:00Z",
+      "config": {
+        "model": "claude-opus-4",
+        "timeout": 60000,
+        "retries": 2,
+        "environment": "production"
+      },
+      "results": {
+        "total": 10,
+        "passed": 9,
+        "failed": 1,
+        "skipped": 0,
+        "duration": 3421,
+        "coverage": 92.3
+      },
+      "tests": [
+        { "templateId": "memory-persistence", "status": "passed", "duration": 298 },
+        { "templateId": "tool-calling", "status": "passed", "duration": 512 },
+        { "templateId": "error-recovery", "status": "passed", "duration": 234 },
+        { "templateId": "multi-turn-conversation", "status": "passed", "duration": 845 },
+        { "templateId": "timeout-handling", "status": "passed", "duration": 376 },
+        { "templateId": "rate-limiting", "status": "failed", "duration": 934 },
+        { "templateId": "auth-flow", "status": "passed", "duration": 601 },
+        { "templateId": "data-validation", "status": "passed", "duration": 223 },
+        { "templateId": "concurrent-operations", "status": "passed", "duration": 1087 },
+        { "templateId": "streaming-responses", "status": "passed", "duration": 311 }
+      ]
+    },
+    {
+      "id": "run-003",
+      "timestamp": "2026-02-06T16:48:00Z",
+      "config": {
+        "model": "claude-sonnet-4",
+        "timeout": 45000,
+        "retries": 3,
+        "environment": "staging"
+      },
+      "results": {
+        "total": 8,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 1,
+        "duration": 2156,
+        "coverage": 78.9
+      },
+      "tests": [
+        { "templateId": "memory-persistence", "status": "passed", "duration": 221 },
+        { "templateId": "tool-calling", "status": "passed", "duration": 443 },
+        { "templateId": "error-recovery", "status": "passed", "duration": 201 },
+        { "templateId": "multi-turn-conversation", "status": "passed", "duration": 689 },
+        { "templateId": "timeout-handling", "status": "passed", "duration": 298 },
+        { "templateId": "auth-flow", "status": "passed", "duration": 489 },
+        { "templateId": "data-validation", "status": "passed", "duration": 187 },
+        { "templateId": "streaming-responses", "status": "skipped", "duration": 0 }
+      ]
+    }
+  ]
+}
