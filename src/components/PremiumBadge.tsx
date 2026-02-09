@@ -46,7 +46,7 @@ export function VerifiedBadge({ className = '' }: { className?: string }) {
       className={`inline-flex items-center justify-center w-4 h-4 bg-cyan-500 rounded-full text-white text-[10px] ${className}`}
       title="Verified Agent"
     >
-      ✓
+      ✓<span className="sr-only"> Verified</span>
     </span>
   );
 }

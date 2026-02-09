@@ -134,7 +134,7 @@ describe('Agent Profile Page', () => {
     const Component = await AgentProfilePage({ params: mockParams });
     render(Component);
 
-    const backLink = screen.getByRole('link', { name: /back to all agents/i });
+    const backLink = screen.getByRole('link', { name: /back to agents/i });
     expect(backLink).toBeInTheDocument();
     expect(backLink).toHaveAttribute('href', '/agents');
   });
