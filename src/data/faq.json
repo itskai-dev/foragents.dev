@@ -1,0 +1,186 @@
+{
+  "categories": [
+    {
+      "id": "general",
+      "name": "General",
+      "questions": [
+        {
+          "id": "what-is-foragents",
+          "question": "What is forAgents.dev?",
+          "answer": "forAgents.dev is the central hub for AI agent development. We provide a curated marketplace of skills, kits, and tools designed specifically for AI agents. Think of us as the package manager and discovery platform for agent capabilities—helping developers find, share, and integrate the best tools to make their agents more powerful."
+        },
+        {
+          "id": "who-is-it-for",
+          "question": "Who is forAgents.dev for?",
+          "answer": "forAgents.dev is built for AI agent developers, teams building autonomous systems, and anyone working with LLM-based applications. Whether you're building a customer service bot, a research assistant, or an autonomous workflow system, we help you discover and integrate the capabilities your agent needs."
+        },
+        {
+          "id": "how-does-it-work",
+          "question": "How does forAgents.dev work?",
+          "answer": "Browse our catalog of skills and kits, each with clear documentation, compatibility info, and community reviews. When you find what you need, simply follow the integration instructions—most skills support standard protocols like MCP (Model Context Protocol) or can be installed via npm/pip. We handle discovery and documentation; you handle the implementation."
+        },
+        {
+          "id": "is-it-free",
+          "question": "Is forAgents.dev free to use?",
+          "answer": "Yes! Browsing, searching, and accessing most skills and kits is completely free. Some premium or enterprise-grade tools may have their own licensing requirements, which will be clearly marked. We also offer premium features for creators and teams who want enhanced analytics, priority support, and advanced distribution options."
+        }
+      ]
+    },
+    {
+      "id": "getting-started",
+      "name": "Getting Started",
+      "questions": [
+        {
+          "id": "how-to-start",
+          "question": "How do I get started with forAgents.dev?",
+          "answer": "Start by exploring our Skills and Collections pages. Use the search and filters to find capabilities that match your use case. Each skill page includes installation instructions, compatibility information, and usage examples. If you're new to agent development, check out our Guides section for tutorials and best practices."
+        },
+        {
+          "id": "first-skill",
+          "question": "How do I install my first skill?",
+          "answer": "Each skill page includes an 'Installation' section with step-by-step instructions. Most skills support standard installation methods: MCP servers can be added to your agent config, npm packages can be installed with a single command, and API-based skills provide integration snippets. Follow the specific instructions for your chosen skill and framework."
+        },
+        {
+          "id": "requirements",
+          "question": "What do I need to get started?",
+          "answer": "At minimum, you need an AI agent framework or LLM application where you can integrate new capabilities. Popular frameworks include LangChain, AutoGPT, CrewAI, or custom implementations. Some skills require specific runtime environments (Node.js, Python) or API keys, which will be listed in the skill's requirements section."
+        },
+        {
+          "id": "documentation",
+          "question": "Where can I find documentation and tutorials?",
+          "answer": "Each skill has its own dedicated documentation on its detail page. For broader learning, visit our Guides section for tutorials, integration patterns, and best practices. We also maintain a Blog with case studies and announcements, plus a Changelog to track platform updates and new features."
+        }
+      ]
+    },
+    {
+      "id": "skills-kits",
+      "name": "Skills & Kits",
+      "questions": [
+        {
+          "id": "what-is-skill",
+          "question": "What is a 'skill'?",
+          "answer": "A skill is a discrete capability or tool that you can add to your AI agent. It could be an API integration (like weather data or web search), a processing capability (like PDF parsing or image generation), or a function library. Skills are modular, documented, and designed to be easily integrated into your agent's workflow."
+        },
+        {
+          "id": "what-is-kit",
+          "question": "What is a 'kit'?",
+          "answer": "A kit is a curated collection of related skills bundled together for a specific use case. For example, a 'Research Agent Kit' might include web search, PDF extraction, citation formatting, and summarization skills. Kits save you time by grouping complementary capabilities and providing integration patterns that work well together."
+        },
+        {
+          "id": "skill-compatibility",
+          "question": "How do I know if a skill is compatible with my setup?",
+          "answer": "Each skill page displays compatibility badges showing supported protocols (MCP, API, npm, etc.), required runtimes (Node.js, Python), and tested frameworks. Check the 'Compatibility' section for detailed requirements. You can also filter search results by protocol and runtime to find skills that match your stack."
+        },
+        {
+          "id": "submit-skill",
+          "question": "Can I submit my own skills?",
+          "answer": "Absolutely! Click 'Submit' in the navigation to add your skill or kit to forAgents.dev. You'll need to provide documentation, installation instructions, and compatibility details. Once reviewed, your submission will be published and discoverable by the community. Popular skills can earn recognition through our trending system and community reviews."
+        }
+      ]
+    },
+    {
+      "id": "billing-pricing",
+      "name": "Billing & Pricing",
+      "questions": [
+        {
+          "id": "cost",
+          "question": "How much does forAgents.dev cost?",
+          "answer": "Using forAgents.dev as a discovery and integration platform is free. Individual skills and kits may have their own pricing models (free, freemium, paid, or enterprise), which will be clearly indicated on each tool's page. We also offer optional Premium accounts with advanced features for creators and teams."
+        },
+        {
+          "id": "premium-features",
+          "question": "What do I get with a Premium account?",
+          "answer": "Premium accounts include enhanced analytics for your published skills, priority review for submissions, early access to new features, advanced search filters, and direct support channels. Premium is designed for active creators and teams who want to maximize their presence and insights on the platform."
+        },
+        {
+          "id": "pay-for-skills",
+          "question": "Do I have to pay for individual skills?",
+          "answer": "That depends on the skill. Many skills are completely free and open-source. Some offer freemium models with basic features free and premium features paid. Others may charge for API usage or require enterprise licensing. Pricing details are always shown on the skill's detail page before you integrate."
+        },
+        {
+          "id": "enterprise-pricing",
+          "question": "Is there enterprise pricing?",
+          "answer": "Yes! We offer Enterprise plans for teams who need dedicated support, private skill hosting, team analytics, SSO, and SLAs. Contact us through the Enterprise page or reach out to enterprise@foragents.dev for custom pricing and features tailored to your organization's needs."
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "questions": [
+        {
+          "id": "data-security",
+          "question": "How is my data secured?",
+          "answer": "forAgents.dev itself doesn't store or process your agent's operational data. When you integrate a skill, data flows directly between your agent and that skill's infrastructure (or runs locally if self-hosted). Each skill's data handling practices are documented on its detail page. For sensitive use cases, look for self-hosted or on-premise compatible skills."
+        },
+        {
+          "id": "skill-trust",
+          "question": "How do I know if a skill is trustworthy?",
+          "answer": "We provide multiple trust signals: verified creator badges, community ratings and reviews, open-source badges (so you can audit the code), compatibility certifications, and usage statistics. We also flag skills that have been tested by the forAgents team. Always review a skill's source code, documentation, and privacy policy before integrating it into production systems."
+        },
+        {
+          "id": "api-keys",
+          "question": "How should I manage API keys for skills?",
+          "answer": "Never hardcode API keys in your code. Use environment variables, secure secret managers (like AWS Secrets Manager, HashiCorp Vault, or Doppler), or your framework's built-in secret management. Each skill's documentation will specify which credentials it requires. Rotate keys regularly and use least-privilege access principles."
+        },
+        {
+          "id": "report-security",
+          "question": "How do I report a security concern?",
+          "answer": "If you discover a security vulnerability in a skill or on forAgents.dev itself, please email security@foragents.dev immediately. Do not post security issues publicly. We follow responsible disclosure practices and work with skill creators to address issues quickly. Reporters who follow best practices are acknowledged in our security hall of fame."
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "name": "API",
+      "questions": [
+        {
+          "id": "api-access",
+          "question": "Does forAgents.dev have an API?",
+          "answer": "Yes! Our API allows programmatic access to our skill catalog, search functionality, and metadata. Use it to build custom integrations, automated skill discovery, or dynamic agent configuration. API documentation is available at /docs/api, and you can generate an API key from your account settings."
+        },
+        {
+          "id": "api-rate-limits",
+          "question": "What are the API rate limits?",
+          "answer": "Free tier: 100 requests per hour. Premium accounts: 1,000 requests per hour. Enterprise plans have custom rate limits tailored to your needs. Rate limit headers are included in all API responses so you can track your usage. If you need higher limits, contact us about upgrading your account."
+        },
+        {
+          "id": "api-authentication",
+          "question": "How do I authenticate API requests?",
+          "answer": "Use Bearer token authentication. Generate an API key from your account dashboard and include it in the Authorization header: `Authorization: Bearer YOUR_API_KEY`. Keep your API keys secure and never commit them to version control. You can rotate keys at any time from your account settings."
+        },
+        {
+          "id": "api-support",
+          "question": "Is there API support available?",
+          "answer": "Yes! API documentation includes examples and troubleshooting guides at /docs/api. Free users can ask questions via our community Discord or GitHub Discussions. Premium and Enterprise users get direct API support with guaranteed response times. Check our status page at /status for API uptime and incident reports."
+        }
+      ]
+    },
+    {
+      "id": "enterprise",
+      "name": "Enterprise",
+      "questions": [
+        {
+          "id": "enterprise-features",
+          "question": "What enterprise features are available?",
+          "answer": "Enterprise plans include: private skill registries, team collaboration tools, SSO/SAML authentication, advanced analytics and usage tracking, priority support with SLAs, dedicated account management, custom integrations, audit logs, and the ability to host forAgents infrastructure on your own systems. Contact our enterprise team for a full feature breakdown."
+        },
+        {
+          "id": "self-hosted",
+          "question": "Can I self-host forAgents.dev?",
+          "answer": "Yes, Enterprise customers can deploy a private instance of forAgents.dev within their own infrastructure. This gives you full control over data, compliance, and access. Self-hosted deployments include all enterprise features plus the ability to customize the platform for your organization's specific workflows and policies."
+        },
+        {
+          "id": "team-management",
+          "question": "How does team management work?",
+          "answer": "Enterprise accounts support team workspaces with role-based access control. Admins can invite team members, assign roles (viewer, contributor, admin), manage permissions, and track team activity. Teams can collaboratively manage skill submissions, share private skills internally, and access consolidated analytics across all team projects."
+        },
+        {
+          "id": "sla-support",
+          "question": "What SLAs and support options are included?",
+          "answer": "Enterprise plans include 99.9% uptime SLA, 24/7 email and chat support, dedicated Slack channel, guaranteed response times (1-hour for critical issues), and quarterly business reviews with your account manager. We also offer optional on-site training, custom integration assistance, and white-glove onboarding for large deployments."
+        }
+      ]
+    }
+  ]
+}
