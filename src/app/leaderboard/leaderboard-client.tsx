@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SkillBadges } from "@/components/skill-badges";
+import type { BadgeDefinition } from "@/lib/badges";
 import type { Skill } from "@/lib/data";
 import type { CanaryScorecard, CanaryScorecardTrend } from "@/lib/server/canaryScorecardStore";
 
@@ -81,9 +83,11 @@ function aggregateForAgent(agentId: string, scorecards: CanaryScorecard[], start
 export function LeaderboardClient({
   skills,
   scorecards,
+  badgeMap,
 }: {
   skills: Skill[];
   scorecards: CanaryScorecard[];
+  badgeMap: Record<string, BadgeDefinition[]>;
 }) {
   const [range, setRange] = useState<RangeKey>("7d");
   const [tag, setTag] = useState<string>("");
@@ -223,7 +227,6 @@ export function LeaderboardClient({
                   rows.map((r, idx) => {
                     const rank = idx + 1;
                     const trophy = rank === 1 ? "🏆" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : null;
-                    const qualifies = r.passRate >= 0.95;
 
                     return (
                       <tr key={r.agentId} className="border-t border-white/5">
@@ -273,16 +276,7 @@ export function LeaderboardClient({
                           </Badge>
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex flex-wrap gap-2">
-                            {qualifies ? (
-                              <Badge className="bg-green-500/10 text-green-400 border border-green-500/20">✅ 95%+</Badge>
-                            ) : null}
-                            {trophy ? (
-                              <Badge className="bg-cyan/10 text-cyan border border-cyan/20">
-                                {trophy} Top {rank}
-                              </Badge>
-                            ) : null}
-                          </div>
+                          <SkillBadges badges={badgeMap[r.agentId] ?? []} mode="compact" />
                         </td>
                       </tr>
                     );

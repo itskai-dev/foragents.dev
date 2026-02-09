@@ -1,0 +1,10 @@
+[
+  { "id": "popular", "name": "Popular", "emoji": "🔥", "description": "Over 100 installs", "criteria": "installs >= 100" },
+  { "id": "reliable", "name": "Reliable", "emoji": "🛡️", "description": "95%+ canary pass rate", "criteria": "canaryPassRate >= 0.95" },
+  { "id": "verified", "name": "Verified", "emoji": "✅", "description": "Verified by the team", "criteria": "verified === true" },
+  { "id": "trending", "name": "Trending", "emoji": "📈", "description": "In top 5 trending this week", "criteria": "trendingRank <= 5" },
+  { "id": "well-documented", "name": "Well Documented", "emoji": "📚", "description": "Has README, examples, and API docs", "criteria": "docsScore >= 3" },
+  { "id": "community-pick", "name": "Community Pick", "emoji": "⭐", "description": "Highly rated by the community", "criteria": "avgRating >= 4.5" },
+  { "id": "battle-tested", "name": "Battle Tested", "emoji": "⚔️", "description": "100+ days with 95%+ uptime", "criteria": "daysAbove95 >= 100" },
+  { "id": "new", "name": "New", "emoji": "🆕", "description": "Added in the last 7 days", "criteria": "ageInDays <= 7" }
+]
