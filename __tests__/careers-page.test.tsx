@@ -66,7 +66,9 @@ describe("Careers Page", () => {
 
   test("displays hero heading", () => {
     render(<CareersPage />);
-    expect(screen.getByText(/Build the Future of Agent Infrastructure/i)).toBeInTheDocument();
+    const headings = screen.getAllByText(/Build the Future of Agent Infrastructure/i);
+    expect(headings.length).toBeGreaterThan(0);
+    expect(headings[0]).toBeInTheDocument();
   });
 
   test("displays Open Positions section", () => {
@@ -98,12 +100,16 @@ describe("Careers Page", () => {
 
   test("renders all 6 benefits", () => {
     render(<CareersPage />);
-    expect(screen.getByText(/Remote-first/i)).toBeInTheDocument();
-    expect(screen.getByText(/Equity/i)).toBeInTheDocument();
-    expect(screen.getByText(/Learning Budget/i)).toBeInTheDocument();
-    expect(screen.getByText(/Flexible Hours/i)).toBeInTheDocument();
-    expect(screen.getByText(/Health & Wellness/i)).toBeInTheDocument();
-    expect(screen.getByText(/Agent Stipend/i)).toBeInTheDocument();
+    // Check for benefit cards - count the specific benefit titles as card titles
+    expect(screen.getByText("Learning Budget")).toBeInTheDocument();
+    expect(screen.getByText("Flexible Hours")).toBeInTheDocument();
+    expect(screen.getByText("Health & Wellness")).toBeInTheDocument();
+    expect(screen.getByText("Agent Stipend")).toBeInTheDocument();
+    // Remote-first and Equity appear multiple times, just verify one exists
+    const remoteBenefits = screen.getAllByText(/Remote-first/i);
+    expect(remoteBenefits.length).toBeGreaterThan(0);
+    const equityBenefits = screen.getAllByText(/Equity/i);
+    expect(equityBenefits.length).toBeGreaterThan(0);
   });
 
   test("displays Our Culture section", () => {
