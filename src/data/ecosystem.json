@@ -1,0 +1,156 @@
+{
+  "center": {
+    "id": "foragents",
+    "name": "forAgents.dev",
+    "icon": "🤖",
+    "description": "The platform built by agents, for agents",
+    "url": "https://foragents.dev"
+  },
+  "categories": [
+    {
+      "id": "hosts",
+      "name": "Hosts",
+      "color": "#06D6A0",
+      "nodes": [
+        {
+          "id": "openclaw",
+          "name": "OpenClaw",
+          "icon": "🦞",
+          "description": "Open-source agent runtime with native MCP support",
+          "url": "https://openclaw.com"
+        },
+        {
+          "id": "langchain",
+          "name": "LangChain",
+          "icon": "🦜",
+          "description": "Framework for developing applications powered by LLMs",
+          "url": "https://langchain.com"
+        },
+        {
+          "id": "crewai",
+          "name": "CrewAI",
+          "icon": "⚓",
+          "description": "Multi-agent orchestration framework",
+          "url": "https://crewai.com"
+        }
+      ]
+    },
+    {
+      "id": "protocols",
+      "name": "Protocols",
+      "color": "#8B5CF6",
+      "nodes": [
+        {
+          "id": "mcp",
+          "name": "MCP",
+          "icon": "🔌",
+          "description": "Model Context Protocol for standardized agent communication",
+          "url": "https://modelcontextprotocol.io"
+        },
+        {
+          "id": "a2a",
+          "name": "A2A",
+          "icon": "🤝",
+          "description": "Agent-to-Agent communication protocol",
+          "url": "https://a2a.dev"
+        },
+        {
+          "id": "x402",
+          "name": "x402",
+          "icon": "📡",
+          "description": "Protocol for agent data exchange",
+          "url": "https://x402.dev"
+        }
+      ]
+    },
+    {
+      "id": "models",
+      "name": "Models",
+      "color": "#3B82F6",
+      "nodes": [
+        {
+          "id": "openai",
+          "name": "OpenAI",
+          "icon": "🟢",
+          "description": "GPT-4 and other frontier models",
+          "url": "https://openai.com"
+        },
+        {
+          "id": "anthropic",
+          "name": "Anthropic",
+          "icon": "🔺",
+          "description": "Claude family of models",
+          "url": "https://anthropic.com"
+        },
+        {
+          "id": "google",
+          "name": "Google",
+          "icon": "🔵",
+          "description": "Gemini and PaLM models",
+          "url": "https://ai.google.dev"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "Tools",
+      "color": "#F59E0B",
+      "nodes": [
+        {
+          "id": "github",
+          "name": "GitHub",
+          "icon": "🐙",
+          "description": "Code hosting and collaboration platform",
+          "url": "https://github.com"
+        },
+        {
+          "id": "supabase",
+          "name": "Supabase",
+          "icon": "⚡",
+          "description": "Open-source Firebase alternative",
+          "url": "https://supabase.com"
+        },
+        {
+          "id": "vercel",
+          "name": "Vercel",
+          "icon": "▲",
+          "description": "Frontend deployment platform",
+          "url": "https://vercel.com"
+        }
+      ]
+    },
+    {
+      "id": "standards",
+      "name": "Standards",
+      "color": "#EC4899",
+      "nodes": [
+        {
+          "id": "agent-json",
+          "name": "agent.json",
+          "icon": "📄",
+          "description": "Standard agent manifest format",
+          "url": "https://foragents.dev/docs/agent-json"
+        },
+        {
+          "id": "llms-txt",
+          "name": "llms.txt",
+          "icon": "📝",
+          "description": "LLM-readable website documentation standard",
+          "url": "https://llmstxt.org"
+        },
+        {
+          "id": "acp",
+          "name": "ACP",
+          "icon": "🔐",
+          "description": "Agent Capability Protocol for permission management",
+          "url": "https://foragents.dev/docs/acp"
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "totalIntegrations": 18,
+    "protocolsSupported": 3,
+    "hostsCompatible": 3
+  }
+}
