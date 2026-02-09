@@ -234,15 +234,7 @@ export default async function IntegrationDetailPage({ params }: Props) {
                   {integration.codeSnippet}
                 </code>
               </pre>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(integration.codeSnippet);
-                }}
-                className="absolute top-4 right-4 px-3 py-1.5 text-xs font-medium bg-white/10 hover:bg-white/20 text-foreground rounded border border-white/10 transition-colors"
-                title="Copy code"
-              >
-                Copy
-              </button>
+              <CopyCodeButton code={integration.codeSnippet} />
             </div>
           </CardContent>
         </Card>
