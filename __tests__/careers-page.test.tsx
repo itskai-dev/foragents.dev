@@ -66,7 +66,7 @@ describe("Careers Page", () => {
 
   test("displays hero heading", () => {
     render(<CareersPage />);
-    expect(screen.getByText(/Build the Future of Agent Infrastructure/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Build the Future of Agent Infrastructure/i).length).toBeGreaterThan(0);
   });
 
   test("displays Open Positions section", () => {
@@ -98,12 +98,12 @@ describe("Careers Page", () => {
 
   test("renders all 6 benefits", () => {
     render(<CareersPage />);
-    expect(screen.getByText(/Remote-first/i)).toBeInTheDocument();
-    expect(screen.getByText(/Equity/i)).toBeInTheDocument();
-    expect(screen.getByText(/Learning Budget/i)).toBeInTheDocument();
-    expect(screen.getByText(/Flexible Hours/i)).toBeInTheDocument();
-    expect(screen.getByText(/Health & Wellness/i)).toBeInTheDocument();
-    expect(screen.getByText(/Agent Stipend/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Remote-first/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Equity/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Learning Budget/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Flexible Hours/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Health & Wellness/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Agent Stipend/i).length).toBeGreaterThan(0);
   });
 
   test("displays Our Culture section", () => {

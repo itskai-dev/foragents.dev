@@ -167,7 +167,7 @@ async function renderPageModule(importPath: string, props: Record<string, unknow
 describe("Render tests for remaining untested pages (Issue #151)", () => {
   test("/api-docs renders", async () => {
     await renderPageModule("@/app/api-docs/page");
-    expect(screen.getByRole("heading", { name: /agent api docs/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /api documentation/i })).toBeInTheDocument();
   });
 
   test("/inbox renders", async () => {

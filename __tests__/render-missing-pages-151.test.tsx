@@ -139,6 +139,19 @@ jest.mock('@/components/PremiumBadge', () => ({
   VerifiedBadge: () => <span data-testid="verified-badge" />,
 }));
 
+// Mock changelog data
+jest.mock('@/lib/changelog', () => ({
+  getChangelogEntries: () => [
+    {
+      version: '1.0.0',
+      date: '2026-01-01',
+      title: 'Example Update',
+      description: 'Example description',
+      changes: [],
+    },
+  ],
+}));
+
 // Avoid network / filesystem variability for render-only tests.
 jest.mock('@/lib/data', () => {
   const skill = {
@@ -235,6 +248,22 @@ jest.mock('@/lib/data', () => {
 
     // Async functions
     getRecentSubmissions: async () => [],
+
+    // Blog functions
+    getBlogPosts: () => [
+      {
+        slug: 'example-post',
+        title: 'Example Post',
+        excerpt: 'Example excerpt',
+        category: 'Updates',
+        date: '2026-01-01',
+        author: {
+          name: 'Team',
+          avatar: '🤖',
+        },
+      },
+    ],
+    getBlogCategories: () => ['Updates', 'Technical'],
 
     // Types
     Skill: {},
