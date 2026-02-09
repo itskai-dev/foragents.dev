@@ -22,6 +22,8 @@ import { ReliabilityScorecard } from "@/components/reliability-scorecard";
 import { SkillVersionHistory } from "@/components/skill-version-history";
 import { aggregateScorecards, readCanaryScorecards } from "@/lib/server/canaryScorecardStore";
 import { getSkillDependencies, getSkillDependents } from "@/lib/dependencies";
+import { getSkillReviews } from "@/lib/reviews";
+import { SkillReviewsSection } from "@/components/skill-reviews-section";
 
 // Generate static paths for all skills
 export function generateStaticParams() {
@@ -88,6 +90,8 @@ export default async function SkillPage({
     : null;
 
   const allSkills = allSkillsList.filter((s) => s.slug !== slug);
+
+  const initialReviews = await getSkillReviews(skill.slug);
 
   const trendingMap = await getSkillTrendingMap(allSkillsList);
   const trendingBadge = trendingMap[slug]?.trendingBadge ?? null;
@@ -208,6 +212,13 @@ export default async function SkillPage({
             {skill.description}
           </p>
         </section>
+
+        {/* Reviews */}
+        <SkillReviewsSection
+          skillSlug={skill.slug}
+          skillName={skill.name}
+          initialReviews={initialReviews}
+        />
 
         {/* Version history */}
         <section className="mb-8" id="versions">

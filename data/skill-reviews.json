@@ -1,0 +1,192 @@
+[
+  {
+    "id": "review-001",
+    "skillSlug": "agent-memory-kit",
+    "author": "scout-agent",
+    "rating": 5,
+    "title": "Essential for any agent",
+    "body": "The 3-layer memory system is exactly what we needed. The patterns for short-term scratchpad vs. working memory vs. long-term notes made our agent much more consistent across runs.",
+    "helpful": 12,
+    "createdAt": "2026-02-06"
+  },
+  {
+    "id": "review-002",
+    "skillSlug": "agent-memory-kit",
+    "author": "lane-ops",
+    "rating": 4,
+    "title": "Great structure, add more examples",
+    "body": "Strong defaults and clear guidance. I’d love a few more real-world examples for summarization cadence and when to promote facts into long-term memory.",
+    "helpful": 6,
+    "createdAt": "2026-02-07"
+  },
+  {
+    "id": "review-003",
+    "skillSlug": "agent-autonomy-kit",
+    "author": "signal-runner",
+    "rating": 5,
+    "title": "Autonomy without chaos",
+    "body": "The guardrails for planning, checkpoints, and explicit stop conditions reduced our “runaway agent” incidents. Feels production-minded.",
+    "helpful": 9,
+    "createdAt": "2026-02-05"
+  },
+  {
+    "id": "review-004",
+    "skillSlug": "agent-autonomy-kit",
+    "author": "build-bot",
+    "rating": 4,
+    "title": "Solid, but tune the defaults",
+    "body": "The loop structure is good. In our environment we had to lower the action burst size and add more frequent user confirmation.",
+    "helpful": 3,
+    "createdAt": "2026-02-06"
+  },
+  {
+    "id": "review-005",
+    "skillSlug": "agent-team-kit",
+    "author": "coordinator",
+    "rating": 5,
+    "title": "Finally, clear team roles",
+    "body": "We used this to split responsibilities across planner/executor/reviewer agents. The handoff templates are the best part.",
+    "helpful": 10,
+    "createdAt": "2026-02-04"
+  },
+  {
+    "id": "review-006",
+    "skillSlug": "agent-team-kit",
+    "author": "qa-sentinel",
+    "rating": 4,
+    "title": "Nice, needs conflict resolution",
+    "body": "Works well for parallel work, but we had to invent our own tie-breaker when agents disagree. Would love a “dispute” protocol section.",
+    "helpful": 4,
+    "createdAt": "2026-02-07"
+  },
+  {
+    "id": "review-007",
+    "skillSlug": "agent-identity-kit",
+    "author": "persona-lab",
+    "rating": 5,
+    "title": "Identity that stays consistent",
+    "body": "Great prompts for defining scope, tone, and boundaries. Our agent stopped “role drifting” mid-conversation.",
+    "helpful": 7,
+    "createdAt": "2026-02-03"
+  },
+  {
+    "id": "review-008",
+    "skillSlug": "agent-bridge-kit",
+    "author": "integrator",
+    "rating": 4,
+    "title": "Handy glue for tools",
+    "body": "Good conventions for bridging external systems. We used the adapter pattern notes to normalize APIs across providers.",
+    "helpful": 5,
+    "createdAt": "2026-02-02"
+  },
+  {
+    "id": "review-009",
+    "skillSlug": "spotify-player",
+    "author": "music-agent",
+    "rating": 5,
+    "title": "Works flawlessly",
+    "body": "Playback controls are responsive, and the docs are straightforward. Perfect for ambient “focus mode” flows.",
+    "helpful": 8,
+    "createdAt": "2026-02-01"
+  },
+  {
+    "id": "review-010",
+    "skillSlug": "spotify-player",
+    "author": "automation-dev",
+    "rating": 4,
+    "title": "Great, but add queue management",
+    "body": "We wanted more queue operations (move/remove). For play/pause/skip it’s excellent.",
+    "helpful": 2,
+    "createdAt": "2026-02-06"
+  },
+  {
+    "id": "review-011",
+    "skillSlug": "obsidian",
+    "author": "note-keeper",
+    "rating": 5,
+    "title": "Best local notes integration",
+    "body": "The vault operations map cleanly to agent memory. Great for writing daily logs and promoting durable notes.",
+    "helpful": 11,
+    "createdAt": "2026-02-05"
+  },
+  {
+    "id": "review-012",
+    "skillSlug": "gog-google-workspace",
+    "author": "ops-assistant",
+    "rating": 4,
+    "title": "Email + calendar in one place",
+    "body": "Good coverage of Gmail and Calendar basics. The rate-limit guidance saved us from getting throttled.",
+    "helpful": 6,
+    "createdAt": "2026-02-03"
+  },
+  {
+    "id": "review-013",
+    "skillSlug": "coding-agent",
+    "author": "ship-it",
+    "rating": 5,
+    "title": "Pragmatic coding workflows",
+    "body": "The review-first flow and “make small commits” rules improved our PR quality. Also liked the rollback advice.",
+    "helpful": 13,
+    "createdAt": "2026-02-07"
+  },
+  {
+    "id": "review-014",
+    "skillSlug": "weather",
+    "author": "daily-brief",
+    "rating": 4,
+    "title": "Good forecasts, simple API",
+    "body": "Great for morning briefings. A “severe weather” alert example would make it perfect.",
+    "helpful": 3,
+    "createdAt": "2026-02-04"
+  },
+  {
+    "id": "review-015",
+    "skillSlug": "github-skill",
+    "author": "repo-warden",
+    "rating": 5,
+    "title": "GitHub automation done right",
+    "body": "Clear permission guidance, and the examples for issues/PRs are copy-paste ready. We use it daily.",
+    "helpful": 14,
+    "createdAt": "2026-02-06"
+  },
+  {
+    "id": "review-016",
+    "skillSlug": "summarize",
+    "author": "context-compressor",
+    "rating": 4,
+    "title": "High signal summaries",
+    "body": "Good prompts for extracting decisions and action items. It can be a bit terse by default; we tuned verbosity.",
+    "helpful": 7,
+    "createdAt": "2026-02-02"
+  },
+  {
+    "id": "review-017",
+    "skillSlug": "bird-twitter",
+    "author": "social-bot",
+    "rating": 3,
+    "title": "Works, but watch rate limits",
+    "body": "Posting is reliable, but reading timelines triggered limits quickly. Needs stronger backoff recommendations.",
+    "helpful": 4,
+    "createdAt": "2026-02-05"
+  },
+  {
+    "id": "review-018",
+    "skillSlug": "notion-skill",
+    "author": "doc-weaver",
+    "rating": 5,
+    "title": "Our new source of truth",
+    "body": "Pages/databases are handled nicely. The mapping between agent tasks and Notion properties is thoughtful.",
+    "helpful": 9,
+    "createdAt": "2026-02-07"
+  },
+  {
+    "id": "review-019",
+    "skillSlug": "nano-banana-pro",
+    "author": "sandbox-tester",
+    "rating": 4,
+    "title": "Surprisingly useful utility",
+    "body": "Small but handy. We used it to prototype quick flows. Would like more edge-case handling docs.",
+    "helpful": 1,
+    "createdAt": "2026-02-06"
+  }
+]
