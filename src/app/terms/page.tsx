@@ -1,321 +1,355 @@
-import { Metadata } from 'next';
+"use client";
 
-export const metadata: Metadata = {
-  title: 'Terms of Service | forAgents.dev',
-  description: 'Terms of service for forAgents.dev - Rules and guidelines for using our AI agent directory.',
-  openGraph: {
-    title: 'Terms of Service | forAgents.dev',
-    description: 'Terms of service for forAgents.dev - Rules and guidelines for using our AI agent directory.',
-    url: 'https://foragents.dev/terms',
-    siteName: 'forAgents.dev',
-    type: 'website',
-  },
-};
+import { useState, useEffect } from 'react';
+
+const sections = [
+  { id: 'acceptance', title: '1. Acceptance of Terms' },
+  { id: 'service', title: '2. Description of Service' },
+  { id: 'accounts', title: '3. User Accounts' },
+  { id: 'api', title: '4. API Usage' },
+  { id: 'acceptable', title: '5. Acceptable Use' },
+  { id: 'intellectual', title: '6. Intellectual Property' },
+  { id: 'payment', title: '7. Payment Terms' },
+  { id: 'termination', title: '8. Termination' },
+  { id: 'limitation', title: '9. Limitation of Liability' },
+  { id: 'governing', title: '10. Governing Law' },
+  { id: 'changes', title: '11. Changes to Terms' },
+  { id: 'contact', title: '12. Contact Information' },
+];
 
 export default function TermsPage() {
+  const [activeSection, setActiveSection] = useState('acceptance');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-100px 0px -66%' }
+    );
+
+    sections.forEach(({ id }) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="max-w-4xl mx-auto px-6 py-16">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#06D6A0' }}>
-          Terms of Service
-        </h1>
-        <p className="text-gray-400 mb-12">
-          Last updated: February 2026
-        </p>
+      {/* Hero Section */}
+      <section className="relative overflow-hidden min-h-[300px] flex items-center border-b border-white/5">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
+        </div>
 
-        <div className="space-y-8 text-gray-300 leading-relaxed">
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Introduction</h2>
-            <p>
-              Welcome to forAgents.dev. These Terms of Service (&quot;Terms&quot;, &quot;Terms of Service&quot;) govern your 
-              use of our website and services. By accessing or using forAgents.dev, you agree to be bound by these 
-              Terms. If you disagree with any part of the terms, then you may not access the service.
-            </p>
-          </section>
+        <div className="relative max-w-7xl mx-auto px-4 py-16 w-full">
+          <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
+            Terms of Service
+          </h1>
+          <div className="flex flex-col gap-2 text-sm text-foreground/60">
+            <p>Effective Date: February 9, 2026</p>
+            <p>Last Updated: February 9, 2026</p>
+          </div>
+        </div>
+      </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Acceptance of Terms</h2>
-            <p className="mb-4">
-              By accessing and using forAgents.dev, you accept and agree to be bound by the terms and provision of 
-              this agreement. Additionally, when using our services, you shall be subject to any posted guidelines 
-              or rules applicable to such services.
-            </p>
-            <p className="mb-4">
-              If you do not agree to these Terms, please do not use our service. We reserve the right to modify or 
-              replace these Terms at any time. If a revision is material, we will try to provide at least 30 days&apos; 
-              notice prior to any new terms taking effect. What constitutes a material change will be determined at 
-              our sole discretion.
-            </p>
-            <p>
-              Your continued use of the service following the posting of any changes to these Terms constitutes 
-              acceptance of those changes.
-            </p>
-          </section>
+      {/* Main Content with Sidebar */}
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="flex flex-col lg:flex-row gap-12">
+          {/* Table of Contents Sidebar */}
+          <aside className="lg:w-64 flex-shrink-0">
+            <div className="lg:sticky lg:top-24">
+              <nav className="bg-[#0f0f0f] border border-white/10 rounded-lg p-4">
+                <h2 className="text-sm font-semibold text-foreground mb-4 px-2">Table of Contents</h2>
+                <ul className="space-y-1">
+                  {sections.map(({ id, title }) => (
+                    <li key={id}>
+                      <button
+                        onClick={() => scrollToSection(id)}
+                        className={`w-full text-left text-sm px-2 py-1.5 rounded transition-colors ${
+                          activeSection === id
+                            ? 'text-[#06D6A0] bg-[#06D6A0]/10 font-medium'
+                            : 'text-foreground/60 hover:text-foreground hover:bg-white/5'
+                        }`}
+                      >
+                        {title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </aside>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Use of Service</h2>
-            <p className="mb-4">
-              forAgents.dev is a directory platform for discovering and sharing AI agents. When using our service, 
-              you agree to:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Provide accurate, current, and complete information about yourself and any agents you submit</li>
-              <li>Maintain and promptly update your information to keep it accurate, current, and complete</li>
-              <li>Use the service only for lawful purposes and in accordance with these Terms</li>
-              <li>Not use the service in any way that could damage, disable, overburden, or impair the service</li>
-              <li>Not attempt to gain unauthorized access to any portion of the service or any other systems or 
-              networks connected to the service</li>
-              <li>Not use any automated system, including robots, spiders, or scrapers, to access the service 
-              without our prior written permission</li>
-              <li>Not impersonate or attempt to impersonate forAgents.dev, another user, or any other person or entity</li>
-              <li>Not engage in any conduct that restricts or inhibits anyone&apos;s use or enjoyment of the service</li>
-            </ul>
-          </section>
+          {/* Content */}
+          <main className="flex-1 max-w-4xl">
+            <div className="prose prose-invert max-w-none">
+              <section id="acceptance" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">1. Acceptance of Terms</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    By accessing and using forAgents.dev (&quot;Service&quot;, &quot;Platform&quot;, &quot;Website&quot;), you accept and agree to be bound by these Terms of Service (&quot;Terms&quot;). These Terms constitute a legally binding agreement between you and forAgents.dev.
+                  </p>
+                  <p>
+                    If you do not agree to these Terms, you must not access or use the Service. Your continued use of the Service following any changes to these Terms constitutes acceptance of those changes.
+                  </p>
+                  <p>
+                    By using this Service, you represent that you are at least 18 years of age or have reached the age of majority in your jurisdiction, and that you have the legal capacity to enter into these Terms.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">User Accounts</h2>
-            <p className="mb-4">
-              When you create an account with us or submit an agent to our directory, you must provide information 
-              that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the 
-              Terms, which may result in immediate termination of your account or listing.
-            </p>
-            <p className="mb-4">
-              You are responsible for safeguarding any credentials used to access the service and for any activities 
-              or actions under your account. You agree not to disclose your credentials to any third party. You must 
-              notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.
-            </p>
-            <p>
-              We reserve the right to refuse service, terminate accounts, or remove or edit content in our sole 
-              discretion.
-            </p>
-          </section>
+              <section id="service" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">2. Description of Service</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    forAgents.dev is a comprehensive directory and platform for discovering, sharing, and managing AI agents, skills, tools, and related services. The Service provides:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>A searchable directory of AI agents and tools</li>
+                    <li>API access for programmatic interaction with our directory</li>
+                    <li>User profiles and agent submission capabilities</li>
+                    <li>Community features including ratings, reviews, and discussions</li>
+                    <li>Documentation, guides, and educational resources</li>
+                    <li>Analytics and tracking features for submitted agents</li>
+                  </ul>
+                  <p>
+                    We reserve the right to modify, suspend, or discontinue any aspect of the Service at any time, with or without notice. We are not liable for any modification, suspension, or discontinuance of the Service.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">User Content</h2>
-            <p className="mb-4">
-              Our service allows you to submit, post, and share information about AI agents, including descriptions, 
-              links, images, and other content (&quot;User Content&quot;). You retain any and all of your rights to any User 
-              Content you submit, post, or display on or through the service.
-            </p>
-            <p className="mb-4">
-              By submitting, posting, or displaying User Content on or through the service, you grant us a worldwide, 
-              non-exclusive, royalty-free license to use, reproduce, adapt, publish, translate, and distribute your 
-              User Content in any existing or future media. This license is for the purpose of operating, promoting, 
-              and improving the service.
-            </p>
-            <p className="mb-4">
-              You represent and warrant that:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>You own or have the necessary rights and permissions to use and authorize us to use all User Content</li>
-              <li>Your User Content does not and will not infringe, violate, or misappropriate any third party&apos;s 
-              intellectual property rights, or rights of publicity or privacy</li>
-              <li>Your User Content does not contain any material that is defamatory, obscene, indecent, abusive, 
-              offensive, harassing, violent, hateful, inflammatory, or otherwise objectionable</li>
-              <li>Your User Content does not violate any law or regulation</li>
-            </ul>
-            <p className="mt-4">
-              We reserve the right to remove any User Content that violates these Terms or that we deem inappropriate 
-              for any reason, without notice.
-            </p>
-          </section>
+              <section id="accounts" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">3. User Accounts</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    To access certain features of the Service, you may be required to create an account. When creating an account, you agree to:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Provide accurate, current, and complete information</li>
+                    <li>Maintain and promptly update your account information</li>
+                    <li>Maintain the security of your account credentials</li>
+                    <li>Accept responsibility for all activities that occur under your account</li>
+                    <li>Notify us immediately of any unauthorized access or security breach</li>
+                  </ul>
+                  <p>
+                    You may not use another person&apos;s account without permission, impersonate any person or entity, or falsely state or misrepresent your affiliation with any person or entity.
+                  </p>
+                  <p>
+                    We reserve the right to suspend or terminate your account if we determine, in our sole discretion, that you have violated these Terms or engaged in conduct that we deem inappropriate.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Agent Listings</h2>
-            <p className="mb-4">
-              When submitting an agent to our directory, you agree that:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>All information provided about the agent is accurate and truthful</li>
-              <li>You have the right to list the agent on our platform</li>
-              <li>The agent does not violate any laws, regulations, or third-party rights</li>
-              <li>You will promptly update the listing if any information changes or becomes inaccurate</li>
-              <li>You understand that we may feature, categorize, or promote certain agents at our discretion</li>
-            </ul>
-            <p className="mt-4">
-              We reserve the right to reject, remove, or modify any agent listing that we believe violates these 
-              Terms, is inaccurate, or is otherwise inappropriate.
-            </p>
-          </section>
+              <section id="api" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">4. API Usage</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    If you access our API, you agree to comply with the following terms:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Respect all rate limits and usage quotas as specified in our API documentation</li>
+                    <li>Not attempt to circumvent any security measures or access controls</li>
+                    <li>Not use the API in a manner that could damage, disable, overburden, or impair the Service</li>
+                    <li>Not use the API for any illegal purpose or in violation of any applicable laws</li>
+                    <li>Properly attribute data obtained from our API when required</li>
+                    <li>Keep your API keys confidential and secure</li>
+                  </ul>
+                  <p>
+                    We may impose rate limits, usage restrictions, or other limitations on API usage at our discretion. Violation of API usage terms may result in immediate suspension or termination of API access without notice.
+                  </p>
+                  <p>
+                    We reserve the right to monitor API usage and may contact you if we detect unusual patterns or potential violations of these Terms.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Intellectual Property</h2>
-            <p className="mb-4">
-              The service and its original content (excluding User Content), features, and functionality are and will 
-              remain the exclusive property of forAgents.dev and its licensors. The service is protected by copyright, 
-              trademark, and other laws of both the United States and foreign countries.
-            </p>
-            <p className="mb-4">
-              Our trademarks and trade dress may not be used in connection with any product or service without the 
-              prior written consent of forAgents.dev. Nothing in these Terms constitutes a transfer of any intellectual 
-              property rights from us to you.
-            </p>
-            <p>
-              You may not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, 
-              republish, download, store, or transmit any of the material on our service, except as incidentally 
-              necessary for normal web browsing.
-            </p>
-          </section>
+              <section id="acceptable" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">5. Acceptable Use</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    You agree not to use the Service to:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Violate any applicable laws, regulations, or third-party rights</li>
+                    <li>Submit false, misleading, or deceptive content</li>
+                    <li>Harass, threaten, or intimidate any person</li>
+                    <li>Distribute spam, malware, viruses, or other malicious code</li>
+                    <li>Attempt to gain unauthorized access to any systems or networks</li>
+                    <li>Scrape, crawl, or harvest data without permission</li>
+                    <li>Interfere with or disrupt the Service or servers</li>
+                    <li>Infringe upon intellectual property rights of others</li>
+                    <li>Impersonate any person or entity or misrepresent your affiliation</li>
+                    <li>Engage in any form of automated use without express permission</li>
+                    <li>Submit content that is illegal, obscene, defamatory, or otherwise objectionable</li>
+                  </ul>
+                  <p>
+                    We reserve the right to investigate and take appropriate legal action against anyone who violates this provision, including removing the offending content and terminating accounts.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Third-Party Links and Services</h2>
-            <p className="mb-4">
-              Our service may contain links to third-party websites, services, or agents that are not owned or 
-              controlled by forAgents.dev. We have no control over, and assume no responsibility for, the content, 
-              privacy policies, or practices of any third-party websites, services, or agents.
-            </p>
-            <p className="mb-4">
-              You acknowledge and agree that forAgents.dev shall not be responsible or liable, directly or indirectly, 
-              for any damage or loss caused or alleged to be caused by or in connection with the use of or reliance 
-              on any such content, goods, or services available on or through any such third-party websites, services, 
-              or agents.
-            </p>
-            <p>
-              We strongly advise you to read the terms and conditions and privacy policies of any third-party websites, 
-              services, or agents that you visit or interact with.
-            </p>
-          </section>
+              <section id="intellectual" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">6. Intellectual Property</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    The Service and its original content, features, and functionality are owned by forAgents.dev and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.
+                  </p>
+                  <p>
+                    <strong className="text-white">Your Content:</strong> You retain all rights to any content you submit, post, or display on or through the Service (&quot;User Content&quot;). By submitting User Content, you grant us a worldwide, non-exclusive, royalty-free, transferable license to use, reproduce, distribute, prepare derivative works of, display, and perform your User Content in connection with the Service.
+                  </p>
+                  <p>
+                    <strong className="text-white">Our Content:</strong> Unless otherwise indicated, all content on the Service, including text, graphics, logos, icons, images, audio clips, and software, is the property of forAgents.dev or its licensors and is protected by copyright laws.
+                  </p>
+                  <p>
+                    You may not reproduce, distribute, modify, create derivative works of, publicly display, publicly perform, republish, download, store, or transmit any of the material on our Service without our prior written consent.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Disclaimers</h2>
-            <p className="mb-4">
-              Your use of the service is at your sole risk. The service is provided on an &quot;AS IS&quot; and &quot;AS AVAILABLE&quot; 
-              basis. The service is provided without warranties of any kind, whether express or implied, including, 
-              but not limited to, implied warranties of merchantability, fitness for a particular purpose, 
-              non-infringement, or course of performance.
-            </p>
-            <p className="mb-4">
-              forAgents.dev, its subsidiaries, affiliates, and its licensors do not warrant that:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>The service will function uninterrupted, secure, or available at any particular time or location</li>
-              <li>Any errors or defects will be corrected</li>
-              <li>The service is free of viruses or other harmful components</li>
-              <li>The results of using the service will meet your requirements</li>
-              <li>Any agents listed on the service will perform as described or meet your expectations</li>
-            </ul>
-            <p className="mt-4">
-              We do not endorse, warrant, or assume responsibility for any agents, products, or services advertised 
-              or offered by third parties through the service or any hyperlinked website. We will not be a party to 
-              or in any way be responsible for monitoring any transaction between you and third-party providers of 
-              agents, products, or services.
-            </p>
-          </section>
+              <section id="payment" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">7. Payment Terms</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    Certain features of the Service may be provided for a fee. If you elect to use paid features, you agree to the following:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>You will provide accurate and complete billing information</li>
+                    <li>You authorize us to charge your payment method for all fees incurred</li>
+                    <li>All fees are non-refundable unless otherwise stated</li>
+                    <li>Prices are subject to change with reasonable notice</li>
+                    <li>You are responsible for all taxes associated with your purchase</li>
+                    <li>Subscription fees are billed in advance on a recurring basis</li>
+                  </ul>
+                  <p>
+                    If any payment is not successfully processed, due to expiration, insufficient funds, or otherwise, we may suspend or terminate your access to paid features until payment is received.
+                  </p>
+                  <p>
+                    You may cancel your subscription at any time, but no refunds will be provided for any unused portion of a subscription period.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Limitation of Liability</h2>
-            <p className="mb-4">
-              In no event shall forAgents.dev, nor its directors, employees, partners, agents, suppliers, or 
-              affiliates, be liable for any indirect, incidental, special, consequential, or punitive damages, 
-              including without limitation, loss of profits, data, use, goodwill, or other intangible losses, 
-              resulting from:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4">
-              <li>Your access to or use of or inability to access or use the service</li>
-              <li>Any conduct or content of any third party on the service</li>
-              <li>Any content obtained from the service</li>
-              <li>Unauthorized access, use, or alteration of your transmissions or content</li>
-              <li>Any agents, products, or services obtained through the service</li>
-            </ul>
-            <p className="mt-4">
-              This limitation of liability applies whether the alleged liability is based on contract, tort, 
-              negligence, strict liability, or any other basis, even if forAgents.dev has been advised of the 
-              possibility of such damage.
-            </p>
-            <p className="mt-4">
-              Some jurisdictions do not allow the exclusion of certain warranties or the limitation or exclusion 
-              of liability for incidental or consequential damages. Accordingly, some of the above limitations may 
-              not apply to you. In such jurisdictions, our liability will be limited to the greatest extent permitted 
-              by law.
-            </p>
-          </section>
+              <section id="termination" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">8. Termination</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Breach of these Terms</li>
+                    <li>Request by law enforcement or other government agencies</li>
+                    <li>Discontinuance or material modification of the Service</li>
+                    <li>Unexpected technical or security issues</li>
+                    <li>Extended periods of inactivity</li>
+                    <li>Engagement in fraudulent or illegal activities</li>
+                  </ul>
+                  <p>
+                    You may terminate your account at any time by discontinuing use of the Service and requesting account deletion through your account settings or by contacting us.
+                  </p>
+                  <p>
+                    Upon termination, your right to use the Service will immediately cease. All provisions of these Terms that by their nature should survive termination shall survive, including ownership provisions, warranty disclaimers, indemnity, and limitations of liability.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Indemnification</h2>
-            <p>
-              You agree to defend, indemnify, and hold harmless forAgents.dev and its licensors and licensees, and 
-              their employees, contractors, agents, officers, and directors, from and against any and all claims, 
-              damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to 
-              attorney&apos;s fees), resulting from or arising out of:
-            </p>
-            <ul className="list-disc list-inside space-y-2 ml-4 mt-4">
-              <li>Your use and access of the service</li>
-              <li>Your violation of any term of these Terms</li>
-              <li>Your violation of any third-party right, including without limitation any copyright, property, 
-              or privacy right</li>
-              <li>Any claim that your User Content caused damage to a third party</li>
-            </ul>
-          </section>
+              <section id="limitation" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">9. Limitation of Liability</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL FORAGENTS.DEV, ITS AFFILIATES, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING WITHOUT LIMITATION, LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM:
+                  </p>
+                  <ul className="list-disc list-inside space-y-2 ml-4">
+                    <li>Your access to or use of or inability to access or use the Service</li>
+                    <li>Any conduct or content of any third party on the Service</li>
+                    <li>Any content obtained from the Service</li>
+                    <li>Unauthorized access, use, or alteration of your transmissions or content</li>
+                  </ul>
+                  <p>
+                    THE SERVICE IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+                  </p>
+                  <p>
+                    WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, SECURE, OR ERROR-FREE, OR THAT ANY DEFECTS WILL BE CORRECTED. IN NO EVENT SHALL OUR TOTAL LIABILITY TO YOU FOR ALL DAMAGES EXCEED THE AMOUNT YOU PAID US IN THE TWELVE (12) MONTHS PRIOR TO THE EVENT GIVING RISE TO THE LIABILITY, OR ONE HUNDRED DOLLARS ($100) IF NO SUCH PAYMENTS WERE MADE.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Termination</h2>
-            <p className="mb-4">
-              We may terminate or suspend your account and access to the service immediately, without prior notice 
-              or liability, for any reason whatsoever, including without limitation if you breach the Terms.
-            </p>
-            <p className="mb-4">
-              Upon termination, your right to use the service will immediately cease. If you wish to terminate your 
-              account, you may simply discontinue using the service or contact us to request account deletion.
-            </p>
-            <p>
-              All provisions of the Terms which by their nature should survive termination shall survive termination, 
-              including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations 
-              of liability.
-            </p>
-          </section>
+              <section id="governing" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">10. Governing Law</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    These Terms shall be governed and construed in accordance with the laws of the United States and the State of California, without regard to its conflict of law provisions.
+                  </p>
+                  <p>
+                    Any dispute arising out of or relating to these Terms or the Service shall be resolved exclusively in the state or federal courts located in San Francisco County, California, and you consent to the personal jurisdiction of such courts.
+                  </p>
+                  <p>
+                    Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions will remain in effect.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Governing Law</h2>
-            <p>
-              These Terms shall be governed and construed in accordance with the laws of the United States, without 
-              regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms 
-              will not be considered a waiver of those rights.
-            </p>
-          </section>
+              <section id="changes" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">11. Changes to Terms</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    We reserve the right to modify or replace these Terms at any time at our sole discretion. If a revision is material, we will provide at least 30 days&apos; notice prior to any new terms taking effect.
+                  </p>
+                  <p>
+                    What constitutes a material change will be determined at our sole discretion. You are responsible for reviewing these Terms periodically for changes. Your continued use of the Service following the posting of any changes constitutes acceptance of those changes.
+                  </p>
+                  <p>
+                    If you do not agree to the new terms, you must stop using the Service. We will indicate the effective date of the new terms, and in some cases, we may notify you of changes via email or through a notice on the Service.
+                  </p>
+                </div>
+              </section>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Severability</h2>
-            <p>
-              If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining 
-              provisions of these Terms will remain in effect. These Terms constitute the entire agreement between 
-              us regarding our service, and supersede and replace any prior agreements we might have between us 
-              regarding the service.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Changes to Terms</h2>
-            <p className="mb-4">
-              We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a 
-              revision is material, we will try to provide at least 30 days&apos; notice prior to any new terms taking 
-              effect. What constitutes a material change will be determined at our sole discretion.
-            </p>
-            <p>
-              By continuing to access or use our service after those revisions become effective, you agree to be 
-              bound by the revised terms. If you do not agree to the new terms, please stop using the service.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-2xl font-semibold mb-4 text-white">Contact Us</h2>
-            <p className="mb-4">
-              If you have any questions about these Terms of Service, please contact us:
-            </p>
-            <ul className="list-none space-y-2">
-              <li>
-                <strong className="text-white">Email:</strong>{' '}
-                <a href="mailto:legal@foragents.dev" className="hover:underline" style={{ color: '#06D6A0' }}>
-                  legal@foragents.dev
-                </a>
-              </li>
-              <li>
-                <strong className="text-white">Website:</strong>{' '}
-                <a href="https://foragents.dev" className="hover:underline" style={{ color: '#06D6A0' }}>
-                  https://foragents.dev
-                </a>
-              </li>
-            </ul>
-          </section>
+              <section id="contact" className="mb-12 scroll-mt-24">
+                <h2 className="text-2xl font-semibold mb-4 text-white">12. Contact Information</h2>
+                <div className="space-y-4 text-gray-300 leading-relaxed">
+                  <p>
+                    If you have any questions about these Terms, please contact us:
+                  </p>
+                  <div className="bg-[#0f0f0f] border border-white/10 rounded-lg p-6 space-y-3">
+                    <div>
+                      <strong className="text-white">Email:</strong>{' '}
+                      <a href="mailto:legal@foragents.dev" className="text-[#06D6A0] hover:underline">
+                        legal@foragents.dev
+                      </a>
+                    </div>
+                    <div>
+                      <strong className="text-white">Website:</strong>{' '}
+                      <a href="https://foragents.dev" className="text-[#06D6A0] hover:underline">
+                        foragents.dev
+                      </a>
+                    </div>
+                    <div>
+                      <strong className="text-white">Contact Form:</strong>{' '}
+                      <a href="https://foragents.dev/contact" className="text-[#06D6A0] hover:underline">
+                        foragents.dev/contact
+                      </a>
+                    </div>
+                  </div>
+                  <p className="text-sm text-foreground/60 mt-8">
+                    These Terms of Service were last updated on February 9, 2026.
+                  </p>
+                </div>
+              </section>
+            </div>
+          </main>
         </div>
       </div>
     </div>
