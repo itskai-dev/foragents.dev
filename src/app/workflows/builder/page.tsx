@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,6 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import {
   ArrowUp,
   ArrowDown,
-  Plus,
   Trash2,
   Download,
   Upload,
@@ -58,13 +57,13 @@ const stepTypes: Record<StepType, { icon: typeof Play; color: string; descriptio
 };
 
 export default function WorkflowBuilderPage() {
-  const [workflow, setWorkflow] = useState<Workflow>({
-    id: `workflow-${Date.now()}`,
+  const [workflow, setWorkflow] = useState<Workflow>(() => ({
+    id: `workflow-${crypto.randomUUID()}`,
     name: "New Workflow",
     description: "Describe your workflow",
     category: "Custom",
     steps: [],
-  });
+  }));
   const [selectedStepIndex, setSelectedStepIndex] = useState<number | null>(null);
   const [showTemplateDialog, setShowTemplateDialog] = useState(false);
   const [previewTab, setPreviewTab] = useState("yaml");
@@ -73,7 +72,7 @@ export default function WorkflowBuilderPage() {
   const loadTemplate = (template: Workflow) => {
     setWorkflow({
       ...template,
-      id: `workflow-${Date.now()}`,
+      id: `workflow-${crypto.randomUUID()}`,
     });
     setShowTemplateDialog(false);
     setSelectedStepIndex(null);
@@ -82,7 +81,7 @@ export default function WorkflowBuilderPage() {
   // Add new step
   const addStep = (type: StepType) => {
     const newStep: WorkflowStep = {
-      id: `step-${Date.now()}`,
+      id: `step-${crypto.randomUUID()}`,
       name: `New ${type} step`,
       type,
       description: "",
@@ -124,16 +123,6 @@ export default function WorkflowBuilderPage() {
     setWorkflow({ ...workflow, steps: newSteps });
   };
 
-  // Update step config
-  const updateStepConfig = (index: number, key: string, value: unknown) => {
-    const newSteps = [...workflow.steps];
-    newSteps[index] = {
-      ...newSteps[index],
-      config: { ...newSteps[index].config, [key]: value },
-    };
-    setWorkflow({ ...workflow, steps: newSteps });
-  };
-
   // Generate YAML
   const generateYAML = () => {
     const yaml = `# ${workflow.name}
@@ -146,7 +135,7 @@ description: ${workflow.description}
 steps:
 ${workflow.steps
   .map(
-    (step, i) => `  - id: ${step.id}
+    (step) => `  - id: ${step.id}
     name: ${step.name}
     type: ${step.type}
     description: ${step.description}
@@ -475,7 +464,7 @@ ${Object.entries(step.config)
                         try {
                           const config = JSON.parse(e.target.value);
                           updateStep(selectedStepIndex, { config });
-                        } catch (err) {
+                        } catch {
                           // Invalid JSON, don't update
                         }
                       }}
