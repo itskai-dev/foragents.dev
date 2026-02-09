@@ -6,9 +6,11 @@ import { getRegistryAgents } from "../src/lib/registry-data";
 
 // Mock Next.js Link component
 jest.mock("next/link", () => {
-  return ({ children, href }: { children: React.ReactNode; href: string }) => {
+  const LinkMock = ({ children, href }: { children: React.ReactNode; href: string }) => {
     return <a href={href}>{children}</a>;
   };
+  LinkMock.displayName = "Link";
+  return LinkMock;
 });
 
 // Mock the client component
