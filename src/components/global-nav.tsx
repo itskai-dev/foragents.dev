@@ -21,6 +21,7 @@ const navLinks = [
   { href: "/mcp", label: "MCP" },
   { href: "/macros", label: "Macros" },
   { href: "/integrations", label: "Integrations" },
+  { href: "/partners", label: "Partners" },
   { href: "/requests", label: "Requests" },
   { href: "/bounties", label: "Bounties" },
   { href: "/forum", label: "Forum" },

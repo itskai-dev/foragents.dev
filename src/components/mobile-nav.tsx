@@ -20,6 +20,7 @@ const moreLinks = [
   { href: "/collections", label: "Collections" },
   { href: "/benchmarks", label: "Benchmarks" },
   { href: "/dependencies", label: "Dependencies" },
+  { href: "/partners", label: "Partners" },
   { href: "/stack", label: "Stack Cards" },
   { href: "/acp", label: "ACP Agents" },
   { href: "/llms-txt", label: "llms.txt Sites" },

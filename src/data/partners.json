@@ -1,0 +1,242 @@
+[
+  {
+    "id": "openclaw",
+    "name": "OpenClaw",
+    "slug": "openclaw",
+    "icon": "🦅",
+    "description": "Open-source AI agent orchestration platform with native support for multi-agent workflows and tool routing.",
+    "fullDescription": "OpenClaw is an open-source platform for building, deploying, and orchestrating AI agents at scale. With built-in support for multi-agent workflows, tool routing, and real-time monitoring, OpenClaw makes it easy to build production-ready agent systems.",
+    "tier": "Gold",
+    "integrationType": "SDK",
+    "features": [
+      "Multi-agent workflow orchestration",
+      "Built-in tool registry and routing",
+      "Real-time agent monitoring and tracing",
+      "Native TypeScript and Python SDKs",
+      "Self-hosted or cloud deployment options"
+    ],
+    "integrationGuide": "npm install @openclaw/sdk\n\nimport { OpenClaw } from '@openclaw/sdk';\n\nconst claw = new OpenClaw({\n  apiKey: process.env.OPENCLAW_API_KEY\n});\n\nconst agent = await claw.agents.create({\n  name: 'my-agent',\n  model: 'claude-3-5-sonnet',\n  tools: ['web-search', 'calculator']\n});\n\nconst result = await agent.run({\n  prompt: 'Find the latest news on AI agents'\n});",
+    "docsUrl": "https://docs.openclaw.dev",
+    "contactEmail": "partners@openclaw.dev"
+  },
+  {
+    "id": "supabase",
+    "name": "Supabase",
+    "slug": "supabase",
+    "icon": "⚡",
+    "description": "Open-source Firebase alternative with PostgreSQL database, authentication, and real-time subscriptions for agent data storage.",
+    "fullDescription": "Supabase provides an open-source backend-as-a-service platform built on PostgreSQL. Perfect for storing agent conversation history, user data, and application state with built-in authentication and real-time capabilities.",
+    "tier": "Gold",
+    "integrationType": "API",
+    "features": [
+      "PostgreSQL database with instant APIs",
+      "Built-in authentication and authorization",
+      "Real-time subscriptions for live updates",
+      "Vector storage for embeddings (pgvector)",
+      "Edge functions for serverless logic"
+    ],
+    "integrationGuide": "npm install @supabase/supabase-js\n\nimport { createClient } from '@supabase/supabase-js';\n\nconst supabase = createClient(\n  process.env.SUPABASE_URL,\n  process.env.SUPABASE_ANON_KEY\n);\n\n// Store agent conversation\nconst { data, error } = await supabase\n  .from('conversations')\n  .insert({\n    agent_id: 'agent-123',\n    message: 'Hello, how can I help?',\n    timestamp: new Date().toISOString()\n  });",
+    "docsUrl": "https://supabase.com/docs",
+    "contactEmail": "partners@supabase.io"
+  },
+  {
+    "id": "vercel",
+    "name": "Vercel",
+    "slug": "vercel",
+    "icon": "▲",
+    "description": "Deploy AI agents and web applications instantly with zero-config deployments and edge functions.",
+    "fullDescription": "Vercel is the platform for frontend developers, providing the best experience for deploying modern web applications. Deploy your AI agent interfaces with automatic CI/CD, edge functions, and global CDN distribution.",
+    "tier": "Silver",
+    "integrationType": "Service",
+    "features": [
+      "Zero-config deployments from Git",
+      "Edge functions for low-latency responses",
+      "Built-in analytics and monitoring",
+      "Preview deployments for every push",
+      "Global CDN with automatic optimization"
+    ],
+    "integrationGuide": "# Install Vercel CLI\nnpm install -g vercel\n\n# Deploy your agent app\nvercel deploy\n\n# Set environment variables\nvercel env add OPENAI_API_KEY\nvercel env add AGENT_CONFIG\n\n# Deploy to production\nvercel --prod",
+    "docsUrl": "https://vercel.com/docs",
+    "contactEmail": "support@vercel.com"
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "slug": "anthropic",
+    "icon": "🧠",
+    "description": "Build agents with Claude, the AI assistant known for safety, reliability, and extended context windows.",
+    "fullDescription": "Anthropic's Claude models power intelligent, safe, and reliable AI agents. With support for 200K+ token context windows, function calling, and vision capabilities, Claude is ideal for complex agentic workflows.",
+    "tier": "Gold",
+    "integrationType": "API",
+    "features": [
+      "200K+ token context window",
+      "Native function calling and tool use",
+      "Vision capabilities for image understanding",
+      "Constitutional AI for safety and alignment",
+      "Streaming responses for real-time UX"
+    ],
+    "integrationGuide": "npm install @anthropic-ai/sdk\n\nimport Anthropic from '@anthropic-ai/sdk';\n\nconst client = new Anthropic({\n  apiKey: process.env.ANTHROPIC_API_KEY\n});\n\nconst message = await client.messages.create({\n  model: 'claude-3-5-sonnet-20241022',\n  max_tokens: 1024,\n  messages: [{\n    role: 'user',\n    content: 'Hello, Claude!'\n  }]\n});",
+    "docsUrl": "https://docs.anthropic.com",
+    "contactEmail": "partners@anthropic.com"
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "slug": "openai",
+    "icon": "🤖",
+    "description": "Power your agents with GPT-4 and advanced function calling capabilities for complex reasoning tasks.",
+    "fullDescription": "OpenAI provides cutting-edge language models including GPT-4, GPT-4 Turbo, and GPT-4o. With advanced function calling, vision, and code interpreter capabilities, OpenAI models excel at complex agentic workflows.",
+    "tier": "Silver",
+    "integrationType": "API",
+    "features": [
+      "GPT-4 and GPT-4 Turbo models",
+      "Advanced function calling",
+      "Vision and image understanding",
+      "Code interpreter for data analysis",
+      "Fine-tuning for custom use cases"
+    ],
+    "integrationGuide": "npm install openai\n\nimport OpenAI from 'openai';\n\nconst openai = new OpenAI({\n  apiKey: process.env.OPENAI_API_KEY\n});\n\nconst completion = await openai.chat.completions.create({\n  model: 'gpt-4-turbo-preview',\n  messages: [{\n    role: 'user',\n    content: 'Build me an agent'\n  }],\n  tools: [{\n    type: 'function',\n    function: {\n      name: 'search_web',\n      description: 'Search the web'\n    }\n  }]\n});",
+    "docsUrl": "https://platform.openai.com/docs",
+    "contactEmail": "partners@openai.com"
+  },
+  {
+    "id": "stripe",
+    "name": "Stripe",
+    "slug": "stripe",
+    "icon": "💳",
+    "description": "Accept payments and manage subscriptions for your agent services with developer-friendly APIs.",
+    "fullDescription": "Stripe is the leading payment infrastructure for the internet. Enable your AI agents to process payments, manage subscriptions, and handle billing with a complete suite of payment APIs.",
+    "tier": "Silver",
+    "integrationType": "API",
+    "features": [
+      "Accept payments in 135+ currencies",
+      "Subscription and recurring billing",
+      "Fraud prevention and detection",
+      "Usage-based billing for agents",
+      "Complete webhook system"
+    ],
+    "integrationGuide": "npm install stripe\n\nimport Stripe from 'stripe';\n\nconst stripe = new Stripe(process.env.STRIPE_SECRET_KEY);\n\n// Create a subscription for agent usage\nconst subscription = await stripe.subscriptions.create({\n  customer: 'cus_xxx',\n  items: [{\n    price: 'price_agent_pro',\n    quantity: 1\n  }],\n  metadata: {\n    agent_id: 'agent-123'\n  }\n});",
+    "docsUrl": "https://stripe.com/docs/api",
+    "contactEmail": "partners@stripe.com"
+  },
+  {
+    "id": "github",
+    "name": "GitHub",
+    "slug": "github",
+    "icon": "🐙",
+    "description": "Enable agents to interact with code repositories, issues, and pull requests via the GitHub API.",
+    "fullDescription": "GitHub provides a comprehensive API for automating code workflows. Build agents that can review pull requests, manage issues, deploy code, and collaborate with your development team.",
+    "tier": "Bronze",
+    "integrationType": "API",
+    "features": [
+      "Repository and code management",
+      "Issue and pull request automation",
+      "GitHub Actions integration",
+      "Code review and collaboration",
+      "Webhooks for real-time events"
+    ],
+    "integrationGuide": "npm install @octokit/rest\n\nimport { Octokit } from '@octokit/rest';\n\nconst octokit = new Octokit({\n  auth: process.env.GITHUB_TOKEN\n});\n\n// Create an issue\nconst issue = await octokit.issues.create({\n  owner: 'your-org',\n  repo: 'your-repo',\n  title: 'Agent found a bug',\n  body: 'Details from agent analysis...'\n});",
+    "docsUrl": "https://docs.github.com/rest",
+    "contactEmail": "partnerships@github.com"
+  },
+  {
+    "id": "cloudflare",
+    "name": "Cloudflare",
+    "slug": "cloudflare",
+    "icon": "☁️",
+    "description": "Deploy agents globally on Cloudflare Workers with edge computing and built-in AI capabilities.",
+    "fullDescription": "Cloudflare Workers enable you to deploy serverless AI agents at the edge, closer to your users. With built-in AI models via Workers AI and vector storage via Vectorize, build low-latency agent experiences.",
+    "tier": "Bronze",
+    "integrationType": "Service",
+    "features": [
+      "Edge computing in 300+ cities",
+      "Built-in Workers AI models",
+      "Vectorize for embeddings storage",
+      "Durable Objects for stateful agents",
+      "R2 storage for agent artifacts"
+    ],
+    "integrationGuide": "npm install wrangler -g\n\n# Create a new Worker\nwrangler init my-agent\n\n# Deploy to Cloudflare\nwrangler deploy\n\n# Use Workers AI\nexport default {\n  async fetch(request, env) {\n    const response = await env.AI.run(\n      '@cf/meta/llama-2-7b-chat-int8',\n      { prompt: 'Hello, agent!' }\n    );\n    return new Response(JSON.stringify(response));\n  }\n};",
+    "docsUrl": "https://developers.cloudflare.com/workers",
+    "contactEmail": "partners@cloudflare.com"
+  },
+  {
+    "id": "langchain",
+    "name": "LangChain",
+    "slug": "langchain",
+    "icon": "🦜",
+    "description": "Build complex agent chains and workflows with the leading framework for LLM application development.",
+    "fullDescription": "LangChain is the most popular framework for building applications with large language models. Create sophisticated agent workflows with built-in memory, tools, and chain orchestration.",
+    "tier": "Community",
+    "integrationType": "SDK",
+    "features": [
+      "Pre-built agent templates",
+      "Memory and context management",
+      "Tool and chain orchestration",
+      "Multi-model support",
+      "Active open-source community"
+    ],
+    "integrationGuide": "npm install langchain @langchain/openai\n\nimport { ChatOpenAI } from '@langchain/openai';\nimport { initializeAgentExecutorWithOptions } from 'langchain/agents';\nimport { Calculator } from 'langchain/tools/calculator';\n\nconst model = new ChatOpenAI({ temperature: 0 });\nconst tools = [new Calculator()];\n\nconst executor = await initializeAgentExecutorWithOptions(\n  tools,\n  model,\n  { agentType: 'zero-shot-react-description' }\n);",
+    "docsUrl": "https://js.langchain.com/docs",
+    "contactEmail": "hello@langchain.dev"
+  },
+  {
+    "id": "crewai",
+    "name": "CrewAI",
+    "slug": "crewai",
+    "icon": "👥",
+    "description": "Orchestrate multi-agent teams where specialized agents collaborate to complete complex tasks.",
+    "fullDescription": "CrewAI enables you to create teams of AI agents that work together, each with their own role, goal, and backstory. Build collaborative agent systems that divide and conquer complex problems.",
+    "tier": "Community",
+    "integrationType": "SDK",
+    "features": [
+      "Multi-agent collaboration",
+      "Role-based agent specialization",
+      "Task delegation and coordination",
+      "Sequential and parallel workflows",
+      "Python and TypeScript support"
+    ],
+    "integrationGuide": "pip install crewai\n\nfrom crewai import Agent, Task, Crew\n\nresearcher = Agent(\n  role='Researcher',\n  goal='Research AI agent frameworks',\n  backstory='Expert AI researcher'\n)\n\nwriter = Agent(\n  role='Writer',\n  goal='Write technical documentation',\n  backstory='Technical writer with 10 years exp'\n)\n\ntask = Task(\n  description='Research and write about agents',\n  agent=researcher\n)\n\ncrew = Crew(agents=[researcher, writer], tasks=[task])\nresult = crew.kickoff()",
+    "docsUrl": "https://docs.crewai.com",
+    "contactEmail": "hello@crewai.com"
+  },
+  {
+    "id": "autogpt",
+    "name": "AutoGPT",
+    "slug": "autogpt",
+    "icon": "🚀",
+    "description": "Open-source autonomous agent framework that can self-direct to achieve complex goals with minimal guidance.",
+    "fullDescription": "AutoGPT is one of the pioneering autonomous agent frameworks that can break down goals, execute tasks, and iterate on solutions with minimal human intervention. Build self-directed agents that can research, code, and problem-solve.",
+    "tier": "Community",
+    "integrationType": "SDK",
+    "features": [
+      "Autonomous goal-oriented agents",
+      "Built-in memory and context",
+      "Web browsing and research",
+      "Code execution capabilities",
+      "Plugin system for extensions"
+    ],
+    "integrationGuide": "pip install autogpt\n\nfrom autogpt.agent import Agent\nfrom autogpt.config import Config\n\nconfig = Config()\nagent = Agent(\n  ai_name='ResearchBot',\n  memory=Memory(),\n  config=config\n)\n\nresult = agent.start_interaction_loop(\n  goal='Research the latest AI agent frameworks'\n)",
+    "docsUrl": "https://docs.agpt.co",
+    "contactEmail": "team@agpt.co"
+  },
+  {
+    "id": "composio",
+    "name": "Composio",
+    "slug": "composio",
+    "icon": "🔧",
+    "description": "Connect your agents to 150+ tools and APIs with a unified interface for seamless integration.",
+    "fullDescription": "Composio provides a universal API gateway for connecting AI agents to popular tools and services. From calendar management to CRM integrations, give your agents the tools they need through a single, consistent interface.",
+    "tier": "Bronze",
+    "integrationType": "API",
+    "features": [
+      "150+ pre-built tool integrations",
+      "Unified authentication layer",
+      "Rate limiting and error handling",
+      "Action logging and monitoring",
+      "Custom tool creation support"
+    ],
+    "integrationGuide": "npm install composio-core\n\nimport { Composio } from 'composio-core';\n\nconst composio = new Composio({\n  apiKey: process.env.COMPOSIO_API_KEY\n});\n\n// Connect to Gmail\nconst gmail = await composio.getEntity('gmail');\n\n// Send email via agent\nawait gmail.execute('GMAIL_SEND_EMAIL', {\n  to: 'user@example.com',\n  subject: 'Agent Report',\n  body: 'Analysis complete...'\n});",
+    "docsUrl": "https://docs.composio.dev",
+    "contactEmail": "partners@composio.dev"
+  }
+]
