@@ -5,6 +5,7 @@ import llmsTxtData from "@/data/llms-txt.json";
 import agentsData from "@/data/agents.json";
 import acpAgentsData from "@/data/acp-agents.json";
 import workflowsData from "@/data/workflows.json";
+import templatesData from "@/data/templates.json";
 import { getSupabase } from "@/lib/supabase";
 import { getVerificationInfo, type VerifiedSkillInfo } from "@/lib/verification";
 import { promises as fs } from "fs";
@@ -622,5 +623,47 @@ export function getWorkflowsByCategory(category: string): Workflow[] {
 export function getWorkflowsByDifficulty(difficulty: string): Workflow[] {
   return (workflowsData as Workflow[]).filter(
     (w) => w.difficulty.toLowerCase() === difficulty.toLowerCase()
+  );
+}
+
+/**
+ * Template types
+ */
+export type TemplateCategory = "chatbot" | "coding-assistant" | "data-analyst" | "content-creator" | "devops";
+
+export type Template = {
+  id: string;
+  name: string;
+  description: string;
+  category: TemplateCategory;
+  useCase: string;
+  stack: {
+    models: string[];
+    tools: string[];
+    frameworks: string[];
+  };
+  config: Record<string, unknown>;
+};
+
+/**
+ * Get all templates
+ */
+export function getTemplates(): Template[] {
+  return templatesData as Template[];
+}
+
+/**
+ * Get a specific template by ID
+ */
+export function getTemplateById(id: string): Template | undefined {
+  return (templatesData as Template[]).find((t) => t.id === id);
+}
+
+/**
+ * Get templates by category
+ */
+export function getTemplatesByCategory(category: string): Template[] {
+  return (templatesData as Template[]).filter(
+    (t) => t.category.toLowerCase() === category.toLowerCase()
   );
 }

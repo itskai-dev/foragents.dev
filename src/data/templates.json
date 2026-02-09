@@ -1,0 +1,237 @@
+[
+  {
+    "id": "chatbot-basic",
+    "name": "Basic Chatbot",
+    "description": "A simple conversational agent for customer support and FAQs. Handles basic queries with context awareness and friendly responses.",
+    "category": "chatbot",
+    "useCase": "Customer support, FAQ automation, general conversation",
+    "stack": {
+      "models": ["gpt-4o-mini", "claude-3.5-haiku"],
+      "tools": ["agent-memory-kit", "text-generation"],
+      "frameworks": ["LangChain", "OpenAI SDK"]
+    },
+    "config": {
+      "model": "gpt-4o-mini",
+      "temperature": 0.7,
+      "maxTokens": 500,
+      "systemPrompt": "You are a helpful customer support agent. Be friendly, concise, and accurate.",
+      "memory": {
+        "enabled": true,
+        "type": "conversation-buffer",
+        "maxMessages": 10
+      },
+      "tools": ["agent-memory-kit"]
+    }
+  },
+  {
+    "id": "code-assistant-typescript",
+    "name": "TypeScript Code Assistant",
+    "description": "AI-powered coding assistant specialized in TypeScript and modern web development. Provides code review, generation, and debugging help.",
+    "category": "coding-assistant",
+    "useCase": "Code generation, debugging, code review, refactoring",
+    "stack": {
+      "models": ["claude-sonnet-4", "gpt-4o"],
+      "tools": ["file-system", "code-execution", "github-integration"],
+      "frameworks": ["Anthropic SDK", "GitHub API"]
+    },
+    "config": {
+      "model": "claude-sonnet-4",
+      "temperature": 0.2,
+      "maxTokens": 4000,
+      "systemPrompt": "You are an expert TypeScript developer. Write clean, type-safe code following best practices. Explain your reasoning.",
+      "tools": ["file-system", "code-execution", "github-integration"],
+      "capabilities": ["read-files", "write-files", "execute-code", "git-operations"]
+    }
+  },
+  {
+    "id": "data-analyst-sql",
+    "name": "SQL Data Analyst",
+    "description": "Analyze data using natural language queries. Automatically generates SQL, runs queries, and visualizes results.",
+    "category": "data-analyst",
+    "useCase": "Business intelligence, data exploration, automated reporting",
+    "stack": {
+      "models": ["gpt-4o", "claude-3.5-sonnet"],
+      "tools": ["database-connector", "data-visualization", "csv-parser"],
+      "frameworks": ["SQLAlchemy", "Plotly", "Pandas"]
+    },
+    "config": {
+      "model": "gpt-4o",
+      "temperature": 0.1,
+      "maxTokens": 2000,
+      "systemPrompt": "You are a data analyst. Generate accurate SQL queries, analyze results, and present insights clearly.",
+      "tools": ["database-connector", "data-visualization"],
+      "database": {
+        "type": "postgresql",
+        "schema": "auto-detect"
+      }
+    }
+  },
+  {
+    "id": "content-writer-blog",
+    "name": "Blog Content Writer",
+    "description": "Create engaging blog posts, articles, and marketing copy. SEO-optimized with research capabilities.",
+    "category": "content-creator",
+    "useCase": "Blog writing, content marketing, SEO optimization",
+    "stack": {
+      "models": ["gpt-4o", "claude-3.5-sonnet"],
+      "tools": ["web-search", "content-analyzer", "seo-optimizer"],
+      "frameworks": ["OpenAI SDK", "SerpAPI"]
+    },
+    "config": {
+      "model": "gpt-4o",
+      "temperature": 0.8,
+      "maxTokens": 3000,
+      "systemPrompt": "You are a professional content writer. Create engaging, SEO-friendly content that resonates with readers.",
+      "tools": ["web-search", "content-analyzer"],
+      "style": {
+        "tone": "professional-friendly",
+        "targetLength": 1500,
+        "seoOptimized": true
+      }
+    }
+  },
+  {
+    "id": "devops-monitor",
+    "name": "DevOps Monitoring Agent",
+    "description": "Monitor infrastructure, analyze logs, and respond to incidents. Proactive alerting and automated remediation.",
+    "category": "devops",
+    "useCase": "Infrastructure monitoring, incident response, log analysis",
+    "stack": {
+      "models": ["gpt-4o-mini", "claude-3.5-haiku"],
+      "tools": ["kubernetes-api", "prometheus", "slack-webhook", "pagerduty"],
+      "frameworks": ["Kubernetes Python Client", "Prometheus API"]
+    },
+    "config": {
+      "model": "gpt-4o-mini",
+      "temperature": 0.3,
+      "maxTokens": 1000,
+      "systemPrompt": "You are a DevOps engineer. Monitor systems, diagnose issues, and take action when needed. Be clear and actionable.",
+      "tools": ["kubernetes-api", "prometheus", "slack-webhook"],
+      "monitoring": {
+        "checkInterval": "5m",
+        "alertThreshold": "critical",
+        "autoRemediate": false
+      }
+    }
+  },
+  {
+    "id": "chatbot-sales",
+    "name": "Sales Assistant Chatbot",
+    "description": "Lead qualification and sales support agent. Handles inquiries, qualifies leads, and schedules demos.",
+    "category": "chatbot",
+    "useCase": "Lead generation, sales support, demo scheduling",
+    "stack": {
+      "models": ["gpt-4o", "claude-3.5-sonnet"],
+      "tools": ["crm-integration", "calendar-api", "email-sender"],
+      "frameworks": ["Salesforce API", "Google Calendar API"]
+    },
+    "config": {
+      "model": "gpt-4o",
+      "temperature": 0.6,
+      "maxTokens": 800,
+      "systemPrompt": "You are a sales assistant. Qualify leads, answer product questions, and schedule demos professionally.",
+      "tools": ["crm-integration", "calendar-api"],
+      "qualification": {
+        "criteria": ["budget", "authority", "need", "timeline"],
+        "scoringEnabled": true
+      }
+    }
+  },
+  {
+    "id": "code-reviewer",
+    "name": "Automated Code Reviewer",
+    "description": "Review pull requests for code quality, security issues, and best practices. Provides inline comments and suggestions.",
+    "category": "coding-assistant",
+    "useCase": "Code review automation, security scanning, quality assurance",
+    "stack": {
+      "models": ["claude-sonnet-4", "gpt-4o"],
+      "tools": ["github-integration", "static-analysis", "security-scanner"],
+      "frameworks": ["GitHub API", "Semgrep", "ESLint"]
+    },
+    "config": {
+      "model": "claude-sonnet-4",
+      "temperature": 0.1,
+      "maxTokens": 3000,
+      "systemPrompt": "You are a senior code reviewer. Check for bugs, security issues, performance problems, and style violations. Be constructive.",
+      "tools": ["github-integration", "static-analysis"],
+      "reviewCriteria": {
+        "security": true,
+        "performance": true,
+        "style": true,
+        "tests": true
+      }
+    }
+  },
+  {
+    "id": "bi-dashboard",
+    "name": "BI Dashboard Agent",
+    "description": "Answer business questions by querying databases and generating visualizations. Natural language to insights.",
+    "category": "data-analyst",
+    "useCase": "Executive dashboards, ad-hoc analysis, KPI monitoring",
+    "stack": {
+      "models": ["gpt-4o", "claude-3.5-sonnet"],
+      "tools": ["database-connector", "data-visualization", "slack-integration"],
+      "frameworks": ["SQLAlchemy", "Chart.js", "Slack API"]
+    },
+    "config": {
+      "model": "gpt-4o",
+      "temperature": 0.2,
+      "maxTokens": 2500,
+      "systemPrompt": "You are a business intelligence analyst. Transform questions into data queries and present insights visually.",
+      "tools": ["database-connector", "data-visualization", "slack-integration"],
+      "visualization": {
+        "defaultType": "auto",
+        "colorScheme": "professional",
+        "interactive": true
+      }
+    }
+  },
+  {
+    "id": "social-media-manager",
+    "name": "Social Media Content Manager",
+    "description": "Generate, schedule, and optimize social media posts across platforms. Trend-aware and engagement-focused.",
+    "category": "content-creator",
+    "useCase": "Social media marketing, content scheduling, engagement optimization",
+    "stack": {
+      "models": ["gpt-4o", "claude-3.5-sonnet"],
+      "tools": ["twitter-api", "instagram-api", "analytics-tracker", "image-generation"],
+      "frameworks": ["Twitter API v2", "Meta Graph API", "DALL-E"]
+    },
+    "config": {
+      "model": "gpt-4o",
+      "temperature": 0.9,
+      "maxTokens": 500,
+      "systemPrompt": "You are a social media manager. Create engaging posts optimized for each platform. Be current and authentic.",
+      "tools": ["twitter-api", "analytics-tracker", "image-generation"],
+      "platforms": ["twitter", "linkedin", "instagram"],
+      "scheduling": {
+        "enabled": true,
+        "optimizeTimings": true
+      }
+    }
+  },
+  {
+    "id": "ci-cd-orchestrator",
+    "name": "CI/CD Pipeline Orchestrator",
+    "description": "Manage deployment pipelines, run tests, and coordinate releases. Intelligent rollback and error handling.",
+    "category": "devops",
+    "useCase": "Continuous deployment, release management, test orchestration",
+    "stack": {
+      "models": ["claude-3.5-haiku", "gpt-4o-mini"],
+      "tools": ["github-actions", "kubernetes-api", "terraform", "slack-webhook"],
+      "frameworks": ["GitHub Actions API", "Kubernetes Python Client", "Terraform"]
+    },
+    "config": {
+      "model": "claude-3.5-haiku",
+      "temperature": 0.2,
+      "maxTokens": 1500,
+      "systemPrompt": "You are a DevOps automation specialist. Orchestrate deployments safely with proper validation and rollback procedures.",
+      "tools": ["github-actions", "kubernetes-api", "slack-webhook"],
+      "deployment": {
+        "strategy": "blue-green",
+        "autoRollback": true,
+        "validationRequired": true
+      }
+    }
+  }
+]
