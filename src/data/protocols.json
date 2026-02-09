@@ -1,0 +1,456 @@
+{
+  "protocols": [
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol",
+      "shortName": "MCP",
+      "icon": "🔌",
+      "description": "Standardized protocol for connecting AI models to external tools and data sources",
+      "fullDescription": "The Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context to LLMs. Created by Anthropic, MCP enables AI systems to securely connect to data sources, tools, and services through a unified interface.",
+      "category": "messaging",
+      "adoptionLevel": "widespread",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": true,
+        "bidirectional": true
+      },
+      "useCases": [
+        "Connecting agents to enterprise data sources",
+        "Tool integration for AI assistants",
+        "Secure context provision for LLMs",
+        "Multi-modal data exchange"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Claude Desktop",
+        "Custom MCP Clients"
+      ],
+      "relatedSkills": [
+        "mcp-servers",
+        "tool-integration",
+        "context-management"
+      ],
+      "codeExample": "// MCP Server Example\nimport { Server } from '@modelcontextprotocol/sdk/server/index.js';\n\nconst server = new Server({\n  name: 'my-mcp-server',\n  version: '1.0.0'\n});\n\nserver.setRequestHandler(ListToolsRequestSchema, async () => ({\n  tools: [{\n    name: 'get_weather',\n    description: 'Get current weather',\n    inputSchema: {\n      type: 'object',\n      properties: {\n        location: { type: 'string' }\n      }\n    }\n  }]\n}));",
+      "documentation": "https://modelcontextprotocol.io/docs",
+      "repository": "https://github.com/anthropics/model-context-protocol"
+    },
+    {
+      "id": "a2a",
+      "name": "Agent-to-Agent Protocol",
+      "shortName": "A2A",
+      "icon": "🤝",
+      "description": "Protocol for direct agent-to-agent communication and collaboration",
+      "fullDescription": "A2A enables autonomous agents to discover, authenticate, and communicate with each other. It provides standardized message formats, capability negotiation, and trust frameworks for multi-agent systems.",
+      "category": "messaging",
+      "adoptionLevel": "growing",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": true,
+        "bidirectional": true
+      },
+      "useCases": [
+        "Multi-agent collaboration workflows",
+        "Distributed agent networks",
+        "Agent marketplace integration",
+        "Cross-platform agent communication"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "AutoGPT",
+        "LangGraph"
+      ],
+      "relatedSkills": [
+        "agent-discovery",
+        "capability-negotiation",
+        "trust-verification"
+      ],
+      "codeExample": "// A2A Message Exchange\nimport { A2AClient } from '@a2a/client';\n\nconst client = new A2AClient({\n  agentId: 'my-agent',\n  capabilities: ['task-execution', 'data-analysis']\n});\n\nawait client.sendMessage({\n  to: 'target-agent-id',\n  type: 'request',\n  action: 'analyze-data',\n  payload: { data: [...] }\n});",
+      "documentation": "https://a2a.dev/docs",
+      "repository": "https://github.com/a2a-protocol/a2a"
+    },
+    {
+      "id": "rest",
+      "name": "REST API",
+      "shortName": "REST",
+      "icon": "🌐",
+      "description": "Representational State Transfer architecture for web services",
+      "fullDescription": "REST is an architectural style for distributed systems, using standard HTTP methods (GET, POST, PUT, DELETE) to interact with resources. It's the most widely adopted API pattern for agent integration.",
+      "category": "execution",
+      "adoptionLevel": "widespread",
+      "features": {
+        "streaming": false,
+        "auth": true,
+        "discovery": false,
+        "bidirectional": false
+      },
+      "useCases": [
+        "HTTP-based tool integration",
+        "Third-party service integration",
+        "Simple request-response patterns",
+        "Legacy system integration"
+      ],
+      "compatibleHosts": [
+        "Any HTTP client",
+        "OpenClaw",
+        "All major frameworks"
+      ],
+      "relatedSkills": [
+        "http-client",
+        "api-integration",
+        "oauth"
+      ],
+      "codeExample": "// REST API Call\nconst response = await fetch('https://api.example.com/v1/data', {\n  method: 'POST',\n  headers: {\n    'Authorization': 'Bearer ${token}',\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({ query: 'search term' })\n});\nconst data = await response.json();",
+      "documentation": "https://restfulapi.net",
+      "repository": null
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "shortName": "GraphQL",
+      "icon": "⚡",
+      "description": "Query language for APIs with a type system for data",
+      "fullDescription": "GraphQL is a query language and runtime for APIs that allows clients to request exactly the data they need. It provides strong typing, introspection, and efficient data fetching for agent systems.",
+      "category": "data",
+      "adoptionLevel": "growing",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": true,
+        "bidirectional": false
+      },
+      "useCases": [
+        "Complex data queries",
+        "Schema-driven API integration",
+        "Efficient multi-resource fetching",
+        "Real-time subscriptions"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Apollo Client",
+        "Most modern frameworks"
+      ],
+      "relatedSkills": [
+        "graphql-client",
+        "schema-introspection",
+        "subscriptions"
+      ],
+      "codeExample": "// GraphQL Query\nconst query = `\n  query GetAgent($id: ID!) {\n    agent(id: $id) {\n      name\n      capabilities\n      status\n      metrics {\n        tasksCompleted\n        uptime\n      }\n    }\n  }\n`;\n\nconst result = await client.query({ query, variables: { id: 'agent-123' } });",
+      "documentation": "https://graphql.org/learn",
+      "repository": "https://github.com/graphql/graphql-spec"
+    },
+    {
+      "id": "websocket",
+      "name": "WebSocket",
+      "shortName": "WebSocket",
+      "icon": "🔄",
+      "description": "Full-duplex communication protocol for real-time agent interactions",
+      "fullDescription": "WebSocket provides persistent, bidirectional communication channels over a single TCP connection. Ideal for real-time agent communication, streaming responses, and live updates.",
+      "category": "messaging",
+      "adoptionLevel": "widespread",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": false,
+        "bidirectional": true
+      },
+      "useCases": [
+        "Real-time agent communication",
+        "Streaming LLM responses",
+        "Live agent status updates",
+        "Event-driven architectures"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Any WebSocket client",
+        "Browser-based agents"
+      ],
+      "relatedSkills": [
+        "websocket-client",
+        "event-streaming",
+        "real-time-sync"
+      ],
+      "codeExample": "// WebSocket Connection\nconst ws = new WebSocket('wss://agent-server.example.com');\n\nws.onopen = () => {\n  ws.send(JSON.stringify({\n    type: 'subscribe',\n    channel: 'agent-updates'\n  }));\n};\n\nws.onmessage = (event) => {\n  const message = JSON.parse(event.data);\n  console.log('Received:', message);\n};",
+      "documentation": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
+      "repository": null
+    },
+    {
+      "id": "grpc",
+      "name": "gRPC",
+      "shortName": "gRPC",
+      "icon": "⚙️",
+      "description": "High-performance RPC framework using Protocol Buffers",
+      "fullDescription": "gRPC is a modern, high-performance RPC framework that uses HTTP/2 for transport and Protocol Buffers for serialization. It provides strong typing, efficient binary serialization, and built-in streaming.",
+      "category": "execution",
+      "adoptionLevel": "growing",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": true,
+        "bidirectional": true
+      },
+      "useCases": [
+        "High-performance agent communication",
+        "Microservices architectures",
+        "Low-latency tool execution",
+        "Strongly-typed interfaces"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Custom gRPC clients",
+        "Cloud-native platforms"
+      ],
+      "relatedSkills": [
+        "grpc-client",
+        "protobuf",
+        "service-mesh"
+      ],
+      "codeExample": "// gRPC Service Definition (protobuf)\nservice AgentService {\n  rpc ExecuteTask(TaskRequest) returns (TaskResponse);\n  rpc StreamResults(TaskRequest) returns (stream TaskResult);\n}\n\nmessage TaskRequest {\n  string task_id = 1;\n  string action = 2;\n  map<string, string> params = 3;\n}",
+      "documentation": "https://grpc.io/docs",
+      "repository": "https://github.com/grpc/grpc"
+    },
+    {
+      "id": "mqtt",
+      "name": "MQTT",
+      "shortName": "MQTT",
+      "icon": "📡",
+      "description": "Lightweight publish-subscribe messaging protocol for IoT and agents",
+      "fullDescription": "MQTT is a lightweight, publish-subscribe network protocol optimized for constrained devices and low-bandwidth networks. Perfect for IoT agent integration and distributed agent systems.",
+      "category": "messaging",
+      "adoptionLevel": "emerging",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": false,
+        "bidirectional": true
+      },
+      "useCases": [
+        "IoT agent integration",
+        "Event-driven agent systems",
+        "Low-bandwidth agent networks",
+        "Edge computing scenarios"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "MQTT brokers",
+        "IoT platforms"
+      ],
+      "relatedSkills": [
+        "mqtt-client",
+        "pub-sub",
+        "iot-integration"
+      ],
+      "codeExample": "// MQTT Publish/Subscribe\nimport mqtt from 'mqtt';\n\nconst client = mqtt.connect('mqtt://broker.example.com');\n\nclient.on('connect', () => {\n  client.subscribe('agent/tasks/#');\n  client.publish('agent/status', JSON.stringify({ state: 'online' }));\n});\n\nclient.on('message', (topic, message) => {\n  console.log(`Received on ${topic}:`, message.toString());\n});",
+      "documentation": "https://mqtt.org/getting-started",
+      "repository": "https://github.com/mqtt/mqtt.org"
+    },
+    {
+      "id": "jsonrpc",
+      "name": "JSON-RPC",
+      "shortName": "JSON-RPC",
+      "icon": "📦",
+      "description": "Lightweight remote procedure call protocol using JSON",
+      "fullDescription": "JSON-RPC is a stateless, lightweight RPC protocol using JSON for data encoding. It's simple, language-agnostic, and widely supported for agent tool integration.",
+      "category": "execution",
+      "adoptionLevel": "emerging",
+      "features": {
+        "streaming": false,
+        "auth": false,
+        "discovery": false,
+        "bidirectional": false
+      },
+      "useCases": [
+        "Simple RPC tool integration",
+        "Language-agnostic APIs",
+        "Blockchain agent interaction",
+        "Legacy system integration"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Custom JSON-RPC clients",
+        "Web3 platforms"
+      ],
+      "relatedSkills": [
+        "jsonrpc-client",
+        "rpc-tools",
+        "web3"
+      ],
+      "codeExample": "// JSON-RPC Request\nconst request = {\n  jsonrpc: '2.0',\n  method: 'execute_task',\n  params: {\n    task: 'analyze',\n    data: [...]\n  },\n  id: 1\n};\n\nconst response = await fetch('https://api.example.com/rpc', {\n  method: 'POST',\n  body: JSON.stringify(request)\n});",
+      "documentation": "https://www.jsonrpc.org/specification",
+      "repository": null
+    },
+    {
+      "id": "sse",
+      "name": "Server-Sent Events",
+      "shortName": "SSE",
+      "icon": "📤",
+      "description": "Server-to-client streaming protocol for real-time updates",
+      "fullDescription": "Server-Sent Events (SSE) provides a simple, HTTP-based protocol for servers to push real-time updates to clients. Ideal for streaming LLM responses and agent status updates.",
+      "category": "messaging",
+      "adoptionLevel": "emerging",
+      "features": {
+        "streaming": true,
+        "auth": true,
+        "discovery": false,
+        "bidirectional": false
+      },
+      "useCases": [
+        "Streaming LLM responses",
+        "Real-time agent logs",
+        "Live progress updates",
+        "Event notifications"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Browser-based clients",
+        "HTTP clients"
+      ],
+      "relatedSkills": [
+        "sse-client",
+        "event-streaming",
+        "llm-streaming"
+      ],
+      "codeExample": "// Server-Sent Events Client\nconst eventSource = new EventSource('https://api.example.com/stream');\n\neventSource.onmessage = (event) => {\n  const data = JSON.parse(event.data);\n  console.log('Stream update:', data);\n};\n\neventSource.addEventListener('completion', (event) => {\n  console.log('Stream completed:', event.data);\n  eventSource.close();\n});",
+      "documentation": "https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events",
+      "repository": null
+    },
+    {
+      "id": "openapi",
+      "name": "OpenAPI",
+      "shortName": "OpenAPI",
+      "icon": "📋",
+      "description": "Specification for describing and documenting REST APIs",
+      "fullDescription": "OpenAPI (formerly Swagger) is a specification for machine-readable API descriptions. It enables automatic discovery, code generation, and validation for agent-API integration.",
+      "category": "discovery",
+      "adoptionLevel": "widespread",
+      "features": {
+        "streaming": false,
+        "auth": true,
+        "discovery": true,
+        "bidirectional": false
+      },
+      "useCases": [
+        "Automatic API discovery",
+        "Client code generation",
+        "API documentation",
+        "Schema validation"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Swagger tools",
+        "All REST clients"
+      ],
+      "relatedSkills": [
+        "openapi-client",
+        "api-discovery",
+        "schema-validation"
+      ],
+      "codeExample": "// OpenAPI Specification Example\nopenapi: 3.0.0\ninfo:\n  title: Agent API\n  version: 1.0.0\npaths:\n  /tasks:\n    post:\n      summary: Create a new task\n      requestBody:\n        content:\n          application/json:\n            schema:\n              type: object\n              properties:\n                action:\n                  type: string\n                params:\n                  type: object",
+      "documentation": "https://swagger.io/specification",
+      "repository": "https://github.com/OAI/OpenAPI-Specification"
+    },
+    {
+      "id": "activitypub",
+      "name": "ActivityPub",
+      "shortName": "ActivityPub",
+      "icon": "🌍",
+      "description": "Decentralized social networking protocol for agent federation",
+      "fullDescription": "ActivityPub is a W3C standard for decentralized social networking. It enables agents to publish activities, discover other agents, and participate in federated networks.",
+      "category": "discovery",
+      "adoptionLevel": "experimental",
+      "features": {
+        "streaming": false,
+        "auth": true,
+        "discovery": true,
+        "bidirectional": true
+      },
+      "useCases": [
+        "Federated agent networks",
+        "Agent social graphs",
+        "Decentralized discovery",
+        "Activity publishing"
+      ],
+      "compatibleHosts": [
+        "Mastodon",
+        "Custom ActivityPub servers",
+        "Federated platforms"
+      ],
+      "relatedSkills": [
+        "activitypub-client",
+        "federation",
+        "social-graphs"
+      ],
+      "codeExample": "// ActivityPub Actor\n{\n  \"@context\": \"https://www.w3.org/ns/activitystreams\",\n  \"type\": \"Person\",\n  \"id\": \"https://agents.example.com/users/my-agent\",\n  \"name\": \"My Agent\",\n  \"inbox\": \"https://agents.example.com/users/my-agent/inbox\",\n  \"outbox\": \"https://agents.example.com/users/my-agent/outbox\"\n}",
+      "documentation": "https://www.w3.org/TR/activitypub",
+      "repository": "https://github.com/w3c/activitypub"
+    },
+    {
+      "id": "x402",
+      "name": "x402 Protocol",
+      "shortName": "x402",
+      "icon": "💳",
+      "description": "Payment protocol for agent-to-agent transactions",
+      "fullDescription": "x402 extends HTTP 402 (Payment Required) with standardized micropayment flows for agent services. It enables agents to monetize capabilities and pay for services autonomously.",
+      "category": "execution",
+      "adoptionLevel": "experimental",
+      "features": {
+        "streaming": false,
+        "auth": true,
+        "discovery": false,
+        "bidirectional": false
+      },
+      "useCases": [
+        "Agent service monetization",
+        "Micropayments for API calls",
+        "Autonomous agent transactions",
+        "Pay-per-use agent tools"
+      ],
+      "compatibleHosts": [
+        "OpenClaw",
+        "Bitcoin Lightning",
+        "Custom payment gateways"
+      ],
+      "relatedSkills": [
+        "micropayments",
+        "lightning-network",
+        "agent-economy"
+      ],
+      "codeExample": "// x402 Payment Flow\nconst response = await fetch('https://api.example.com/premium-tool', {\n  headers: {\n    'Authorization': 'Bearer ${token}'\n  }\n});\n\nif (response.status === 402) {\n  const invoice = await response.json();\n  await payInvoice(invoice.payment_request);\n  // Retry request with proof of payment\n}",
+      "documentation": "https://x402.dev",
+      "repository": "https://github.com/x402/x402-protocol"
+    }
+  ],
+  "stats": {
+    "totalProtocols": 12,
+    "mostAdopted": "REST",
+    "newestAddition": "x402",
+    "lastUpdated": "2026-02-09"
+  },
+  "categories": [
+    {
+      "id": "messaging",
+      "name": "Messaging",
+      "description": "Real-time communication protocols for agents",
+      "color": "#06D6A0"
+    },
+    {
+      "id": "discovery",
+      "name": "Discovery",
+      "description": "Protocols for finding and understanding agent capabilities",
+      "color": "#8B5CF6"
+    },
+    {
+      "id": "execution",
+      "name": "Execution",
+      "description": "Protocols for executing agent tasks and tool calls",
+      "color": "#3B82F6"
+    },
+    {
+      "id": "data",
+      "name": "Data",
+      "description": "Protocols for querying and exchanging structured data",
+      "color": "#F59E0B"
+    }
+  ]
+}
