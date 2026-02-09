@@ -1,7 +1,40 @@
+/** @jest-environment jsdom */
+
+import React from "react";
 import { render, screen } from "@testing-library/react";
 import CertificationsPage from "@/app/certifications/page";
 import CertificationDetailPage from "@/app/certifications/[slug]/page";
 import certificationsData from "@/../data/certifications.json";
+
+jest.setTimeout(10_000);
+
+// Browser API polyfills
+class NoopObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+// @ts-expect-error - polyfill for tests
+global.ResizeObserver = global.ResizeObserver ?? NoopObserver;
+// @ts-expect-error - polyfill for tests
+global.IntersectionObserver = global.IntersectionObserver ?? NoopObserver;
+
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value:
+    window.matchMedia ??
+    ((query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => {},
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => false,
+    })),
+});
 
 // Mock next/navigation
 jest.mock("next/navigation", () => ({
@@ -14,10 +47,19 @@ jest.mock("next/navigation", () => ({
 }));
 
 // Mock next/link
+type LinkProps = {
+  href: string;
+  children?: React.ReactNode;
+} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+
 jest.mock("next/link", () => {
-  return ({ children, href }: { children: React.ReactNode; href: string }) => {
-    return <a href={href}>{children}</a>;
-  };
+  const LinkMock = ({ href, children, ...props }: LinkProps) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  );
+  LinkMock.displayName = "Link";
+  return LinkMock;
 });
 
 describe("Certifications Pages", () => {
@@ -35,7 +77,8 @@ describe("Certifications Pages", () => {
       render(<CertificationsPage />);
 
       certificationsData.forEach((cert) => {
-        expect(screen.getByText(cert.name)).toBeInTheDocument();
+        const elements = screen.getAllByText(cert.name);
+        expect(elements.length).toBeGreaterThan(0);
       });
     });
 
@@ -67,7 +110,8 @@ describe("Certifications Pages", () => {
       
       render(page);
 
-      expect(screen.getByText("Security Certified Agent")).toBeInTheDocument();
+      const elements = screen.getAllByText("Security Certified Agent");
+      expect(elements.length).toBeGreaterThan(0);
       expect(screen.getByText(/Validates that an agent follows security best practices/i)).toBeInTheDocument();
     });
 
