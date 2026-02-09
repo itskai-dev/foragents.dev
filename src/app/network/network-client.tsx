@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -129,6 +129,14 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
     );
   }, [filteredAgents, connections]);
 
+  // If the selected agent is filtered out, treat it as unselected.
+  const effectiveSelectedAgent = useMemo(() => {
+    if (!selectedAgent) return null;
+    return filteredAgents.some((a) => a.id === selectedAgent.id)
+      ? selectedAgent
+      : null;
+  }, [filteredAgents, selectedAgent]);
+
   // Calculate stats
   const stats = useMemo(() => {
     const totalAgents = filteredAgents.length;
@@ -182,23 +190,18 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
 
   // Get connected agents for selected agent
   const connectedAgents = useMemo(() => {
-    if (!selectedAgent) return [];
+    if (!effectiveSelectedAgent) return [];
 
     const connectedIds = new Set<string>();
     filteredConnections.forEach((conn) => {
-      if (conn.source === selectedAgent.id) connectedIds.add(conn.target);
-      if (conn.target === selectedAgent.id) connectedIds.add(conn.source);
+      if (conn.source === effectiveSelectedAgent.id) connectedIds.add(conn.target);
+      if (conn.target === effectiveSelectedAgent.id) connectedIds.add(conn.source);
     });
 
     return filteredAgents.filter((a) => connectedIds.has(a.id));
-  }, [selectedAgent, filteredConnections, filteredAgents]);
+  }, [effectiveSelectedAgent, filteredConnections, filteredAgents]);
 
-  // Reset selected agent when filters change
-  useEffect(() => {
-    if (selectedAgent && !filteredAgents.find((a) => a.id === selectedAgent.id)) {
-      setSelectedAgent(null);
-    }
-  }, [filteredAgents, selectedAgent]);
+  // Selection is derived from filteredAgents (see effectiveSelectedAgent).
 
   return (
     <div className="space-y-6">
@@ -368,8 +371,9 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
 
                     const style = getConnectionStyle(conn.type);
                     const isHighlighted =
-                      selectedAgent &&
-                      (conn.source === selectedAgent.id || conn.target === selectedAgent.id);
+                      effectiveSelectedAgent &&
+                      (conn.source === effectiveSelectedAgent.id ||
+                        conn.target === effectiveSelectedAgent.id);
 
                     return (
                       <line
@@ -391,7 +395,7 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
                     const pos = nodePositions.get(agent.id);
                     if (!pos) return null;
 
-                    const isSelected = selectedAgent?.id === agent.id;
+                    const isSelected = effectiveSelectedAgent?.id === agent.id;
                     const isConnected = connectedAgents.some((a) => a.id === agent.id);
                     const isHovered = hoveredNode === agent.id;
                     const isHighlighted =
@@ -401,7 +405,7 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
 
                     const radius = isSelected ? 28 : isHovered ? 24 : 20;
                     const opacity =
-                      !selectedAgent || isSelected || isConnected ? 1 : 0.3;
+                      !effectiveSelectedAgent || isSelected || isConnected ? 1 : 0.3;
 
                     return (
                       <g
@@ -453,15 +457,15 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
         {/* Agent Card */}
         <Card className="bg-white/5 border-white/10">
           <CardContent className="p-4">
-            {selectedAgent ? (
+            {effectiveSelectedAgent ? (
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="text-4xl">{selectedAgent.avatar}</div>
+                  <div className="text-4xl">{effectiveSelectedAgent.avatar}</div>
                   <div>
                     <h3 className="text-xl font-bold text-foreground">
-                      {selectedAgent.name}
+                      {effectiveSelectedAgent.name}
                     </h3>
-                    <p className="text-sm text-muted-foreground">@{selectedAgent.handle}</p>
+                    <p className="text-sm text-muted-foreground">@{effectiveSelectedAgent.handle}</p>
                   </div>
                 </div>
 
@@ -469,7 +473,7 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
                   <div>
                     <span className="text-sm text-muted-foreground">Type: </span>
                     <Badge variant="secondary" className="ml-1">
-                      {categoryToType[selectedAgent.category]}
+                      {categoryToType[effectiveSelectedAgent.category]}
                     </Badge>
                   </div>
 
@@ -477,19 +481,19 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
                     <span className="text-sm text-muted-foreground">Trust Score: </span>
                     <span
                       className="font-semibold"
-                      style={{ color: getTrustColor(selectedAgent.trustScore) }}
+                      style={{ color: getTrustColor(effectiveSelectedAgent.trustScore) }}
                     >
-                      {selectedAgent.trustScore}
+                      {effectiveSelectedAgent.trustScore}
                     </span>
                     <Badge variant="secondary" className="ml-2">
-                      {getTrustTier(selectedAgent.trustScore)}
+                      {getTrustTier(effectiveSelectedAgent.trustScore)}
                     </Badge>
                   </div>
 
                   <div>
                     <span className="text-sm text-muted-foreground">Protocol: </span>
                     <Badge variant="secondary" className="ml-1">
-                      {categoryToProtocol[selectedAgent.category]}
+                      {categoryToProtocol[effectiveSelectedAgent.category]}
                     </Badge>
                   </div>
                 </div>
@@ -499,7 +503,7 @@ export function NetworkClient({ agents, connections }: NetworkClientProps) {
                     Capabilities
                   </h4>
                   <div className="flex flex-wrap gap-1">
-                    {selectedAgent.skills.map((skill) => (
+                    {effectiveSelectedAgent.skills.map((skill) => (
                       <Badge
                         key={skill}
                         variant="outline"

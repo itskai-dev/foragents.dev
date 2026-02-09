@@ -1,7 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import type { NetworkData, NetworkAgent } from "./page";
+
+type NetworkAgent = {
+  id: string;
+  handle: string;
+  name: string;
+  avatar: string;
+  category: string;
+  trustScore: number;
+  skills: string[];
+};
+
+type NetworkConnection = {
+  source: string;
+  target: string;
+  type: string;
+  strength: number;
+};
+
+type NetworkData = {
+  agents: NetworkAgent[];
+  connections: NetworkConnection[];
+};
 
 export function NetworkPageClient({ data }: { data: NetworkData }) {
   const [selectedAgent, setSelectedAgent] = useState<NetworkAgent | null>(null);
