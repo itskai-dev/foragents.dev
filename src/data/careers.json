@@ -1,0 +1,244 @@
+{
+  "positions": [
+    {
+      "id": "senior-fullstack-engineer",
+      "title": "Senior Full-Stack Engineer",
+      "department": "Engineering",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2026-02-01",
+      "description": "Build the future of agent infrastructure. Work on core platform features, API design, and developer tools that power thousands of AI agents worldwide.",
+      "responsibilities": [
+        "Design and implement scalable backend services and APIs",
+        "Build intuitive frontend experiences for agent developers",
+        "Optimize performance and reliability of critical infrastructure",
+        "Collaborate with product and design teams on feature development",
+        "Mentor junior engineers and contribute to technical decisions",
+        "Participate in code reviews and maintain high code quality standards"
+      ],
+      "requirements": [
+        "5+ years of experience in full-stack development",
+        "Strong proficiency in TypeScript, React, and Node.js",
+        "Experience building and scaling production APIs",
+        "Deep understanding of web performance and security",
+        "Excellent problem-solving and communication skills",
+        "Experience with modern DevOps practices and cloud platforms"
+      ],
+      "niceToHaves": [
+        "Experience with AI/ML systems or LLM APIs",
+        "Open source contributions or technical writing",
+        "Background in developer tools or platform engineering",
+        "Familiarity with Next.js, PostgreSQL, and edge computing"
+      ]
+    },
+    {
+      "id": "devrel-developer-advocate",
+      "title": "DevRel / Developer Advocate",
+      "department": "Marketing",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2026-02-03",
+      "description": "Be the bridge between our platform and the developer community. Create content, speak at events, and help builders succeed with agent development.",
+      "responsibilities": [
+        "Create technical content (tutorials, guides, videos, demos)",
+        "Speak at conferences, meetups, and developer events",
+        "Engage with the community on Discord, GitHub, and social media",
+        "Build example projects and sample applications",
+        "Gather developer feedback and advocate for their needs",
+        "Collaborate with engineering and product on documentation"
+      ],
+      "requirements": [
+        "3+ years of software development experience",
+        "Strong technical writing and presentation skills",
+        "Active presence in developer communities",
+        "Experience creating educational technical content",
+        "Passion for developer experience and community building",
+        "Ability to explain complex concepts clearly"
+      ],
+      "niceToHaves": [
+        "Public speaking experience at tech conferences",
+        "Experience with video production and live streaming",
+        "Background in AI/ML or autonomous agents",
+        "Existing audience or community following"
+      ]
+    },
+    {
+      "id": "agent-platform-engineer",
+      "title": "Agent Platform Engineer",
+      "department": "Engineering",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2026-01-28",
+      "description": "Push the boundaries of what agents can do. Work on agent orchestration, reasoning systems, and cutting-edge AI research applications.",
+      "responsibilities": [
+        "Design and build agent orchestration and coordination systems",
+        "Optimize LLM integration and prompt engineering workflows",
+        "Implement agent memory, planning, and reasoning capabilities",
+        "Develop tools for agent monitoring and debugging",
+        "Research and experiment with emerging AI techniques",
+        "Collaborate with ML researchers on new agent architectures"
+      ],
+      "requirements": [
+        "4+ years of software engineering experience",
+        "Strong Python and async programming skills",
+        "Experience integrating LLMs and AI APIs",
+        "Understanding of agent architectures and patterns",
+        "Ability to balance research exploration with production engineering",
+        "Strong debugging and system design skills"
+      ],
+      "niceToHaves": [
+        "ML/AI research background or publications",
+        "Experience with agent frameworks (LangChain, AutoGPT, etc.)",
+        "Knowledge of vector databases and semantic search",
+        "Contributions to AI open source projects"
+      ]
+    },
+    {
+      "id": "product-designer",
+      "title": "Product Designer",
+      "department": "Design",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2026-02-05",
+      "description": "Design intuitive experiences for agent builders. Shape the future of developer tools and create delightful interfaces for complex systems.",
+      "responsibilities": [
+        "Design user interfaces for agent development workflows",
+        "Create design systems and component libraries",
+        "Conduct user research and usability testing",
+        "Prototype and iterate on new features",
+        "Collaborate with engineers on implementation",
+        "Ensure consistency across the product experience"
+      ],
+      "requirements": [
+        "4+ years of product design experience",
+        "Strong portfolio demonstrating UI/UX design work",
+        "Proficiency in Figma and modern design tools",
+        "Experience designing for developers or technical users",
+        "Understanding of frontend technologies (HTML, CSS, React)",
+        "Excellent visual design and interaction design skills"
+      ],
+      "niceToHaves": [
+        "Experience with developer tools or B2B SaaS",
+        "Knowledge of AI/ML product design patterns",
+        "Frontend development skills",
+        "Experience with design systems at scale"
+      ]
+    },
+    {
+      "id": "community-manager",
+      "title": "Community Manager",
+      "department": "Community",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2026-02-07",
+      "description": "Grow and nurture our community of agent developers. Organize events, moderate discussions, and help create a thriving ecosystem.",
+      "responsibilities": [
+        "Manage and moderate Discord, forums, and community channels",
+        "Organize online and in-person community events",
+        "Create community programs and initiatives",
+        "Surface feedback and insights to product teams",
+        "Build relationships with power users and advocates",
+        "Track community metrics and health indicators"
+      ],
+      "requirements": [
+        "3+ years of community management experience",
+        "Deep understanding of developer communities",
+        "Excellent written and verbal communication skills",
+        "Experience with Discord, Slack, and community platforms",
+        "Ability to handle difficult situations with empathy",
+        "Strong organizational and project management skills"
+      ],
+      "niceToHaves": [
+        "Technical background or software development experience",
+        "Experience growing communities from early stages",
+        "Event planning and production experience",
+        "Knowledge of AI/ML developer ecosystem"
+      ]
+    },
+    {
+      "id": "technical-writer",
+      "title": "Technical Writer",
+      "department": "Content",
+      "location": "Remote",
+      "type": "Contract",
+      "postedDate": "2026-02-04",
+      "description": "Create world-class documentation for developers. Write clear, comprehensive guides that help builders succeed with our platform.",
+      "responsibilities": [
+        "Write and maintain API documentation and developer guides",
+        "Create tutorials and getting-started content",
+        "Improve documentation structure and information architecture",
+        "Collaborate with engineers to document new features",
+        "Gather feedback and continuously improve docs",
+        "Establish documentation standards and best practices"
+      ],
+      "requirements": [
+        "3+ years of technical writing experience",
+        "Strong understanding of developer documentation",
+        "Ability to learn complex technical concepts quickly",
+        "Experience with documentation tools (Markdown, Git, etc.)",
+        "Excellent writing and editing skills",
+        "User-focused approach to documentation"
+      ],
+      "niceToHaves": [
+        "Software development background",
+        "Experience with API documentation tools (OpenAPI, etc.)",
+        "Portfolio of published technical documentation",
+        "Familiarity with AI/ML concepts and terminology"
+      ]
+    }
+  ],
+  "benefits": [
+    {
+      "title": "Remote-first",
+      "description": "Work from anywhere in the world. We believe great talent isn't limited by geography. Async-friendly culture with flexible hours across all time zones.",
+      "icon": "🌍"
+    },
+    {
+      "title": "Equity",
+      "description": "Competitive equity packages for all team members. Share in the success you help create as we build the future of agent infrastructure.",
+      "icon": "📈"
+    },
+    {
+      "title": "Learning Budget",
+      "description": "$3,000 annual learning and development budget. Invest in courses, books, conferences, and tools that help you grow professionally.",
+      "icon": "📚"
+    },
+    {
+      "title": "Flexible Hours",
+      "description": "No fixed schedules or rigid hours. Work when you're most productive. We care about results, not when you're online.",
+      "icon": "⏰"
+    },
+    {
+      "title": "Health & Wellness",
+      "description": "Comprehensive health insurance and wellness stipend. Take care of your physical and mental health with our support.",
+      "icon": "💚"
+    },
+    {
+      "title": "Agent Stipend",
+      "description": "$200/month to experiment with AI tools and agents. Build with the latest AI technologies and stay at the cutting edge.",
+      "icon": "🤖"
+    }
+  ],
+  "culture": {
+    "title": "Our Culture",
+    "description": "We're a small, passionate team building tools that empower developers to create the next generation of AI agents. We value autonomy, transparency, and impact.",
+    "values": [
+      {
+        "title": "Builders First",
+        "description": "We exist to serve developers. Every decision we make prioritizes the builder experience and community needs."
+      },
+      {
+        "title": "Move Fast, Think Deep",
+        "description": "Ship quickly, but think carefully. We balance speed with thoughtful design and long-term architectural decisions."
+      },
+      {
+        "title": "Radically Open",
+        "description": "Default to transparency. Share our work, our thinking, and our learnings openly with the community."
+      },
+      {
+        "title": "Human + AI",
+        "description": "We build tools that enhance human capabilities, not replace them. AI should empower people to do their best work."
+      }
+    ]
+  }
+}
