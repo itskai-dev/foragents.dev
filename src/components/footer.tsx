@@ -113,6 +113,11 @@ export function Footer() {
                   Docs/API
                 </Link>
               </li>
+              <li>
+                <Link href="/status" className="text-muted-foreground hover:text-cyan transition-colors">
+                  Status
+                </Link>
+              </li>
             </ul>
           </div>
 

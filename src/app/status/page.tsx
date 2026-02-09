@@ -1,207 +1,253 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-type ServiceStatus = "operational" | "degraded" | "down";
+type ServiceStatus = "operational" | "degraded" | "outage";
 
 interface Service {
   name: string;
   status: ServiceStatus;
   uptime: number;
-  lastChecked: Date;
+  responseTime: number;
 }
 
 interface Incident {
+  id: string;
   date: string;
   title: string;
-  status: "resolved" | "investigating" | "monitoring";
   description: string;
+  status: "resolved" | "investigating" | "monitoring";
+  affectedServices: string[];
 }
 
-export default function StatusPage() {
-  const [lastRefresh, setLastRefresh] = useState(new Date());
+const statusConfig = {
+  operational: {
+    color: "bg-green-500",
+    text: "Operational",
+    badgeVariant: "default" as const,
+  },
+  degraded: {
+    color: "bg-yellow-500",
+    text: "Degraded",
+    badgeVariant: "secondary" as const,
+  },
+  outage: {
+    color: "bg-red-500",
+    text: "Outage",
+    badgeVariant: "destructive" as const,
+  },
+};
 
-  // Auto-refresh every 30 seconds
+// Mock data - in production this would come from an API
+const initialServices: Service[] = [
+  {
+    name: "API",
+    status: "operational",
+    uptime: 99.98,
+    responseTime: 145,
+  },
+  {
+    name: "Website",
+    status: "operational",
+    uptime: 99.99,
+    responseTime: 87,
+  },
+  {
+    name: "MCP Registry",
+    status: "operational",
+    uptime: 99.95,
+    responseTime: 213,
+  },
+  {
+    name: "Supabase",
+    status: "operational",
+    uptime: 99.97,
+    responseTime: 92,
+  },
+  {
+    name: "CDN",
+    status: "operational",
+    uptime: 100.0,
+    responseTime: 34,
+  },
+];
+
+const incidents: Incident[] = [
+  {
+    id: "inc-005",
+    date: "2026-02-05",
+    title: "Brief API Latency Spike",
+    description:
+      "Users experienced elevated API response times for approximately 8 minutes. Root cause identified as database connection pool exhaustion. Connection limits have been increased.",
+    status: "resolved",
+    affectedServices: ["API"],
+  },
+  {
+    id: "inc-004",
+    date: "2026-01-28",
+    title: "CDN Cache Invalidation Issue",
+    description:
+      "CDN cache invalidation failed for approximately 15 minutes, causing some users to see stale content. Issue was resolved by manually purging cache and redeploying edge configuration.",
+    status: "resolved",
+    affectedServices: ["CDN", "Website"],
+  },
+  {
+    id: "inc-003",
+    date: "2026-01-22",
+    title: "MCP Registry Search Degradation",
+    description:
+      "Search functionality in the MCP Registry experienced degraded performance due to an index optimization job running during peak hours. Job has been rescheduled to off-peak times.",
+    status: "resolved",
+    affectedServices: ["MCP Registry"],
+  },
+  {
+    id: "inc-002",
+    date: "2026-01-15",
+    title: "Supabase Connection Timeout",
+    description:
+      "Database connection timeouts affected user authentication for approximately 12 minutes. Supabase team resolved the issue on their end. Implementing additional retry logic.",
+    status: "resolved",
+    affectedServices: ["Supabase", "API"],
+  },
+  {
+    id: "inc-001",
+    date: "2026-01-09",
+    title: "Scheduled Maintenance",
+    description:
+      "Planned maintenance window for infrastructure upgrades. All services were briefly unavailable for approximately 30 minutes. Upgrades included security patches and performance improvements.",
+    status: "resolved",
+    affectedServices: ["API", "Website", "MCP Registry", "Supabase", "CDN"],
+  },
+];
+
+export default function StatusPage() {
+  const [services] = useState<Service[]>(initialServices);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Status — forAgents.dev",
+    description:
+      "Real-time status and uptime information for forAgents.dev services including API, Website, MCP Registry, Supabase, and CDN.",
+    url: "https://foragents.dev/status",
+  };
+
+  // Simulate periodic updates (in production, this would poll an API)
   useEffect(() => {
     const interval = setInterval(() => {
-      setLastRefresh(new Date());
-    }, 30000);
+      setLastUpdated(new Date());
+    }, 60000); // Update every minute
 
     return () => clearInterval(interval);
   }, []);
 
-  // Mock service data - in production this would come from an API
-  const services: Service[] = [
-    {
-      name: "API",
-      status: "operational",
-      uptime: 99.95,
-      lastChecked: lastRefresh,
-    },
-    {
-      name: "Website",
-      status: "operational",
-      uptime: 99.98,
-      lastChecked: lastRefresh,
-    },
-    {
-      name: "CDN",
-      status: "operational",
-      uptime: 99.99,
-      lastChecked: lastRefresh,
-    },
-    {
-      name: "Database",
-      status: "operational",
-      uptime: 99.92,
-      lastChecked: lastRefresh,
-    },
-    {
-      name: "Search",
-      status: "operational",
-      uptime: 99.97,
-      lastChecked: lastRefresh,
-    },
-  ];
+  const overallStatus: ServiceStatus =
+    services.every((s) => s.status === "operational")
+      ? "operational"
+      : services.some((s) => s.status === "outage")
+        ? "outage"
+        : "degraded";
 
-  const incidents: Incident[] = [
-    {
-      date: "2026-02-05",
-      title: "Elevated API Response Times",
-      status: "resolved",
-      description:
-        "API endpoints experienced increased latency due to database query optimization. Issue was identified and resolved within 15 minutes.",
-    },
-    {
-      date: "2026-02-01",
-      title: "Search Indexing Delay",
-      status: "resolved",
-      description:
-        "Search index update was delayed by 2 hours due to upstream data pipeline maintenance. Normal operation resumed automatically.",
-    },
-    {
-      date: "2026-01-28",
-      title: "Skills Registry Rate Limiting",
-      status: "resolved",
-      description:
-        "Temporary rate limiting applied to Skills Registry API due to unexpected traffic spike. Capacity increased and limits removed.",
-    },
-    {
-      date: "2026-01-25",
-      title: "News Feed Synchronization",
-      status: "resolved",
-      description:
-        "News feed RSS sync experienced intermittent failures. Feed parser updated and monitoring improved.",
-    },
-  ];
-
-  const getStatusColor = (status: ServiceStatus) => {
-    switch (status) {
-      case "operational":
-        return "bg-green-500";
-      case "degraded":
-        return "bg-yellow-500";
-      case "down":
-        return "bg-red-500";
-    }
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
-
-  const getStatusText = (status: ServiceStatus) => {
-    switch (status) {
-      case "operational":
-        return "Operational";
-      case "degraded":
-        return "Degraded";
-      case "down":
-        return "Down";
-    }
-  };
-
-  const allOperational = services.every((s) => s.status === "operational");
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
 
-      {/* Overall Status Banner */}
-      <section className="relative overflow-hidden">
+      {/* Hero Section with Overall Status */}
+      <section className="relative overflow-hidden min-h-[300px] flex items-center">
         <div className="absolute inset-0">
-          <div
-            className={`absolute top-0 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] ${
-              allOperational ? "bg-[#06D6A0]/5" : "bg-yellow-500/5"
-            } rounded-full blur-[160px]`}
-          />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
         </div>
 
-        <div className="relative max-w-5xl mx-auto px-4 py-16">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-3 mb-4">
-              <div
-                className={`w-4 h-4 rounded-full ${
-                  allOperational ? "bg-[#06D6A0]" : "bg-yellow-500"
-                } animate-pulse`}
-              />
-              <h1 className="text-3xl md:text-4xl font-bold text-[#F8FAFC]">
-                {allOperational ? "All Systems Operational" : "System Status"}
-              </h1>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Last updated: {lastRefresh.toLocaleTimeString()} · Auto-refreshes
-              every 30 seconds
+        <div className="relative max-w-5xl mx-auto px-4 py-16 w-full">
+          <div className="text-center mb-8">
+            <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
+              System Status
+            </h1>
+            <p className="text-xl text-foreground/80 mb-6">
+              Real-time status and uptime information
             </p>
           </div>
+
+          {/* Overall Status Banner */}
+          <Card className="bg-[#0f0f0f] border-white/10 max-w-3xl mx-auto">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`w-4 h-4 rounded-full ${statusConfig[overallStatus].color}`}
+                  />
+                  <div>
+                    <h2 className="text-2xl font-semibold">
+                      {overallStatus === "operational"
+                        ? "All Systems Operational"
+                        : overallStatus === "degraded"
+                          ? "Some Systems Degraded"
+                          : "Service Outage"}
+                    </h2>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Last updated: {lastUpdated.toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
-      <Separator className="opacity-10" />
-
       {/* Services Status */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-2">Service Status</h2>
-          <p className="text-muted-foreground">
-            Current operational status of all forAgents.dev services
-          </p>
-        </div>
+      <section className="relative max-w-5xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8">Services</h2>
 
-        <div className="grid gap-4">
-          {services.map((service, index) => (
+        <div className="space-y-4">
+          {services.map((service) => (
             <Card
-              key={index}
-              className="bg-card/50 border-white/5 hover:border-[#06D6A0]/20 transition-all"
+              key={service.name}
+              className="bg-[#0f0f0f] border-white/10 hover:border-white/20 transition-colors"
             >
-              <CardContent className="p-6">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="flex items-center gap-4">
+              <CardContent className="pt-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
                     <div
-                      className={`w-3 h-3 rounded-full ${getStatusColor(
-                        service.status
-                      )} ${
-                        service.status === "operational" ? "animate-pulse" : ""
-                      }`}
+                      className={`w-3 h-3 rounded-full ${statusConfig[service.status].color}`}
                     />
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground">
-                        {service.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground">
-                        {getStatusText(service.status)}
-                      </p>
-                    </div>
+                    <h3 className="text-xl font-semibold">{service.name}</h3>
+                    <Badge
+                      variant={statusConfig[service.status].badgeVariant}
+                      className="ml-2"
+                    >
+                      {statusConfig[service.status].text}
+                    </Badge>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                    <div className="text-sm">
-                      <span className="text-muted-foreground">Uptime: </span>
-                      <span className="font-semibold text-[#06D6A0]">
-                        {service.uptime}%
-                      </span>
+                  <div className="flex gap-8 text-sm">
+                    <div>
+                      <p className="text-muted-foreground">Uptime (30d)</p>
+                      <p className="font-semibold text-[#06D6A0]">
+                        {service.uptime.toFixed(2)}%
+                      </p>
                     </div>
-                    <div className="text-sm text-muted-foreground">
-                      Checked: {service.lastChecked.toLocaleTimeString()}
+                    <div>
+                      <p className="text-muted-foreground">Response Time</p>
+                      <p className="font-semibold text-[#06D6A0]">
+                        {service.responseTime}ms
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -211,98 +257,83 @@ export default function StatusPage() {
         </div>
       </section>
 
-      <Separator className="opacity-10" />
-
       {/* Incident History */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-2">Incident History</h2>
-          <p className="text-muted-foreground">
-            Recent incidents and their resolutions
-          </p>
-        </div>
+      <section className="relative max-w-5xl mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold mb-8">Incident History</h2>
 
-        <div className="space-y-4">
-          {incidents.map((incident, index) => (
+        <div className="space-y-6">
+          {incidents.map((incident) => (
             <Card
-              key={index}
-              className="bg-card/50 border-white/5 hover:border-[#06D6A0]/20 transition-all"
+              key={incident.id}
+              className="bg-[#0f0f0f] border-white/10"
             >
               <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   <div className="flex-1">
-                    <CardTitle className="text-lg mb-2">
-                      {incident.title}
-                    </CardTitle>
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex items-center gap-3 mb-2">
+                      <CardTitle className="text-xl">
+                        {incident.title}
+                      </CardTitle>
                       <Badge
-                        variant="outline"
-                        className="text-xs bg-green-500/10 text-green-500 border-green-500/30"
+                        variant={
+                          incident.status === "resolved"
+                            ? "default"
+                            : "secondary"
+                        }
+                        className="capitalize"
                       >
-                        {incident.status === "resolved"
-                          ? "✓ Resolved"
-                          : incident.status === "investigating"
-                          ? "⚠ Investigating"
-                          : "👁 Monitoring"}
+                        {incident.status}
                       </Badge>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(incident.date).toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </span>
                     </div>
+                    <p className="text-sm text-muted-foreground">
+                      {formatDate(incident.date)}
+                    </p>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-foreground/80 mb-4">
                   {incident.description}
                 </p>
+                <Separator className="my-4" />
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Affected Services:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {incident.affectedServices.map((service) => (
+                      <Badge
+                        key={service}
+                        variant="secondary"
+                        className="bg-white/5"
+                      >
+                        {service}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
       </section>
 
-      <Separator className="opacity-10" />
-
-      {/* Status Subscribe CTA */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="relative overflow-hidden rounded-2xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/5 via-card/80 to-purple/5">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#06D6A0]/10 rounded-full blur-[80px]" />
-
-          <div className="relative p-8 md:p-12">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">📬</span>
-              <h2 className="text-2xl font-bold">Stay Updated</h2>
-            </div>
-
-            <p className="text-muted-foreground mb-6 max-w-2xl">
-              Want to receive notifications about incidents and maintenance
-              windows? We&apos;ll notify you of any service disruptions or
-              planned maintenance.
+      {/* Subscribe to Updates */}
+      <section className="relative max-w-5xl mx-auto px-4 py-12 mb-12">
+        <Card className="bg-gradient-to-br from-[#06D6A0]/10 to-[#06D6A0]/5 border-[#06D6A0]/20">
+          <CardContent className="pt-6 text-center">
+            <h3 className="text-2xl font-bold mb-2">
+              Stay Updated
+            </h3>
+            <p className="text-foreground/80 mb-4">
+              Subscribe to status updates and be notified of incidents as they happen.
             </p>
-
-            <div className="flex flex-col sm:flex-row items-start gap-3">
-              <Link
-                href="/subscribe"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-sm hover:brightness-110 transition-all"
-              >
-                Subscribe to Updates
-              </Link>
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-white/10 text-foreground font-semibold text-sm hover:bg-white/5 transition-colors"
-              >
-                Back to Home →
-              </Link>
-            </div>
-          </div>
-        </div>
+            <p className="text-sm text-muted-foreground">
+              Coming soon: Email and webhook notifications
+            </p>
+          </CardContent>
+        </Card>
       </section>
-
     </div>
   );
 }
