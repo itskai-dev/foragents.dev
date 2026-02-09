@@ -6,6 +6,7 @@ import agentsData from "@/data/agents.json";
 import acpAgentsData from "@/data/acp-agents.json";
 import workflowsData from "@/data/workflows.json";
 import templatesData from "@/data/templates.json";
+import blogPostsData from "@/data/blog-posts.json";
 import { getSupabase } from "@/lib/supabase";
 import { getVerificationInfo, type VerifiedSkillInfo } from "@/lib/verification";
 import { promises as fs } from "fs";
@@ -666,4 +667,84 @@ export function getTemplatesByCategory(category: string): Template[] {
   return (templatesData as Template[]).filter(
     (t) => t.category.toLowerCase() === category.toLowerCase()
   );
+}
+
+// -----------------------------------------------------------------------------
+// Blog Posts
+// -----------------------------------------------------------------------------
+
+export type BlogContentBlock = {
+  type: "paragraph" | "heading";
+  text: string;
+};
+
+export type BlogAuthor = {
+  name: string;
+  role: string;
+  avatar: string;
+  bio: string;
+};
+
+export type BlogPost = {
+  slug: string;
+  title: string;
+  excerpt: string;
+  category: string;
+  author: BlogAuthor;
+  publishedAt: string;
+  readingTime: string;
+  tags: string[];
+  content: BlogContentBlock[];
+};
+
+export function getBlogPosts(category?: string): BlogPost[] {
+  let posts = blogPostsData as BlogPost[];
+  if (category) {
+    posts = posts.filter((p) => p.category === category);
+  }
+  return posts.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+}
+
+export function getBlogPostBySlug(slug: string): BlogPost | undefined {
+  return (blogPostsData as BlogPost[]).find((p) => p.slug === slug);
+}
+
+export function getBlogCategories(): string[] {
+  const categories = new Set<string>();
+  (blogPostsData as BlogPost[]).forEach((p) => categories.add(p.category));
+  return Array.from(categories).sort();
+}
+
+export function getRelatedBlogPosts(slug: string, limit = 3): BlogPost[] {
+  const currentPost = getBlogPostBySlug(slug);
+  if (!currentPost) return [];
+
+  const allPosts = getBlogPosts();
+  
+  // Score posts by relevance
+  const scored = allPosts
+    .filter((p) => p.slug !== slug)
+    .map((p) => {
+      let score = 0;
+      
+      // Same category = +3
+      if (p.category === currentPost.category) score += 3;
+      
+      // Shared tags = +1 per tag
+      const sharedTags = p.tags.filter((t) => currentPost.tags.includes(t));
+      score += sharedTags.length;
+      
+      return { post: p, score };
+    });
+  
+  // Sort by score desc, then by date desc
+  scored.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return new Date(b.post.publishedAt).getTime() - new Date(a.post.publishedAt).getTime();
+  });
+  
+  return scored.slice(0, limit).map((s) => s.post);
 }
