@@ -1,0 +1,110 @@
+[
+  {
+    "id": "gpt-5.3",
+    "name": "GPT-5.3",
+    "provider": "OpenAI",
+    "family": "GPT",
+    "inputPricePer1M": 10,
+    "outputPricePer1M": 30,
+    "contextWindow": 256000,
+    "speedRating": 7.2,
+    "qualityRating": 9.8,
+    "recommendedFor": ["feature-build", "research", "architecture"]
+  },
+  {
+    "id": "gpt-5.3-codex",
+    "name": "GPT-5.3-Codex",
+    "provider": "OpenAI",
+    "family": "GPT",
+    "inputPricePer1M": 8,
+    "outputPricePer1M": 24,
+    "contextWindow": 256000,
+    "speedRating": 8,
+    "qualityRating": 9.6,
+    "recommendedFor": ["bug-fix", "feature-build", "testing", "code-review"]
+  },
+  {
+    "id": "claude-opus-4.1",
+    "name": "Claude Opus 4.1",
+    "provider": "Anthropic",
+    "family": "Claude Opus",
+    "inputPricePer1M": 15,
+    "outputPricePer1M": 75,
+    "contextWindow": 200000,
+    "speedRating": 6.5,
+    "qualityRating": 9.9,
+    "recommendedFor": ["feature-build", "research", "docs"]
+  },
+  {
+    "id": "claude-sonnet-4.5",
+    "name": "Claude Sonnet 4.5",
+    "provider": "Anthropic",
+    "family": "Claude Sonnet",
+    "inputPricePer1M": 3,
+    "outputPricePer1M": 15,
+    "contextWindow": 200000,
+    "speedRating": 8.2,
+    "qualityRating": 9,
+    "recommendedFor": ["code-review", "docs", "testing", "bug-fix"]
+  },
+  {
+    "id": "gemini-2.5-pro",
+    "name": "Gemini 2.5 Pro",
+    "provider": "Google",
+    "family": "Gemini",
+    "inputPricePer1M": 2.5,
+    "outputPricePer1M": 10,
+    "contextWindow": 1000000,
+    "speedRating": 7.8,
+    "qualityRating": 8.9,
+    "recommendedFor": ["research", "feature-build", "docs"]
+  },
+  {
+    "id": "gemini-2.5-flash",
+    "name": "Gemini 2.5 Flash",
+    "provider": "Google",
+    "family": "Gemini",
+    "inputPricePer1M": 0.3,
+    "outputPricePer1M": 1.5,
+    "contextWindow": 1000000,
+    "speedRating": 9.5,
+    "qualityRating": 7.8,
+    "recommendedFor": ["testing", "docs", "support"]
+  },
+  {
+    "id": "llama-4-maverick",
+    "name": "Llama 4 Maverick",
+    "provider": "Meta",
+    "family": "Llama",
+    "inputPricePer1M": 0.6,
+    "outputPricePer1M": 2,
+    "contextWindow": 128000,
+    "speedRating": 8.6,
+    "qualityRating": 7.6,
+    "recommendedFor": ["testing", "classification", "docs"]
+  },
+  {
+    "id": "llama-3.3-70b",
+    "name": "Llama 3.3 70B",
+    "provider": "Meta",
+    "family": "Llama",
+    "inputPricePer1M": 0.8,
+    "outputPricePer1M": 2.4,
+    "contextWindow": 128000,
+    "speedRating": 8.1,
+    "qualityRating": 7.9,
+    "recommendedFor": ["code-review", "testing", "docs"]
+  },
+  {
+    "id": "mistral-large-2",
+    "name": "Mistral Large 2",
+    "provider": "Mistral",
+    "family": "Mistral",
+    "inputPricePer1M": 2,
+    "outputPricePer1M": 6,
+    "contextWindow": 128000,
+    "speedRating": 8.4,
+    "qualityRating": 8.3,
+    "recommendedFor": ["code-review", "agent-routing", "docs"]
+  }
+]
