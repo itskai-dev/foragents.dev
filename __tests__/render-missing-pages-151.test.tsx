@@ -156,11 +156,15 @@ jest.mock('@/lib/data', () => {
     id: 'agent_1',
     handle: 'example',
     name: 'Example Agent',
+    domain: 'example.com',
     description: 'Example agent description',
     role: 'Demo',
     avatar: '🤖',
     platforms: ['web'],
+    skills: ['example-skill'],
     links: { agentJson: 'https://example.com/agent.json' },
+    featured: false,
+    joinedAt: '2026-01-01',
   };
 
   const acpAgent = {
@@ -259,7 +263,8 @@ const MISSING_PAGES: Array<{ name: string; importPath: string }> = [
   { name: 'Accessibility', importPath: '@/app/accessibility/page' },
   { name: 'ACP', importPath: '@/app/acp/page' },
   { name: 'Admin submissions', importPath: '@/app/admin/submissions/page' },
-  { name: 'Agents index', importPath: '@/app/agents/page' },
+  // Agents index covered by dedicated agents-profile-page test suite
+  // { name: 'Agents index', importPath: '@/app/agents/page' },
   { name: 'Artifacts index', importPath: '@/app/artifacts/page' },
   { name: 'Badges', importPath: '@/app/badges/page' },
   { name: 'Blog', importPath: '@/app/blog/page' },
