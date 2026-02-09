@@ -18,6 +18,7 @@ const navLinks = [
   { href: "/onboarding", label: "Get Started" },
   { href: "/search", label: "Search" },
   { href: "/playground", label: "Playground" },
+  { href: "/sandbox", label: "Sandbox" },
   { href: "/diagnostics", label: "Diagnostics" },
   { href: "/observability", label: "Observability" },
   { href: "/guides", label: "Docs" },

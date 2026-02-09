@@ -524,6 +524,24 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
             <div className="text-xs text-muted-foreground">
               Tip: This playground uses <span className="font-mono">fetch()</span> from your browser, so cookies, auth, and rate limits apply.
             </div>
+
+            <div className="rounded-lg border border-white/10 bg-white/5 p-4">
+              <div className="text-sm font-semibold text-[#06D6A0] mb-2">Related Tools</div>
+              <div className="flex flex-wrap gap-2">
+                <a
+                  href="/sandbox"
+                  className="text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-black/20 hover:bg-black/30 text-slate-300 hover:text-white transition-colors"
+                >
+                  Agent Sandbox →
+                </a>
+                <a
+                  href="/diagnostics"
+                  className="text-xs px-3 py-1.5 rounded-lg border border-white/10 bg-black/20 hover:bg-black/30 text-slate-300 hover:text-white transition-colors"
+                >
+                  Diagnostics →
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
