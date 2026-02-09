@@ -1,0 +1,42 @@
+[
+  {
+    "id": "openclaw",
+    "name": "OpenClaw",
+    "description": "Best for autonomous local agents with built-in tooling and node support.",
+    "detectHints": ["openclaw", "open claw", "openclaw gateway", "relay"],
+    "defaultSkills": ["memory-kit", "autonomy-kit", "team-kit", "identity-kit"],
+    "defaultMcpServers": ["filesystem", "memory", "brave-search"],
+    "agentCapabilities": ["chat", "tools", "filesystem", "browser", "memory"],
+    "bootstrapCommand": "npx -y @reflectt/agent-bootstrap --host openclaw --skills memory-kit,autonomy-kit,team-kit,identity-kit --mcp filesystem,memory,brave-search"
+  },
+  {
+    "id": "claude-desktop",
+    "name": "Claude Desktop",
+    "description": "Great for local MCP setups with stdio server definitions.",
+    "detectHints": ["claude", "anthropic", "claude-desktop"],
+    "defaultSkills": ["memory-kit", "identity-kit"],
+    "defaultMcpServers": ["filesystem", "memory"],
+    "agentCapabilities": ["chat", "memory", "knowledge"],
+    "bootstrapCommand": "npx -y @reflectt/agent-bootstrap --host claude-desktop --skills memory-kit,identity-kit --mcp filesystem,memory"
+  },
+  {
+    "id": "cursor",
+    "name": "Cursor",
+    "description": "Strong fit for coding agents with project context and terminal access.",
+    "detectHints": ["cursor", "cursor.sh", "anysphere"],
+    "defaultSkills": ["memory-kit", "autonomy-kit", "team-kit"],
+    "defaultMcpServers": ["filesystem", "postgres", "brave-search"],
+    "agentCapabilities": ["chat", "code", "terminal", "git"],
+    "bootstrapCommand": "npx -y @reflectt/agent-bootstrap --host cursor --skills memory-kit,autonomy-kit,team-kit --mcp filesystem,postgres,brave-search"
+  },
+  {
+    "id": "custom",
+    "name": "Custom Host",
+    "description": "Bring your own runtime and tune every setup parameter manually.",
+    "detectHints": ["unknown", "custom"],
+    "defaultSkills": ["memory-kit", "identity-kit"],
+    "defaultMcpServers": ["filesystem"],
+    "agentCapabilities": ["chat"],
+    "bootstrapCommand": "npx -y @reflectt/agent-bootstrap --host custom --skills memory-kit,identity-kit --mcp filesystem"
+  }
+]
