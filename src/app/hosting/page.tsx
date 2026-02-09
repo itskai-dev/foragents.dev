@@ -257,7 +257,7 @@ export default function HostingPage() {
           ].map((filter) => (
             <button
               key={filter.id}
-              onClick={() => setFilterType(filter.id as any)}
+              onClick={() => setFilterType(filter.id as "all" | "local" | "cloud" | "serverless")}
               className={`px-4 py-2 rounded-lg border transition-all ${
                 filterType === filter.id
                   ? "bg-[#06D6A0]/10 border-[#06D6A0] text-[#06D6A0]"
@@ -377,7 +377,7 @@ export default function HostingPage() {
                 <h3 className="font-semibold text-white mb-1">Optimizing for cost?</h3>
                 <p className="text-sm text-gray-400">
                   Use <Link href="/hosting/cloud#lambda" className="text-[#06D6A0] hover:underline">serverless</Link>
-                  {" "}(Lambda, Cloud Functions) for sporadic workloads that don't need 24/7 uptime.
+                  {" "}(Lambda, Cloud Functions) for sporadic workloads that don&apos;t need 24/7 uptime.
                 </p>
               </div>
             </div>
