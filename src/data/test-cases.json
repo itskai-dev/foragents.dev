@@ -1,0 +1,601 @@
+{
+  "categories": [
+    {
+      "id": "tool-reliability",
+      "name": "Tool Reliability",
+      "description": "Test cases for verifying tool calls work correctly",
+      "icon": "🔧",
+      "color": "blue"
+    },
+    {
+      "id": "context-handling",
+      "name": "Context Handling",
+      "description": "Test cases for context awareness and memory",
+      "icon": "🧠",
+      "color": "purple"
+    },
+    {
+      "id": "error-recovery",
+      "name": "Error Recovery",
+      "description": "Test cases for graceful error handling",
+      "icon": "🛡️",
+      "color": "red"
+    },
+    {
+      "id": "multi-turn",
+      "name": "Multi-Turn Conversation",
+      "description": "Test cases for conversation continuity",
+      "icon": "💬",
+      "color": "green"
+    },
+    {
+      "id": "edge-cases",
+      "name": "Edge Cases",
+      "description": "Test cases for unusual inputs and scenarios",
+      "icon": "⚡",
+      "color": "yellow"
+    }
+  ],
+  "testCases": [
+    {
+      "id": "tc-001",
+      "category": "tool-reliability",
+      "title": "Basic File Read",
+      "description": "Verify agent can read a file correctly",
+      "difficulty": "beginner",
+      "setup": "Create a test file with known content",
+      "input": "Read the contents of test.txt",
+      "expectedBehavior": "Agent should use file read tool and return exact content",
+      "commonFailures": [
+        "Reading wrong file path",
+        "Truncating content",
+        "Not using tool at all"
+      ],
+      "tags": ["file-operations", "basic", "tools"]
+    },
+    {
+      "id": "tc-002",
+      "category": "tool-reliability",
+      "title": "File Write and Verify",
+      "description": "Test agent can write a file and verify the result",
+      "difficulty": "beginner",
+      "setup": "Ensure write permissions in test directory",
+      "input": "Write 'Hello World' to output.txt and verify it was written correctly",
+      "expectedBehavior": "Agent should write file, then read it back to verify",
+      "commonFailures": [
+        "Not verifying the write",
+        "Writing to wrong location",
+        "Incorrect content encoding"
+      ],
+      "tags": ["file-operations", "verification", "tools"]
+    },
+    {
+      "id": "tc-003",
+      "category": "tool-reliability",
+      "title": "Shell Command Execution",
+      "description": "Test agent can execute shell commands safely",
+      "difficulty": "intermediate",
+      "setup": "Prepare test environment with expected output",
+      "input": "Run 'ls -la' and tell me how many files are in the directory",
+      "expectedBehavior": "Agent should execute command, parse output, count files",
+      "commonFailures": [
+        "Not parsing output correctly",
+        "Security issues with command injection",
+        "Not handling errors"
+      ],
+      "tags": ["shell", "execution", "parsing"]
+    },
+    {
+      "id": "tc-004",
+      "category": "tool-reliability",
+      "title": "API Call with Parameters",
+      "description": "Test agent can make API calls with correct parameters",
+      "difficulty": "intermediate",
+      "setup": "Mock API endpoint ready",
+      "input": "Search for 'AI agents' using the search API",
+      "expectedBehavior": "Agent should construct correct API call with query parameter",
+      "commonFailures": [
+        "Incorrect parameter encoding",
+        "Missing required headers",
+        "Not handling rate limits"
+      ],
+      "tags": ["api", "parameters", "http"]
+    },
+    {
+      "id": "tc-005",
+      "category": "tool-reliability",
+      "title": "Parallel Tool Calls",
+      "description": "Test agent can make multiple independent tool calls in parallel",
+      "difficulty": "advanced",
+      "setup": "Multiple independent resources available",
+      "input": "Check the weather in NYC, SF, and LA simultaneously",
+      "expectedBehavior": "Agent should batch independent calls together",
+      "commonFailures": [
+        "Making sequential calls instead of parallel",
+        "Not handling partial failures",
+        "Race conditions"
+      ],
+      "tags": ["parallel", "optimization", "performance"]
+    },
+    {
+      "id": "tc-006",
+      "category": "context-handling",
+      "title": "Reference to Previous Message",
+      "description": "Test agent remembers context from previous message",
+      "difficulty": "beginner",
+      "setup": "Multi-turn conversation",
+      "input": "Message 1: 'My favorite color is blue.' Message 2: 'What's my favorite color?'",
+      "expectedBehavior": "Agent should recall and respond 'blue'",
+      "commonFailures": [
+        "Not retaining context",
+        "Hallucinating different answer",
+        "Asking user to repeat"
+      ],
+      "tags": ["memory", "context", "conversation"]
+    },
+    {
+      "id": "tc-007",
+      "category": "context-handling",
+      "title": "Multi-File Context",
+      "description": "Test agent can track information across multiple files",
+      "difficulty": "intermediate",
+      "setup": "Create 3 related files",
+      "input": "Read config.json, data.csv, and README.md. What's the database connection string?",
+      "expectedBehavior": "Agent should read all files and extract correct info",
+      "commonFailures": [
+        "Only checking one file",
+        "Mixing up information",
+        "Not correlating data"
+      ],
+      "tags": ["multi-file", "context", "information-retrieval"]
+    },
+    {
+      "id": "tc-008",
+      "category": "context-handling",
+      "title": "Pronoun Resolution",
+      "description": "Test agent correctly resolves pronouns to referents",
+      "difficulty": "intermediate",
+      "setup": "Conversation with multiple entities",
+      "input": "Alice works at OpenAI. Bob works at Anthropic. She is a researcher.",
+      "expectedBehavior": "Agent should correctly identify 'She' refers to Alice",
+      "commonFailures": [
+        "Confusing referents",
+        "Not tracking entities",
+        "Ambiguity handling"
+      ],
+      "tags": ["nlp", "reference", "entities"]
+    },
+    {
+      "id": "tc-009",
+      "category": "context-handling",
+      "title": "Long-Term Memory",
+      "description": "Test agent remembers facts from much earlier in conversation",
+      "difficulty": "advanced",
+      "setup": "Long conversation with 50+ messages",
+      "input": "Remember fact from message 5, query in message 55",
+      "expectedBehavior": "Agent retrieves fact despite many intervening messages",
+      "commonFailures": [
+        "Context window limitations",
+        "Not using memory tools",
+        "Information decay"
+      ],
+      "tags": ["long-term", "memory", "persistence"]
+    },
+    {
+      "id": "tc-010",
+      "category": "context-handling",
+      "title": "State Tracking",
+      "description": "Test agent tracks state changes across actions",
+      "difficulty": "advanced",
+      "setup": "Multi-step workflow",
+      "input": "Create file A, modify it, rename it, then tell me its current name",
+      "expectedBehavior": "Agent tracks all state changes and reports final state",
+      "commonFailures": [
+        "Losing track after rename",
+        "Reporting old state",
+        "Not updating mental model"
+      ],
+      "tags": ["state", "tracking", "workflow"]
+    },
+    {
+      "id": "tc-011",
+      "category": "error-recovery",
+      "title": "Missing File Handling",
+      "description": "Test agent handles missing file gracefully",
+      "difficulty": "beginner",
+      "setup": "Ensure file doesn't exist",
+      "input": "Read the contents of nonexistent.txt",
+      "expectedBehavior": "Agent should detect file doesn't exist, explain clearly",
+      "commonFailures": [
+        "Crashing without explanation",
+        "Hallucinating content",
+        "Not suggesting alternatives"
+      ],
+      "tags": ["error-handling", "files", "recovery"]
+    },
+    {
+      "id": "tc-012",
+      "category": "error-recovery",
+      "title": "API Rate Limit",
+      "description": "Test agent handles rate limiting gracefully",
+      "difficulty": "intermediate",
+      "setup": "Mock API with rate limit",
+      "input": "Make 100 API calls rapidly",
+      "expectedBehavior": "Agent should detect rate limit, implement backoff",
+      "commonFailures": [
+        "Not catching rate limit error",
+        "Giving up immediately",
+        "Not informing user"
+      ],
+      "tags": ["api", "rate-limiting", "retry"]
+    },
+    {
+      "id": "tc-013",
+      "category": "error-recovery",
+      "title": "Malformed JSON",
+      "description": "Test agent handles malformed JSON gracefully",
+      "difficulty": "intermediate",
+      "setup": "Create file with invalid JSON",
+      "input": "Parse data.json and extract the 'name' field",
+      "expectedBehavior": "Agent should detect malformed JSON, explain error",
+      "commonFailures": [
+        "Silent failure",
+        "Hallucinating data",
+        "Not attempting to fix"
+      ],
+      "tags": ["json", "parsing", "validation"]
+    },
+    {
+      "id": "tc-014",
+      "category": "error-recovery",
+      "title": "Network Timeout",
+      "description": "Test agent handles network timeouts",
+      "difficulty": "intermediate",
+      "setup": "Mock slow/unresponsive endpoint",
+      "input": "Fetch data from slow-api.example.com",
+      "expectedBehavior": "Agent should timeout appropriately, inform user, offer retry",
+      "commonFailures": [
+        "Hanging indefinitely",
+        "Not setting timeout",
+        "No retry mechanism"
+      ],
+      "tags": ["network", "timeout", "resilience"]
+    },
+    {
+      "id": "tc-015",
+      "category": "error-recovery",
+      "title": "Partial Tool Failure",
+      "description": "Test agent continues when one of multiple tools fails",
+      "difficulty": "advanced",
+      "setup": "Multiple tools, one fails",
+      "input": "Read fileA.txt, fileB.txt (missing), and fileC.txt",
+      "expectedBehavior": "Agent should report fileA and fileC content, explain fileB failed",
+      "commonFailures": [
+        "Stopping at first failure",
+        "Not reporting successful reads",
+        "Confusing partial results"
+      ],
+      "tags": ["partial-failure", "resilience", "multi-tool"]
+    },
+    {
+      "id": "tc-016",
+      "category": "multi-turn",
+      "title": "Follow-Up Question",
+      "description": "Test agent handles clarifying follow-up questions",
+      "difficulty": "beginner",
+      "setup": "Initial ambiguous request",
+      "input": "Message 1: 'List files' → Message 2: 'Which directory?'",
+      "expectedBehavior": "Agent should ask for clarification before acting",
+      "commonFailures": [
+        "Making assumptions",
+        "Acting on wrong directory",
+        "Not asking for clarification"
+      ],
+      "tags": ["clarification", "conversation", "ux"]
+    },
+    {
+      "id": "tc-017",
+      "category": "multi-turn",
+      "title": "Iterative Refinement",
+      "description": "Test agent refines output based on feedback",
+      "difficulty": "intermediate",
+      "setup": "Code generation task",
+      "input": "Message 1: 'Write a function' → Message 2: 'Add error handling'",
+      "expectedBehavior": "Agent modifies previous output, doesn't start from scratch",
+      "commonFailures": [
+        "Rewriting entire function",
+        "Losing previous work",
+        "Not understanding 'add to existing'"
+      ],
+      "tags": ["refinement", "iteration", "incremental"]
+    },
+    {
+      "id": "tc-018",
+      "category": "multi-turn",
+      "title": "Task Decomposition",
+      "description": "Test agent breaks complex task into steps and confirms",
+      "difficulty": "intermediate",
+      "setup": "Complex multi-step request",
+      "input": "Set up a new web project with React, tests, and CI",
+      "expectedBehavior": "Agent should outline steps, confirm before executing each",
+      "commonFailures": [
+        "Doing everything at once",
+        "Not confirming plan",
+        "Missing steps"
+      ],
+      "tags": ["decomposition", "planning", "workflow"]
+    },
+    {
+      "id": "tc-019",
+      "category": "multi-turn",
+      "title": "Context Switch",
+      "description": "Test agent handles switching between tasks",
+      "difficulty": "advanced",
+      "setup": "Start task A, switch to task B, return to task A",
+      "input": "Complex multi-task conversation with interruptions",
+      "expectedBehavior": "Agent tracks both tasks, resumes correctly",
+      "commonFailures": [
+        "Forgetting first task",
+        "Mixing task contexts",
+        "Not acknowledging switch"
+      ],
+      "tags": ["context-switch", "multi-tasking", "memory"]
+    },
+    {
+      "id": "tc-020",
+      "category": "multi-turn",
+      "title": "Conversation Repair",
+      "description": "Test agent recovers when user corrects themselves",
+      "difficulty": "intermediate",
+      "setup": "User makes mistake and corrects it",
+      "input": "Message 1: 'Delete report.pdf' → Message 2: 'Wait, I meant report.doc'",
+      "expectedBehavior": "Agent should stop previous action, switch to correct target",
+      "commonFailures": [
+        "Already deleted wrong file",
+        "Not canceling first action",
+        "Confusion about which file"
+      ],
+      "tags": ["correction", "undo", "recovery"]
+    },
+    {
+      "id": "tc-021",
+      "category": "edge-cases",
+      "title": "Empty File",
+      "description": "Test agent handles empty files",
+      "difficulty": "beginner",
+      "setup": "Create 0-byte file",
+      "input": "Read empty.txt and summarize it",
+      "expectedBehavior": "Agent should recognize file is empty, explain clearly",
+      "commonFailures": [
+        "Error instead of recognition",
+        "Hallucinating content",
+        "Claiming file doesn't exist"
+      ],
+      "tags": ["empty", "edge-case", "files"]
+    },
+    {
+      "id": "tc-022",
+      "category": "edge-cases",
+      "title": "Very Large File",
+      "description": "Test agent handles files larger than context window",
+      "difficulty": "advanced",
+      "setup": "Create 10MB+ text file",
+      "input": "Summarize huge.txt",
+      "expectedBehavior": "Agent should use chunking or streaming strategy",
+      "commonFailures": [
+        "Truncation without explanation",
+        "Out of memory errors",
+        "Not using appropriate strategy"
+      ],
+      "tags": ["large-files", "streaming", "performance"]
+    },
+    {
+      "id": "tc-023",
+      "category": "edge-cases",
+      "title": "Special Characters in Filename",
+      "description": "Test agent handles filenames with spaces and special chars",
+      "difficulty": "intermediate",
+      "setup": "Create file with name 'my file (2024).txt'",
+      "input": "Read my file (2024).txt",
+      "expectedBehavior": "Agent should properly escape/quote filename",
+      "commonFailures": [
+        "Not escaping spaces",
+        "Breaking on parentheses",
+        "Path parsing errors"
+      ],
+      "tags": ["filenames", "escaping", "edge-case"]
+    },
+    {
+      "id": "tc-024",
+      "category": "edge-cases",
+      "title": "Unicode Content",
+      "description": "Test agent handles Unicode/emoji correctly",
+      "difficulty": "intermediate",
+      "setup": "File with emoji and international characters",
+      "input": "Read unicode.txt containing '你好 🌍 Привет'",
+      "expectedBehavior": "Agent should preserve all Unicode characters correctly",
+      "commonFailures": [
+        "Encoding issues",
+        "Emoji replacement",
+        "Garbled international text"
+      ],
+      "tags": ["unicode", "encoding", "i18n"]
+    },
+    {
+      "id": "tc-025",
+      "category": "edge-cases",
+      "title": "Circular References",
+      "description": "Test agent detects circular dependencies",
+      "difficulty": "advanced",
+      "setup": "Create files with circular imports",
+      "input": "Analyze the dependency tree",
+      "expectedBehavior": "Agent should detect and report circular reference",
+      "commonFailures": [
+        "Infinite loop",
+        "Stack overflow",
+        "Not detecting cycle"
+      ],
+      "tags": ["circular", "dependencies", "detection"]
+    },
+    {
+      "id": "tc-026",
+      "category": "edge-cases",
+      "title": "Null and Undefined Handling",
+      "description": "Test agent handles null/undefined values",
+      "difficulty": "intermediate",
+      "setup": "JSON with null values",
+      "input": "Parse data with null fields",
+      "expectedBehavior": "Agent should distinguish null, undefined, empty string",
+      "commonFailures": [
+        "Treating null as string 'null'",
+        "Crashing on null",
+        "Not distinguishing types"
+      ],
+      "tags": ["null", "undefined", "types"]
+    },
+    {
+      "id": "tc-027",
+      "category": "edge-cases",
+      "title": "Timezone Handling",
+      "description": "Test agent correctly handles timezone conversions",
+      "difficulty": "intermediate",
+      "setup": "Multi-timezone scenario",
+      "input": "Schedule meeting at 2pm PST for someone in Tokyo",
+      "expectedBehavior": "Agent should correctly convert and confirm times",
+      "commonFailures": [
+        "Wrong conversion",
+        "Not specifying timezone",
+        "Daylight saving issues"
+      ],
+      "tags": ["timezone", "datetime", "conversion"]
+    },
+    {
+      "id": "tc-028",
+      "category": "edge-cases",
+      "title": "Permission Denied",
+      "description": "Test agent handles permission errors",
+      "difficulty": "intermediate",
+      "setup": "File with restricted permissions",
+      "input": "Read /etc/shadow (restricted file)",
+      "expectedBehavior": "Agent should detect permission error, explain clearly",
+      "commonFailures": [
+        "Attempting without check",
+        "Unclear error message",
+        "Not suggesting alternatives"
+      ],
+      "tags": ["permissions", "security", "errors"]
+    },
+    {
+      "id": "tc-029",
+      "category": "edge-cases",
+      "title": "Race Condition",
+      "description": "Test agent handles files being modified during read",
+      "difficulty": "advanced",
+      "setup": "File being written by another process",
+      "input": "Read file that's actively being modified",
+      "expectedBehavior": "Agent should handle gracefully, possibly retry",
+      "commonFailures": [
+        "Partial/corrupted read",
+        "Not detecting concurrent modification",
+        "No retry strategy"
+      ],
+      "tags": ["race-condition", "concurrency", "resilience"]
+    },
+    {
+      "id": "tc-030",
+      "category": "edge-cases",
+      "title": "Symlink Resolution",
+      "description": "Test agent correctly follows symlinks",
+      "difficulty": "advanced",
+      "setup": "Create symlink to file",
+      "input": "Read link.txt (symlink to actual.txt)",
+      "expectedBehavior": "Agent should follow symlink transparently",
+      "commonFailures": [
+        "Not following symlink",
+        "Breaking on broken symlink",
+        "Infinite loop on circular symlink"
+      ],
+      "tags": ["symlinks", "filesystem", "resolution"]
+    },
+    {
+      "id": "tc-031",
+      "category": "tool-reliability",
+      "title": "Browser Automation",
+      "description": "Test agent can control browser correctly",
+      "difficulty": "advanced",
+      "setup": "Browser automation environment",
+      "input": "Navigate to google.com and search for 'AI agents'",
+      "expectedBehavior": "Agent should load page, find search box, enter query, submit",
+      "commonFailures": [
+        "Not waiting for page load",
+        "Wrong selectors",
+        "Not handling popups"
+      ],
+      "tags": ["browser", "automation", "web"]
+    },
+    {
+      "id": "tc-032",
+      "category": "context-handling",
+      "title": "Ambiguity Resolution",
+      "description": "Test agent asks clarifying questions when input is ambiguous",
+      "difficulty": "intermediate",
+      "setup": "Multiple files matching pattern",
+      "input": "Delete the test file (when multiple test files exist)",
+      "expectedBehavior": "Agent should list options and ask which one",
+      "commonFailures": [
+        "Deleting wrong file",
+        "Deleting all matching files",
+        "Guessing without asking"
+      ],
+      "tags": ["ambiguity", "clarification", "safety"]
+    },
+    {
+      "id": "tc-033",
+      "category": "error-recovery",
+      "title": "Dependency Installation Failure",
+      "description": "Test agent handles package installation failures",
+      "difficulty": "advanced",
+      "setup": "Package with missing dependency",
+      "input": "Install package that has broken dependencies",
+      "expectedBehavior": "Agent should detect failure, attempt resolution, explain issue",
+      "commonFailures": [
+        "Silent failure",
+        "Not checking installation success",
+        "Not suggesting alternatives"
+      ],
+      "tags": ["dependencies", "installation", "recovery"]
+    },
+    {
+      "id": "tc-034",
+      "category": "multi-turn",
+      "title": "Progressive Disclosure",
+      "description": "Test agent reveals information progressively based on user interest",
+      "difficulty": "intermediate",
+      "setup": "Complex data structure",
+      "input": "User explores data step by step with follow-up questions",
+      "expectedBehavior": "Agent provides summary first, details on request",
+      "commonFailures": [
+        "Info dumping everything at once",
+        "Not tracking what was already shown",
+        "Repeating information"
+      ],
+      "tags": ["disclosure", "conversation", "ux"]
+    },
+    {
+      "id": "tc-035",
+      "category": "edge-cases",
+      "title": "Binary File Handling",
+      "description": "Test agent recognizes and handles binary files appropriately",
+      "difficulty": "intermediate",
+      "setup": "Mix of text and binary files",
+      "input": "Read image.png as text",
+      "expectedBehavior": "Agent should detect binary file, explain it's not text-readable",
+      "commonFailures": [
+        "Attempting to read as text",
+        "Garbled output",
+        "Not suggesting alternatives"
+      ],
+      "tags": ["binary", "file-types", "detection"]
+    }
+  ]
+}

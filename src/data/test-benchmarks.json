@@ -1,0 +1,339 @@
+{
+  "benchmarks": [
+    {
+      "id": "response-quality",
+      "name": "Response Quality",
+      "description": "Measures the quality, accuracy, and relevance of agent responses",
+      "metrics": [
+        {
+          "id": "accuracy",
+          "name": "Factual Accuracy",
+          "description": "Percentage of factually correct statements",
+          "weight": 0.3,
+          "scale": "0-100",
+          "measurement": "Automated fact-checking against ground truth"
+        },
+        {
+          "id": "relevance",
+          "name": "Relevance",
+          "description": "How well responses address the user's actual question",
+          "weight": 0.25,
+          "scale": "0-100",
+          "measurement": "Semantic similarity + human evaluation"
+        },
+        {
+          "id": "completeness",
+          "name": "Completeness",
+          "description": "Whether all aspects of the question are addressed",
+          "weight": 0.2,
+          "scale": "0-100",
+          "measurement": "Coverage of required information points"
+        },
+        {
+          "id": "clarity",
+          "name": "Clarity",
+          "description": "How clear and understandable the response is",
+          "weight": 0.15,
+          "scale": "0-100",
+          "measurement": "Readability scores + coherence analysis"
+        },
+        {
+          "id": "conciseness",
+          "name": "Conciseness",
+          "description": "Appropriate length without unnecessary verbosity",
+          "weight": 0.1,
+          "scale": "0-100",
+          "measurement": "Information density vs token count"
+        }
+      ]
+    },
+    {
+      "id": "tool-efficiency",
+      "name": "Tool Usage Efficiency",
+      "description": "Measures how effectively the agent uses available tools",
+      "metrics": [
+        {
+          "id": "tool-selection",
+          "name": "Tool Selection Accuracy",
+          "description": "Percentage of times the correct tool is chosen",
+          "weight": 0.35,
+          "scale": "0-100",
+          "measurement": "Correct tool / Total tool invocations"
+        },
+        {
+          "id": "parameter-correctness",
+          "name": "Parameter Correctness",
+          "description": "How often tool parameters are correct",
+          "weight": 0.25,
+          "scale": "0-100",
+          "measurement": "Valid parameters / Total tool calls"
+        },
+        {
+          "id": "call-minimization",
+          "name": "Call Minimization",
+          "description": "Uses minimum necessary tool calls",
+          "weight": 0.2,
+          "scale": "0-100",
+          "measurement": "Optimal calls / Actual calls"
+        },
+        {
+          "id": "parallelization",
+          "name": "Parallelization",
+          "description": "Batches independent tool calls when possible",
+          "weight": 0.15,
+          "scale": "0-100",
+          "measurement": "Parallel opportunities used / Total opportunities"
+        },
+        {
+          "id": "error-handling",
+          "name": "Tool Error Handling",
+          "description": "Gracefully handles tool failures",
+          "weight": 0.05,
+          "scale": "0-100",
+          "measurement": "Successful recoveries / Tool errors"
+        }
+      ]
+    },
+    {
+      "id": "context-retention",
+      "name": "Context Retention",
+      "description": "Measures the agent's ability to maintain and use conversation context",
+      "metrics": [
+        {
+          "id": "short-term",
+          "name": "Short-Term Memory (1-5 turns)",
+          "description": "Recalls information from recent messages",
+          "weight": 0.3,
+          "scale": "0-100",
+          "measurement": "Successful recalls / Recall opportunities"
+        },
+        {
+          "id": "medium-term",
+          "name": "Medium-Term Memory (6-20 turns)",
+          "description": "Maintains context across multiple exchanges",
+          "weight": 0.3,
+          "scale": "0-100",
+          "measurement": "Context coherence over conversation segments"
+        },
+        {
+          "id": "long-term",
+          "name": "Long-Term Memory (20+ turns)",
+          "description": "Retains important information throughout session",
+          "weight": 0.25,
+          "scale": "0-100",
+          "measurement": "Fact persistence across long conversations"
+        },
+        {
+          "id": "entity-tracking",
+          "name": "Entity Tracking",
+          "description": "Correctly tracks multiple entities and their attributes",
+          "weight": 0.1,
+          "scale": "0-100",
+          "measurement": "Correct entity references / Total references"
+        },
+        {
+          "id": "state-awareness",
+          "name": "State Awareness",
+          "description": "Tracks state changes and current system state",
+          "weight": 0.05,
+          "scale": "0-100",
+          "measurement": "Accurate state reports / State queries"
+        }
+      ]
+    },
+    {
+      "id": "error-handling-grace",
+      "name": "Error Handling Grace",
+      "description": "Measures how well the agent handles errors and edge cases",
+      "metrics": [
+        {
+          "id": "detection",
+          "name": "Error Detection",
+          "description": "Recognizes when errors occur",
+          "weight": 0.25,
+          "scale": "0-100",
+          "measurement": "Detected errors / Actual errors"
+        },
+        {
+          "id": "communication",
+          "name": "Error Communication",
+          "description": "Clearly explains errors to users",
+          "weight": 0.2,
+          "scale": "0-100",
+          "measurement": "Quality of error explanations (human eval)"
+        },
+        {
+          "id": "recovery",
+          "name": "Recovery Success",
+          "description": "Successfully recovers from errors",
+          "weight": 0.3,
+          "scale": "0-100",
+          "measurement": "Successful recoveries / Total errors"
+        },
+        {
+          "id": "graceful-degradation",
+          "name": "Graceful Degradation",
+          "description": "Continues with partial results when possible",
+          "weight": 0.15,
+          "scale": "0-100",
+          "measurement": "Partial completions / Failure opportunities"
+        },
+        {
+          "id": "retry-strategy",
+          "name": "Retry Strategy",
+          "description": "Uses appropriate retry logic",
+          "weight": 0.1,
+          "scale": "0-100",
+          "measurement": "Successful retries / Retry attempts"
+        }
+      ]
+    },
+    {
+      "id": "multi-step-reasoning",
+      "name": "Multi-Step Reasoning",
+      "description": "Measures the agent's ability to break down and solve complex problems",
+      "metrics": [
+        {
+          "id": "planning",
+          "name": "Planning Quality",
+          "description": "Creates effective plans for complex tasks",
+          "weight": 0.25,
+          "scale": "0-100",
+          "measurement": "Plan completeness and logical structure"
+        },
+        {
+          "id": "decomposition",
+          "name": "Task Decomposition",
+          "description": "Breaks complex tasks into manageable steps",
+          "weight": 0.2,
+          "scale": "0-100",
+          "measurement": "Quality of task breakdown"
+        },
+        {
+          "id": "execution-order",
+          "name": "Execution Order",
+          "description": "Executes steps in logical, efficient order",
+          "weight": 0.2,
+          "scale": "0-100",
+          "measurement": "Optimal ordering vs actual"
+        },
+        {
+          "id": "dependency-handling",
+          "name": "Dependency Handling",
+          "description": "Correctly handles dependencies between steps",
+          "weight": 0.2,
+          "scale": "0-100",
+          "measurement": "Dependency resolution accuracy"
+        },
+        {
+          "id": "adaptation",
+          "name": "Plan Adaptation",
+          "description": "Adjusts plan when circumstances change",
+          "weight": 0.15,
+          "scale": "0-100",
+          "measurement": "Successful adaptations / Change events"
+        }
+      ]
+    }
+  ],
+  "scoringMethodology": {
+    "overview": "Benchmarks use a weighted scoring system where each metric contributes to the overall score based on its importance. Individual metrics are scored 0-100, then combined using their weights.",
+    "calculation": "Overall Score = Σ(Metric Score × Weight) for all metrics in a benchmark",
+    "normalization": "Scores are normalized to a 0-100 scale, with 70+ considered good, 85+ excellent, and 95+ exceptional",
+    "aggregation": "Agent scores are aggregated across multiple test runs to reduce variance and provide reliable performance indicators",
+    "statistical": {
+      "confidence": "95% confidence intervals provided for all scores",
+      "minimumRuns": 10,
+      "outlierRemoval": "Modified Z-score method (threshold: 3.5)"
+    }
+  },
+  "leaderboard": {
+    "description": "Community leaderboard concept for agent performance comparison",
+    "categories": [
+      {
+        "id": "overall",
+        "name": "Overall Performance",
+        "description": "Composite score across all benchmarks",
+        "calculation": "Weighted average of all benchmark scores"
+      },
+      {
+        "id": "specialized",
+        "name": "Specialized Categories",
+        "description": "Best performance in specific benchmark categories",
+        "options": [
+          "Best Tool User",
+          "Best Conversationalist",
+          "Most Reliable",
+          "Best Reasoner",
+          "Most Efficient"
+        ]
+      }
+    ],
+    "submissions": {
+      "requirements": [
+        "Agent must complete all benchmark tests",
+        "Minimum 10 runs per benchmark",
+        "Public disclosure of model and configuration",
+        "Reproducible results"
+      ],
+      "verification": "Community verification process with spot checks and re-runs"
+    },
+    "updateFrequency": "Weekly recalculation with rolling 30-day window"
+  },
+  "testSuites": [
+    {
+      "id": "quick-eval",
+      "name": "Quick Evaluation",
+      "description": "Fast benchmark suite for rapid iteration (~5 minutes)",
+      "tests": 25,
+      "coverage": ["response-quality", "tool-efficiency"],
+      "useCases": ["Development", "Quick checks", "PR validation"]
+    },
+    {
+      "id": "standard",
+      "name": "Standard Benchmark",
+      "description": "Comprehensive evaluation covering all capabilities (~30 minutes)",
+      "tests": 100,
+      "coverage": ["response-quality", "tool-efficiency", "context-retention", "error-handling-grace", "multi-step-reasoning"],
+      "useCases": ["Pre-release testing", "Performance comparison", "Leaderboard submission"]
+    },
+    {
+      "id": "stress",
+      "name": "Stress Test",
+      "description": "Extended testing under challenging conditions (~2 hours)",
+      "tests": 250,
+      "coverage": ["All benchmarks plus edge cases, performance under load, long conversations"],
+      "useCases": ["Production readiness", "Reliability validation", "Capacity planning"]
+    }
+  ],
+  "exampleScores": [
+    {
+      "agent": "Example Agent A",
+      "model": "claude-sonnet-4",
+      "scores": {
+        "response-quality": 87,
+        "tool-efficiency": 82,
+        "context-retention": 91,
+        "error-handling-grace": 78,
+        "multi-step-reasoning": 85,
+        "overall": 85
+      },
+      "strengths": ["Context retention", "Response quality"],
+      "weaknesses": ["Error recovery", "Tool parameter validation"]
+    },
+    {
+      "agent": "Example Agent B",
+      "model": "gpt-4o",
+      "scores": {
+        "response-quality": 89,
+        "tool-efficiency": 91,
+        "context-retention": 84,
+        "error-handling-grace": 88,
+        "multi-step-reasoning": 90,
+        "overall": 88
+      },
+      "strengths": ["Tool usage", "Multi-step reasoning"],
+      "weaknesses": ["Medium-term context retention"]
+    }
+  ]
+}

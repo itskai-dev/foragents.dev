@@ -1,0 +1,278 @@
+{
+  "overview": {
+    "title": "CI/CD for AI Agents",
+    "description": "Continuous integration and deployment pipelines specifically designed for AI agents, with testing, validation, and safe deployment strategies.",
+    "keyPrinciples": [
+      "Automated testing on every change",
+      "Gradual rollouts with monitoring",
+      "Fast rollback capabilities",
+      "Performance regression detection",
+      "Behavioral validation before deploy"
+    ]
+  },
+  "workflows": [
+    {
+      "id": "github-actions-basic",
+      "name": "GitHub Actions - Basic Agent Testing",
+      "description": "Run unit tests and basic validation on every PR",
+      "platform": "GitHub Actions",
+      "difficulty": "beginner",
+      "triggers": ["pull_request", "push to main"],
+      "code": "name: Agent Tests\n\non:\n  pull_request:\n  push:\n    branches: [main]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      \n      - name: Setup Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n          \n      - name: Install dependencies\n        run: npm ci\n        \n      - name: Run agent unit tests\n        run: npm run test:agent\n        \n      - name: Run tool integration tests\n        run: npm run test:tools\n        \n      - name: Check prompt templates\n        run: npm run validate:prompts\n        \n      - name: Upload test results\n        if: always()\n        uses: actions/upload-artifact@v4\n        with:\n          name: test-results\n          path: test-results/\n          retention-days: 30"
+    },
+    {
+      "id": "github-actions-benchmarks",
+      "name": "GitHub Actions - Performance Benchmarks",
+      "description": "Run benchmarks and compare against baseline",
+      "platform": "GitHub Actions",
+      "difficulty": "intermediate",
+      "triggers": ["pull_request", "schedule"],
+      "code": "name: Agent Benchmarks\n\non:\n  pull_request:\n  schedule:\n    - cron: '0 2 * * *'  # Daily at 2am\n\njobs:\n  benchmark:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      \n      - name: Setup Node.js\n        uses: actions/setup-node@v4\n        with:\n          node-version: '20'\n          \n      - name: Install dependencies\n        run: npm ci\n        \n      - name: Download baseline benchmarks\n        uses: actions/download-artifact@v4\n        with:\n          name: baseline-benchmarks\n          path: ./baseline/\n        continue-on-error: true\n        \n      - name: Run benchmarks\n        run: npm run benchmark:full\n        env:\n          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}\n          \n      - name: Compare against baseline\n        run: |\n          node scripts/compare-benchmarks.js \\\n            --baseline ./baseline/results.json \\\n            --current ./benchmark-results/results.json \\\n            --threshold 5  # 5% regression threshold\n            \n      - name: Upload benchmark results\n        uses: actions/upload-artifact@v4\n        with:\n          name: benchmark-results\n          path: benchmark-results/\n          \n      - name: Comment PR with results\n        if: github.event_name == 'pull_request'\n        uses: actions/github-script@v7\n        with:\n          script: |\n            const fs = require('fs');\n            const results = JSON.parse(fs.readFileSync('./benchmark-results/summary.json', 'utf8'));\n            \n            const body = `## 📊 Benchmark Results\\n\\n` +\n              `| Metric | Current | Baseline | Change |\\n` +\n              `|--------|---------|----------|--------|\\n` +\n              results.metrics.map(m => \n                `| ${m.name} | ${m.current} | ${m.baseline} | ${m.change} |`\n              ).join('\\n');\n              \n            github.rest.issues.createComment({\n              issue_number: context.issue.number,\n              owner: context.repo.owner,\n              repo: context.repo.repo,\n              body: body\n            });"
+    },
+    {
+      "id": "github-actions-canary",
+      "name": "GitHub Actions - Canary Deployment",
+      "description": "Deploy to subset of users first, monitor, then full rollout",
+      "platform": "GitHub Actions",
+      "difficulty": "advanced",
+      "triggers": ["workflow_dispatch", "push to main"],
+      "code": "name: Canary Deploy\n\non:\n  push:\n    branches: [main]\n  workflow_dispatch:\n    inputs:\n      canary_percentage:\n        description: 'Percentage of traffic for canary'\n        required: false\n        default: '10'\n\njobs:\n  deploy-canary:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      \n      - name: Deploy to canary environment\n        run: |\n          ./scripts/deploy.sh canary\n        env:\n          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}\n          \n      - name: Route traffic to canary\n        run: |\n          PERCENTAGE=${{ github.event.inputs.canary_percentage || '10' }}\n          ./scripts/route-traffic.sh canary $PERCENTAGE\n          \n      - name: Wait for initial metrics\n        run: sleep 300  # 5 minutes\n        \n      - name: Check canary health\n        id: canary_health\n        run: |\n          HEALTH=$(./scripts/check-health.sh canary)\n          echo \"status=$HEALTH\" >> $GITHUB_OUTPUT\n          \n          if [ \"$HEALTH\" != \"healthy\" ]; then\n            echo \"❌ Canary unhealthy: $HEALTH\"\n            exit 1\n          fi\n          \n      - name: Check error rates\n        run: |\n          ERROR_RATE=$(./scripts/get-metric.sh canary error_rate)\n          BASELINE_ERROR_RATE=$(./scripts/get-metric.sh production error_rate)\n          \n          # Allow 50% higher error rate than baseline\n          THRESHOLD=$(echo \"$BASELINE_ERROR_RATE * 1.5\" | bc)\n          \n          if (( $(echo \"$ERROR_RATE > $THRESHOLD\" | bc -l) )); then\n            echo \"❌ Error rate too high: $ERROR_RATE (threshold: $THRESHOLD)\"\n            ./scripts/rollback.sh canary\n            exit 1\n          fi\n          \n      - name: Monitor canary\n        run: |\n          # Monitor for 30 minutes\n          for i in {1..6}; do\n            sleep 300  # 5 minutes\n            ./scripts/check-metrics.sh canary\n          done\n          \n  promote-to-production:\n    needs: deploy-canary\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      \n      - name: Promote canary to production\n        run: |\n          ./scripts/promote.sh canary production\n          \n      - name: Route all traffic to new version\n        run: |\n          ./scripts/route-traffic.sh production 100\n          \n      - name: Notify team\n        uses: 8398a7/action-slack@v3\n        with:\n          status: ${{ job.status }}\n          text: '✅ Canary promoted to production'\n          webhook_url: ${{ secrets.SLACK_WEBHOOK }}\n          \n  rollback-on-failure:\n    needs: deploy-canary\n    if: failure()\n    runs-on: ubuntu-latest\n    steps:\n      - name: Rollback canary\n        run: ./scripts/rollback.sh canary\n        \n      - name: Notify team of rollback\n        uses: 8398a7/action-slack@v3\n        with:\n          status: 'failure'\n          text: '⚠️ Canary deployment failed - rolled back'\n          webhook_url: ${{ secrets.SLACK_WEBHOOK }}"
+    },
+    {
+      "id": "pre-commit-hooks",
+      "name": "Pre-commit Hooks",
+      "description": "Local validation before commits",
+      "platform": "Git Hooks",
+      "difficulty": "beginner",
+      "triggers": ["pre-commit"],
+      "code": "#!/bin/bash\n# .git/hooks/pre-commit\n# Or use husky: npm install -D husky && npx husky init\n\necho \"🔍 Running pre-commit checks...\"\n\n# Check prompt templates\necho \"Validating prompt templates...\"\nnpm run validate:prompts\nif [ $? -ne 0 ]; then\n  echo \"❌ Prompt validation failed\"\n  exit 1\nfi\n\n# Run fast unit tests\necho \"Running unit tests...\"\nnpm run test:unit\nif [ $? -ne 0 ]; then\n  echo \"❌ Unit tests failed\"\n  exit 1\nfi\n\n# Check for secrets\necho \"Checking for exposed secrets...\"\ngit diff --cached --name-only | xargs grep -l 'sk-' && {\n  echo \"❌ Possible API key detected!\"\n  exit 1\n}\n\n# Lint code\necho \"Linting...\"\nnpm run lint\nif [ $? -ne 0 ]; then\n  echo \"❌ Linting failed\"\n  exit 1\nfi\n\necho \"✅ All pre-commit checks passed\"\nexit 0"
+    },
+    {
+      "id": "regression-detection",
+      "name": "Behavioral Regression Detection",
+      "description": "Detect changes in agent behavior",
+      "platform": "Custom Script",
+      "difficulty": "advanced",
+      "triggers": ["CI pipeline"],
+      "code": "// scripts/detect-regressions.js\nimport { runTestSuite } from './test-harness.js';\nimport { compareResults } from './comparison.js';\n\nasync function detectRegressions() {\n  console.log('🔍 Running regression detection...');\n  \n  // Load baseline results\n  const baseline = await loadBaseline('./baseline/test-results.json');\n  \n  // Run current test suite\n  const current = await runTestSuite({\n    model: process.env.AGENT_MODEL,\n    tests: baseline.tests,\n    config: baseline.config\n  });\n  \n  // Compare results\n  const comparison = compareResults(baseline, current);\n  \n  // Check for regressions\n  const regressions = comparison.differences.filter(d => d.type === 'regression');\n  \n  if (regressions.length > 0) {\n    console.error('❌ Behavioral regressions detected:');\n    \n    for (const regression of regressions) {\n      console.error(`  - ${regression.test}: ${regression.description}`);\n      console.error(`    Expected: ${regression.expected}`);\n      console.error(`    Got: ${regression.actual}`);\n    }\n    \n    // Save detailed report\n    await saveReport('./regression-report.json', {\n      regressions,\n      comparison,\n      timestamp: new Date().toISOString()\n    });\n    \n    process.exit(1);\n  }\n  \n  console.log('✅ No regressions detected');\n  \n  // Check for improvements\n  const improvements = comparison.differences.filter(d => d.type === 'improvement');\n  if (improvements.length > 0) {\n    console.log('🎉 Improvements detected:');\n    improvements.forEach(i => console.log(`  - ${i.test}: ${i.description}`));\n  }\n  \n  return comparison;\n}\n\n// Example comparison logic\nfunction compareResults(baseline, current) {\n  const differences = [];\n  \n  for (const test of baseline.tests) {\n    const baseResult = baseline.results[test.id];\n    const currResult = current.results[test.id];\n    \n    // Compare response quality\n    if (currResult.score < baseResult.score - 5) {\n      differences.push({\n        type: 'regression',\n        test: test.name,\n        metric: 'score',\n        expected: baseResult.score,\n        actual: currResult.score,\n        description: `Score dropped by ${baseResult.score - currResult.score} points`\n      });\n    }\n    \n    // Compare tool usage\n    if (currResult.toolCalls > baseResult.toolCalls * 1.2) {\n      differences.push({\n        type: 'regression',\n        test: test.name,\n        metric: 'efficiency',\n        expected: baseResult.toolCalls,\n        actual: currResult.toolCalls,\n        description: 'Using more tool calls than necessary'\n      });\n    }\n    \n    // Compare error rates\n    if (currResult.errors > baseResult.errors) {\n      differences.push({\n        type: 'regression',\n        test: test.name,\n        metric: 'reliability',\n        expected: baseResult.errors,\n        actual: currResult.errors,\n        description: 'Higher error rate'\n      });\n    }\n  }\n  \n  return { differences, baseline, current };\n}\n\nif (import.meta.url === `file://${process.argv[1]}`) {\n  detectRegressions().catch(console.error);\n}"
+    }
+  ],
+  "strategies": [
+    {
+      "name": "Blue-Green Deployment",
+      "description": "Maintain two identical production environments, switch traffic instantly",
+      "pros": ["Instant rollback", "Zero downtime", "Easy to test production environment"],
+      "cons": ["Double infrastructure cost", "Database migration complexity"],
+      "bestFor": "Production agents with high uptime requirements",
+      "implementation": {
+        "steps": [
+          "Deploy new version to 'green' environment",
+          "Run smoke tests on green",
+          "Switch router/load balancer to green",
+          "Keep blue as rollback option for 24h",
+          "Next deploy goes to blue"
+        ],
+        "tools": ["Vercel", "AWS ECS", "Kubernetes"]
+      }
+    },
+    {
+      "name": "Canary Deployment",
+      "description": "Gradually roll out to small percentage of users first",
+      "pros": ["Risk mitigation", "Real user testing", "Gradual validation"],
+      "cons": ["More complex", "Longer deployment time", "Monitoring overhead"],
+      "bestFor": "Agent updates with behavioral changes",
+      "implementation": {
+        "steps": [
+          "Deploy to canary (5-10% of traffic)",
+          "Monitor error rates, latency, user feedback",
+          "Gradually increase to 25%, 50%, 100%",
+          "Rollback if metrics degrade"
+        ],
+        "tools": ["Feature flags", "Split.io", "LaunchDarkly"]
+      }
+    },
+    {
+      "name": "Shadow Deployment",
+      "description": "Run new version alongside old, compare outputs without affecting users",
+      "pros": ["Zero user impact", "Real traffic testing", "Behavioral comparison"],
+      "cons": ["Double compute cost", "Complex comparison logic", "Not always feasible"],
+      "bestFor": "Major agent updates or model changes",
+      "implementation": {
+        "steps": [
+          "Deploy new version in shadow mode",
+          "Route production traffic to both versions",
+          "Only use old version responses for users",
+          "Log and compare new version outputs",
+          "Analyze differences before promoting"
+        ],
+        "tools": ["Custom proxy", "Service mesh", "Istio"]
+      }
+    },
+    {
+      "name": "Feature Flags",
+      "description": "Toggle features on/off without redeployment",
+      "pros": ["Instant rollback", "A/B testing", "Gradual rollout"],
+      "cons": ["Code complexity", "Technical debt if not cleaned up", "Flag management overhead"],
+      "bestFor": "Experimental features or prompt changes",
+      "implementation": {
+        "steps": [
+          "Wrap new behavior in feature flag",
+          "Deploy with flag off",
+          "Enable for internal users first",
+          "Gradually enable for more users",
+          "Remove flag after stabilization"
+        ],
+        "tools": ["LaunchDarkly", "Split.io", "Unleash", "PostHog"]
+      }
+    }
+  ],
+  "monitoring": {
+    "title": "Essential Monitoring for Agent Deployments",
+    "metrics": [
+      {
+        "category": "Performance",
+        "metrics": [
+          "Response latency (p50, p95, p99)",
+          "Tool call latency",
+          "Token usage per request",
+          "Cache hit rate"
+        ]
+      },
+      {
+        "category": "Reliability",
+        "metrics": [
+          "Error rate overall",
+          "Tool failure rate",
+          "Timeout rate",
+          "Retry success rate"
+        ]
+      },
+      {
+        "category": "Quality",
+        "metrics": [
+          "User satisfaction score",
+          "Task completion rate",
+          "Average turns per conversation",
+          "Escalation rate (to human)"
+        ]
+      },
+      {
+        "category": "Cost",
+        "metrics": [
+          "Cost per request",
+          "Tokens per request",
+          "Tool API costs",
+          "Infrastructure costs"
+        ]
+      }
+    ],
+    "alerting": {
+      "critical": [
+        "Error rate > 5%",
+        "P95 latency > 10s",
+        "Cost spike > 3x baseline"
+      ],
+      "warning": [
+        "Error rate > 2%",
+        "User satisfaction < 4.0/5",
+        "Tool failure rate > 10%"
+      ]
+    },
+    "tools": ["Datadog", "New Relic", "Prometheus + Grafana", "PostHog", "LogRocket"]
+  },
+  "rollbackStrategies": [
+    {
+      "name": "Instant Rollback",
+      "description": "Revert to previous version immediately",
+      "when": "Critical issues detected",
+      "howTo": "Keep previous version running, switch traffic back",
+      "timeframe": "< 1 minute"
+    },
+    {
+      "name": "Gradual Rollback",
+      "description": "Reduce traffic to new version gradually",
+      "when": "Elevated error rates but not critical",
+      "howTo": "Decrease canary percentage: 50% → 25% → 10% → 0%",
+      "timeframe": "5-15 minutes"
+    },
+    {
+      "name": "Feature Flag Disable",
+      "description": "Turn off problematic feature",
+      "when": "Specific feature causing issues",
+      "howTo": "Disable feature flag in production",
+      "timeframe": "< 30 seconds"
+    },
+    {
+      "name": "Circuit Breaker",
+      "description": "Automatic failover when error threshold hit",
+      "when": "Automated response to degradation",
+      "howTo": "Configure circuit breaker to detect and switch automatically",
+      "timeframe": "Automatic (seconds)"
+    }
+  ],
+  "bestPractices": [
+    {
+      "category": "Pre-Deploy Checks",
+      "practices": [
+        "Run full test suite including edge cases",
+        "Validate all prompt templates",
+        "Check for exposed secrets or credentials",
+        "Review changes in tool configurations",
+        "Verify model version and parameters",
+        "Test against production-like data"
+      ]
+    },
+    {
+      "category": "Deployment",
+      "practices": [
+        "Deploy during low-traffic periods",
+        "Start with canary deployment",
+        "Monitor metrics in real-time",
+        "Have rollback plan ready",
+        "Keep team available during deploy",
+        "Document deployment steps"
+      ]
+    },
+    {
+      "category": "Post-Deploy",
+      "practices": [
+        "Monitor for 24-48 hours",
+        "Review user feedback and support tickets",
+        "Analyze cost and performance metrics",
+        "Document any issues encountered",
+        "Update baseline benchmarks",
+        "Celebrate successful deploys 🎉"
+      ]
+    }
+  ],
+  "examplePipeline": {
+    "name": "Complete Agent CI/CD Pipeline",
+    "stages": [
+      {
+        "name": "Commit",
+        "steps": ["Pre-commit hooks", "Lint", "Unit tests"],
+        "duration": "< 1 minute"
+      },
+      {
+        "name": "PR",
+        "steps": ["Full test suite", "Integration tests", "Benchmark comparison", "Security scan"],
+        "duration": "5-10 minutes"
+      },
+      {
+        "name": "Merge to Main",
+        "steps": ["Build", "Deploy to staging", "Run smoke tests", "Manual approval"],
+        "duration": "10-15 minutes"
+      },
+      {
+        "name": "Production Deploy",
+        "steps": ["Deploy canary (10%)", "Monitor 30 min", "Promote to 50%", "Monitor 30 min", "Full rollout"],
+        "duration": "1-2 hours"
+      },
+      {
+        "name": "Post-Deploy",
+        "steps": ["Monitor metrics", "Update baseline", "Notify team"],
+        "duration": "Ongoing"
+      }
+    ]
+  }
+}
