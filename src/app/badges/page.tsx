@@ -244,7 +244,7 @@ export default function BadgesPage() {
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-[#F8FAFC] mb-2">Your Progress</h2>
                 <p className="text-muted-foreground">
-                  You've unlocked <span className="text-[#06D6A0] font-semibold">{userBadgeCount}</span> of{" "}
+                  You&apos;ve unlocked <span className="text-[#06D6A0] font-semibold">{userBadgeCount}</span> of{" "}
                   <span className="font-semibold">{totalBadges}</span> badges
                 </p>
               </div>
