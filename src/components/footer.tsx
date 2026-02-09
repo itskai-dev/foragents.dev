@@ -99,6 +99,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/newsletter" className="text-muted-foreground hover:text-cyan transition-colors">
+                  Newsletter
+                </Link>
+              </li>
+              <li>
                 <Link href="/changelog" className="text-muted-foreground hover:text-cyan transition-colors">
                   Changelog
                 </Link>

@@ -1,0 +1,93 @@
+{
+  "subscriberCount": 2400,
+  "benefits": [
+    {
+      "id": "weekly-digest",
+      "title": "Weekly Digest",
+      "description": "Get a curated roundup of the latest skills, updates, and community highlights delivered every Tuesday.",
+      "icon": "mail"
+    },
+    {
+      "id": "early-access",
+      "title": "Early Access",
+      "description": "Be the first to know about new features, beta programs, and exclusive opportunities before they go public.",
+      "icon": "zap"
+    },
+    {
+      "id": "community-spotlights",
+      "title": "Community Spotlights",
+      "description": "Discover inspiring projects, creator stories, and innovative use cases from the forAgents community.",
+      "icon": "users"
+    },
+    {
+      "id": "no-spam",
+      "title": "No Spam Promise",
+      "description": "We respect your inbox. Only valuable content, no promotional emails, and you can unsubscribe anytime.",
+      "icon": "shield-check"
+    }
+  ],
+  "recentIssues": [
+    {
+      "id": "issue-42",
+      "title": "February Platform Update: New Skill Registry & Community Contributions",
+      "date": "2026-02-04",
+      "preview": "Announcing the new Skill Registry with enhanced search capabilities, plus highlights from 47 community-contributed skills this month. Learn how the new semantic search works and what's coming in Q1 2026.",
+      "readUrl": "/newsletter/issues/42"
+    },
+    {
+      "id": "issue-41",
+      "title": "January Wrap-Up: 2,400+ Subscribers & Year in Review",
+      "date": "2026-01-28",
+      "preview": "We crossed 2,400 subscribers! Reflecting on 2025's milestones, the most popular skills of the year, and what the community built together. Plus a sneak peek at our 2026 roadmap.",
+      "readUrl": "/newsletter/issues/41"
+    },
+    {
+      "id": "issue-40",
+      "title": "Security Advisory: Best Practices for Agent Authentication",
+      "date": "2026-01-21",
+      "preview": "Important security update covering authentication patterns, API key management, and common pitfalls to avoid. Includes updated documentation and migration guides for legacy implementations.",
+      "readUrl": "/newsletter/issues/40"
+    },
+    {
+      "id": "issue-39",
+      "title": "Community Spotlight: Building Multi-Agent Workflows",
+      "date": "2026-01-14",
+      "preview": "Deep dive into @alex's innovative multi-agent coordination framework, how @sarah automated customer support with 3 agents, and new workflow templates from the community.",
+      "readUrl": "/newsletter/issues/39"
+    },
+    {
+      "id": "issue-38",
+      "title": "New Year, New Skills: Top 10 Most Installed in December",
+      "date": "2026-01-07",
+      "preview": "The skills that dominated December installations, trending patterns in agent development, and predictions for what's coming in 2026. Plus early access to the new comparison tool.",
+      "readUrl": "/newsletter/issues/38"
+    }
+  ],
+  "interestOptions": [
+    {
+      "id": "new-skills",
+      "label": "New Skills",
+      "description": "Get notified when new skills are published"
+    },
+    {
+      "id": "platform-updates",
+      "label": "Platform Updates",
+      "description": "Stay informed about new features and improvements"
+    },
+    {
+      "id": "community-highlights",
+      "label": "Community Highlights",
+      "description": "Discover interesting projects from the community"
+    },
+    {
+      "id": "security-advisories",
+      "label": "Security Advisories",
+      "description": "Receive important security updates and patches"
+    },
+    {
+      "id": "api-changes",
+      "label": "API Changes",
+      "description": "Breaking changes and deprecation notices"
+    }
+  ]
+}

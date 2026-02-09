@@ -1,203 +1,363 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Mail, Zap, Users, ShieldCheck, ExternalLink, Calendar } from "lucide-react";
+import newsletterData from "@/data/newsletter.json";
 
-export const metadata = {
-  title: "Newsletter — forAgents.dev",
-  description:
-    "Subscribe to the forAgents.dev newsletter for weekly roundups, new skills spotlight, community highlights, and platform updates.",
-  openGraph: {
-    title: "Newsletter — forAgents.dev",
-    description:
-      "Subscribe to the forAgents.dev newsletter for weekly roundups, new skills spotlight, community highlights, and platform updates.",
-    url: "https://foragents.dev/newsletter",
-    siteName: "forAgents.dev",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Newsletter — forAgents.dev",
-    description:
-      "Subscribe to the forAgents.dev newsletter for weekly roundups, new skills spotlight, community highlights, and platform updates.",
-  },
+const iconMap = {
+  mail: Mail,
+  zap: Zap,
+  users: Users,
+  "shield-check": ShieldCheck,
 };
-
-type NewsletterIssue = {
-  issue: number;
-  date: string;
-  title: string;
-  preview: string;
-  slug: string;
-};
-
-const pastIssues: NewsletterIssue[] = [
-  {
-    issue: 6,
-    date: "2026-02-07",
-    title: "Weekly Roundup: 30+ Pages Shipped & API Playground Launch",
-    preview:
-      "This week we made history by shipping over 30 pages in a single night! From enhanced skill pages to the new API playground, discover what&apos;s new in the forAgents.dev ecosystem. Plus: featured creators and trending skills.",
-    slug: "weekly-roundup-feb-7-2026",
-  },
-  {
-    issue: 5,
-    date: "2026-02-01",
-    title: "New Skills Spotlight: Advanced Automation & AI Integrations",
-    preview:
-      "Explore the latest skills added to our marketplace this week, including advanced automation tools, AI model integrations, and workflow orchestration capabilities. Learn how top creators are pushing the boundaries of agent development.",
-    slug: "skills-spotlight-feb-1-2026",
-  },
-  {
-    issue: 4,
-    date: "2026-01-25",
-    title: "Community Highlights: Top Contributors & Featured Projects",
-    preview:
-      "Meet the creators making waves in the agent community! This week&apos;s highlights include innovative skill kits, collaborative projects, and success stories from builders using forAgents.dev to power their AI workflows.",
-    slug: "community-highlights-jan-25-2026",
-  },
-  {
-    issue: 3,
-    date: "2026-01-18",
-    title: "Platform Updates: Dark Mode, Analytics & Creator Dashboard",
-    preview:
-      "We&apos;ve rolled out major platform improvements including beautiful dark mode support, creator analytics dashboards, and enhanced search functionality. Learn how these updates can help you build better agents faster.",
-    slug: "platform-updates-jan-18-2026",
-  },
-  {
-    issue: 2,
-    date: "2026-01-11",
-    title: "Weekly Roundup: MCP Servers & Skill Discovery Improvements",
-    preview:
-      "Dive into this week&apos;s additions including new MCP server integrations, improved skill discovery with advanced filtering, and a behind-the-scenes look at how we&apos;re building the world&apos;s largest agent resource library.",
-    slug: "weekly-roundup-jan-11-2026",
-  },
-  {
-    issue: 1,
-    date: "2026-01-04",
-    title: "Welcome to forAgents.dev: Building the Future of AI Agents",
-    preview:
-      "Welcome to our inaugural newsletter! Learn about our vision for forAgents.dev, discover the first wave of skills and kits, meet our founding creators, and get a sneak peek at what&apos;s coming next in the agent ecosystem.",
-    slug: "welcome-jan-4-2026",
-  },
-];
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 export default function NewsletterPage() {
+  const webPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Newsletter — forAgents.dev",
+    description: "Stay in the Loop with forAgents.dev newsletter. Get weekly digests, early access to features, and community spotlights.",
+    url: "https://foragents.dev/newsletter"
+  };
+
+  const [subscribeForm, setSubscribeForm] = useState({
+    email: "",
+    name: "",
+    interests: [] as string[],
+  });
+  const [unsubscribeToken, setUnsubscribeToken] = useState("");
+  const [subscribeSubmitted, setSubscribeSubmitted] = useState(false);
+  const [unsubscribeSubmitted, setUnsubscribeSubmitted] = useState(false);
+
+  const handleSubscribeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubscribeSubmitted(true);
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setSubscribeForm({ email: "", name: "", interests: [] });
+      setSubscribeSubmitted(false);
+    }, 3000);
+  };
+
+  const handleUnsubscribeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setUnsubscribeSubmitted(true);
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setUnsubscribeToken("");
+      setUnsubscribeSubmitted(false);
+    }, 3000);
+  };
+
+  const handleInterestToggle = (interestId: string) => {
+    setSubscribeForm((prev) => ({
+      ...prev,
+      interests: prev.interests.includes(interestId)
+        ? prev.interests.filter((id) => id !== interestId)
+        : [...prev.interests, interestId],
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Subscribe Hero Section */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            📬 Newsletter
-          </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Get weekly roundups, new skills spotlight, community highlights, and
-            platform updates delivered straight to your inbox
-          </p>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
+      />
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden min-h-[300px] flex items-center">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
         </div>
 
-        {/* Subscribe Form */}
-        <Card className="bg-card/50 border-white/5 max-w-xl mx-auto">
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              <div>
-                <label
-                  htmlFor="email"
-                  className="text-sm font-medium text-muted-foreground block mb-2"
-                >
-                  Email address
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="bg-background/50 border-white/10 focus:border-[#06D6A0] transition-colors"
-                />
-              </div>
-              <Button className="w-full bg-[#06D6A0] text-[#0a0a0a] font-semibold hover:brightness-110 transition-all">
-                Subscribe
-              </Button>
-              <p className="text-xs text-muted-foreground text-center">
-                We&apos;ll never share your email. Unsubscribe anytime.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="relative max-w-5xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
+            Stay in the Loop
+          </h1>
+          <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
+            Get weekly updates on new skills, platform improvements, and community highlights.
+            Join {newsletterData.subscriberCount.toLocaleString()}+ subscribers who stay ahead of the curve.
+          </p>
+        </div>
       </section>
 
-      {/* Past Issues Section */}
-      <section className="max-w-3xl mx-auto px-4 py-12">
-        <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">
-            📚 Past Issues
-          </h2>
-          <p className="text-muted-foreground">
-            Catch up on what you&apos;ve missed
-          </p>
-        </div>
-
-        {/* Issues List */}
-        <div className="space-y-6">
-          {pastIssues.map((issue) => (
-            <Card
-              key={issue.issue}
-              className="bg-card/50 border-white/5 hover:border-[#06D6A0]/20 transition-all"
-            >
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between gap-4 mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-sm font-mono text-[#06D6A0] font-semibold">
-                        Issue #{issue.issue}
-                      </span>
-                      <span className="text-xs text-muted-foreground">•</span>
-                      <time className="text-sm font-mono text-muted-foreground">
-                        {formatDate(issue.date)}
-                      </time>
+      {/* Main Content */}
+      <section className="relative max-w-5xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Subscription Form */}
+          <div className="lg:col-span-2">
+            <Card className="bg-[#0f0f0f] border-white/10">
+              <CardHeader>
+                <CardTitle className="text-2xl">Subscribe to Our Newsletter</CardTitle>
+                <p className="text-muted-foreground text-sm">
+                  Choose what matters to you and we&apos;ll deliver it straight to your inbox.
+                </p>
+              </CardHeader>
+              <CardContent>
+                {subscribeSubmitted ? (
+                  <div className="p-8 text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#06D6A0]/10 mb-4">
+                      <svg
+                        className="w-8 h-8 text-[#06D6A0]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
                     </div>
-                    <h3 className="text-xl font-bold mb-2">{issue.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {issue.preview}
+                    <h3 className="text-xl font-semibold mb-2">You&apos;re subscribed!</h3>
+                    <p className="text-muted-foreground">
+                      Check your email to confirm your subscription.
                     </p>
                   </div>
-                </div>
-                <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
-                  <Link
-                    href={`/newsletter/${issue.slug}`}
-                    className="inline-flex items-center text-sm text-[#06D6A0] hover:underline font-medium"
-                  >
-                    Read issue →
-                  </Link>
+                ) : (
+                  <form onSubmit={handleSubscribeSubmit} className="space-y-6">
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Email <span className="text-red-500">*</span>
+                      </label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        value={subscribeForm.email}
+                        onChange={(e) =>
+                          setSubscribeForm({ ...subscribeForm, email: e.target.value })
+                        }
+                        className="bg-[#0a0a0a] border-white/10 focus:border-[#06D6A0]"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-medium mb-2"
+                      >
+                        Name <span className="text-muted-foreground text-xs">(optional)</span>
+                      </label>
+                      <Input
+                        id="name"
+                        name="name"
+                        type="text"
+                        value={subscribeForm.name}
+                        onChange={(e) =>
+                          setSubscribeForm({ ...subscribeForm, name: e.target.value })
+                        }
+                        className="bg-[#0a0a0a] border-white/10 focus:border-[#06D6A0]"
+                        placeholder="Your name"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-3">
+                        What are you interested in?
+                      </label>
+                      <div className="space-y-3">
+                        {newsletterData.interestOptions.map((option) => (
+                          <div key={option.id} className="flex items-start gap-3">
+                            <Checkbox
+                              id={option.id}
+                              checked={subscribeForm.interests.includes(option.id)}
+                              onCheckedChange={() => handleInterestToggle(option.id)}
+                              className="mt-1"
+                            />
+                            <div className="flex-1">
+                              <label
+                                htmlFor={option.id}
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                              >
+                                {option.label}
+                              </label>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {option.description}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      className="w-full bg-[#06D6A0] hover:bg-[#06D6A0]/90 text-black font-medium"
+                    >
+                      Subscribe
+                    </Button>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Subscriber Count Badge */}
+          <div className="space-y-6">
+            <Card className="bg-[#0f0f0f] border-white/10">
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#06D6A0]/10 mb-4">
+                    <Users className="w-8 h-8 text-[#06D6A0]" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-2">
+                    {newsletterData.subscriberCount.toLocaleString()}+
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    developers and creators already subscribed
+                  </p>
                 </div>
               </CardContent>
             </Card>
-          ))}
+          </div>
         </div>
 
-        {/* Archive CTA */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-muted-foreground mb-4">
-            Looking for older issues?
-          </p>
-          <Link
-            href="/newsletter/archive"
-            className="inline-flex items-center justify-center h-10 px-6 rounded-lg border border-white/10 text-sm font-medium hover:border-[#06D6A0]/50 hover:text-[#06D6A0] transition-all"
-          >
-            View Full Archive
-          </Link>
+        {/* Benefits Section */}
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Why Subscribe?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {newsletterData.benefits.map((benefit) => {
+              const Icon = iconMap[benefit.icon as keyof typeof iconMap];
+              return (
+                <Card key={benefit.id} className="bg-[#0f0f0f] border-white/10">
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col items-center text-center">
+                      <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#06D6A0]/10 mb-4">
+                        <Icon className="w-6 h-6 text-[#06D6A0]" />
+                      </div>
+                      <h3 className="text-lg font-semibold mb-2">{benefit.title}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {benefit.description}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Recent Issues Section */}
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Recent Newsletter Issues
+          </h2>
+          <div className="space-y-4">
+            {newsletterData.recentIssues.map((issue) => (
+              <Card key={issue.id} className="bg-[#0f0f0f] border-white/10 hover:border-[#06D6A0]/30 transition-colors">
+                <CardContent className="p-6">
+                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold mb-2">{issue.title}</h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {issue.preview}
+                      </p>
+                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(issue.date).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                    <Link
+                      href={issue.readUrl}
+                      className="flex items-center gap-2 text-sm text-[#06D6A0] hover:text-[#06D6A0]/80 transition-colors whitespace-nowrap"
+                    >
+                      Read Online
+                      <ExternalLink className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Unsubscribe Section */}
+        <div className="mt-16">
+          <Card className="bg-[#0f0f0f] border-white/10">
+            <CardHeader>
+              <CardTitle className="text-xl">Need to Unsubscribe?</CardTitle>
+              <p className="text-muted-foreground text-sm">
+                We&apos;re sorry to see you go. Enter your unsubscribe token from any newsletter email.
+              </p>
+            </CardHeader>
+            <CardContent>
+              {unsubscribeSubmitted ? (
+                <div className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#06D6A0]/10 mb-4">
+                    <svg
+                      className="w-8 h-8 text-[#06D6A0]"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">You&apos;re unsubscribed</h3>
+                  <p className="text-muted-foreground">
+                    You&apos;ve been removed from our mailing list. We&apos;ll miss you!
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleUnsubscribeSubmit} className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="unsubscribe-token"
+                      className="block text-sm font-medium mb-2"
+                    >
+                      Unsubscribe Token
+                    </label>
+                    <Input
+                      id="unsubscribe-token"
+                      name="unsubscribe-token"
+                      type="text"
+                      required
+                      value={unsubscribeToken}
+                      onChange={(e) => setUnsubscribeToken(e.target.value)}
+                      className="bg-[#0a0a0a] border-white/10 focus:border-[#06D6A0]"
+                      placeholder="Enter your token"
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    variant="outline"
+                    className="w-full border-white/10 hover:border-red-500/50 hover:text-red-500"
+                  >
+                    Unsubscribe
+                  </Button>
+                </form>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </section>
-
     </div>
   );
 }
