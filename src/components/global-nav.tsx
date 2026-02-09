@@ -34,6 +34,7 @@ const navLinks = [
   { href: "/sandbox", label: "Sandbox" },
   { href: "/diagnostics", label: "Diagnostics" },
   { href: "/observability", label: "Observability" },
+  { href: "/analytics", label: "Analytics" },
   { href: "/guides", label: "Guides" },
   { href: "/api-docs", label: "API Docs" },
   { href: "/digest", label: "Digest" },
