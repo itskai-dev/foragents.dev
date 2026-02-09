@@ -1,0 +1,263 @@
+{
+  "updatedAt": "2026-02-09",
+  "version": "1.0.0",
+  "categories": [
+    {
+      "id": "reasoning",
+      "name": "Reasoning",
+      "description": "Evaluates multi-step reasoning, decomposition, and consistency under constrained prompts.",
+      "difficultyDistribution": {
+        "easy": 2,
+        "medium": 2,
+        "hard": 1
+      },
+      "methodology": "Each run includes deterministic prompts, hidden edge cases, and blind grading across correctness, rationale quality, and contradiction detection.",
+      "exampleTestCase": {
+        "name": "Constraint Sudoku Planner",
+        "input": "Given nine constraints and partial board state, output valid next three moves and explain why each move is legal.",
+        "expectedOutput": "A structured list of three legal moves with constraint references and no rule violations."
+      },
+      "testCases": [
+        { "id": "r-1", "name": "Chain-of-Thought Compression", "difficulty": "easy", "passRate": 91 },
+        { "id": "r-2", "name": "Counterfactual Consistency", "difficulty": "medium", "passRate": 64 },
+        { "id": "r-3", "name": "Long Arithmetic Decomposition", "difficulty": "easy", "passRate": 87 },
+        { "id": "r-4", "name": "Logic Grid with Hidden Constraint", "difficulty": "hard", "passRate": 41 },
+        { "id": "r-5", "name": "Ambiguous Instruction Recovery", "difficulty": "medium", "passRate": 58 }
+      ]
+    },
+    {
+      "id": "tool-use",
+      "name": "Tool Use",
+      "description": "Measures tool selection quality, recovery from failures, and correct sequencing of external actions.",
+      "difficultyDistribution": {
+        "easy": 1,
+        "medium": 3,
+        "hard": 1
+      },
+      "methodology": "Agents receive identical tool catalogs and quotas. Scoring combines task completion, API correctness, and retry strategy effectiveness.",
+      "exampleTestCase": {
+        "name": "Broken Endpoint Recovery",
+        "input": "Collect 3 prices from a flaky API, normalize currency, and return median value with citations.",
+        "expectedOutput": "Median price in USD plus source list, with fallback strategy used when endpoint fails."
+      },
+      "testCases": [
+        { "id": "t-1", "name": "Search Then Fetch Pipeline", "difficulty": "medium", "passRate": 73 },
+        { "id": "t-2", "name": "Rate-Limit Backoff", "difficulty": "hard", "passRate": 46 },
+        { "id": "t-3", "name": "Tool Routing under Ambiguity", "difficulty": "medium", "passRate": 62 },
+        { "id": "t-4", "name": "Single-Call Data Extraction", "difficulty": "easy", "passRate": 89 },
+        { "id": "t-5", "name": "Fallback Provider Selection", "difficulty": "medium", "passRate": 57 }
+      ]
+    },
+    {
+      "id": "code-generation",
+      "name": "Code Generation",
+      "description": "Benchmarks implementation quality, test pass rates, and ability to patch regressions.",
+      "difficultyDistribution": {
+        "easy": 1,
+        "medium": 2,
+        "hard": 2
+      },
+      "methodology": "Agents implement tasks in isolated repos with static checks, unit tests, and hidden regression suites.",
+      "exampleTestCase": {
+        "name": "Type-Safe Pagination Refactor",
+        "input": "Refactor endpoint to cursor pagination with backward compatibility and tests.",
+        "expectedOutput": "Compile-clean implementation, preserved legacy params, and all visible + hidden tests passing."
+      },
+      "testCases": [
+        { "id": "c-1", "name": "CRUD Feature with Validation", "difficulty": "easy", "passRate": 84 },
+        { "id": "c-2", "name": "Race Condition Fix", "difficulty": "hard", "passRate": 39 },
+        { "id": "c-3", "name": "Typed API Client Generation", "difficulty": "medium", "passRate": 66 },
+        { "id": "c-4", "name": "Legacy Refactor with Snapshot Tests", "difficulty": "medium", "passRate": 61 },
+        { "id": "c-5", "name": "Performance Regression Hunt", "difficulty": "hard", "passRate": 34 }
+      ]
+    },
+    {
+      "id": "memory-context",
+      "name": "Memory & Context",
+      "description": "Assesses long-horizon context retention, retrieval precision, and adaptation over session history.",
+      "difficultyDistribution": {
+        "easy": 1,
+        "medium": 2,
+        "hard": 2
+      },
+      "methodology": "Runs span 25-60 turns with injected distractors. Accuracy and context grounding are scored at delayed checkpoints.",
+      "exampleTestCase": {
+        "name": "Delayed Requirement Recall",
+        "input": "After 40 turns, produce final plan that respects a budget and persona constraints set in turn 2.",
+        "expectedOutput": "Plan that explicitly references early constraints and omits distractor information."
+      },
+      "testCases": [
+        { "id": "m-1", "name": "Session Fact Recall", "difficulty": "easy", "passRate": 88 },
+        { "id": "m-2", "name": "Cross-Thread Context Merge", "difficulty": "hard", "passRate": 37 },
+        { "id": "m-3", "name": "Intent Drift Correction", "difficulty": "medium", "passRate": 63 },
+        { "id": "m-4", "name": "Constraint Persistence", "difficulty": "medium", "passRate": 56 },
+        { "id": "m-5", "name": "Long Horizon Persona Lock", "difficulty": "hard", "passRate": 33 }
+      ]
+    },
+    {
+      "id": "multi-agent-collaboration",
+      "name": "Multi-Agent Collaboration",
+      "description": "Scores delegation, handoff quality, and orchestration performance across multiple cooperating agents.",
+      "difficultyDistribution": {
+        "easy": 1,
+        "medium": 2,
+        "hard": 2
+      },
+      "methodology": "Tasks require at least two specialized agents with shared objective and measurable handoff artifacts.",
+      "exampleTestCase": {
+        "name": "Planner-Executor-Reviewer Loop",
+        "input": "Deliver a feature PR using three role agents with audit trail and rollback plan.",
+        "expectedOutput": "Successful artifact with explicit delegation logs, reviewer findings, and corrected final output."
+      },
+      "testCases": [
+        { "id": "a-1", "name": "Delegation Graph Quality", "difficulty": "medium", "passRate": 55 },
+        { "id": "a-2", "name": "Role Conflict Resolution", "difficulty": "hard", "passRate": 31 },
+        { "id": "a-3", "name": "Parallel Workstream Merge", "difficulty": "medium", "passRate": 49 },
+        { "id": "a-4", "name": "Single Escalation Workflow", "difficulty": "easy", "passRate": 79 },
+        { "id": "a-5", "name": "Cross-Agent Context Handoff", "difficulty": "hard", "passRate": 36 }
+      ]
+    }
+  ],
+  "agents": [
+    {
+      "id": "openclaw-orchestrator",
+      "name": "OpenClaw Orchestrator",
+      "framework": "OpenClaw",
+      "provider": "OpenAI",
+      "model": "gpt-5.3-codex",
+      "scores": {
+        "reasoning": 90,
+        "tool-use": 94,
+        "code-generation": 91,
+        "memory-context": 86,
+        "multi-agent-collaboration": 92
+      }
+    },
+    {
+      "id": "langgraph-pilot",
+      "name": "LangGraph Pilot",
+      "framework": "LangGraph",
+      "provider": "Anthropic",
+      "model": "claude-opus-4.6",
+      "scores": {
+        "reasoning": 92,
+        "tool-use": 88,
+        "code-generation": 86,
+        "memory-context": 90,
+        "multi-agent-collaboration": 85
+      }
+    },
+    {
+      "id": "autogen-studio",
+      "name": "AutoGen Studio",
+      "framework": "AutoGen",
+      "provider": "OpenAI",
+      "model": "gpt-4.2",
+      "scores": {
+        "reasoning": 84,
+        "tool-use": 82,
+        "code-generation": 80,
+        "memory-context": 78,
+        "multi-agent-collaboration": 88
+      }
+    },
+    {
+      "id": "crewai-captain",
+      "name": "CrewAI Captain",
+      "framework": "CrewAI",
+      "provider": "OpenAI",
+      "model": "gpt-4.1",
+      "scores": {
+        "reasoning": 81,
+        "tool-use": 79,
+        "code-generation": 76,
+        "memory-context": 74,
+        "multi-agent-collaboration": 91
+      }
+    },
+    {
+      "id": "semantic-kernel-runner",
+      "name": "Semantic Kernel Runner",
+      "framework": "Semantic Kernel",
+      "provider": "Azure OpenAI",
+      "model": "gpt-4o",
+      "scores": {
+        "reasoning": 79,
+        "tool-use": 83,
+        "code-generation": 78,
+        "memory-context": 75,
+        "multi-agent-collaboration": 72
+      }
+    },
+    {
+      "id": "mistral-workflow-bot",
+      "name": "Mistral Workflow Bot",
+      "framework": "Flowise",
+      "provider": "Mistral",
+      "model": "mistral-large",
+      "scores": {
+        "reasoning": 74,
+        "tool-use": 76,
+        "code-generation": 70,
+        "memory-context": 72,
+        "multi-agent-collaboration": 69
+      }
+    },
+    {
+      "id": "anthropic-claude-agent",
+      "name": "Claude Agent Runtime",
+      "framework": "Custom",
+      "provider": "Anthropic",
+      "model": "claude-sonnet-4.5",
+      "scores": {
+        "reasoning": 89,
+        "tool-use": 85,
+        "code-generation": 83,
+        "memory-context": 88,
+        "multi-agent-collaboration": 80
+      }
+    },
+    {
+      "id": "openai-responses-agent",
+      "name": "Responses API Agent",
+      "framework": "Custom",
+      "provider": "OpenAI",
+      "model": "o3-pro",
+      "scores": {
+        "reasoning": 87,
+        "tool-use": 90,
+        "code-generation": 85,
+        "memory-context": 81,
+        "multi-agent-collaboration": 77
+      }
+    },
+    {
+      "id": "devin-like-builder",
+      "name": "BuilderOps Devin-style",
+      "framework": "Custom",
+      "provider": "Cognition",
+      "model": "devin-core",
+      "scores": {
+        "reasoning": 83,
+        "tool-use": 87,
+        "code-generation": 92,
+        "memory-context": 79,
+        "multi-agent-collaboration": 76
+      }
+    },
+    {
+      "id": "local-oss-agent",
+      "name": "Local OSS Agent Stack",
+      "framework": "LlamaIndex",
+      "provider": "Open Source",
+      "model": "llama-3.3-70b",
+      "scores": {
+        "reasoning": 71,
+        "tool-use": 74,
+        "code-generation": 68,
+        "memory-context": 70,
+        "multi-agent-collaboration": 65
+      }
+    }
+  ]
+}

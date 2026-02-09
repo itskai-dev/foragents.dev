@@ -1,504 +1,216 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import type { AgentBenchmarksData, CategoryId } from "@/types/agent-benchmarks";
 
-interface HistoryRun {
-  run: number;
-  p50: number;
-  requestsPerSec: number;
-  successRate: number;
-}
-
-interface Skill {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  latency: {
-    p50: number;
-    p95: number;
-    p99: number;
-  };
-  throughput: {
-    requestsPerSec: number;
-    maxConcurrent: number;
-  };
-  reliability: {
-    successRate: number;
-    errorRate: number;
-    uptime: number;
-  };
-  resources: {
-    avgMemoryMB: number;
-    peakMemoryMB: number;
-    avgCpu: number;
-  };
-  history: HistoryRun[];
-}
-
-interface Environment {
-  hardware: string;
-  model: string;
-  dateRun: string;
-  testDuration: string;
-  totalRequests: number;
-}
-
-interface BenchmarksData {
-  environment: Environment;
-  skills: Skill[];
-}
+type LeaderboardAgent = AgentBenchmarksData["agents"][number] & {
+  compositeScore: number;
+};
 
 interface BenchmarksClientProps {
-  data: BenchmarksData;
+  data: AgentBenchmarksData;
 }
 
-type SortKey = "name" | "p50" | "p95" | "p99" | "requestsPerSec" | "successRate" | "avgMemoryMB";
-type SortDirection = "asc" | "desc";
-
-function LatencyBarChart({ p50, p95, p99, maxValue }: { p50: number; p95: number; p99: number; maxValue: number }) {
-  const p50Width = (p50 / maxValue) * 100;
-  const p95Width = (p95 / maxValue) * 100;
-  const p99Width = (p99 / maxValue) * 100;
-
-  return (
-    <div className="space-y-1.5 w-full">
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-muted-foreground w-8">p50</span>
-        <div className="flex-1 bg-card/50 rounded-sm h-4 relative overflow-hidden">
-          <div
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#06D6A0] to-[#06D6A0]/80 rounded-sm transition-all"
-            style={{ width: `${p50Width}%` }}
-          />
-        </div>
-        <span className="text-xs font-mono w-12 text-right">{p50}ms</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-muted-foreground w-8">p95</span>
-        <div className="flex-1 bg-card/50 rounded-sm h-4 relative overflow-hidden">
-          <div
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-yellow-500 to-yellow-500/80 rounded-sm transition-all"
-            style={{ width: `${p95Width}%` }}
-          />
-        </div>
-        <span className="text-xs font-mono w-12 text-right">{p95}ms</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-muted-foreground w-8">p99</span>
-        <div className="flex-1 bg-card/50 rounded-sm h-4 relative overflow-hidden">
-          <div
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-red-500 to-red-500/80 rounded-sm transition-all"
-            style={{ width: `${p99Width}%` }}
-          />
-        </div>
-        <span className="text-xs font-mono w-12 text-right">{p99}ms</span>
-      </div>
-    </div>
-  );
-}
-
-function HistorySparkline({ history }: { history: HistoryRun[] }) {
-  const values = history.map(h => h.p50);
-  const max = Math.max(...values);
-  const min = Math.min(...values);
-  const range = max - min || 1;
-
-  return (
-    <div className="flex items-end gap-0.5 h-8">
-      {history.map((run, idx) => {
-        const height = ((run.p50 - min) / range) * 100;
-        const isImproving = idx > 0 && run.p50 < history[idx - 1].p50;
-        return (
-          <div
-            key={run.run}
-            className="flex-1 rounded-t-sm transition-all relative group"
-            style={{
-              height: `${Math.max(height, 10)}%`,
-              backgroundColor: isImproving ? '#06D6A0' : '#8B5CF6',
-            }}
-            title={`Run ${run.run}: ${run.p50}ms`}
-          >
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-2 py-1 bg-card border border-white/10 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              Run {run.run}: {run.p50}ms
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function MetricBadge({ value, suffix = "", threshold = { good: 99, warning: 95 } }: { value: number; suffix?: string; threshold?: { good: number; warning: number } }) {
-  const color = value >= threshold.good 
-    ? "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30" 
-    : value >= threshold.warning 
-    ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/30" 
-    : "bg-red-500/10 text-red-500 border-red-500/30";
-
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-mono border ${color}`}>
-      {value}{suffix}
-    </span>
-  );
-}
-
-function SortIcon({ column, sortKey, sortDirection }: { column: SortKey; sortKey: SortKey; sortDirection: SortDirection }) {
-  if (sortKey !== column) {
-    return <span className="text-muted-foreground/50 ml-1">⇅</span>;
-  }
-  return <span className="ml-1">{sortDirection === "asc" ? "↑" : "↓"}</span>;
+function scoreBarWidth(score: number) {
+  return `${Math.max(5, Math.min(100, score))}%`;
 }
 
 export function BenchmarksClient({ data }: BenchmarksClientProps) {
-  const [categoryFilter, setCategoryFilter] = useState<string>("all");
-  const [sortKey, setSortKey] = useState<SortKey>("p50");
-  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
-  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<"all" | CategoryId>("all");
+  const [selectedProvider, setSelectedProvider] = useState<string>("all");
+  const [selectedFramework, setSelectedFramework] = useState<string>("all");
 
-  const categories = useMemo(() => {
-    const cats = new Set(data.skills.map(s => s.category));
-    return ["all", ...Array.from(cats).sort()];
-  }, [data.skills]);
+  const providers = useMemo(
+    () => ["all", ...new Set(data.agents.map((agent) => agent.provider))],
+    [data.agents]
+  );
 
-  const maxLatency = useMemo(() => {
-    return Math.max(...data.skills.map(s => s.latency.p99));
-  }, [data.skills]);
+  const frameworks = useMemo(
+    () => ["all", ...new Set(data.agents.map((agent) => agent.framework))],
+    [data.agents]
+  );
 
-  const filteredAndSorted = useMemo(() => {
-    let result = data.skills;
+  const topScorers = useMemo(() => {
+    return data.categories.reduce<Record<string, { name: string; score: number }>>((acc, category) => {
+      const sorted = [...data.agents].sort(
+        (a, b) => b.scores[category.id] - a.scores[category.id]
+      );
+      acc[category.id] = { name: sorted[0].name, score: sorted[0].scores[category.id] };
+      return acc;
+    }, {});
+  }, [data.agents, data.categories]);
 
-    if (categoryFilter !== "all") {
-      result = result.filter(s => s.category === categoryFilter);
-    }
-
-    result = [...result].sort((a, b) => {
-      let aVal: number;
-      let bVal: number;
-
-      if (sortKey === "name") {
-        return sortDirection === "asc" 
-          ? a.name.localeCompare(b.name) 
-          : b.name.localeCompare(a.name);
+  const leaderboard: LeaderboardAgent[] = useMemo(() => {
+    const filtered = data.agents.filter((agent) => {
+      if (selectedProvider !== "all" && agent.provider !== selectedProvider) {
+        return false;
       }
 
-      switch (sortKey) {
-        case "p50":
-          aVal = a.latency.p50;
-          bVal = b.latency.p50;
-          break;
-        case "p95":
-          aVal = a.latency.p95;
-          bVal = b.latency.p95;
-          break;
-        case "p99":
-          aVal = a.latency.p99;
-          bVal = b.latency.p99;
-          break;
-        case "requestsPerSec":
-          aVal = a.throughput.requestsPerSec;
-          bVal = b.throughput.requestsPerSec;
-          break;
-        case "successRate":
-          aVal = a.reliability.successRate;
-          bVal = b.reliability.successRate;
-          break;
-        case "avgMemoryMB":
-          aVal = a.resources.avgMemoryMB;
-          bVal = b.resources.avgMemoryMB;
-          break;
-        default:
-          return 0;
+      if (selectedFramework !== "all" && agent.framework !== selectedFramework) {
+        return false;
       }
 
-      return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
+      return true;
     });
 
-    return result;
-  }, [data.skills, categoryFilter, sortKey, sortDirection]);
+    return filtered
+      .map((agent) => {
+        const values =
+          selectedCategory === "all"
+            ? Object.values(agent.scores)
+            : [agent.scores[selectedCategory]];
 
-  const handleSort = (key: SortKey) => {
-    if (sortKey === key) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortKey(key);
-      setSortDirection(key === "successRate" || key === "requestsPerSec" ? "desc" : "asc");
-    }
-  };
+        const compositeScore = Number(
+          (values.reduce((sum, score) => sum + score, 0) / values.length).toFixed(1)
+        );
+
+        return { ...agent, compositeScore };
+      })
+      .sort((a, b) => b.compositeScore - a.compositeScore);
+  }, [data.agents, selectedCategory, selectedFramework, selectedProvider]);
 
   return (
-    <>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[400px] flex items-center">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
-          <div className="absolute top-1/3 left-1/3 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple/3 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 py-20">
-          <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
-            Performance Benchmarks
-          </h1>
-          <p className="text-xl text-foreground/80 mb-8">
-            Comprehensive performance metrics for top skills across latency, throughput, and reliability
+    <div className="min-h-screen bg-[#0b1020] text-slate-100">
+      <main className="mx-auto max-w-6xl px-4 py-12 md:px-6">
+        <section className="mb-10 rounded-2xl border border-white/10 bg-white/5 p-6">
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Agent Benchmark Suite</h1>
+          <p className="mt-3 max-w-3xl text-sm text-slate-300 md:text-base">
+            Standardized evaluation of agent capabilities across reasoning, tool use, code generation,
+            memory & context management, and multi-agent collaboration so each runner's strengths are comparable.
           </p>
+          <p className="mt-2 text-xs text-slate-400">
+            Dataset v{data.version} · Updated {data.updatedAt}
+          </p>
+        </section>
 
-          {/* Environment Info */}
-          <div className="inline-flex flex-wrap gap-3 text-sm">
-            <Badge variant="outline" className="bg-card/30 border-white/10">
-              <span className="text-muted-foreground mr-1">Hardware:</span> {data.environment.hardware}
-            </Badge>
-            <Badge variant="outline" className="bg-card/30 border-white/10">
-              <span className="text-muted-foreground mr-1">Model:</span> {data.environment.model}
-            </Badge>
-            <Badge variant="outline" className="bg-card/30 border-white/10">
-              <span className="text-muted-foreground mr-1">Date:</span> {data.environment.dateRun}
-            </Badge>
-            <Badge variant="outline" className="bg-card/30 border-white/10">
-              <span className="text-muted-foreground mr-1">Duration:</span> {data.environment.testDuration}
-            </Badge>
-            <Badge variant="outline" className="bg-card/30 border-white/10">
-              <span className="text-muted-foreground mr-1">Total Requests:</span> {data.environment.totalRequests.toLocaleString()}
-            </Badge>
-          </div>
-        </div>
-      </section>
+        <section className="mb-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {data.categories.map((category) => {
+            const topScorer = topScorers[category.id];
+            const totalTests = category.testCases.length;
 
-      <Separator className="opacity-10" />
-
-      {/* Main Content */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        {/* Category Filters */}
-        <div className="mb-8">
-          <h2 className="text-sm font-semibold text-muted-foreground mb-3">FILTER BY CATEGORY</h2>
-          <div className="flex flex-wrap gap-2">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setCategoryFilter(cat)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  categoryFilter === cat
-                    ? "bg-[#06D6A0] text-[#0a0a0a]"
-                    : "bg-card/30 border border-white/10 text-foreground hover:bg-card/50"
-                }`}
+            return (
+              <article
+                key={category.id}
+                className="rounded-xl border border-white/10 bg-white/[0.03] p-5"
               >
-                {cat === "all" ? "All Categories" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-              </button>
-            ))}
+                <div className="mb-3 flex items-center justify-between gap-4">
+                  <h2 className="text-lg font-semibold">{category.name}</h2>
+                  <Link
+                    href={`/benchmarks/${category.id}`}
+                    className="text-xs font-medium text-cyan-300 hover:text-cyan-200"
+                  >
+                    View details →
+                  </Link>
+                </div>
+                <p className="text-sm text-slate-300">{category.description}</p>
+                <div className="mt-4 space-y-2 text-xs text-slate-300">
+                  <p>Test cases: {totalTests}</p>
+                  <p>
+                    Difficulty: E {category.difficultyDistribution.easy} · M {category.difficultyDistribution.medium}
+                    · H {category.difficultyDistribution.hard}
+                  </p>
+                  <p>
+                    Top scorer: <span className="font-semibold text-slate-100">{topScorer.name}</span> ({topScorer.score})
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </section>
+
+        <section className="mb-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+          <h3 className="mb-3 text-base font-semibold">Leaderboard Filters</h3>
+          <div className="grid gap-3 md:grid-cols-3">
+            <label className="text-xs text-slate-300">
+              Category
+              <select
+                className="mt-1 w-full rounded-md border border-white/15 bg-slate-950 px-2 py-2 text-sm"
+                value={selectedCategory}
+                onChange={(event) => setSelectedCategory(event.target.value as "all" | CategoryId)}
+              >
+                <option value="all">All categories (composite)</option>
+                {data.categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="text-xs text-slate-300">
+              Model Provider
+              <select
+                className="mt-1 w-full rounded-md border border-white/15 bg-slate-950 px-2 py-2 text-sm"
+                value={selectedProvider}
+                onChange={(event) => setSelectedProvider(event.target.value)}
+              >
+                {providers.map((provider) => (
+                  <option key={provider} value={provider}>
+                    {provider === "all" ? "All providers" : provider}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="text-xs text-slate-300">
+              Agent Framework
+              <select
+                className="mt-1 w-full rounded-md border border-white/15 bg-slate-950 px-2 py-2 text-sm"
+                value={selectedFramework}
+                onChange={(event) => setSelectedFramework(event.target.value)}
+              >
+                {frameworks.map((framework) => (
+                  <option key={framework} value={framework}>
+                    {framework === "all" ? "All frameworks" : framework}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
-        </div>
+        </section>
 
-        {/* Benchmarks Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredAndSorted.map(skill => (
-            <Card
-              key={skill.id}
-              className={`bg-card/20 border transition-all cursor-pointer ${
-                selectedSkill?.id === skill.id
-                  ? "border-[#06D6A0] shadow-lg shadow-[#06D6A0]/10"
-                  : "border-white/10 hover:border-white/20"
-              }`}
-              onClick={() => setSelectedSkill(skill)}
-            >
-              <CardHeader>
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <CardTitle className="text-xl mb-1">{skill.name}</CardTitle>
-                    <Badge variant="outline" className="text-xs bg-card/50 border-white/20">
-                      {skill.category}
-                    </Badge>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground">{skill.description}</p>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                {/* Latency */}
-                <div>
-                  <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                    <span className="text-[#06D6A0]">⚡</span> Latency
-                  </h3>
-                  <LatencyBarChart 
-                    p50={skill.latency.p50} 
-                    p95={skill.latency.p95} 
-                    p99={skill.latency.p99}
-                    maxValue={maxLatency}
-                  />
-                </div>
-
-                {/* Throughput & Reliability */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="text-xs font-semibold text-muted-foreground mb-2">Throughput</h4>
-                    <div className="space-y-1">
-                      <MetricBadge 
-                        value={skill.throughput.requestsPerSec} 
-                        suffix=" req/s"
-                        threshold={{ good: 100, warning: 50 }}
-                      />
-                      <div className="text-xs text-muted-foreground">
-                        Max: {skill.throughput.maxConcurrent} concurrent
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-semibold text-muted-foreground mb-2">Reliability</h4>
-                    <div className="space-y-1">
-                      <MetricBadge value={skill.reliability.successRate} suffix="%" />
-                      <div className="text-xs text-muted-foreground">
-                        Error: {skill.reliability.errorRate}%
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Resources */}
-                <div>
-                  <h4 className="text-xs font-semibold text-muted-foreground mb-2">Resource Usage</h4>
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    <div className="bg-card/30 rounded px-2 py-1.5">
-                      <div className="text-muted-foreground">Avg Memory</div>
-                      <div className="font-mono">{skill.resources.avgMemoryMB}MB</div>
-                    </div>
-                    <div className="bg-card/30 rounded px-2 py-1.5">
-                      <div className="text-muted-foreground">Peak Memory</div>
-                      <div className="font-mono">{skill.resources.peakMemoryMB}MB</div>
-                    </div>
-                    <div className="bg-card/30 rounded px-2 py-1.5">
-                      <div className="text-muted-foreground">Avg CPU</div>
-                      <div className="font-mono">{skill.resources.avgCpu}%</div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Historical Trend */}
-                <div>
-                  <h4 className="text-xs font-semibold text-muted-foreground mb-2">
-                    Historical Trend (Last 5 Runs)
-                  </h4>
-                  <HistorySparkline history={skill.history} />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {filteredAndSorted.length === 0 && (
-          <div className="text-center py-20">
-            <div className="text-4xl mb-4">📊</div>
-            <h3 className="text-xl font-semibold mb-2">No benchmarks found</h3>
-            <p className="text-muted-foreground">
-              Try selecting a different category
-            </p>
-          </div>
-        )}
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Comparison Table */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">Detailed Comparison</h2>
-        <div className="overflow-x-auto">
+        <section className="overflow-hidden rounded-xl border border-white/10">
           <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th
-                  className="text-left py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("name")}
-                >
-                  Skill <SortIcon column="name" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
-                <th
-                  className="text-right py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("p50")}
-                >
-                  p50 (ms) <SortIcon column="p50" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
-                <th
-                  className="text-right py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("p95")}
-                >
-                  p95 (ms) <SortIcon column="p95" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
-                <th
-                  className="text-right py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("p99")}
-                >
-                  p99 (ms) <SortIcon column="p99" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
-                <th
-                  className="text-right py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("requestsPerSec")}
-                >
-                  Req/Sec <SortIcon column="requestsPerSec" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
-                <th
-                  className="text-right py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("successRate")}
-                >
-                  Success % <SortIcon column="successRate" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
-                <th
-                  className="text-right py-3 px-4 font-semibold cursor-pointer hover:bg-card/20 transition-colors"
-                  onClick={() => handleSort("avgMemoryMB")}
-                >
-                  Avg Mem (MB) <SortIcon column="avgMemoryMB" sortKey={sortKey} sortDirection={sortDirection} />
-                </th>
+            <thead className="bg-white/[0.04] text-left text-xs uppercase tracking-wide text-slate-300">
+              <tr>
+                <th className="px-4 py-3">Rank</th>
+                <th className="px-4 py-3">Agent</th>
+                <th className="px-4 py-3">Provider</th>
+                <th className="px-4 py-3">Framework</th>
+                <th className="px-4 py-3">Model</th>
+                <th className="px-4 py-3">Composite Score</th>
               </tr>
             </thead>
             <tbody>
-              {filteredAndSorted.map(skill => (
-                <tr
-                  key={skill.id}
-                  className="border-b border-white/5 hover:bg-card/10 transition-colors cursor-pointer"
-                  onClick={() => setSelectedSkill(skill)}
-                >
-                  <td className="py-3 px-4 font-medium">{skill.name}</td>
-                  <td className="py-3 px-4 text-right font-mono">{skill.latency.p50}</td>
-                  <td className="py-3 px-4 text-right font-mono">{skill.latency.p95}</td>
-                  <td className="py-3 px-4 text-right font-mono">{skill.latency.p99}</td>
-                  <td className="py-3 px-4 text-right font-mono">{skill.throughput.requestsPerSec}</td>
-                  <td className="py-3 px-4 text-right font-mono">{skill.reliability.successRate}%</td>
-                  <td className="py-3 px-4 text-right font-mono">{skill.resources.avgMemoryMB}</td>
+              {leaderboard.map((agent, index) => (
+                <tr key={agent.id} className="border-t border-white/10">
+                  <td className="px-4 py-3 font-semibold text-cyan-300">#{index + 1}</td>
+                  <td className="px-4 py-3">{agent.name}</td>
+                  <td className="px-4 py-3 text-slate-300">{agent.provider}</td>
+                  <td className="px-4 py-3 text-slate-300">{agent.framework}</td>
+                  <td className="px-4 py-3 text-slate-300">{agent.model}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-3">
+                      <span className="w-10 text-right font-semibold">{agent.compositeScore}</span>
+                      <div className="h-2.5 flex-1 rounded-full bg-slate-800">
+                        <div
+                          className="h-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500"
+                          style={{ width: scoreBarWidth(agent.compositeScore) }}
+                        />
+                      </div>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Legend */}
-      <section className="max-w-7xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">Metrics Explained</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-card/20 border-white/10">
-            <CardHeader>
-              <CardTitle className="text-lg">Latency Percentiles</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              <div><strong className="text-[#06D6A0]">p50:</strong> Median response time (50% of requests faster)</div>
-              <div><strong className="text-yellow-500">p95:</strong> 95th percentile (95% of requests faster)</div>
-              <div><strong className="text-red-500">p99:</strong> 99th percentile (99% of requests faster)</div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/20 border-white/10">
-            <CardHeader>
-              <CardTitle className="text-lg">Reliability Metrics</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2 text-sm">
-              <div><strong>Success Rate:</strong> Percentage of successful requests</div>
-              <div><strong>Error Rate:</strong> Percentage of failed requests</div>
-              <div><strong>Uptime:</strong> System availability during test period</div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-    </>
+          {leaderboard.length === 0 && (
+            <p className="px-4 py-5 text-sm text-slate-300">No agents match the selected filters.</p>
+          )}
+        </section>
+      </main>
+    </div>
   );
 }
