@@ -1,0 +1,92 @@
+[
+  {
+    "id": "agent-1",
+    "name": "Claude Code",
+    "category": "coding",
+    "responseTime": 850,
+    "accuracy": 94,
+    "costEfficiency": 88,
+    "reliability": 96
+  },
+  {
+    "id": "agent-2",
+    "name": "GPT-4 Assistant",
+    "category": "general",
+    "responseTime": 1200,
+    "accuracy": 92,
+    "costEfficiency": 75,
+    "reliability": 91
+  },
+  {
+    "id": "agent-3",
+    "name": "Gemini Pro",
+    "category": "general",
+    "responseTime": 950,
+    "accuracy": 89,
+    "costEfficiency": 82,
+    "reliability": 88
+  },
+  {
+    "id": "agent-4",
+    "name": "Cursor AI",
+    "category": "coding",
+    "responseTime": 720,
+    "accuracy": 91,
+    "costEfficiency": 85,
+    "reliability": 93
+  },
+  {
+    "id": "agent-5",
+    "name": "Copilot X",
+    "category": "coding",
+    "responseTime": 680,
+    "accuracy": 87,
+    "costEfficiency": 90,
+    "reliability": 89
+  },
+  {
+    "id": "agent-6",
+    "name": "Perplexity AI",
+    "category": "research",
+    "responseTime": 1100,
+    "accuracy": 95,
+    "costEfficiency": 78,
+    "reliability": 94
+  },
+  {
+    "id": "agent-7",
+    "name": "Research Assistant",
+    "category": "research",
+    "responseTime": 1350,
+    "accuracy": 93,
+    "costEfficiency": 72,
+    "reliability": 90
+  },
+  {
+    "id": "agent-8",
+    "name": "Task Automator",
+    "category": "automation",
+    "responseTime": 550,
+    "accuracy": 86,
+    "costEfficiency": 92,
+    "reliability": 95
+  },
+  {
+    "id": "agent-9",
+    "name": "Workflow Pro",
+    "category": "automation",
+    "responseTime": 620,
+    "accuracy": 88,
+    "costEfficiency": 89,
+    "reliability": 92
+  },
+  {
+    "id": "agent-10",
+    "name": "Data Analyst AI",
+    "category": "analytics",
+    "responseTime": 980,
+    "accuracy": 96,
+    "costEfficiency": 80,
+    "reliability": 97
+  }
+]

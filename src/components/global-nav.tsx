@@ -15,6 +15,7 @@ const navLinks = [
   { href: "/dependencies", label: "Dependencies" },
   { href: "/trending", label: "Trending" },
   { href: "/leaderboard", label: "Leaderboard" },
+  { href: "/benchmarks", label: "Benchmarks" },
   { href: "/badges", label: "Badges" },
   { href: "/certifications", label: "Certifications" },
   { href: "/mcp", label: "MCP" },
