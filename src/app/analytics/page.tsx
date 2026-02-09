@@ -11,14 +11,32 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import analyticsData from "@/data/analytics.json";
+import Link from "next/link";
 
-type TimeRange = "7d" | "30d" | "90d";
+type TimeRange = "7d" | "30d" | "90d" | "all";
 
 export default function AnalyticsPage() {
   const [timeRange, setTimeRange] = useState<TimeRange>("30d");
 
-  // Calculate max value for chart scaling
-  const maxViews = Math.max(...analyticsData.trafficChart.data);
+  // Get downloads data based on selected time range
+  const downloadsData = analyticsData.downloadsOverTime[timeRange];
+  const maxDownloads = Math.max(...downloadsData.data);
+
+  // Calculate max value for skill chart scaling
+  const maxSkillDownloads = Math.max(
+    ...analyticsData.topSkills.map((s) => s.downloads)
+  );
+
+  // Category colors for pie-style display
+  const categoryColors = [
+    "from-cyan to-cyan/80",
+    "from-purple to-purple/80",
+    "from-green to-green/80",
+    "from-yellow to-yellow/80",
+    "from-pink to-pink/80",
+    "from-blue to-blue/80",
+    "from-orange to-orange/80",
+  ];
 
   return (
     <div className="min-h-screen">
@@ -31,10 +49,10 @@ export default function AnalyticsPage() {
 
         <div className="relative max-w-5xl mx-auto px-4 py-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            📊 Analytics Dashboard
+            📊 Skill Analytics Dashboard
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Real-time insights into forAgents.dev traffic and engagement
+            Insights into skill performance, downloads, creators, and trends
           </p>
         </div>
       </section>
@@ -42,7 +60,7 @@ export default function AnalyticsPage() {
       {/* Time Range Selector */}
       <section className="max-w-5xl mx-auto px-4 py-4">
         <div className="flex justify-end gap-2">
-          {(["7d", "30d", "90d"] as TimeRange[]).map((range) => (
+          {(["7d", "30d", "90d", "all"] as TimeRange[]).map((range) => (
             <button
               key={range}
               onClick={() => setTimeRange(range)}
@@ -52,7 +70,13 @@ export default function AnalyticsPage() {
                   : "bg-white/5 text-muted-foreground hover:bg-white/10"
               }`}
             >
-              {range === "7d" ? "Last 7 days" : range === "30d" ? "Last 30 days" : "Last 90 days"}
+              {range === "7d"
+                ? "Last 7 days"
+                : range === "30d"
+                ? "Last 30 days"
+                : range === "90d"
+                ? "Last 90 days"
+                : "All Time"}
             </button>
           ))}
         </div>
@@ -61,17 +85,17 @@ export default function AnalyticsPage() {
       {/* Overview Stats Cards */}
       <section className="max-w-5xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold mb-6">📈 Overview</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <Card className="bg-card/50 border-white/5">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-cyan">
-                {analyticsData.overview.pageViewsThisMonth.toLocaleString()}
+                {analyticsData.overview.totalSkills.toLocaleString()}
               </CardTitle>
-              <CardDescription>Page Views (This Month)</CardDescription>
+              <CardDescription>Total Skills</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Total page impressions
+                Published on platform
               </p>
             </CardContent>
           </Card>
@@ -79,13 +103,13 @@ export default function AnalyticsPage() {
           <Card className="bg-card/50 border-white/5">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-purple">
-                {analyticsData.overview.uniqueVisitors.toLocaleString()}
+                {analyticsData.overview.totalDownloads.toLocaleString()}
               </CardTitle>
-              <CardDescription>Unique Visitors</CardDescription>
+              <CardDescription>Total Downloads</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Individual users tracked
+                Across all skills
               </p>
             </CardContent>
           </Card>
@@ -93,41 +117,27 @@ export default function AnalyticsPage() {
           <Card className="bg-card/50 border-white/5">
             <CardHeader>
               <CardTitle className="text-3xl font-bold text-green">
-                {analyticsData.overview.skillDownloads.toLocaleString()}
+                {analyticsData.overview.activeCreators.toLocaleString()}
               </CardTitle>
-              <CardDescription>Skill Downloads</CardDescription>
+              <CardDescription>Active Creators</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Skills accessed/installed
+                Contributing skills
               </p>
             </CardContent>
           </Card>
 
           <Card className="bg-card/50 border-white/5">
             <CardHeader>
-              <CardTitle className="text-3xl font-bold text-cyan">
-                {analyticsData.overview.apiCalls.toLocaleString()}
+              <CardTitle className="text-3xl font-bold text-yellow">
+                {analyticsData.overview.avgRating.toFixed(1)} ⭐
               </CardTitle>
-              <CardDescription>API Calls</CardDescription>
+              <CardDescription>Average Rating</CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Machine-readable requests
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-purple">
-                {analyticsData.overview.avgSessionDuration}
-              </CardTitle>
-              <CardDescription>Avg Session Duration</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Time spent on site
+                Across all skills
               </p>
             </CardContent>
           </Card>
@@ -136,18 +146,20 @@ export default function AnalyticsPage() {
 
       <Separator className="opacity-10" />
 
-      {/* Traffic Chart */}
+      {/* Downloads Over Time Chart */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">📉 Daily Traffic (Last 14 Days)</h2>
+        <h2 className="text-2xl font-bold mb-6">
+          📉 Downloads Over Time ({timeRange === "7d" ? "Last 7 Days" : timeRange === "30d" ? "Last 30 Days" : timeRange === "90d" ? "Last 90 Days" : "All Time"})
+        </h2>
         <Card className="bg-card/50 border-white/5">
           <CardContent className="p-6">
             <div className="space-y-4">
-              {analyticsData.trafficChart.data.map((value, index) => {
-                const percentage = (value / maxViews) * 100;
+              {downloadsData.data.map((value, index) => {
+                const percentage = (value / maxDownloads) * 100;
                 return (
                   <div key={index} className="flex items-center gap-4">
                     <span className="text-xs text-muted-foreground w-16 text-right">
-                      {analyticsData.trafficChart.labels[index]}
+                      {downloadsData.labels[index]}
                     </span>
                     <div className="flex-1 relative">
                       <div className="h-8 bg-white/5 rounded-lg overflow-hidden">
@@ -171,51 +183,60 @@ export default function AnalyticsPage() {
 
       <Separator className="opacity-10" />
 
-      {/* Top Pages Table */}
+      {/* Top 10 Most Downloaded Skills */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">📄 Top Pages</h2>
+        <h2 className="text-2xl font-bold mb-6">🏆 Top 10 Most Downloaded Skills</h2>
         <Card className="bg-card/50 border-white/5">
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-white/5">
-                    <th className="text-left p-4 text-sm font-semibold text-muted-foreground">
-                      Page Path
-                    </th>
-                    <th className="text-right p-4 text-sm font-semibold text-muted-foreground">
-                      Views
-                    </th>
-                    <th className="text-right p-4 text-sm font-semibold text-muted-foreground">
-                      Unique Visitors
-                    </th>
-                    <th className="text-right p-4 text-sm font-semibold text-muted-foreground">
-                      Avg Time on Page
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {analyticsData.topPages.map((page, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                    >
-                      <td className="p-4 font-mono text-sm text-cyan">
-                        {page.path}
-                      </td>
-                      <td className="p-4 text-right font-semibold">
-                        {page.views.toLocaleString()}
-                      </td>
-                      <td className="p-4 text-right text-muted-foreground">
-                        {page.uniqueVisitors.toLocaleString()}
-                      </td>
-                      <td className="p-4 text-right text-muted-foreground">
-                        {page.avgTimeOnPage}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {analyticsData.topSkills.map((skill, index) => {
+                const percentage = (skill.downloads / maxSkillDownloads) * 100;
+                return (
+                  <div key={index} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Badge
+                          variant="outline"
+                          className="bg-white/5 text-white/80 border-white/10 w-8 h-8 flex items-center justify-center p-0"
+                        >
+                          #{index + 1}
+                        </Badge>
+                        <div>
+                          <Link
+                            href={`/skills/${skill.slug}`}
+                            className="font-semibold text-foreground hover:text-cyan transition-colors"
+                          >
+                            {skill.name}
+                          </Link>
+                          <div className="flex items-center gap-2 mt-1">
+                            <Badge
+                              variant="outline"
+                              className="bg-cyan/10 text-cyan border-cyan/30 text-xs"
+                            >
+                              {skill.category}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">
+                              {skill.rating} ⭐
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-foreground">
+                          {skill.downloads.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">downloads</p>
+                      </div>
+                    </div>
+                    <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-cyan to-purple rounded-full transition-all duration-500"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
@@ -223,178 +244,115 @@ export default function AnalyticsPage() {
 
       <Separator className="opacity-10" />
 
-      {/* Top Referrers */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">🔗 Top Referrers</h2>
-        <Card className="bg-card/50 border-white/5">
-          <CardContent className="p-6 space-y-4">
-            {analyticsData.topReferrers.map((referrer, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-foreground">
-                      {referrer.source}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {referrer.visits.toLocaleString()} visits
-                    </p>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="bg-cyan/10 text-cyan border-cyan/30"
-                  >
-                    {referrer.percentage}%
-                  </Badge>
-                </div>
-                <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-cyan to-purple rounded-full transition-all duration-500"
-                    style={{ width: `${referrer.percentage}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Geographic Breakdown and Device Breakdown */}
+      {/* Category Breakdown and Creator Leaderboard */}
       <section className="max-w-5xl mx-auto px-4 py-12">
         <div className="grid gap-6 lg:grid-cols-2">
-          {/* Geographic Breakdown */}
+          {/* Category Breakdown */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">🌍 Geographic Breakdown</h2>
+            <h2 className="text-2xl font-bold mb-6">📦 Category Breakdown</h2>
             <Card className="bg-card/50 border-white/5">
-              <CardContent className="p-6 space-y-3">
-                {analyticsData.geographicBreakdown.map((country, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{country.flag}</span>
-                      <div>
-                        <p className="font-semibold text-foreground">
-                          {country.country}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          {country.visits.toLocaleString()} visits
-                        </p>
+              <CardContent className="p-6">
+                {/* Pie-style visual */}
+                <div className="mb-6">
+                  <p className="text-sm text-muted-foreground text-center mb-3">
+                    Skills by Category
+                  </p>
+                  <div className="flex h-8 rounded-lg overflow-hidden">
+                    {analyticsData.categoryBreakdown.map((cat, index) => (
+                      <div
+                        key={index}
+                        className={`bg-gradient-to-r ${categoryColors[index]} flex items-center justify-center text-xs font-semibold text-white transition-all hover:opacity-80`}
+                        style={{ width: `${cat.percentage}%` }}
+                        title={`${cat.category}: ${cat.percentage}%`}
+                      >
+                        {cat.percentage > 10 && `${cat.percentage}%`}
                       </div>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="bg-white/5 text-white/80 border-white/10"
-                    >
-                      #{index + 1}
-                    </Badge>
+                    ))}
                   </div>
-                ))}
+                </div>
+
+                {/* Category list */}
+                <div className="space-y-3">
+                  {analyticsData.categoryBreakdown.map((cat, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-3 h-3 rounded-full bg-gradient-to-r ${categoryColors[index]}`}
+                        />
+                        <div>
+                          <p className="font-semibold text-foreground">
+                            {cat.category}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {cat.count} skills · {cat.downloads.toLocaleString()}{" "}
+                            downloads
+                          </p>
+                        </div>
+                      </div>
+                      <Badge
+                        variant="outline"
+                        className="bg-white/5 text-white/80 border-white/10"
+                      >
+                        {cat.percentage}%
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Device Breakdown */}
+          {/* Creator Leaderboard */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">💻 Device Breakdown</h2>
+            <h2 className="text-2xl font-bold mb-6">👥 Creator Leaderboard</h2>
             <Card className="bg-card/50 border-white/5">
-              <CardContent className="p-6 space-y-6">
-                {/* Desktop */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">🖥️</span>
-                      <span className="font-semibold text-foreground">Desktop</span>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="bg-cyan/10 text-cyan border-cyan/30"
-                    >
-                      {analyticsData.deviceBreakdown.desktop}%
-                    </Badge>
-                  </div>
-                  <div className="h-3 bg-white/5 rounded-full overflow-hidden">
+              <CardContent className="p-6">
+                <div className="space-y-3">
+                  {analyticsData.topCreators.map((creator, index) => (
                     <div
-                      className="h-full bg-gradient-to-r from-cyan to-cyan/80 rounded-full transition-all duration-500"
-                      style={{ width: `${analyticsData.deviceBreakdown.desktop}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Mobile */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">📱</span>
-                      <span className="font-semibold text-foreground">Mobile</span>
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className="bg-purple/10 text-purple border-purple/30"
+                      key={index}
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors"
                     >
-                      {analyticsData.deviceBreakdown.mobile}%
-                    </Badge>
-                  </div>
-                  <div className="h-3 bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-purple to-purple/80 rounded-full transition-all duration-500"
-                      style={{ width: `${analyticsData.deviceBreakdown.mobile}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Tablet */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl">📲</span>
-                      <span className="font-semibold text-foreground">Tablet</span>
+                      <div className="flex items-center gap-3">
+                        <Badge
+                          variant="outline"
+                          className={`${
+                            index === 0
+                              ? "bg-yellow/20 text-yellow border-yellow/30"
+                              : index === 1
+                              ? "bg-white/20 text-white border-white/30"
+                              : index === 2
+                              ? "bg-orange/20 text-orange border-orange/30"
+                              : "bg-white/5 text-white/80 border-white/10"
+                          } w-8 h-8 flex items-center justify-center p-0`}
+                        >
+                          {index + 1}
+                        </Badge>
+                        <div className="text-2xl">{creator.avatar}</div>
+                        <div>
+                          <Link
+                            href={`/creators/${creator.username}`}
+                            className="font-semibold text-foreground hover:text-cyan transition-colors"
+                          >
+                            {creator.displayName}
+                          </Link>
+                          <p className="text-xs text-muted-foreground">
+                            {creator.skillsPublished} skills · {creator.avgRating}{" "}
+                            ⭐
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-foreground">
+                          {creator.totalDownloads.toLocaleString()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">downloads</p>
+                      </div>
                     </div>
-                    <Badge
-                      variant="outline"
-                      className="bg-green/10 text-green border-green/30"
-                    >
-                      {analyticsData.deviceBreakdown.tablet}%
-                    </Badge>
-                  </div>
-                  <div className="h-3 bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-green to-green/80 rounded-full transition-all duration-500"
-                      style={{ width: `${analyticsData.deviceBreakdown.tablet}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Visual Summary */}
-                <div className="pt-4 border-t border-white/5">
-                  <p className="text-sm text-muted-foreground text-center mb-3">
-                    Device Distribution
-                  </p>
-                  <div className="flex h-8 rounded-lg overflow-hidden">
-                    <div
-                      className="bg-cyan flex items-center justify-center text-xs font-semibold text-[#0A0E17]"
-                      style={{ width: `${analyticsData.deviceBreakdown.desktop}%` }}
-                      title="Desktop"
-                    >
-                      {analyticsData.deviceBreakdown.desktop}%
-                    </div>
-                    <div
-                      className="bg-purple flex items-center justify-center text-xs font-semibold text-white"
-                      style={{ width: `${analyticsData.deviceBreakdown.mobile}%` }}
-                      title="Mobile"
-                    >
-                      {analyticsData.deviceBreakdown.mobile}%
-                    </div>
-                    <div
-                      className="bg-green flex items-center justify-center text-xs font-semibold text-[#0A0E17]"
-                      style={{ width: `${analyticsData.deviceBreakdown.tablet}%` }}
-                      title="Tablet"
-                    >
-                      {analyticsData.deviceBreakdown.tablet}%
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </CardContent>
             </Card>
@@ -409,7 +367,7 @@ export default function AnalyticsPage() {
         <Card className="bg-card/50 border-white/5">
           <CardContent className="p-8 text-center">
             <p className="text-sm text-muted-foreground">
-              Analytics data updates in real-time. All metrics are based on privacy-respecting, cookie-free tracking.
+              Analytics data reflects aggregated skill downloads and creator activity. All metrics are updated periodically.
             </p>
             <p className="text-xs text-muted-foreground mt-2">
               Last updated: {new Date().toLocaleString()}

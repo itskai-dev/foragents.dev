@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import AnalyticsPage from "../src/app/analytics/page";
 
 type LinkProps = {
@@ -19,7 +19,7 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-describe("Analytics Page", () => {
+describe("Analytics Page - Skill Analytics Dashboard", () => {
   it("renders the analytics page", () => {
     const { container } = render(<AnalyticsPage />);
     expect(container).toBeInTheDocument();
@@ -27,12 +27,12 @@ describe("Analytics Page", () => {
 
   it("displays the page title", () => {
     render(<AnalyticsPage />);
-    expect(screen.getByText("📊 Analytics Dashboard")).toBeInTheDocument();
+    expect(screen.getByText("📊 Skill Analytics Dashboard")).toBeInTheDocument();
   });
 
   it("displays the page description", () => {
     render(<AnalyticsPage />);
-    expect(screen.getByText("Real-time insights into forAgents.dev traffic and engagement")).toBeInTheDocument();
+    expect(screen.getByText("Insights into skill performance, downloads, creators, and trends")).toBeInTheDocument();
   });
 
   it("displays overview section", () => {
@@ -42,44 +42,23 @@ describe("Analytics Page", () => {
 
   it("displays overview stats cards", () => {
     render(<AnalyticsPage />);
-    expect(screen.getByText("Page Views (This Month)")).toBeInTheDocument();
-    expect(screen.getAllByText("Unique Visitors").length).toBeGreaterThan(0);
-    expect(screen.getByText("Skill Downloads")).toBeInTheDocument();
-    expect(screen.getByText("API Calls")).toBeInTheDocument();
-    expect(screen.getByText("Avg Session Duration")).toBeInTheDocument();
+    expect(screen.getByText("Total Skills")).toBeInTheDocument();
+    expect(screen.getByText("Total Downloads")).toBeInTheDocument();
+    expect(screen.getByText("Active Creators")).toBeInTheDocument();
+    expect(screen.getByText("Average Rating")).toBeInTheDocument();
   });
 
-  it("displays traffic chart section", () => {
+  it("displays overview stats values from analytics data", () => {
     render(<AnalyticsPage />);
-    expect(screen.getByText("📉 Daily Traffic (Last 14 Days)")).toBeInTheDocument();
-  });
-
-  it("displays top pages section", () => {
-    render(<AnalyticsPage />);
-    expect(screen.getByText("📄 Top Pages")).toBeInTheDocument();
-  });
-
-  it("displays top pages table headers", () => {
-    render(<AnalyticsPage />);
-    expect(screen.getByText("Page Path")).toBeInTheDocument();
-    expect(screen.getByText("Views")).toBeInTheDocument();
-    expect(screen.getAllByText("Unique Visitors").length).toBeGreaterThan(0);
-    expect(screen.getByText("Avg Time on Page")).toBeInTheDocument();
-  });
-
-  it("displays top referrers section", () => {
-    render(<AnalyticsPage />);
-    expect(screen.getByText("🔗 Top Referrers")).toBeInTheDocument();
-  });
-
-  it("displays geographic breakdown section", () => {
-    render(<AnalyticsPage />);
-    expect(screen.getByText("🌍 Geographic Breakdown")).toBeInTheDocument();
-  });
-
-  it("displays device breakdown section", () => {
-    render(<AnalyticsPage />);
-    expect(screen.getByText("💻 Device Breakdown")).toBeInTheDocument();
+    // Total Skills
+    expect(screen.getByText("342")).toBeInTheDocument();
+    // Total Downloads
+    expect(screen.getByText("127,856")).toBeInTheDocument();
+    // Active Creators
+    expect(screen.getByText("89")).toBeInTheDocument();
+    // Average Rating (4.7 ⭐) - appears multiple times in skills list
+    const ratingElements = screen.getAllByText("4.7 ⭐");
+    expect(ratingElements.length).toBeGreaterThan(0);
   });
 
   it("displays time range selector buttons", () => {
@@ -87,21 +66,112 @@ describe("Analytics Page", () => {
     expect(screen.getByText("Last 7 days")).toBeInTheDocument();
     expect(screen.getByText("Last 30 days")).toBeInTheDocument();
     expect(screen.getByText("Last 90 days")).toBeInTheDocument();
+    expect(screen.getByText("All Time")).toBeInTheDocument();
   });
 
-  it("displays device types", () => {
+  it("changes time range when clicking selector buttons", () => {
     render(<AnalyticsPage />);
-    expect(screen.getByText("Desktop")).toBeInTheDocument();
-    expect(screen.getByText("Mobile")).toBeInTheDocument();
-    expect(screen.getByText("Tablet")).toBeInTheDocument();
+    const sevenDaysButton = screen.getByText("Last 7 days");
+    fireEvent.click(sevenDaysButton);
+    // Check that the chart title updates
+    expect(screen.getByText(/Downloads Over Time \(Last 7 Days\)/)).toBeInTheDocument();
   });
 
-  it("displays analytics data from JSON", () => {
+  it("displays downloads over time chart section", () => {
     render(<AnalyticsPage />);
-    // Check that numeric data is displayed (formatted with commas)
-    expect(screen.getByText("47,823")).toBeInTheDocument(); // Page views
-    expect(screen.getByText("12,456")).toBeInTheDocument(); // Unique visitors
-    expect(screen.getByText("3,421")).toBeInTheDocument(); // Skill downloads
-    expect(screen.getByText("89,234")).toBeInTheDocument(); // API calls
+    expect(screen.getByText(/📉 Downloads Over Time/)).toBeInTheDocument();
+  });
+
+  it("displays top 10 most downloaded skills section", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText("🏆 Top 10 Most Downloaded Skills")).toBeInTheDocument();
+  });
+
+  it("displays top skills from analytics data", () => {
+    render(<AnalyticsPage />);
+    // Check for some of the top skills
+    expect(screen.getByText("SSH Manager")).toBeInTheDocument();
+    expect(screen.getByText("Web Scraper Pro")).toBeInTheDocument();
+    expect(screen.getByText("API Monitor")).toBeInTheDocument();
+  });
+
+  it("displays skill categories in top skills", () => {
+    render(<AnalyticsPage />);
+    // These categories appear multiple times (in skills and category breakdown)
+    expect(screen.getAllByText("DevOps").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Data").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Monitoring").length).toBeGreaterThan(0);
+  });
+
+  it("displays category breakdown section", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText("📦 Category Breakdown")).toBeInTheDocument();
+  });
+
+  it("displays category breakdown pie visualization", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText("Skills by Category")).toBeInTheDocument();
+  });
+
+  it("displays categories with percentages", () => {
+    render(<AnalyticsPage />);
+    // DevOps is 23%
+    const devOpsElements = screen.getAllByText("23%");
+    expect(devOpsElements.length).toBeGreaterThan(0);
+  });
+
+  it("displays creator leaderboard section", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText("👥 Creator Leaderboard")).toBeInTheDocument();
+  });
+
+  it("displays top creators from analytics data", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText("DevMaster")).toBeInTheDocument();
+    expect(screen.getByText("Cloud Ninja")).toBeInTheDocument();
+    expect(screen.getByText("Data Wizard")).toBeInTheDocument();
+  });
+
+  it("displays creator avatars", () => {
+    render(<AnalyticsPage />);
+    // Check for emoji avatars in the leaderboard
+    expect(screen.getByText("👨‍💻")).toBeInTheDocument();
+    expect(screen.getByText("🥷")).toBeInTheDocument();
+    expect(screen.getByText("🧙")).toBeInTheDocument();
+  });
+
+  it("displays creator download counts", () => {
+    render(<AnalyticsPage />);
+    // DevMaster has 34,567 downloads
+    expect(screen.getByText("34,567")).toBeInTheDocument();
+  });
+
+  it("displays skill rankings with badges", () => {
+    render(<AnalyticsPage />);
+    // Check for rank badges in top skills
+    const badges = screen.getAllByText(/^#[1-9]0?$/);
+    expect(badges.length).toBeGreaterThanOrEqual(10); // At least top 10
+  });
+
+  it("displays footer note", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText(/Analytics data reflects aggregated skill downloads/)).toBeInTheDocument();
+  });
+
+  it("displays last updated timestamp", () => {
+    render(<AnalyticsPage />);
+    expect(screen.getByText(/Last updated:/)).toBeInTheDocument();
+  });
+
+  it("links to skill detail pages", () => {
+    render(<AnalyticsPage />);
+    const sshManagerLink = screen.getByText("SSH Manager").closest("a");
+    expect(sshManagerLink).toHaveAttribute("href", "/skills/ssh-manager");
+  });
+
+  it("links to creator profile pages", () => {
+    render(<AnalyticsPage />);
+    const devMasterLink = screen.getByText("DevMaster").closest("a");
+    expect(devMasterLink).toHaveAttribute("href", "/creators/devmaster");
   });
 });

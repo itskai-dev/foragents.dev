@@ -1,152 +1,224 @@
 {
   "overview": {
-    "pageViewsThisMonth": 47823,
-    "uniqueVisitors": 12456,
-    "skillDownloads": 3421,
-    "apiCalls": 89234,
-    "avgSessionDuration": "4m 32s"
+    "totalSkills": 342,
+    "totalDownloads": 127856,
+    "activeCreators": 89,
+    "avgRating": 4.7
   },
-  "trafficChart": {
-    "labels": ["Jan 26", "Jan 27", "Jan 28", "Jan 29", "Jan 30", "Jan 31", "Feb 1", "Feb 2", "Feb 3", "Feb 4", "Feb 5", "Feb 6", "Feb 7", "Feb 8"],
-    "data": [2340, 2890, 3120, 2750, 3450, 3890, 4120, 3780, 4250, 4680, 3920, 4340, 4580, 4920]
+  "downloadsOverTime": {
+    "7d": {
+      "labels": ["Feb 3", "Feb 4", "Feb 5", "Feb 6", "Feb 7", "Feb 8", "Feb 9"],
+      "data": [1240, 1380, 1520, 1680, 1850, 2100, 2340]
+    },
+    "30d": {
+      "labels": ["Jan 11", "Jan 13", "Jan 15", "Jan 17", "Jan 19", "Jan 21", "Jan 23", "Jan 25", "Jan 27", "Jan 29", "Jan 31", "Feb 2", "Feb 4", "Feb 6", "Feb 8"],
+      "data": [890, 920, 1050, 1180, 1250, 1390, 1520, 1670, 1780, 1890, 2010, 2140, 2280, 2420, 2560]
+    },
+    "90d": {
+      "labels": ["Nov 12", "Nov 22", "Dec 2", "Dec 12", "Dec 22", "Jan 1", "Jan 11", "Jan 21", "Jan 31", "Feb 9"],
+      "data": [450, 580, 720, 890, 1050, 1280, 1520, 1780, 2010, 2560]
+    },
+    "all": {
+      "labels": ["Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"],
+      "data": [180, 340, 580, 890, 1520, 2280, 2560]
+    }
   },
-  "topPages": [
+  "topSkills": [
     {
-      "path": "/",
-      "views": 12340,
-      "uniqueVisitors": 8234,
-      "avgTimeOnPage": "3m 24s"
+      "name": "SSH Manager",
+      "slug": "ssh-manager",
+      "downloads": 12845,
+      "rating": 4.9,
+      "category": "DevOps"
     },
     {
-      "path": "/skills",
-      "views": 9870,
-      "uniqueVisitors": 6543,
-      "avgTimeOnPage": "5m 12s"
+      "name": "Web Scraper Pro",
+      "slug": "web-scraper-pro",
+      "downloads": 11234,
+      "rating": 4.8,
+      "category": "Data"
     },
     {
-      "path": "/agents",
-      "views": 8234,
-      "uniqueVisitors": 5678,
-      "avgTimeOnPage": "4m 45s"
+      "name": "API Monitor",
+      "slug": "api-monitor",
+      "downloads": 9876,
+      "rating": 4.7,
+      "category": "Monitoring"
     },
     {
-      "path": "/marketplace",
-      "views": 6543,
-      "uniqueVisitors": 4321,
-      "avgTimeOnPage": "6m 18s"
+      "name": "Docker Commander",
+      "slug": "docker-commander",
+      "downloads": 8543,
+      "rating": 4.9,
+      "category": "DevOps"
     },
     {
-      "path": "/playground",
-      "views": 5432,
-      "uniqueVisitors": 3456,
-      "avgTimeOnPage": "8m 34s"
+      "name": "Database Query Builder",
+      "slug": "db-query-builder",
+      "downloads": 7654,
+      "rating": 4.6,
+      "category": "Database"
     },
     {
-      "path": "/api-docs",
-      "views": 4321,
-      "uniqueVisitors": 2987,
-      "avgTimeOnPage": "7m 12s"
+      "name": "Code Analyzer",
+      "slug": "code-analyzer",
+      "downloads": 6789,
+      "rating": 4.8,
+      "category": "Development"
     },
     {
-      "path": "/guides",
-      "views": 3456,
-      "uniqueVisitors": 2345,
-      "avgTimeOnPage": "9m 45s"
+      "name": "Cloud Deploy",
+      "slug": "cloud-deploy",
+      "downloads": 5987,
+      "rating": 4.5,
+      "category": "DevOps"
     },
     {
-      "path": "/pricing",
-      "views": 2987,
-      "uniqueVisitors": 2134,
-      "avgTimeOnPage": "3m 56s"
+      "name": "Security Scanner",
+      "slug": "security-scanner",
+      "downloads": 5432,
+      "rating": 4.7,
+      "category": "Security"
+    },
+    {
+      "name": "Log Aggregator",
+      "slug": "log-aggregator",
+      "downloads": 4876,
+      "rating": 4.6,
+      "category": "Monitoring"
+    },
+    {
+      "name": "CI/CD Pipeline",
+      "slug": "cicd-pipeline",
+      "downloads": 4321,
+      "rating": 4.8,
+      "category": "DevOps"
     }
   ],
-  "topReferrers": [
+  "categoryBreakdown": [
     {
-      "source": "Google",
-      "visits": 18234,
-      "percentage": 38
+      "category": "DevOps",
+      "count": 78,
+      "percentage": 23,
+      "downloads": 42345
     },
     {
-      "source": "Twitter (X)",
-      "visits": 12456,
-      "percentage": 26
+      "category": "Data",
+      "count": 65,
+      "percentage": 19,
+      "downloads": 35678
     },
     {
-      "source": "GitHub",
-      "visits": 8901,
-      "percentage": 18
+      "category": "Development",
+      "count": 54,
+      "percentage": 16,
+      "downloads": 28901
     },
     {
-      "source": "Direct",
-      "visits": 4567,
-      "percentage": 10
+      "category": "Monitoring",
+      "count": 48,
+      "percentage": 14,
+      "downloads": 24567
     },
     {
-      "source": "LinkedIn",
-      "visits": 2345,
-      "percentage": 5
+      "category": "Database",
+      "count": 38,
+      "percentage": 11,
+      "downloads": 18234
     },
     {
-      "source": "Reddit",
-      "visits": 1456,
-      "percentage": 3
+      "category": "Security",
+      "count": 32,
+      "percentage": 9,
+      "downloads": 15432
+    },
+    {
+      "category": "Automation",
+      "count": 27,
+      "percentage": 8,
+      "downloads": 12890
     }
   ],
-  "geographicBreakdown": [
+  "topCreators": [
     {
-      "country": "United States",
-      "flag": "🇺🇸",
-      "visits": 15678
+      "username": "devmaster",
+      "displayName": "DevMaster",
+      "skillsPublished": 12,
+      "totalDownloads": 34567,
+      "avgRating": 4.8,
+      "avatar": "👨‍💻"
     },
     {
-      "country": "United Kingdom",
-      "flag": "🇬🇧",
-      "visits": 8234
+      "username": "cloudninja",
+      "displayName": "Cloud Ninja",
+      "skillsPublished": 8,
+      "totalDownloads": 28901,
+      "avgRating": 4.9,
+      "avatar": "🥷"
     },
     {
-      "country": "Canada",
-      "flag": "🇨🇦",
-      "visits": 5432
+      "username": "datawizard",
+      "displayName": "Data Wizard",
+      "skillsPublished": 15,
+      "totalDownloads": 25678,
+      "avgRating": 4.7,
+      "avatar": "🧙"
     },
     {
-      "country": "Germany",
-      "flag": "🇩🇪",
-      "visits": 4321
+      "username": "securitypro",
+      "displayName": "Security Pro",
+      "skillsPublished": 6,
+      "totalDownloads": 21234,
+      "avgRating": 4.9,
+      "avatar": "🔒"
     },
     {
-      "country": "France",
-      "flag": "🇫🇷",
-      "visits": 3456
+      "username": "automateall",
+      "displayName": "AutomateAll",
+      "skillsPublished": 10,
+      "totalDownloads": 19876,
+      "avgRating": 4.6,
+      "avatar": "🤖"
     },
     {
-      "country": "India",
-      "flag": "🇮🇳",
-      "visits": 2987
+      "username": "codegenius",
+      "displayName": "Code Genius",
+      "skillsPublished": 9,
+      "totalDownloads": 17543,
+      "avgRating": 4.8,
+      "avatar": "💡"
     },
     {
-      "country": "Australia",
-      "flag": "🇦🇺",
-      "visits": 2345
+      "username": "monitorguru",
+      "displayName": "Monitor Guru",
+      "skillsPublished": 7,
+      "totalDownloads": 15432,
+      "avgRating": 4.7,
+      "avatar": "📊"
     },
     {
-      "country": "Japan",
-      "flag": "🇯🇵",
-      "visits": 1987
+      "username": "dbexpert",
+      "displayName": "DB Expert",
+      "skillsPublished": 11,
+      "totalDownloads": 14321,
+      "avgRating": 4.5,
+      "avatar": "🗄️"
     },
     {
-      "country": "Netherlands",
-      "flag": "🇳🇱",
-      "visits": 1678
+      "username": "apimaster",
+      "displayName": "API Master",
+      "skillsPublished": 5,
+      "totalDownloads": 12890,
+      "avgRating": 4.8,
+      "avatar": "🔌"
     },
     {
-      "country": "Singapore",
-      "flag": "🇸🇬",
-      "visits": 1234
+      "username": "deployking",
+      "displayName": "Deploy King",
+      "skillsPublished": 8,
+      "totalDownloads": 11234,
+      "avgRating": 4.6,
+      "avatar": "👑"
     }
-  ],
-  "deviceBreakdown": {
-    "desktop": 62,
-    "mobile": 28,
-    "tablet": 10
-  }
+  ]
 }
