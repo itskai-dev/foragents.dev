@@ -1,0 +1,152 @@
+{
+  "overview": {
+    "pageViewsThisMonth": 47823,
+    "uniqueVisitors": 12456,
+    "skillDownloads": 3421,
+    "apiCalls": 89234,
+    "avgSessionDuration": "4m 32s"
+  },
+  "trafficChart": {
+    "labels": ["Jan 26", "Jan 27", "Jan 28", "Jan 29", "Jan 30", "Jan 31", "Feb 1", "Feb 2", "Feb 3", "Feb 4", "Feb 5", "Feb 6", "Feb 7", "Feb 8"],
+    "data": [2340, 2890, 3120, 2750, 3450, 3890, 4120, 3780, 4250, 4680, 3920, 4340, 4580, 4920]
+  },
+  "topPages": [
+    {
+      "path": "/",
+      "views": 12340,
+      "uniqueVisitors": 8234,
+      "avgTimeOnPage": "3m 24s"
+    },
+    {
+      "path": "/skills",
+      "views": 9870,
+      "uniqueVisitors": 6543,
+      "avgTimeOnPage": "5m 12s"
+    },
+    {
+      "path": "/agents",
+      "views": 8234,
+      "uniqueVisitors": 5678,
+      "avgTimeOnPage": "4m 45s"
+    },
+    {
+      "path": "/marketplace",
+      "views": 6543,
+      "uniqueVisitors": 4321,
+      "avgTimeOnPage": "6m 18s"
+    },
+    {
+      "path": "/playground",
+      "views": 5432,
+      "uniqueVisitors": 3456,
+      "avgTimeOnPage": "8m 34s"
+    },
+    {
+      "path": "/api-docs",
+      "views": 4321,
+      "uniqueVisitors": 2987,
+      "avgTimeOnPage": "7m 12s"
+    },
+    {
+      "path": "/guides",
+      "views": 3456,
+      "uniqueVisitors": 2345,
+      "avgTimeOnPage": "9m 45s"
+    },
+    {
+      "path": "/pricing",
+      "views": 2987,
+      "uniqueVisitors": 2134,
+      "avgTimeOnPage": "3m 56s"
+    }
+  ],
+  "topReferrers": [
+    {
+      "source": "Google",
+      "visits": 18234,
+      "percentage": 38
+    },
+    {
+      "source": "Twitter (X)",
+      "visits": 12456,
+      "percentage": 26
+    },
+    {
+      "source": "GitHub",
+      "visits": 8901,
+      "percentage": 18
+    },
+    {
+      "source": "Direct",
+      "visits": 4567,
+      "percentage": 10
+    },
+    {
+      "source": "LinkedIn",
+      "visits": 2345,
+      "percentage": 5
+    },
+    {
+      "source": "Reddit",
+      "visits": 1456,
+      "percentage": 3
+    }
+  ],
+  "geographicBreakdown": [
+    {
+      "country": "United States",
+      "flag": "🇺🇸",
+      "visits": 15678
+    },
+    {
+      "country": "United Kingdom",
+      "flag": "🇬🇧",
+      "visits": 8234
+    },
+    {
+      "country": "Canada",
+      "flag": "🇨🇦",
+      "visits": 5432
+    },
+    {
+      "country": "Germany",
+      "flag": "🇩🇪",
+      "visits": 4321
+    },
+    {
+      "country": "France",
+      "flag": "🇫🇷",
+      "visits": 3456
+    },
+    {
+      "country": "India",
+      "flag": "🇮🇳",
+      "visits": 2987
+    },
+    {
+      "country": "Australia",
+      "flag": "🇦🇺",
+      "visits": 2345
+    },
+    {
+      "country": "Japan",
+      "flag": "🇯🇵",
+      "visits": 1987
+    },
+    {
+      "country": "Netherlands",
+      "flag": "🇳🇱",
+      "visits": 1678
+    },
+    {
+      "country": "Singapore",
+      "flag": "🇸🇬",
+      "visits": 1234
+    }
+  ],
+  "deviceBreakdown": {
+    "desktop": 62,
+    "mobile": 28,
+    "tablet": 10
+  }
+}
