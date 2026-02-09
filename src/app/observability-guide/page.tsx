@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Activity, Eye, LineChart, Network, CheckCircle, XCircle } from "lucide-react";
+import { Eye, CheckCircle, XCircle } from "lucide-react";
 
 interface ChecklistItem {
   id: string;
@@ -372,15 +372,15 @@ export default function ObservabilityGuidePage() {
         <div className="bg-gradient-to-br from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
           <p className="text-gray-700 mb-4">
             AI agents are <strong>non-deterministic black boxes</strong> that make autonomous decisions, call external
-            tools, and chain complex reasoning steps. Without observability, you're flying blind:
+            tools, and chain complex reasoning steps. Without observability, you&apos;re flying blind:
           </p>
           <div className="grid md:grid-cols-2 gap-4 mb-4">
             <div className="bg-white rounded-lg p-4 border border-gray-200">
               <h3 className="font-bold mb-2 text-red-600">❌ Without Observability</h3>
               <ul className="text-sm space-y-1 text-gray-700">
-                <li>• "The agent failed" — but why?</li>
+                <li>• &quot;The agent failed&quot; — but why?</li>
                 <li>• Debugging requires code changes & redeployment</li>
-                <li>• Can't measure performance improvements</li>
+                <li>• Can&apos;t measure performance improvements</li>
                 <li>• Users report issues before you know they exist</li>
                 <li>• No visibility into cost (tokens, API calls)</li>
               </ul>
@@ -397,7 +397,7 @@ export default function ObservabilityGuidePage() {
             </div>
           </div>
           <p className="text-sm text-gray-600 italic">
-            <strong>Rule of thumb:</strong> If you can't answer "Why did this agent request fail?" in under 2 minutes,
+            <strong>Rule of thumb:</strong> If you can&apos;t answer &quot;Why did this agent request fail?&quot; in under 2 minutes,
             your observability is insufficient.
           </p>
         </div>

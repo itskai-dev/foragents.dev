@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { FileText, AlertCircle, Info, AlertTriangle, XOctagon } from "lucide-react";
+import { FileText, Info, AlertTriangle, XOctagon } from "lucide-react";
 
 interface LogExample {
   title: string;
@@ -550,8 +550,8 @@ export default function LoggingPage() {
         </h2>
         <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-6">
           <p className="text-gray-700 mb-4">
-            <strong>Why correlation IDs matter:</strong> Without them, you can't answer "What happened during this specific
-            user request?" when you have thousands of concurrent requests.
+            <strong>Why correlation IDs matter:</strong> Without them, you can&apos;t answer &quot;What happened during this specific
+            user request?&quot; when you have thousands of concurrent requests.
           </p>
           <p className="text-sm text-gray-600">
             A correlation ID (or request ID) is a unique identifier that connects all logs, metrics, and traces for a

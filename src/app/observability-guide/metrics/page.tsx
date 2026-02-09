@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { LineChart, TrendingUp, AlertCircle, Activity } from "lucide-react";
+import { LineChart } from "lucide-react";
 
 interface Metric {
   name: string;
@@ -417,7 +417,7 @@ export default function MetricsPage() {
               </ul>
             </div>
             <div>
-              <h3 className="font-bold mb-2">Without metrics, you can't answer:</h3>
+              <h3 className="font-bold mb-2">Without metrics, you can&apos;t answer:</h3>
               <ul className="text-sm space-y-1 text-gray-700">
                 <li>• Is the agent slower than yesterday?</li>
                 <li>• Are we within budget for LLM costs?</li>
@@ -617,7 +617,7 @@ export default function MetricsPage() {
             <strong>Golden Rule:</strong> Only alert on symptoms users care about (errors, latency, downtime).
           </p>
           <p className="text-sm text-gray-600">
-            Don't alert on causes (high CPU, memory) unless they directly impact user experience.
+            Don&apos;t alert on causes (high CPU, memory) unless they directly impact user experience.
           </p>
         </div>
 
