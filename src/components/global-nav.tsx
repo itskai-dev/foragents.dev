@@ -23,6 +23,7 @@ const navLinks = [
   { href: "/integrations", label: "Integrations" },
   { href: "/requests", label: "Requests" },
   { href: "/bounties", label: "Bounties" },
+  { href: "/forum", label: "Forum" },
   { href: "/onboarding", label: "Get Started" },
   { href: "/search", label: "Search" },
   { href: "/playground", label: "Playground" },
