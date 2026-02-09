@@ -21,6 +21,7 @@ import { ResumeSection } from "@/components/recently-viewed/ResumeSection";
 import { AgentBootstrapPanel } from "@/components/agent-bootstrap-panel";
 import { NewsletterSignup } from "@/components/newsletter-signup";
 import { InstallCount } from "@/components/InstallCount";
+import { SkillVersionBadge } from "@/components/skill-version-badge";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
 
 export const revalidate = 300;
@@ -412,8 +413,8 @@ export default async function Home() {
                 )}
                 
                 <CardHeader>
-                  <CardTitle className="text-lg group-hover:text-orange-500 transition-colors flex items-center gap-1.5 pr-12">
-                    {skill.name}
+                  <CardTitle className="text-lg group-hover:text-orange-500 transition-colors flex items-center gap-2 pr-12">
+                    <span className="truncate flex-1">{skill.name}</span>
                     {skill.author === "Team Reflectt" && (
                       <Image
                         src="/badges/verified-skill.svg"
@@ -424,6 +425,7 @@ export default async function Home() {
                         className="w-5 h-5 inline-block"
                       />
                     )}
+                    <SkillVersionBadge slug={skill.slug} />
                   </CardTitle>
 
                   {skill.trendingBadge && (
@@ -601,8 +603,8 @@ export default async function Home() {
             <Link key={skill.id} href={`/skills/${skill.slug}`}>
               <Card className="bg-card/50 border-white/5 hover:border-cyan/20 transition-all group h-full">
                 <CardHeader>
-                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
-                    {skill.name}
+                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-2">
+                    <span className="truncate flex-1">{skill.name}</span>
                     {skill.author === "Team Reflectt" && (
                       <Image
                         src="/badges/verified-skill.svg"
@@ -613,6 +615,7 @@ export default async function Home() {
                         className="w-5 h-5 inline-block"
                       />
                     )}
+                    <SkillVersionBadge slug={skill.slug} />
                   </CardTitle>
                   <CardDescription className="text-xs flex items-center gap-2">
                     <span>by {skill.author}</span>

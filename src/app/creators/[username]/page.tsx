@@ -1,5 +1,6 @@
 import { getCreatorByUsername, getCreators } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
+import { SkillVersionBadge } from "@/components/skill-version-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -185,8 +186,8 @@ export default async function CreatorProfilePage({ params }: Props) {
             <Link key={skill.id} href={`/skills/${skill.slug}`}>
               <Card className="bg-card/50 border-white/5 hover:border-cyan/20 transition-all group h-full">
                 <CardHeader>
-                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-1.5">
-                    {skill.name}
+                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-2">
+                    <span className="truncate flex-1">{skill.name}</span>
                     {creator.verified && (
                       <Image
                         src="/badges/verified-skill.svg"
@@ -197,6 +198,7 @@ export default async function CreatorProfilePage({ params }: Props) {
                         className="w-5 h-5 inline-block"
                       />
                     )}
+                    <SkillVersionBadge slug={skill.slug} />
                   </CardTitle>
                   <CardDescription className="text-xs">
                     by {skill.author}

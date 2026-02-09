@@ -3,6 +3,7 @@ import { getSkills } from "@/lib/data";
 import { getTrendingSkillsWithBadges } from "@/lib/server/trendingSkills";
 import { SkillTrendingBadge } from "@/components/skill-trending-badge";
 import { VerifiedSkillBadge } from "@/components/verified-badge";
+import { SkillVersionBadge } from "@/components/skill-version-badge";
 import {
   Card,
   CardContent,
@@ -117,8 +118,9 @@ export default async function TrendingPage() {
                 
                 <CardHeader>
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-2 pr-12">
-                    <span className="truncate">{skill.name}</span>
+                    <span className="truncate flex-1">{skill.name}</span>
                     <VerifiedSkillBadge info={skill.verification ?? null} mode="icon" />
+                    <SkillVersionBadge slug={skill.slug} />
                   </CardTitle>
 
                   {skill.trendingBadge && (

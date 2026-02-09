@@ -19,6 +19,7 @@ import { getCollectionsForSkill } from "@/lib/skillCollections";
 import { RunInReflecttButton } from "@/components/RunInReflecttButton";
 import Link from "next/link";
 import { ReliabilityScorecard } from "@/components/reliability-scorecard";
+import { SkillVersionHistory } from "@/components/skill-version-history";
 import { aggregateScorecards, readCanaryScorecards } from "@/lib/server/canaryScorecardStore";
 import { getSkillDependencies, getSkillDependents } from "@/lib/dependencies";
 
@@ -206,6 +207,12 @@ export default async function SkillPage({
           <p className="text-foreground/80 leading-relaxed text-[15px]">
             {skill.description}
           </p>
+        </section>
+
+        {/* Version history */}
+        <section className="mb-8" id="versions">
+          <h2 className="text-lg font-semibold text-[#F8FAFC] mb-3">Version history</h2>
+          <SkillVersionHistory slug={skill.slug} />
         </section>
 
         {/* Dependencies */}

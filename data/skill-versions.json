@@ -1,0 +1,394 @@
+[
+  {
+    "slug": "agent-memory-kit",
+    "versions": [
+      {
+        "version": "1.2.0",
+        "date": "2026-02-08",
+        "changes": [
+          "Added procedural memory layer",
+          "Fixed feedback loop timing"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.1.1",
+        "date": "2026-02-06",
+        "changes": [
+          "Patched embedding cache invalidation",
+          "Improved memory store error messages"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.1.0",
+        "date": "2026-02-05",
+        "changes": [
+          "Semantic memory search",
+          "Memory compaction"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-02-01",
+        "changes": [
+          "Initial release"
+        ],
+        "type": "major"
+      }
+    ]
+  },
+  {
+    "slug": "agent-autonomy-kit",
+    "versions": [
+      {
+        "version": "2.0.0",
+        "date": "2026-02-07",
+        "changes": [
+          "Reworked planning loop to support multi-step objectives",
+          "Breaking: renamed /intake.md schema fields"
+        ],
+        "type": "major"
+      },
+      {
+        "version": "1.4.0",
+        "date": "2026-02-03",
+        "changes": [
+          "Added daily review routine",
+          "Improved retry/backoff guidelines"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.3.2",
+        "date": "2026-02-02",
+        "changes": [
+          "Fixed stale task re-queue edge case"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.3.0",
+        "date": "2026-01-29",
+        "changes": [
+          "Introduced lightweight checkpointing",
+          "Added safe-mode guardrails"
+        ],
+        "type": "minor"
+      }
+    ]
+  },
+  {
+    "slug": "agent-team-kit",
+    "versions": [
+      {
+        "version": "1.6.0",
+        "date": "2026-02-08",
+        "changes": [
+          "Added role handoff template for cross-lane work",
+          "Improved team status rollup"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.5.1",
+        "date": "2026-02-04",
+        "changes": [
+          "Fixed BACKLOG parsing for nested bullets"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.5.0",
+        "date": "2026-02-01",
+        "changes": [
+          "Added triage lane patterns",
+          "Expanded role definitions"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.4.0",
+        "date": "2026-01-27",
+        "changes": [
+          "Improved intake loop prompts",
+          "Added escalation policy"
+        ],
+        "type": "minor"
+      }
+    ]
+  },
+  {
+    "slug": "agent-identity-kit",
+    "versions": [
+      {
+        "version": "1.3.0",
+        "date": "2026-02-08",
+        "changes": [
+          "Added additional agent.json examples",
+          "Clarified discovery links + DNS notes"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.2.1",
+        "date": "2026-02-06",
+        "changes": [
+          "Fixed schema typo in docs",
+          "Improved validation hints"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.2.0",
+        "date": "2026-02-02",
+        "changes": [
+          "Added fields for multi-platform handles",
+          "Documented agent.json caching"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-01-20",
+        "changes": [
+          "Initial release"
+        ],
+        "type": "major"
+      }
+    ]
+  },
+  {
+    "slug": "agent-bridge-kit",
+    "versions": [
+      {
+        "version": "0.9.0",
+        "date": "2026-02-07",
+        "changes": [
+          "Added adapter interface for external tools",
+          "Improved transport error handling"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "0.8.2",
+        "date": "2026-02-05",
+        "changes": [
+          "Fixed connection teardown race"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "0.8.0",
+        "date": "2026-01-31",
+        "changes": [
+          "Introduced reconnect strategy",
+          "Added healthcheck endpoint"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "0.7.0",
+        "date": "2026-01-25",
+        "changes": [
+          "Initial public preview"
+        ],
+        "type": "minor"
+      }
+    ]
+  },
+  {
+    "slug": "github-skill",
+    "versions": [
+      {
+        "version": "1.9.0",
+        "date": "2026-02-08",
+        "changes": [
+          "Added PR summary generator",
+          "Improved rate limit handling"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.8.3",
+        "date": "2026-02-06",
+        "changes": [
+          "Fixed pagination for large repos"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.8.0",
+        "date": "2026-02-01",
+        "changes": [
+          "Added issue template helpers",
+          "Improved label syncing"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.7.0",
+        "date": "2026-01-28",
+        "changes": [
+          "Introduced GitHub App auth support"
+        ],
+        "type": "minor"
+      }
+    ]
+  },
+  {
+    "slug": "notion-skill",
+    "versions": [
+      {
+        "version": "1.4.0",
+        "date": "2026-02-07",
+        "changes": [
+          "Added database property type support",
+          "Improved page creation defaults"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.3.1",
+        "date": "2026-02-05",
+        "changes": [
+          "Fixed rich-text mention rendering"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.3.0",
+        "date": "2026-01-31",
+        "changes": [
+          "Added incremental sync",
+          "Improved error classification"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.2.0",
+        "date": "2026-01-24",
+        "changes": [
+          "Initial public release"
+        ],
+        "type": "minor"
+      }
+    ]
+  },
+  {
+    "slug": "obsidian",
+    "versions": [
+      {
+        "version": "1.1.0",
+        "date": "2026-02-08",
+        "changes": [
+          "Added daily note capture workflow",
+          "Improved link resolution for vault paths"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "1.0.2",
+        "date": "2026-02-06",
+        "changes": [
+          "Fixed frontmatter parsing for arrays"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.0.1",
+        "date": "2026-02-03",
+        "changes": [
+          "Fixed unicode file name handling"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-02-01",
+        "changes": [
+          "Initial release"
+        ],
+        "type": "major"
+      }
+    ]
+  },
+  {
+    "slug": "weather",
+    "versions": [
+      {
+        "version": "1.0.5",
+        "date": "2026-02-08",
+        "changes": [
+          "Improved unit conversion handling",
+          "Fixed missing precipitation probability"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.0.4",
+        "date": "2026-02-06",
+        "changes": [
+          "Reduced API calls via response caching"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.0.2",
+        "date": "2026-02-02",
+        "changes": [
+          "Added hourly forecast summary"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "1.0.0",
+        "date": "2026-01-30",
+        "changes": [
+          "Initial release"
+        ],
+        "type": "major"
+      }
+    ]
+  },
+  {
+    "slug": "spotify-player",
+    "versions": [
+      {
+        "version": "0.6.0",
+        "date": "2026-02-07",
+        "changes": [
+          "Added playlist queue controls",
+          "Improved device discovery"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "0.5.2",
+        "date": "2026-02-05",
+        "changes": [
+          "Fixed token refresh edge case"
+        ],
+        "type": "patch"
+      },
+      {
+        "version": "0.5.0",
+        "date": "2026-02-01",
+        "changes": [
+          "Added playback state polling",
+          "Improved error handling for unavailable devices"
+        ],
+        "type": "minor"
+      },
+      {
+        "version": "0.4.0",
+        "date": "2026-01-26",
+        "changes": [
+          "Initial public preview"
+        ],
+        "type": "minor"
+      }
+    ]
+  }
+]

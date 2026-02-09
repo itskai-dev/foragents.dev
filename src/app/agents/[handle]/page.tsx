@@ -14,6 +14,7 @@ import { VerifiedBadge } from "@/components/PremiumBadge";
 import { SaveToCollectionButton } from "@/components/collections/SaveToCollectionButton";
 import { TrackRecentlyViewed } from "@/components/recently-viewed/TrackRecentlyViewed";
 import { AgentAvatar } from "@/components/agents/AgentAvatar";
+import { SkillVersionBadge } from "@/components/skill-version-badge";
 
 // Generate static paths for all agents
 export function generateStaticParams() {
@@ -185,7 +186,10 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
                       <h3 className="font-semibold text-[#F8FAFC]">{skill.name}</h3>
                       <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{skill.description}</p>
                     </div>
-                    <span className="text-xs text-cyan font-mono">/{skill.slug}</span>
+                    <div className="flex flex-col items-end gap-1">
+                      <SkillVersionBadge slug={skill.slug} />
+                      <span className="text-xs text-cyan font-mono">/{skill.slug}</span>
+                    </div>
                   </div>
                 </Link>
               ))}
