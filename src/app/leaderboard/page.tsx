@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getSkills } from "@/lib/data";
+import { getBadgesForSkills } from "@/lib/badges";
 import { readCanaryScorecards } from "@/lib/server/canaryScorecardStore";
 import { LeaderboardClient } from "@/app/leaderboard/leaderboard-client";
 
@@ -39,6 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LeaderboardPage() {
   const skills = getSkills();
   const scorecards = await readCanaryScorecards();
+  const badgeMap = await getBadgesForSkills(skills);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -50,7 +52,7 @@ export default async function LeaderboardPage() {
           </p>
         </div>
 
-        <LeaderboardClient skills={skills} scorecards={scorecards} />
+        <LeaderboardClient skills={skills} scorecards={scorecards} badgeMap={badgeMap} />
       </main>
     </div>
   );

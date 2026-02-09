@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { getSkills, getSkillBySlug } from "@/lib/data";
+import { getBadgesForSkills } from "@/lib/badges";
 import { getSkillTrendingMap } from "@/lib/server/trendingSkills";
 import { SkillTrendingBadge } from "@/components/skill-trending-badge";
-import { VerifiedSkillBadge } from "@/components/verified-badge";
+import { SkillBadges } from "@/components/skill-badges";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
@@ -85,6 +86,9 @@ export default async function SkillPage({
   const trendingMap = await getSkillTrendingMap(allSkillsList);
   const trendingBadge = trendingMap[slug]?.trendingBadge ?? null;
 
+  const badgeMap = await getBadgesForSkills(allSkillsList);
+  const skillBadges = badgeMap[slug] ?? [];
+
   const issueBody = buildSkillIssueBodyTemplate({
     skillName: skill.name,
     skillSlug: skill.slug,
@@ -124,7 +128,6 @@ export default async function SkillPage({
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2 flex items-center gap-2 flex-wrap">
             <span>🧰 {skill.name}</span>
-            <VerifiedSkillBadge info={skill.verification ?? null} />
           </h1>
           <div className="flex items-center gap-3 text-muted-foreground flex-wrap">
             <p>
@@ -149,18 +152,20 @@ export default async function SkillPage({
           </div>
         </div>
 
-        {/* Compatibility Badges */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {trendingBadge && <SkillTrendingBadge badge={trendingBadge} />}
-          {/* verified badge moved to title */}
-          <Badge className="bg-purple/20 text-purple border border-purple/30 font-semibold">
-            ⚡ OpenClaw Compatible
-          </Badge>
-          {skill.tags.includes("openclaw") && (
-            <Badge className="bg-cyan/20 text-cyan border border-cyan/30">
-              🖥️ Multi-Platform
+        {/* Badges */}
+        <div className="mb-6 space-y-2">
+          <div className="flex flex-wrap gap-2">
+            {trendingBadge && <SkillTrendingBadge badge={trendingBadge} />}
+            <Badge className="bg-purple/20 text-purple border border-purple/30 font-semibold">
+              ⚡ OpenClaw Compatible
             </Badge>
-          )}
+            {skill.tags.includes("openclaw") && (
+              <Badge className="bg-cyan/20 text-cyan border border-cyan/30">
+                🖥️ Multi-Platform
+              </Badge>
+            )}
+          </div>
+          <SkillBadges badges={skillBadges} mode="full" />
         </div>
 
         {/* Tags */}

@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { getSkills } from "@/lib/data";
-import { VerifiedSkillBadge } from "@/components/verified-badge";
+import { getAllBadges, getBadgesForSkills } from "@/lib/badges";
+import { SkillBadges } from "@/components/skill-badges";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,8 +28,24 @@ export const metadata = {
   },
 };
 
-export default function SkillsPage() {
+export default async function SkillsPage({
+  searchParams,
+}: {
+  searchParams?: Record<string, string | string[] | undefined>;
+}) {
   const skills = getSkills();
+  const badgeFilter = typeof searchParams?.badge === "string" ? searchParams.badge : "";
+
+  const badgeDefs = getAllBadges();
+  const badgeById = new Map(badgeDefs.map((b) => [b.id, b] as const));
+
+  const badgeMap = await getBadgesForSkills(skills);
+
+  const filteredSkills = badgeFilter
+    ? skills.filter((s) => (badgeMap[s.slug] ?? []).some((b) => b.id === badgeFilter))
+    : skills;
+
+  const activeBadge = badgeFilter ? badgeById.get(badgeFilter) : null;
 
   return (
     <div className="min-h-screen">
@@ -43,8 +60,20 @@ export default function SkillsPage() {
             🧰 Skills Directory
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Browse {skills.length} skills for AI agents — including verified core kits.
+            Browse {filteredSkills.length} skills for AI agents{activeBadge ? (
+              <> — filtered by <span className="text-foreground">{activeBadge.emoji} {activeBadge.name}</span></>
+            ) : (
+              <>.</>
+            )}
           </p>
+
+          {activeBadge ? (
+            <div className="mt-4">
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/skills">Clear filter</Link>
+              </Button>
+            </div>
+          ) : null}
         </div>
       </section>
 
@@ -56,7 +85,10 @@ export default function SkillsPage() {
           <div>
             <h2 className="text-2xl font-bold">All Skills</h2>
             <p className="text-muted-foreground text-sm mt-1">
-              Looking for filters? Try <Link href="/search" className="text-cyan hover:underline">Search</Link>.
+              Looking for filters? Try{" "}
+              <Link href="/badges" className="text-cyan hover:underline">Badges</Link>
+              {" "}or{" "}
+              <Link href="/search" className="text-cyan hover:underline">Search</Link>.
             </p>
           </div>
           <div className="flex gap-2">
@@ -74,19 +106,23 @@ export default function SkillsPage() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {skills.map((skill) => (
+          {filteredSkills.map((skill) => (
             <Link key={skill.id} href={`/skills/${skill.slug}`}>
               <Card className="bg-card/50 border-white/5 hover:border-cyan/20 transition-all group h-full">
                 <CardHeader>
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-2">
                     <span className="truncate">{skill.name}</span>
-                    <VerifiedSkillBadge info={skill.verification ?? null} mode="icon" />
                   </CardTitle>
                   <CardDescription className="text-xs flex items-center gap-2">
                     <span>by {skill.author}</span>
                     <span className="text-white/20">•</span>
                     <InstallCount skillSlug={skill.slug} className="text-xs text-cyan" />
                   </CardDescription>
+                  <SkillBadges
+                    badges={badgeMap[skill.slug] ?? []}
+                    mode="compact"
+                    className="mt-2"
+                  />
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
