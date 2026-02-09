@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+    "name": "Anthropic",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Anthropic&font=roboto",
+    "tier": "Enterprise",
+    "website": "https://anthropic.com",
+    "since": "2024-01"
+  },
+  {
+    "id": "2",
+    "name": "OpenAI",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=OpenAI&font=roboto",
+    "tier": "Enterprise",
+    "website": "https://openai.com",
+    "since": "2024-02"
+  },
+  {
+    "id": "3",
+    "name": "Vercel",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Vercel&font=roboto",
+    "tier": "Team",
+    "website": "https://vercel.com",
+    "since": "2024-03"
+  },
+  {
+    "id": "4",
+    "name": "Replicate",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Replicate&font=roboto",
+    "tier": "Team",
+    "website": "https://replicate.com",
+    "since": "2024-04"
+  },
+  {
+    "id": "5",
+    "name": "Hugging Face",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=HuggingFace&font=roboto",
+    "tier": "Team",
+    "website": "https://huggingface.co",
+    "since": "2024-05"
+  },
+  {
+    "id": "6",
+    "name": "LangChain",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=LangChain&font=roboto",
+    "tier": "Individual",
+    "website": "https://langchain.com",
+    "since": "2024-06"
+  },
+  {
+    "id": "7",
+    "name": "Pinecone",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Pinecone&font=roboto",
+    "tier": "Individual",
+    "website": "https://pinecone.io",
+    "since": "2024-07"
+  },
+  {
+    "id": "8",
+    "name": "Modal Labs",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Modal&font=roboto",
+    "tier": "Individual",
+    "website": "https://modal.com",
+    "since": "2024-08"
+  },
+  {
+    "id": "9",
+    "name": "Together AI",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Together&font=roboto",
+    "tier": "Team",
+    "website": "https://together.ai",
+    "since": "2024-09"
+  },
+  {
+    "id": "10",
+    "name": "Supabase",
+    "logo": "https://placehold.co/120x60/1a1a1a/00ffff?text=Supabase&font=roboto",
+    "tier": "Individual",
+    "website": "https://supabase.com",
+    "since": "2024-10"
+  }
+]
