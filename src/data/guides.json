@@ -1,0 +1,161 @@
+[
+  {
+    "slug": "your-first-agent",
+    "title": "Your First Agent",
+    "description": "Build your first AI agent from scratch. Learn the fundamentals of agent creation, setup, and basic interaction patterns.",
+    "difficulty": "Beginner",
+    "category": "Getting Started",
+    "estimatedMinutes": 15,
+    "content": [
+      "Welcome to your first AI agent! This guide will walk you through the basics of creating, configuring, and running your very first agent. By the end, you'll have a working agent that can help you with everyday tasks.",
+      "An AI agent is more than just a chatbot—it's an autonomous system that can use tools, make decisions, and take actions on your behalf. Think of it as a digital assistant that can actually get things done.",
+      "To get started, you'll need a runtime environment like OpenClaw or similar agent frameworks. These provide the infrastructure for your agent to run, access tools, and maintain state across sessions.",
+      "Your agent needs a clear identity and purpose. Create an AGENTS.md file in your workspace with a description of who your agent is and what it should do. This becomes the foundation of your agent's behavior.",
+      "Start simple: give your agent basic file access and the ability to read and write. This lets it take notes, organize information, and remember context between sessions. You can expand capabilities from there.",
+      "Test your agent by asking it to perform simple tasks: 'Create a todo list,' 'Organize my notes,' or 'Search for information on X.' Observe how it uses the tools available and refine its instructions based on what works.",
+      "Remember: agents learn from their experiences. Keep memory files (like MEMORY.md) where your agent can store lessons learned, preferences, and important context. This makes it smarter over time.",
+      "Congratulations! You've built your first agent. From here, you can add more tools, integrate with external services, and teach your agent to handle increasingly complex workflows."
+    ],
+    "tags": ["basics", "setup", "beginner"]
+  },
+  {
+    "slug": "setting-up-agent-memory",
+    "title": "Setting Up Agent Memory",
+    "description": "Implement persistent memory systems for your agents. Learn file-based patterns, state management, and memory best practices.",
+    "difficulty": "Beginner",
+    "category": "Memory & State",
+    "estimatedMinutes": 20,
+    "content": [
+      "Memory is what transforms a stateless chatbot into a truly intelligent agent. Without memory, your agent starts fresh every session—with it, your agent builds context, learns from mistakes, and maintains continuity.",
+      "The simplest and most reliable memory pattern is file-based. Create a memory/ directory in your agent's workspace. This becomes the source of truth for everything your agent needs to remember.",
+      "Use daily log files (memory/YYYY-MM-DD.md) to capture what happened each day. These are raw, timestamped notes of interactions, decisions, and observations. Think of them as your agent's journal.",
+      "MEMORY.md is your agent's long-term memory—the curated, distilled wisdom that persists across all sessions. Your agent should periodically review daily logs and update MEMORY.md with what's worth keeping permanently.",
+      "Separate personal memory (MEMORY.md) from workspace memory. MEMORY.md should only load in private sessions with your human. Use daily logs and workspace files for shared contexts to prevent data leakage.",
+      "Structure memory hierarchically: daily logs for raw data, MEMORY.md for personal insights, and specialized files (TOOLS.md, SKILLS.md) for specific knowledge domains. This keeps memory organized and accessible.",
+      "Implement memory maintenance routines. During quiet periods (like heartbeat checks), your agent can review recent daily files, extract key insights, and update MEMORY.md. This prevents memory from becoming stale.",
+      "Memory best practices: timestamp everything, write clearly for future retrieval, remove outdated information, and always prefer files over 'mental notes.' If it matters, it goes in a file. Text beats brain."
+    ],
+    "tags": ["memory", "state", "persistence", "files"]
+  },
+  {
+    "slug": "autonomous-task-execution",
+    "title": "Autonomous Task Execution",
+    "description": "Enable your agents to work independently on complex tasks. Master proactive behaviors, decision-making, and task decomposition.",
+    "difficulty": "Intermediate",
+    "category": "Autonomy",
+    "estimatedMinutes": 35,
+    "content": [
+      "Autonomy is the defining characteristic of true agents. While assistants wait for commands, autonomous agents identify tasks, plan approaches, and execute without constant supervision.",
+      "Start with heartbeat patterns: periodic checks where your agent proactively looks for things that need attention (emails, calendar events, system status). This transforms reactive waiting into active monitoring.",
+      "Implement task decomposition—breaking complex requests into smaller, manageable steps. Your agent should create a plan, execute each step, verify results, and adapt if something goes wrong.",
+      "Use a state machine approach for multi-step tasks. Track progress in files (task-state.json), update status as work progresses, and handle interruptions gracefully. Your agent should always know where it left off.",
+      "Proactive doesn't mean intrusive. Your agent should understand context: don't interrupt during meetings, respect quiet hours (23:00-08:00), and batch notifications instead of constant pings.",
+      "Decision-making under uncertainty: teach your agent when to proceed autonomously vs. when to ask for guidance. Low-risk operations (organizing files) can proceed freely; high-risk operations (sending emails) need confirmation.",
+      "Implement background work queues. Your agent can maintain a todo list of tasks to work on during idle time: updating documentation, organizing files, researching topics, preparing summaries.",
+      "Monitor and learn from autonomous actions. Keep logs of what your agent does proactively, what works well, and what doesn't. Use this to refine decision-making rules and improve autonomy over time."
+    ],
+    "tags": ["autonomy", "proactive", "task-execution", "heartbeat"]
+  },
+  {
+    "slug": "securing-agent-communications",
+    "title": "Securing Agent Communications",
+    "description": "Implement security best practices for agent interactions. Learn about data privacy, secure communications, and access controls.",
+    "difficulty": "Intermediate",
+    "category": "Security",
+    "estimatedMinutes": 30,
+    "content": [
+      "Security isn't optional when your agent has access to sensitive data and can take actions on your behalf. A compromised agent can leak private information, send unauthorized messages, or cause significant damage.",
+      "First principle: never exfiltrate private data. Your agent should treat personal information, credentials, and sensitive communications as sacred. What happens in your workspace stays in your workspace.",
+      "Implement context separation. MEMORY.md and personal files should only load in private sessions. In group chats or shared contexts, your agent represents itself—not you—and doesn't access your private data.",
+      "Use environment variables and secure storage for credentials. Never hardcode API keys, passwords, or tokens in files. Load them from secure vaults or environment variables, and never log them in plaintext.",
+      "Implement the principle of least privilege. Your agent should only have access to tools and data it actually needs. If it doesn't need to delete files, don't give it that capability.",
+      "Require confirmation for sensitive actions. Before sending emails, posting publicly, making purchases, or deleting data, your agent should ask for explicit approval. Build a confirmation flow for high-risk operations.",
+      "Audit trails are critical. Log all external actions (messages sent, files modified, commands executed) with timestamps and context. This creates accountability and helps debug security issues.",
+      "Regular security reviews: periodically audit what your agent has access to, what actions it's taking, and whether security policies are being followed. Security is a practice, not a one-time setup."
+    ],
+    "tags": ["security", "privacy", "access-control", "authentication"]
+  },
+  {
+    "slug": "deploying-to-production",
+    "title": "Deploying to Production",
+    "description": "Take your agent from development to production. Master deployment strategies, monitoring, error handling, and scaling.",
+    "difficulty": "Advanced",
+    "category": "Deployment",
+    "estimatedMinutes": 45,
+    "content": [
+      "Production deployment is where your agent goes from a local experiment to a reliable, always-on system. This requires careful planning, robust error handling, and comprehensive monitoring.",
+      "Start with a deployment checklist: environment variables configured, secrets in secure storage, logging enabled, error handling in place, and rollback plan ready. Never deploy without these basics.",
+      "Choose your deployment environment: cloud VMs (AWS, GCP, Azure), containerized platforms (Docker, Kubernetes), or managed agent platforms. Consider cost, scaling needs, and operational complexity.",
+      "Implement graceful degradation. If your agent can't access an external API, it should fall back to cached data or notify you—not crash. Build resilience into every integration point.",
+      "Health checks and monitoring are essential. Your agent should expose status endpoints showing uptime, last activity, error rates, and resource usage. Set up alerts for anomalies.",
+      "Error handling strategy: catch all exceptions, log them with context, attempt recovery when possible, and notify humans when intervention is needed. Never let errors silently fail.",
+      "Implement rate limiting and backoff. Don't hammer external APIs when they're having issues. Use exponential backoff, respect rate limits, and implement circuit breakers for failing services.",
+      "Deploy updates safely: use blue-green deployments or rolling updates. Keep the previous version running until the new version is verified. Always have a rollback plan ready.",
+      "Cost management: monitor API usage, model calls, and resource consumption. Set budgets and alerts. Production agents can rack up costs quickly if not carefully managed.",
+      "Document your deployment: runbooks for common issues, deployment procedures, monitoring dashboards, and incident response plans. Future you will thank present you."
+    ],
+    "tags": ["deployment", "production", "monitoring", "devops"]
+  },
+  {
+    "slug": "mcp-server-integration",
+    "title": "MCP Server Integration",
+    "description": "Connect your agents to Model Context Protocol servers for extended capabilities. Learn MCP basics, server discovery, and tool integration.",
+    "difficulty": "Intermediate",
+    "category": "Integration",
+    "estimatedMinutes": 30,
+    "content": [
+      "Model Context Protocol (MCP) is the standard for extending agent capabilities with external tools and services. Think of MCP servers as skill packs that your agent can dynamically load and use.",
+      "MCP separates concerns: your agent runtime handles conversation and decision-making, while MCP servers provide specialized tools (file systems, databases, APIs, etc.). This keeps your agent lean and modular.",
+      "Start by discovering available MCP servers. Check registries like foragents.dev/mcp for community servers, or browse the official Anthropic MCP repository. Install servers that match your agent's needs.",
+      "Installing an MCP server typically involves: adding it to your agent's config, installing dependencies (npm packages, Python modules), and configuring credentials or endpoints in your environment.",
+      "Your agent automatically discovers tools provided by MCP servers. The server describes its capabilities, and your agent can call those tools just like built-in functions. No custom code needed.",
+      "Test MCP integration thoroughly. Try each tool manually, verify error handling, and ensure credentials are properly secured. MCP servers run as separate processes, so they can fail independently.",
+      "Performance considerations: MCP servers add latency since they're separate processes. Batch operations when possible, cache results, and don't call external tools unnecessarily.",
+      "Build your own MCP servers for custom integrations. If you have a unique data source or API, wrap it in an MCP server. This makes it reusable across agents and frameworks.",
+      "Stay updated: the MCP ecosystem evolves quickly. Subscribe to updates, check for new servers regularly, and contribute back when you build something useful."
+    ],
+    "tags": ["mcp", "integration", "tools", "protocols"]
+  },
+  {
+    "slug": "multi-agent-coordination",
+    "title": "Multi-Agent Coordination",
+    "description": "Orchestrate teams of specialized agents working together. Learn coordination patterns, communication protocols, and task distribution.",
+    "difficulty": "Advanced",
+    "category": "Autonomy",
+    "estimatedMinutes": 50,
+    "content": [
+      "Multi-agent systems unlock capabilities that single agents can't achieve alone. By coordinating specialized agents, you can tackle complex workflows that require diverse skills and parallel execution.",
+      "Design principle: each agent should have a clear, narrow purpose. One agent handles research, another writes content, a third reviews for quality. Specialization beats generalization in multi-agent systems.",
+      "Communication patterns matter. Agents can coordinate through shared files (filesystem-based queues), message queues (Redis, RabbitMQ), or direct API calls. Choose based on your reliability and latency requirements.",
+      "Implement a coordinator agent that orchestrates the team. The coordinator breaks down tasks, assigns work to specialists, monitors progress, and handles failures. This prevents chaos and ensures accountability.",
+      "Use a task queue pattern: coordinator adds tasks to a shared queue, worker agents pull tasks they're qualified for, execute them, and report results back. This scales naturally as workload increases.",
+      "Handle agent failures gracefully. What happens if the writer agent crashes mid-task? Implement timeouts, retries, and reassignment logic. The system should continue working even when individual agents fail.",
+      "Conflict resolution: when multiple agents need to modify the same resource, you need locking or coordination. Use file locks, database transactions, or optimistic concurrency control to prevent corruption.",
+      "Monitor the health of your agent team. Track which agents are active, what they're working on, error rates, and throughput. Build dashboards to visualize the state of your multi-agent system.",
+      "Start simple: begin with 2-3 agents and simple workflows. Add complexity gradually as you learn what works. Multi-agent systems are powerful but complex—don't over-engineer too early.",
+      "Document agent roles and interfaces clearly. Future you (or other developers) needs to understand who does what and how agents communicate. Good documentation prevents the system from becoming a black box."
+    ],
+    "tags": ["multi-agent", "coordination", "orchestration", "teams"]
+  },
+  {
+    "slug": "monitoring-observability",
+    "title": "Monitoring & Observability",
+    "description": "Build comprehensive monitoring and observability for your agents. Learn logging strategies, metrics collection, and debugging techniques.",
+    "difficulty": "Intermediate",
+    "category": "Deployment",
+    "estimatedMinutes": 40,
+    "content": [
+      "You can't improve what you don't measure. Monitoring and observability transform a black box agent into a transparent, debuggable, and continuously improving system.",
+      "Start with structured logging. Every significant action should be logged with timestamp, context, and outcome. Use consistent formats (JSON is ideal) so logs can be parsed and analyzed programmatically.",
+      "Log levels matter: DEBUG for detailed traces, INFO for normal operations, WARN for recoverable issues, ERROR for failures. In production, run at INFO level and enable DEBUG only for troubleshooting.",
+      "Implement request tracing: assign a unique ID to each conversation or task, and include it in all related logs. This lets you trace the full lifecycle of a request across multiple components.",
+      "Collect metrics: response times, error rates, token usage, API calls, task completion rates. Store these in a time-series database (Prometheus, InfluxDB) for analysis and alerting.",
+      "Build dashboards to visualize agent health. Show key metrics at a glance: uptime, active tasks, error rates, resource usage. Tools like Grafana make it easy to create beautiful, actionable dashboards.",
+      "Set up alerts for critical conditions: agent down, error rate spike, API quota exceeded, disk space low. Alerts should wake you up for emergencies but not cry wolf for minor issues.",
+      "Performance profiling: periodically trace where your agent spends time. Are LLM calls the bottleneck? File I/O? External APIs? Profile before optimizing—measure, don't guess.",
+      "Error analysis: don't just log errors, analyze patterns. What types of errors are most common? When do they occur? This reveals systemic issues that need fixing.",
+      "Retention and archival: logs grow quickly. Implement rotation (keep 30 days of detailed logs), archival (compress and store older logs), and cleanup (delete ancient logs). Balance debuggability with storage costs."
+    ],
+    "tags": ["monitoring", "observability", "logging", "metrics", "debugging"]
+  }
+]
