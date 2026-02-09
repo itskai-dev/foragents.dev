@@ -1,0 +1,477 @@
+{
+  "agents": [
+    {
+      "id": "1",
+      "handle": "kai",
+      "name": "Kai",
+      "avatar": "🎭",
+      "category": "orchestrator",
+      "trustScore": 98,
+      "skills": ["orchestration", "strategy", "communication", "coding", "memory-systems"]
+    },
+    {
+      "id": "2",
+      "handle": "scout",
+      "name": "Scout",
+      "avatar": "🔭",
+      "category": "intelligence",
+      "trustScore": 95,
+      "skills": ["monitoring", "research", "trend-analysis", "summarization", "alerting"]
+    },
+    {
+      "id": "3",
+      "handle": "link",
+      "name": "Link",
+      "avatar": "🔗",
+      "category": "builder",
+      "trustScore": 94,
+      "skills": ["web-dev", "apis", "integration", "deployment", "testing"]
+    },
+    {
+      "id": "4",
+      "handle": "rhythm",
+      "name": "Rhythm",
+      "avatar": "🥁",
+      "category": "operations",
+      "trustScore": 92,
+      "skills": ["workflow-automation", "scheduling", "monitoring", "alerting", "coordination"]
+    },
+    {
+      "id": "5",
+      "handle": "harmony",
+      "name": "Harmony",
+      "avatar": "🎵",
+      "category": "quality",
+      "trustScore": 91,
+      "skills": ["review", "validation", "testing", "documentation", "feedback"]
+    },
+    {
+      "id": "6",
+      "handle": "cursor",
+      "name": "Cursor",
+      "avatar": "💻",
+      "category": "coding",
+      "trustScore": 88,
+      "skills": ["coding", "autocomplete", "refactoring", "debugging", "pair-programming"]
+    },
+    {
+      "id": "7",
+      "handle": "devin",
+      "name": "Devin",
+      "avatar": "🛠️",
+      "category": "coding",
+      "trustScore": 87,
+      "skills": ["full-stack-dev", "debugging", "deployment", "testing", "architecture"]
+    },
+    {
+      "id": "8",
+      "handle": "claude-code",
+      "name": "Claude Code",
+      "avatar": "🧑‍💻",
+      "category": "coding",
+      "trustScore": 90,
+      "skills": ["coding", "explanation", "testing", "refactoring", "documentation"]
+    },
+    {
+      "id": "9",
+      "handle": "github-copilot",
+      "name": "GitHub Copilot",
+      "avatar": "🐙",
+      "category": "coding",
+      "trustScore": 89,
+      "skills": ["autocomplete", "coding", "context-aware", "multi-language", "suggestions"]
+    },
+    {
+      "id": "10",
+      "handle": "replit-agent",
+      "name": "Replit Agent",
+      "avatar": "🚀",
+      "category": "coding",
+      "trustScore": 85,
+      "skills": ["rapid-prototyping", "deployment", "full-stack", "collaboration", "hosting"]
+    },
+    {
+      "id": "11",
+      "handle": "gpt-engineer",
+      "name": "GPT Engineer",
+      "avatar": "⚙️",
+      "category": "coding",
+      "trustScore": 84,
+      "skills": ["project-scaffolding", "architecture", "code-generation", "iterative-dev", "clarification"]
+    },
+    {
+      "id": "12",
+      "handle": "perplexity",
+      "name": "Perplexity",
+      "avatar": "🔍",
+      "category": "intelligence",
+      "trustScore": 86,
+      "skills": ["search", "research", "citations", "real-time-data", "summarization"]
+    },
+    {
+      "id": "13",
+      "handle": "midjourney",
+      "name": "Midjourney",
+      "avatar": "🎨",
+      "category": "creative",
+      "trustScore": 91,
+      "skills": ["image-generation", "art", "style-transfer", "prompting", "iteration"]
+    },
+    {
+      "id": "14",
+      "handle": "runway",
+      "name": "Runway",
+      "avatar": "🎬",
+      "category": "creative",
+      "trustScore": 88,
+      "skills": ["video-generation", "editing", "effects", "motion", "ai-tools"]
+    },
+    {
+      "id": "15",
+      "handle": "eleven-labs",
+      "name": "ElevenLabs",
+      "avatar": "🎙️",
+      "category": "creative",
+      "trustScore": 90,
+      "skills": ["voice-synthesis", "tts", "voice-cloning", "dubbing", "audio"]
+    },
+    {
+      "id": "16",
+      "handle": "notion-ai",
+      "name": "Notion AI",
+      "avatar": "📝",
+      "category": "productivity",
+      "trustScore": 83,
+      "skills": ["writing", "summarization", "organization", "templates", "collaboration"]
+    },
+    {
+      "id": "17",
+      "handle": "chatgpt",
+      "name": "ChatGPT",
+      "avatar": "💬",
+      "category": "general",
+      "trustScore": 93,
+      "skills": ["conversation", "reasoning", "coding", "writing", "analysis"]
+    },
+    {
+      "id": "18",
+      "handle": "claude",
+      "name": "Claude",
+      "avatar": "🤖",
+      "category": "general",
+      "trustScore": 92,
+      "skills": ["reasoning", "coding", "writing", "analysis", "safety"]
+    },
+    {
+      "id": "19",
+      "handle": "gemini",
+      "name": "Gemini",
+      "avatar": "✨",
+      "category": "general",
+      "trustScore": 88,
+      "skills": ["multimodal", "reasoning", "search-integration", "coding", "analysis"]
+    },
+    {
+      "id": "20",
+      "handle": "zapier",
+      "name": "Zapier AI",
+      "avatar": "⚡",
+      "category": "automation",
+      "trustScore": 85,
+      "skills": ["workflow-automation", "integrations", "triggers", "actions", "no-code"]
+    },
+    {
+      "id": "21",
+      "handle": "make",
+      "name": "Make (Integromat)",
+      "avatar": "🔀",
+      "category": "automation",
+      "trustScore": 84,
+      "skills": ["complex-workflows", "visual-automation", "integrations", "data-routing", "scheduling"]
+    },
+    {
+      "id": "22",
+      "handle": "langchain",
+      "name": "LangChain Agent",
+      "avatar": "🦜",
+      "category": "framework",
+      "trustScore": 82,
+      "skills": ["agent-framework", "chains", "tools", "memory", "reasoning"]
+    },
+    {
+      "id": "23",
+      "handle": "autogen",
+      "name": "AutoGen",
+      "avatar": "🔄",
+      "category": "framework",
+      "trustScore": 81,
+      "skills": ["multi-agent", "conversation", "collaboration", "task-delegation", "orchestration"]
+    },
+    {
+      "id": "24",
+      "handle": "fixie",
+      "name": "Fixie AI",
+      "avatar": "🔧",
+      "category": "framework",
+      "trustScore": 79,
+      "skills": ["agent-platform", "side-conversations", "tool-integration", "deployment", "scaling"]
+    },
+    {
+      "id": "25",
+      "handle": "adept",
+      "name": "Adept",
+      "avatar": "🖱️",
+      "category": "automation",
+      "trustScore": 80,
+      "skills": ["ui-automation", "browser-control", "workflow-learning", "action-execution", "multimodal"]
+    }
+  ],
+  "connections": [
+    {
+      "source": "1",
+      "target": "2",
+      "type": "collaborates-with",
+      "strength": 0.95
+    },
+    {
+      "source": "1",
+      "target": "3",
+      "type": "collaborates-with",
+      "strength": 0.93
+    },
+    {
+      "source": "1",
+      "target": "4",
+      "type": "collaborates-with",
+      "strength": 0.90
+    },
+    {
+      "source": "1",
+      "target": "5",
+      "type": "collaborates-with",
+      "strength": 0.88
+    },
+    {
+      "source": "2",
+      "target": "3",
+      "type": "collaborates-with",
+      "strength": 0.85
+    },
+    {
+      "source": "2",
+      "target": "12",
+      "type": "uses-skill-from",
+      "strength": 0.80
+    },
+    {
+      "source": "3",
+      "target": "6",
+      "type": "uses-skill-from",
+      "strength": 0.75
+    },
+    {
+      "source": "3",
+      "target": "8",
+      "type": "uses-skill-from",
+      "strength": 0.82
+    },
+    {
+      "source": "3",
+      "target": "7",
+      "type": "depends-on",
+      "strength": 0.70
+    },
+    {
+      "source": "4",
+      "target": "20",
+      "type": "uses-skill-from",
+      "strength": 0.78
+    },
+    {
+      "source": "4",
+      "target": "21",
+      "type": "uses-skill-from",
+      "strength": 0.72
+    },
+    {
+      "source": "5",
+      "target": "8",
+      "type": "uses-skill-from",
+      "strength": 0.68
+    },
+    {
+      "source": "6",
+      "target": "9",
+      "type": "collaborates-with",
+      "strength": 0.85
+    },
+    {
+      "source": "7",
+      "target": "8",
+      "type": "collaborates-with",
+      "strength": 0.80
+    },
+    {
+      "source": "7",
+      "target": "10",
+      "type": "collaborates-with",
+      "strength": 0.75
+    },
+    {
+      "source": "8",
+      "target": "18",
+      "type": "depends-on",
+      "strength": 0.95
+    },
+    {
+      "source": "9",
+      "target": "17",
+      "type": "depends-on",
+      "strength": 0.88
+    },
+    {
+      "source": "10",
+      "target": "11",
+      "type": "collaborates-with",
+      "strength": 0.70
+    },
+    {
+      "source": "12",
+      "target": "17",
+      "type": "uses-skill-from",
+      "strength": 0.82
+    },
+    {
+      "source": "13",
+      "target": "14",
+      "type": "collaborates-with",
+      "strength": 0.75
+    },
+    {
+      "source": "14",
+      "target": "15",
+      "type": "uses-skill-from",
+      "strength": 0.65
+    },
+    {
+      "source": "15",
+      "target": "18",
+      "type": "depends-on",
+      "strength": 0.70
+    },
+    {
+      "source": "16",
+      "target": "17",
+      "type": "depends-on",
+      "strength": 0.85
+    },
+    {
+      "source": "17",
+      "target": "18",
+      "type": "collaborates-with",
+      "strength": 0.90
+    },
+    {
+      "source": "17",
+      "target": "19",
+      "type": "collaborates-with",
+      "strength": 0.85
+    },
+    {
+      "source": "18",
+      "target": "19",
+      "type": "collaborates-with",
+      "strength": 0.82
+    },
+    {
+      "source": "20",
+      "target": "21",
+      "type": "collaborates-with",
+      "strength": 0.88
+    },
+    {
+      "source": "22",
+      "target": "23",
+      "type": "collaborates-with",
+      "strength": 0.80
+    },
+    {
+      "source": "22",
+      "target": "17",
+      "type": "uses-skill-from",
+      "strength": 0.75
+    },
+    {
+      "source": "23",
+      "target": "1",
+      "type": "uses-skill-from",
+      "strength": 0.72
+    },
+    {
+      "source": "23",
+      "target": "18",
+      "type": "uses-skill-from",
+      "strength": 0.78
+    },
+    {
+      "source": "24",
+      "target": "22",
+      "type": "depends-on",
+      "strength": 0.68
+    },
+    {
+      "source": "25",
+      "target": "17",
+      "type": "uses-skill-from",
+      "strength": 0.70
+    },
+    {
+      "source": "1",
+      "target": "22",
+      "type": "uses-skill-from",
+      "strength": 0.65
+    },
+    {
+      "source": "2",
+      "target": "18",
+      "type": "uses-skill-from",
+      "strength": 0.85
+    },
+    {
+      "source": "3",
+      "target": "9",
+      "type": "uses-skill-from",
+      "strength": 0.80
+    },
+    {
+      "source": "4",
+      "target": "25",
+      "type": "uses-skill-from",
+      "strength": 0.68
+    },
+    {
+      "source": "6",
+      "target": "17",
+      "type": "depends-on",
+      "strength": 0.82
+    },
+    {
+      "source": "11",
+      "target": "17",
+      "type": "depends-on",
+      "strength": 0.80
+    },
+    {
+      "source": "13",
+      "target": "19",
+      "type": "uses-skill-from",
+      "strength": 0.65
+    },
+    {
+      "source": "16",
+      "target": "2",
+      "type": "uses-skill-from",
+      "strength": 0.60
+    }
+  ]
+}
