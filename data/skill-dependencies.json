@@ -1,0 +1,77 @@
+[
+  {
+    "skill": "agent-memory-kit",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "agent-identity-kit",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "github-skill",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "agent-autonomy-kit",
+    "dependsOn": ["agent-memory-kit"],
+    "verifiedDependsOn": ["agent-memory-kit"]
+  },
+  {
+    "skill": "agent-team-kit",
+    "dependsOn": ["agent-memory-kit", "agent-identity-kit"],
+    "verifiedDependsOn": ["agent-memory-kit", "agent-identity-kit"]
+  },
+  {
+    "skill": "agent-bridge-kit",
+    "dependsOn": ["agent-identity-kit", "bird-twitter", "github-skill"],
+    "verifiedDependsOn": ["agent-identity-kit"]
+  },
+  {
+    "skill": "obsidian",
+    "dependsOn": ["agent-memory-kit"],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "gog-google-workspace",
+    "dependsOn": ["agent-identity-kit"],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "coding-agent",
+    "dependsOn": ["github-skill"],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "summarize",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "weather",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "spotify-player",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "notion-skill",
+    "dependsOn": ["agent-identity-kit"],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "bird-twitter",
+    "dependsOn": ["agent-identity-kit"],
+    "verifiedDependsOn": []
+  },
+  {
+    "skill": "nano-banana-pro",
+    "dependsOn": [],
+    "verifiedDependsOn": []
+  }
+]

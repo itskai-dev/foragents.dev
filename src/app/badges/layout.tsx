@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "Badges — forAgents.dev",
-  description: "Earn badges by engaging with the forAgents.dev community. Track your progress and showcase your achievements.",
+  title: "Skill Badges — forAgents.dev",
+  description: "Explore skill badges earned from installs, reliability scorecards, trending rank, and community ratings on forAgents.dev.",
 };
 
 export default function BadgesLayout({

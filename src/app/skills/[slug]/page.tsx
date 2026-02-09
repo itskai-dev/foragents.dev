@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { getSkills, getSkillBySlug } from "@/lib/data";
+import { getBadgesForSkills } from "@/lib/badges";
 import { getSkillTrendingMap } from "@/lib/server/trendingSkills";
 import { SkillTrendingBadge } from "@/components/skill-trending-badge";
-import { VerifiedSkillBadge } from "@/components/verified-badge";
+import { SkillBadges } from "@/components/skill-badges";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { NextBestActionPanel } from "@/components/next-best-action-panel";
@@ -20,6 +21,7 @@ import Link from "next/link";
 import { ReliabilityScorecard } from "@/components/reliability-scorecard";
 import { SkillVersionHistory } from "@/components/skill-version-history";
 import { aggregateScorecards, readCanaryScorecards } from "@/lib/server/canaryScorecardStore";
+import { getSkillDependencies, getSkillDependents } from "@/lib/dependencies";
 
 // Generate static paths for all skills
 export function generateStaticParams() {
@@ -72,6 +74,10 @@ export default async function SkillPage({
 
   const inCollections = await getCollectionsForSkill(skill.slug);
 
+  const dependencies = await getSkillDependencies(skill.slug);
+  const usedBy = await getSkillDependents(skill.slug);
+  const skillNameBySlug = new Map(allSkillsList.map((s) => [s.slug, s.name] as const));
+
   const allScorecards = await readCanaryScorecards();
   const latestDateForSkill = allScorecards
     .filter((s) => s.agentId === skill.slug)
@@ -85,6 +91,9 @@ export default async function SkillPage({
 
   const trendingMap = await getSkillTrendingMap(allSkillsList);
   const trendingBadge = trendingMap[slug]?.trendingBadge ?? null;
+
+  const badgeMap = await getBadgesForSkills(allSkillsList);
+  const skillBadges = badgeMap[slug] ?? [];
 
   const issueBody = buildSkillIssueBodyTemplate({
     skillName: skill.name,
@@ -125,7 +134,6 @@ export default async function SkillPage({
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2 flex items-center gap-2 flex-wrap">
             <span>🧰 {skill.name}</span>
-            <VerifiedSkillBadge info={skill.verification ?? null} />
           </h1>
           <div className="flex items-center gap-3 text-muted-foreground flex-wrap">
             <p>
@@ -150,18 +158,20 @@ export default async function SkillPage({
           </div>
         </div>
 
-        {/* Compatibility Badges */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {trendingBadge && <SkillTrendingBadge badge={trendingBadge} />}
-          {/* verified badge moved to title */}
-          <Badge className="bg-purple/20 text-purple border border-purple/30 font-semibold">
-            ⚡ OpenClaw Compatible
-          </Badge>
-          {skill.tags.includes("openclaw") && (
-            <Badge className="bg-cyan/20 text-cyan border border-cyan/30">
-              🖥️ Multi-Platform
+        {/* Badges */}
+        <div className="mb-6 space-y-2">
+          <div className="flex flex-wrap gap-2">
+            {trendingBadge && <SkillTrendingBadge badge={trendingBadge} />}
+            <Badge className="bg-purple/20 text-purple border border-purple/30 font-semibold">
+              ⚡ OpenClaw Compatible
             </Badge>
-          )}
+            {skill.tags.includes("openclaw") && (
+              <Badge className="bg-cyan/20 text-cyan border border-cyan/30">
+                🖥️ Multi-Platform
+              </Badge>
+            )}
+          </div>
+          <SkillBadges badges={skillBadges} mode="full" />
         </div>
 
         {/* Tags */}
@@ -203,6 +213,76 @@ export default async function SkillPage({
         <section className="mb-8" id="versions">
           <h2 className="text-lg font-semibold text-[#F8FAFC] mb-3">Version history</h2>
           <SkillVersionHistory slug={skill.slug} />
+        {/* Dependencies */}
+        <section className="mb-8" id="dependencies">
+          <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
+            <h2 className="text-lg font-semibold text-[#F8FAFC]">Dependencies</h2>
+            <Link
+              href={`/dependencies?skill=${encodeURIComponent(skill.slug)}#skill-details`}
+              className="text-sm text-cyan hover:underline"
+            >
+              View in graph →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <h3 className="text-sm font-semibold text-[#F8FAFC] mb-2">Requires</h3>
+              {dependencies.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No declared dependencies yet.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {dependencies.map((d) => (
+                    <li key={d.slug} className="flex items-center gap-2 flex-wrap">
+                      <Link href={`/skills/${d.slug}`} className="text-cyan hover:underline">
+                        {skillNameBySlug.get(d.slug) ?? d.slug}
+                      </Link>
+                      {d.verified ? (
+                        <Badge className="bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 text-[11px]">
+                          verified
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-amber-500/15 text-amber-300 border border-amber-500/25 text-[11px]">
+                          unverified
+                        </Badge>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+              <h3 className="text-sm font-semibold text-[#F8FAFC] mb-2">Used by</h3>
+              {usedBy.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No skills depend on this yet.</p>
+              ) : (
+                <ul className="space-y-2">
+                  {usedBy.map((u) => (
+                    <li key={u.slug} className="flex items-center gap-2 flex-wrap">
+                      <Link href={`/skills/${u.slug}`} className="text-cyan hover:underline">
+                        {skillNameBySlug.get(u.slug) ?? u.slug}
+                      </Link>
+                      {u.verified ? (
+                        <Badge className="bg-emerald-500/15 text-emerald-300 border border-emerald-500/25 text-[11px]">
+                          verified
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-amber-500/15 text-amber-300 border border-amber-500/25 text-[11px]">
+                          unverified
+                        </Badge>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <p className="mt-3 text-xs text-muted-foreground">
+            “verified” indicates the dependency relationship is confirmed; “unverified” means it’s a reasonable assumption
+            but not yet validated.
+          </p>
         </section>
 
         {skill.verification ? (

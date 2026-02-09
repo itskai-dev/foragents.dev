@@ -17,6 +17,7 @@ const primaryLinks = [
 
 const moreLinks = [
   { href: "/collections", label: "Collections" },
+  { href: "/dependencies", label: "Dependencies" },
   { href: "/stack", label: "Stack Cards" },
   { href: "/acp", label: "ACP Agents" },
   { href: "/llms-txt", label: "llms.txt Sites" },
