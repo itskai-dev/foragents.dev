@@ -259,7 +259,7 @@ export default function ProfilerPage() {
 
             <div className="mt-6 p-4 bg-white/5 rounded-lg">
               <p className="text-sm text-muted-foreground">
-                💡 <strong>Reading the waterfall:</strong> Each bar's position shows when it started, 
+                💡 <strong>Reading the waterfall:</strong> Each bar&apos;s position shows when it started, 
                 and its length shows how long it took. Gaps between bars indicate idle time or waiting.
               </p>
             </div>

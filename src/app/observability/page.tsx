@@ -156,6 +156,163 @@ const logger = pino(pinoLoki({
   labels: { app: 'my-agent' }
 }));`,
   },
+  {
+    name: "Langfuse",
+    category: "tracing",
+    description: "Open-source LLM engineering platform for tracing, evaluating, and monitoring AI agents.",
+    setup: "npm install langfuse",
+    hosts: ["Node.js", "Python"],
+    icon: <Activity className="w-5 h-5" />,
+    codeSnippet: `// Setup Langfuse tracing
+import { Langfuse } from 'langfuse';
+
+const langfuse = new Langfuse({
+  publicKey: process.env.LANGFUSE_PUBLIC_KEY,
+  secretKey: process.env.LANGFUSE_SECRET_KEY,
+});
+
+const trace = langfuse.trace({ name: 'agent-run' });
+const span = trace.span({ name: 'tool-call' });
+span.end();`,
+  },
+  {
+    name: "Helicone",
+    category: "metrics",
+    description: "AI observability platform with LLM monitoring, caching, and cost tracking.",
+    setup: "npm install @helicone/helicone",
+    hosts: ["Node.js", "Python"],
+    icon: <Eye className="w-5 h-5" />,
+    codeSnippet: `// Setup Helicone proxy
+import Anthropic from '@anthropic-ai/sdk';
+
+const client = new Anthropic({
+  apiKey: process.env.ANTHROPIC_API_KEY,
+  baseURL: 'https://anthropic.helicone.ai/',
+  defaultHeaders: {
+    'Helicone-Auth': \`Bearer \${process.env.HELICONE_API_KEY}\`,
+  }
+});`,
+  },
+  {
+    name: "Braintrust",
+    category: "metrics",
+    description: "End-to-end platform for building and evaluating AI applications with logging and evals.",
+    setup: "npm install braintrust",
+    hosts: ["Node.js", "Python"],
+    icon: <BarChart3 className="w-5 h-5" />,
+    codeSnippet: `// Setup Braintrust logging
+import { initLogger } from 'braintrust';
+
+const logger = initLogger({
+  projectName: 'my-agent',
+  apiKey: process.env.BRAINTRUST_API_KEY,
+});
+
+logger.log({
+  input: 'user query',
+  output: 'agent response',
+  metadata: { toolCalls: 3 }
+});`,
+  },
+  {
+    name: "Portkey",
+    category: "tracing",
+    description: "AI gateway with observability, caching, and load balancing for LLM applications.",
+    setup: "npm install portkey-ai",
+    hosts: ["Node.js", "Python"],
+    icon: <Layers className="w-5 h-5" />,
+    codeSnippet: `// Setup Portkey gateway
+import Portkey from 'portkey-ai';
+
+const portkey = new Portkey({
+  apiKey: process.env.PORTKEY_API_KEY,
+  virtualKey: process.env.PORTKEY_VIRTUAL_KEY,
+});
+
+const response = await portkey.chat.completions.create({
+  messages: [{ role: 'user', content: 'Hello' }],
+  model: 'claude-3-5-sonnet-20241022',
+});`,
+  },
+  {
+    name: "LangSmith",
+    category: "tracing",
+    description: "LangChain's observability platform for debugging, testing, and monitoring LLM apps.",
+    setup: "npm install langsmith",
+    hosts: ["Node.js", "Python"],
+    icon: <Activity className="w-5 h-5" />,
+    codeSnippet: `// Setup LangSmith tracing
+import { Client } from 'langsmith';
+
+const client = new Client({
+  apiKey: process.env.LANGSMITH_API_KEY,
+});
+
+await client.createRun({
+  name: 'agent-run',
+  run_type: 'chain',
+  inputs: { query: 'user input' },
+  outputs: { response: 'agent output' }
+});`,
+  },
+  {
+    name: "Weights & Biases",
+    category: "metrics",
+    description: "MLOps platform with experiment tracking, model monitoring, and dataset versioning.",
+    setup: "npm install wandb",
+    hosts: ["Node.js", "Python"],
+    icon: <BarChart3 className="w-5 h-5" />,
+    codeSnippet: `// Setup W&B logging
+import wandb from 'wandb';
+
+wandb.init({
+  project: 'agent-monitoring',
+  config: { model: 'claude-3-5-sonnet' }
+});
+
+wandb.log({
+  tool_calls: 5,
+  latency_ms: 1234,
+  tokens_used: 5678
+});`,
+  },
+  {
+    name: "Phoenix (Arize)",
+    category: "tracing",
+    description: "Open-source AI observability platform for LLM tracing, evaluation, and debugging.",
+    setup: "pip install arize-phoenix",
+    hosts: ["Python"],
+    icon: <Activity className="w-5 h-5" />,
+    codeSnippet: `# Setup Phoenix tracing
+import phoenix as px
+from openinference.instrumentation import using_session
+
+px.launch_app()
+session = px.Client().get_spans_dataframe()
+
+# Auto-instrument your app
+with using_session('my-agent-session'):
+    # Your agent code here
+    pass`,
+  },
+  {
+    name: "Highlight.io",
+    category: "logging",
+    description: "Full-stack monitoring with session replay, error tracking, and logging for web apps.",
+    setup: "npm install @highlight-run/node",
+    hosts: ["Node.js"],
+    icon: <Terminal className="w-5 h-5" />,
+    codeSnippet: `// Setup Highlight error tracking
+import { H } from '@highlight-run/node';
+
+H.init({ projectID: process.env.HIGHLIGHT_PROJECT_ID });
+
+try {
+  // Your agent code
+} catch (error) {
+  H.consumeError(error);
+}`,
+  },
 ];
 
 export default function ObservabilityPage() {
