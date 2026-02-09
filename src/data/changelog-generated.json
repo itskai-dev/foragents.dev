@@ -1,0 +1,242 @@
+[
+  {
+    "date": "2026-02-09",
+    "title": "Agent guides and tutorials",
+    "prNumber": 219,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/219",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Public roadmap page",
+    "prNumber": 218,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/218",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Community discussions page",
+    "prNumber": 217,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/217",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Status Page for Service Monitoring",
+    "prNumber": 216,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/216",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Agent Playground page",
+    "prNumber": 215,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/215",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Community Forum Feature",
+    "prNumber": 214,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/214",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Agent Benchmarks Page",
+    "prNumber": 213,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/213",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Agent Templates Gallery",
+    "prNumber": 212,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/212",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Agent Marketplace",
+    "prNumber": 211,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/211",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Cost Calculator page",
+    "prNumber": 210,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/210",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Agent Certification Program",
+    "prNumber": 209,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/209",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Agent Workflow Builder",
+    "prNumber": 208,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/208",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Integration Marketplace",
+    "prNumber": 207,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/207",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Agent Profiles v2 — enhanced directory + trust scores",
+    "prNumber": 206,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/206",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Agent Sandbox — interactive config validator",
+    "prNumber": 205,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/205",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "TDCE Toolkit Phase 2: Diagnostics and Observability",
+    "prNumber": 202,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/202",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Skill reviews: text reviews + API + /reviews",
+    "prNumber": 201,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/201",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Onboarding wizard + recommendations",
+    "prNumber": 200,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/200",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Skill changelog: version history timeline + current version badges",
+    "prNumber": 199,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/199",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Skill Badges system",
+    "prNumber": 198,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/198",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-09",
+    "title": "Add Weekly Digest page",
+    "prNumber": 197,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/197",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Add Skill Dependency Graph",
+    "prNumber": 196,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/196",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "API Playground (/playground)",
+    "prNumber": 195,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/195",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "chore: add cron-friendly news refresh script",
+    "prNumber": 194,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/194",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Add skill comparison page",
+    "prNumber": 193,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/193",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Fund-a-Kit: Bounty board",
+    "prNumber": 192,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/192",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Add Macro Tools directory",
+    "prNumber": 191,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/191",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Verified trust badges for skills",
+    "prNumber": 190,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/190",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Add changelog page (/changelog)",
+    "prNumber": 188,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/188",
+    "category": "feature",
+    "author": "itskai-dev"
+  },
+  {
+    "date": "2026-02-08",
+    "title": "Canary scorecards + reliability leaderboard",
+    "prNumber": 187,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/187",
+    "category": "feature",
+    "author": "itskai-dev"
+  }
+]

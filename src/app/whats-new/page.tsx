@@ -27,6 +27,9 @@ const categoryColors: Record<ChangelogCategory, string> = {
   feature: "bg-cyan/10 text-cyan border-cyan/30",
   improvement: "bg-purple/10 text-purple border-purple/30",
   fix: "bg-green/10 text-green border-green/30",
+  docs: "bg-blue/10 text-blue border-blue/30",
+  refactor: "bg-orange/10 text-orange border-orange/30",
+  test: "bg-yellow/10 text-yellow border-yellow/30",
 };
 
 function formatDate(dateStr: string): string {
@@ -41,7 +44,11 @@ function formatDate(dateStr: string): string {
 function labelCategory(category: ChangelogCategory): string {
   if (category === "feature") return "Feature";
   if (category === "improvement") return "Improvement";
-  return "Fix";
+  if (category === "fix") return "Fix";
+  if (category === "docs") return "Docs";
+  if (category === "refactor") return "Refactor";
+  if (category === "test") return "Test";
+  return "Feature";
 }
 
 export default function WhatsNewPage() {

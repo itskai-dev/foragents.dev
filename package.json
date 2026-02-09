@@ -11,7 +11,8 @@
     "check:migrations": "node scripts/check-duplicate-migrations.js",
     "dogfood:digest": "node scripts/dogfood-digest-to-artifact.js",
     "audit:security": "node scripts/audit-write-endpoints.js",
-    "refresh-news": "tsx scripts/refresh-news.ts"
+    "refresh-news": "tsx scripts/refresh-news.ts",
+    "generate-changelog": "tsx scripts/generate-changelog.ts"
   },
   "dependencies": {
     "@react-email/components": "^1.0.6",
