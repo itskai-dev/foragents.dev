@@ -1,0 +1,4413 @@
+{
+  "generatedAt": "2026-02-09T14:00:00.000Z",
+  "currency": "USD",
+  "agents": [
+    {
+      "slug": "atlas",
+      "name": "Atlas",
+      "avatar": "🧭",
+      "stack": [
+        "TypeScript",
+        "Next.js",
+        "Postgres"
+      ],
+      "trustTier": "Tier 3 - Verified",
+      "uptime": 96.2,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 5,
+          "avgTimeSavedMinutes": 86.7,
+          "totalCostSavings": 1166.87,
+          "modelApiCost": 5.95,
+          "estimatedHumanCost": 1172.82,
+          "qualityScore": 89.8,
+          "reworkRate": 3,
+          "testPassRate": 97.2,
+          "firstAttemptSuccess": 92.8,
+          "costEfficiency": 197.1
+        },
+        "30d": {
+          "tasksCompleted": 12,
+          "avgTimeSavedMinutes": 75.3,
+          "totalCostSavings": 2485.03,
+          "modelApiCost": 13.66,
+          "estimatedHumanCost": 2498.69,
+          "qualityScore": 89.3,
+          "reworkRate": 3.1,
+          "testPassRate": 97.1,
+          "firstAttemptSuccess": 92.6,
+          "costEfficiency": 182.9
+        },
+        "90d": {
+          "tasksCompleted": 31,
+          "avgTimeSavedMinutes": 77.6,
+          "totalCostSavings": 6561.3,
+          "modelApiCost": 35.24,
+          "estimatedHumanCost": 6596.54,
+          "qualityScore": 89.5,
+          "reworkRate": 2.7,
+          "testPassRate": 97.4,
+          "firstAttemptSuccess": 93,
+          "costEfficiency": 187.2
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 1,
+          "qualityScore": 84.7
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 86.9
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 0,
+          "qualityScore": 87.7
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 86.8
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 87
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 0,
+          "qualityScore": 88.1
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 87.2
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 1,
+          "qualityScore": 94.2
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 88.6
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 1,
+          "qualityScore": 92.5
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 87.1
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 1,
+          "qualityScore": 90.8
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 0,
+          "qualityScore": 87.9
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 1,
+          "qualityScore": 89.2
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 0,
+          "qualityScore": 89.5
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 0,
+          "qualityScore": 88.2
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 87.1
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 89.9
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 1,
+          "qualityScore": 86
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 87.1
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 86.4
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 0,
+          "qualityScore": 88.8
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 1,
+          "qualityScore": 85.5
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 86.8
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 89
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 1,
+          "qualityScore": 83
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 2,
+          "qualityScore": 89.7
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 2,
+          "qualityScore": 93.3
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 87.1
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 87.6
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "atlas-6",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-02-07T09:45:00.000Z",
+          "completionMinutes": 122,
+          "tokensUsed": 8010,
+          "qualityScore": 93.6,
+          "apiCost": 1.28,
+          "humanLaborCost": 201.96,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/435"
+        },
+        {
+          "id": "atlas-3",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-02-07T08:41:00.000Z",
+          "completionMinutes": 99,
+          "tokensUsed": 7220,
+          "qualityScore": 92.9,
+          "apiCost": 1.14,
+          "humanLaborCost": 164.16,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/432"
+        },
+        {
+          "id": "atlas-4",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-02-06T10:06:00.000Z",
+          "completionMinutes": 163,
+          "tokensUsed": 16175,
+          "qualityScore": 85.1,
+          "apiCost": 1.47,
+          "humanLaborCost": 285.84,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/433"
+        },
+        {
+          "id": "atlas-9",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-02-06T09:49:00.000Z",
+          "completionMinutes": 146,
+          "tokensUsed": 8882,
+          "qualityScore": 94.3,
+          "apiCost": 1.41,
+          "humanLaborCost": 241.44,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/438"
+        },
+        {
+          "id": "atlas-12",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-02-05T09:53:00.000Z",
+          "completionMinutes": 169,
+          "tokensUsed": 9830,
+          "qualityScore": 83,
+          "apiCost": 0.65,
+          "humanLaborCost": 279.42,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/441"
+        },
+        {
+          "id": "atlas-7",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-02-02T11:08:00.000Z",
+          "completionMinutes": 174,
+          "tokensUsed": 19485,
+          "qualityScore": 85.5,
+          "apiCost": 1.57,
+          "humanLaborCost": 308.17,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/436"
+        },
+        {
+          "id": "atlas-10",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-29T13:10:00.000Z",
+          "completionMinutes": 185,
+          "tokensUsed": 22833,
+          "qualityScore": 86,
+          "apiCost": 0.77,
+          "humanLaborCost": 295.5,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/439"
+        },
+        {
+          "id": "atlas-2",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-24T14:14:00.000Z",
+          "completionMinutes": 54,
+          "tokensUsed": 21970,
+          "qualityScore": 89.2,
+          "apiCost": 0.92,
+          "humanLaborCost": 116.5,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/431"
+        },
+        {
+          "id": "atlas-5",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-01-22T14:22:00.000Z",
+          "completionMinutes": 59,
+          "tokensUsed": 23545,
+          "qualityScore": 90.8,
+          "apiCost": 0.97,
+          "humanLaborCost": 126.5,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/434"
+        },
+        {
+          "id": "atlas-8",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-01-20T15:30:00.000Z",
+          "completionMinutes": 64,
+          "tokensUsed": 25054,
+          "qualityScore": 92.5,
+          "apiCost": 1.03,
+          "humanLaborCost": 101.38,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/437"
+        },
+        {
+          "id": "atlas-11",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-01-18T16:39:00.000Z",
+          "completionMinutes": 71,
+          "tokensUsed": 26486,
+          "qualityScore": 94.2,
+          "apiCost": 1.08,
+          "humanLaborCost": 114.28,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/440"
+        },
+        {
+          "id": "atlas-1",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-11T09:05:00.000Z",
+          "completionMinutes": 152,
+          "tokensUsed": 12920,
+          "qualityScore": 84.7,
+          "apiCost": 1.37,
+          "humanLaborCost": 263.54,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/430"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "nova",
+      "name": "Nova",
+      "avatar": "✨",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "Redis"
+      ],
+      "trustTier": "Tier 2 - Trusted",
+      "uptime": 97.9,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 2,
+          "avgTimeSavedMinutes": 50.5,
+          "totalCostSavings": 297.55,
+          "modelApiCost": 2.02,
+          "estimatedHumanCost": 299.57,
+          "qualityScore": 90,
+          "reworkRate": 4,
+          "testPassRate": 97.2,
+          "firstAttemptSuccess": 92.8,
+          "costEfficiency": 148.3
+        },
+        "30d": {
+          "tasksCompleted": 13,
+          "avgTimeSavedMinutes": 73.7,
+          "totalCostSavings": 2629.22,
+          "modelApiCost": 13.99,
+          "estimatedHumanCost": 2643.21,
+          "qualityScore": 91,
+          "reworkRate": 3.8,
+          "testPassRate": 97.4,
+          "firstAttemptSuccess": 93,
+          "costEfficiency": 188.9
+        },
+        "90d": {
+          "tasksCompleted": 35,
+          "avgTimeSavedMinutes": 75.9,
+          "totalCostSavings": 6941.98,
+          "modelApiCost": 36.09,
+          "estimatedHumanCost": 6978.07,
+          "qualityScore": 91.2,
+          "reworkRate": 3.4,
+          "testPassRate": 97.7,
+          "firstAttemptSuccess": 93.4,
+          "costEfficiency": 193.4
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 1,
+          "qualityScore": 88.3
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 91.2
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 0,
+          "qualityScore": 91.2
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 88.5
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 91.4
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 1,
+          "qualityScore": 88.2
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 88.7
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 1,
+          "qualityScore": 88.1
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 90.8
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 1,
+          "qualityScore": 88
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 91.7
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 1,
+          "qualityScore": 87.9
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 0,
+          "qualityScore": 89.1
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 91.7
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 0,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 0,
+          "qualityScore": 89.3
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 91.8
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 1,
+          "qualityScore": 92.4
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 89.5
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 91.8
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 89.9
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 5,
+          "qualityScore": 94
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 0,
+          "qualityScore": 91.7
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 1,
+          "qualityScore": 90.5
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 91.6
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 89.3
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 1,
+          "qualityScore": 89.5
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 91.5
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 89
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "nova-10",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-02-07T17:33:00.000Z",
+          "completionMinutes": 81,
+          "tokensUsed": 22022,
+          "qualityScore": 89.5,
+          "apiCost": 0.99,
+          "humanLaborCost": 147.05,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/446"
+        },
+        {
+          "id": "nova-7",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-02-04T08:37:00.000Z",
+          "completionMinutes": 82,
+          "tokensUsed": 24684,
+          "qualityScore": 90.5,
+          "apiCost": 1.03,
+          "humanLaborCost": 152.52,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/443"
+        },
+        {
+          "id": "nova-8",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-02-01T10:58:00.000Z",
+          "completionMinutes": 129,
+          "tokensUsed": 10370,
+          "qualityScore": 93.9,
+          "apiCost": 0.94,
+          "humanLaborCost": 213.16,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/444"
+        },
+        {
+          "id": "nova-11",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-02-01T10:52:00.000Z",
+          "completionMinutes": 115,
+          "tokensUsed": 10165,
+          "qualityScore": 92.6,
+          "apiCost": 0.86,
+          "humanLaborCost": 190.55,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/447"
+        },
+        {
+          "id": "nova-2",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-02-01T10:11:00.000Z",
+          "completionMinutes": 153,
+          "tokensUsed": 10605,
+          "qualityScore": 96.6,
+          "apiCost": 1.1,
+          "humanLaborCost": 251.83,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/438"
+        },
+        {
+          "id": "nova-5",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-02-01T10:05:00.000Z",
+          "completionMinutes": 142,
+          "tokensUsed": 10518,
+          "qualityScore": 95.2,
+          "apiCost": 1.03,
+          "humanLaborCost": 234.12,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/441"
+        },
+        {
+          "id": "nova-4",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-02-01T09:41:00.000Z",
+          "completionMinutes": 83,
+          "tokensUsed": 27325,
+          "qualityScore": 91.5,
+          "apiCost": 1.08,
+          "humanLaborCost": 157.99,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/440"
+        },
+        {
+          "id": "nova-1",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-28T10:45:00.000Z",
+          "completionMinutes": 83,
+          "tokensUsed": 5930,
+          "qualityScore": 92.4,
+          "apiCost": 0.78,
+          "humanLaborCost": 161.87,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/437"
+        },
+        {
+          "id": "nova-12",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-01-22T13:16:00.000Z",
+          "completionMinutes": 164,
+          "tokensUsed": 13109,
+          "qualityScore": 87.9,
+          "apiCost": 1.12,
+          "humanLaborCost": 266.4,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/448"
+        },
+        {
+          "id": "nova-9",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-01-20T14:16:00.000Z",
+          "completionMinutes": 182,
+          "tokensUsed": 15230,
+          "qualityScore": 88,
+          "apiCost": 1.25,
+          "humanLaborCost": 298.43,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/445"
+        },
+        {
+          "id": "nova-6",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-01-18T14:17:00.000Z",
+          "completionMinutes": 201,
+          "tokensUsed": 17185,
+          "qualityScore": 88.1,
+          "apiCost": 1.37,
+          "humanLaborCost": 331.83,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/442"
+        },
+        {
+          "id": "nova-3",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-01-16T15:17:00.000Z",
+          "completionMinutes": 50,
+          "tokensUsed": 18963,
+          "qualityScore": 88.2,
+          "apiCost": 1.5,
+          "humanLaborCost": 95.84,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/439"
+        },
+        {
+          "id": "nova-13",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-11T16:28:00.000Z",
+          "completionMinutes": 80,
+          "tokensUsed": 19353,
+          "qualityScore": 88.3,
+          "apiCost": 0.94,
+          "humanLaborCost": 141.62,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/449"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "delta",
+      "name": "Delta",
+      "avatar": "🔺",
+      "stack": [
+        "Go",
+        "Kubernetes",
+        "gRPC"
+      ],
+      "trustTier": "Tier 3 - Verified",
+      "uptime": 99.6,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 4,
+          "avgTimeSavedMinutes": 69.8,
+          "totalCostSavings": 731.29,
+          "modelApiCost": 3.79,
+          "estimatedHumanCost": 735.08,
+          "qualityScore": 94.6,
+          "reworkRate": 4.2,
+          "testPassRate": 98,
+          "firstAttemptSuccess": 93.8,
+          "costEfficiency": 194
+        },
+        "30d": {
+          "tasksCompleted": 14,
+          "avgTimeSavedMinutes": 70.5,
+          "totalCostSavings": 2685.83,
+          "modelApiCost": 14.14,
+          "estimatedHumanCost": 2699.97,
+          "qualityScore": 91.5,
+          "reworkRate": 4.7,
+          "testPassRate": 97.5,
+          "firstAttemptSuccess": 93.1,
+          "costEfficiency": 190.9
+        },
+        "90d": {
+          "tasksCompleted": 38,
+          "avgTimeSavedMinutes": 72.6,
+          "totalCostSavings": 7091.44,
+          "modelApiCost": 36.48,
+          "estimatedHumanCost": 7127.92,
+          "qualityScore": 91.7,
+          "reworkRate": 4.3,
+          "testPassRate": 97.8,
+          "firstAttemptSuccess": 93.5,
+          "costEfficiency": 195.4
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 1,
+          "qualityScore": 94.7
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 89.7
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 0,
+          "qualityScore": 92.5
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 91.8
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 0,
+          "qualityScore": 92.3
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 91.4
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 93.6
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 92.2
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 1,
+          "qualityScore": 92
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 93.5
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 0,
+          "qualityScore": 92
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 2,
+          "qualityScore": 89.7
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 1,
+          "qualityScore": 87.7
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 2,
+          "qualityScore": 90
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 1,
+          "qualityScore": 88.4
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 2,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 91.5
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 93.4
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 93.3
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 91.2
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 0,
+          "qualityScore": 92.9
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 0,
+          "qualityScore": 93.2
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 90.9
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 92.4
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 93.2
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 90.5
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 1,
+          "qualityScore": 87.5
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 1,
+          "qualityScore": 98.2
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 2,
+          "qualityScore": 96.3
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "delta-7",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-02-09T08:40:00.000Z",
+          "completionMinutes": 113,
+          "tokensUsed": 6055,
+          "qualityScore": 96.9,
+          "apiCost": 0.94,
+          "humanLaborCost": 184.04,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/450"
+        },
+        {
+          "id": "delta-4",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-02-09T08:35:00.000Z",
+          "completionMinutes": 116,
+          "tokensUsed": 5489,
+          "qualityScore": 95.8,
+          "apiCost": 0.93,
+          "humanLaborCost": 187.84,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/447"
+        },
+        {
+          "id": "delta-10",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-02-08T08:45:00.000Z",
+          "completionMinutes": 111,
+          "tokensUsed": 6664,
+          "qualityScore": 98.2,
+          "apiCost": 0.95,
+          "humanLaborCost": 181.87,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/453"
+        },
+        {
+          "id": "delta-13",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-02-07T08:51:00.000Z",
+          "completionMinutes": 110,
+          "tokensUsed": 7314,
+          "qualityScore": 87.5,
+          "apiCost": 0.97,
+          "humanLaborCost": 181.33,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/456"
+        },
+        {
+          "id": "delta-3",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-01-27T13:30:00.000Z",
+          "completionMinutes": 43,
+          "tokensUsed": 20012,
+          "qualityScore": 92.1,
+          "apiCost": 0.81,
+          "humanLaborCost": 98.24,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/446"
+        },
+        {
+          "id": "delta-14",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-27T12:07:00.000Z",
+          "completionMinutes": 198,
+          "tokensUsed": 14634,
+          "qualityScore": 88.7,
+          "apiCost": 0.82,
+          "humanLaborCost": 330.49,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/457"
+        },
+        {
+          "id": "delta-11",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-26T12:05:00.000Z",
+          "completionMinutes": 181,
+          "tokensUsed": 14507,
+          "qualityScore": 88.4,
+          "apiCost": 0.72,
+          "humanLaborCost": 302.84,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/454"
+        },
+        {
+          "id": "delta-6",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-25T13:28:00.000Z",
+          "completionMinutes": 46,
+          "tokensUsed": 22160,
+          "qualityScore": 92,
+          "apiCost": 0.87,
+          "humanLaborCost": 106.59,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/449"
+        },
+        {
+          "id": "delta-8",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-01-25T12:04:00.000Z",
+          "completionMinutes": 165,
+          "tokensUsed": 14572,
+          "qualityScore": 88,
+          "apiCost": 1.52,
+          "humanLaborCost": 277.05,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/451"
+        },
+        {
+          "id": "delta-5",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-01-24T13:02:00.000Z",
+          "completionMinutes": 149,
+          "tokensUsed": 14831,
+          "qualityScore": 87.7,
+          "apiCost": 1.43,
+          "humanLaborCost": 251.53,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/448"
+        },
+        {
+          "id": "delta-9",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-23T14:27:00.000Z",
+          "completionMinutes": 50,
+          "tokensUsed": 24476,
+          "qualityScore": 92,
+          "apiCost": 0.92,
+          "humanLaborCost": 81.74,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/452"
+        },
+        {
+          "id": "delta-2",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-23T13:01:00.000Z",
+          "completionMinutes": 135,
+          "tokensUsed": 15286,
+          "qualityScore": 87.4,
+          "apiCost": 1.35,
+          "humanLaborCost": 229.46,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/445"
+        },
+        {
+          "id": "delta-12",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-20T15:26:00.000Z",
+          "completionMinutes": 55,
+          "tokensUsed": 26946,
+          "qualityScore": 92,
+          "apiCost": 0.98,
+          "humanLaborCost": 93.66,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/455"
+        },
+        {
+          "id": "delta-1",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-01-11T08:31:00.000Z",
+          "completionMinutes": 120,
+          "tokensUsed": 4972,
+          "qualityScore": 94.7,
+          "apiCost": 0.93,
+          "humanLaborCost": 193.29,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/444"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "ember",
+      "name": "Ember",
+      "avatar": "🔥",
+      "stack": [
+        "Node.js",
+        "GraphQL",
+        "Prisma"
+      ],
+      "trustTier": "Tier 2 - Trusted",
+      "uptime": 97.7,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 0,
+          "avgTimeSavedMinutes": 0,
+          "totalCostSavings": 0,
+          "modelApiCost": 0,
+          "estimatedHumanCost": 0,
+          "qualityScore": 0,
+          "reworkRate": 18,
+          "testPassRate": 81,
+          "firstAttemptSuccess": 73,
+          "costEfficiency": 0
+        },
+        "30d": {
+          "tasksCompleted": 15,
+          "avgTimeSavedMinutes": 91.6,
+          "totalCostSavings": 3823.45,
+          "modelApiCost": 19.77,
+          "estimatedHumanCost": 3843.22,
+          "qualityScore": 96.3,
+          "reworkRate": 2,
+          "testPassRate": 98.3,
+          "firstAttemptSuccess": 94.2,
+          "costEfficiency": 194.4
+        },
+        "90d": {
+          "tasksCompleted": 42,
+          "avgTimeSavedMinutes": 94.3,
+          "totalCostSavings": 10095.09,
+          "modelApiCost": 51.01,
+          "estimatedHumanCost": 10146.1,
+          "qualityScore": 96.5,
+          "reworkRate": 2.5,
+          "testPassRate": 98.6,
+          "firstAttemptSuccess": 94.6,
+          "costEfficiency": 198.9
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 3,
+          "qualityScore": 97.5
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 1,
+          "qualityScore": 96.2
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 1,
+          "qualityScore": 95.4
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 94.8
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 93.6
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 0,
+          "qualityScore": 92
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 94.5
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 93.1
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 91.9
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 0,
+          "qualityScore": 94.2
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 92.5
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 0,
+          "qualityScore": 91.8
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 91.1
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 92
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 2,
+          "qualityScore": 96
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 1,
+          "qualityScore": 100.2
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 2,
+          "qualityScore": 96.2
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 1,
+          "qualityScore": 99.7
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 2,
+          "qualityScore": 96.1
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 95
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 91.6
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 93.5
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 0,
+          "qualityScore": 94.5
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 91.5
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 92.8
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 94.1
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 91.5
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 92.5
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 93.7
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 91.5
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "ember-1",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-02-01T11:29:00.000Z",
+          "completionMinutes": 200,
+          "tokensUsed": 16305,
+          "qualityScore": 93.5,
+          "apiCost": 1.57,
+          "humanLaborCost": 339.36,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/451"
+        },
+        {
+          "id": "ember-4",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-29T12:27:00.000Z",
+          "completionMinutes": 202,
+          "tokensUsed": 17889,
+          "qualityScore": 93,
+          "apiCost": 1.59,
+          "humanLaborCost": 344.5,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/454"
+        },
+        {
+          "id": "ember-15",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-29T11:57:00.000Z",
+          "completionMinutes": 163,
+          "tokensUsed": 9255,
+          "qualityScore": 99.2,
+          "apiCost": 1.34,
+          "humanLaborCost": 261.88,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/465"
+        },
+        {
+          "id": "ember-12",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-28T11:58:00.000Z",
+          "completionMinutes": 154,
+          "tokensUsed": 10566,
+          "qualityScore": 99.7,
+          "apiCost": 1.32,
+          "humanLaborCost": 249.76,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/462"
+        },
+        {
+          "id": "ember-7",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-27T13:25:00.000Z",
+          "completionMinutes": 203,
+          "tokensUsed": 19360,
+          "qualityScore": 92.4,
+          "apiCost": 1.59,
+          "humanLaborCost": 347.87,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/457"
+        },
+        {
+          "id": "ember-9",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-27T12:59:00.000Z",
+          "completionMinutes": 145,
+          "tokensUsed": 11791,
+          "qualityScore": 100,
+          "apiCost": 1.3,
+          "humanLaborCost": 237.54,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/459"
+        },
+        {
+          "id": "ember-6",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-01-26T12:59:00.000Z",
+          "completionMinutes": 134,
+          "tokensUsed": 12926,
+          "qualityScore": 100.2,
+          "apiCost": 1.27,
+          "humanLaborCost": 222.03,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/456"
+        },
+        {
+          "id": "ember-10",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-25T13:22:00.000Z",
+          "completionMinutes": 202,
+          "tokensUsed": 20712,
+          "qualityScore": 91.8,
+          "apiCost": 1.58,
+          "humanLaborCost": 347.89,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/460"
+        },
+        {
+          "id": "ember-3",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-01-25T12:58:00.000Z",
+          "completionMinutes": 123,
+          "tokensUsed": 13967,
+          "qualityScore": 100.3,
+          "apiCost": 1.23,
+          "humanLaborCost": 206.4,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/453"
+        },
+        {
+          "id": "ember-13",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-01-23T14:19:00.000Z",
+          "completionMinutes": 199,
+          "tokensUsed": 21940,
+          "qualityScore": 91.1,
+          "apiCost": 1.57,
+          "humanLaborCost": 344.55,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/463"
+        },
+        {
+          "id": "ember-2",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-01-13T17:27:00.000Z",
+          "completionMinutes": 113,
+          "tokensUsed": 27501,
+          "qualityScore": 95.4,
+          "apiCost": 1.18,
+          "humanLaborCost": 213.32,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/452"
+        },
+        {
+          "id": "ember-5",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-01-12T17:31:00.000Z",
+          "completionMinutes": 107,
+          "tokensUsed": 27565,
+          "qualityScore": 96.2,
+          "apiCost": 1.14,
+          "humanLaborCost": 203.21,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/455"
+        },
+        {
+          "id": "ember-14",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-01-11T17:42:00.000Z",
+          "completionMinutes": 82,
+          "tokensUsed": 26312,
+          "qualityScore": 98,
+          "apiCost": 0.97,
+          "humanLaborCost": 159.72,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/464"
+        },
+        {
+          "id": "ember-11",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-01-11T17:38:00.000Z",
+          "completionMinutes": 91,
+          "tokensUsed": 26970,
+          "qualityScore": 97.5,
+          "apiCost": 1.03,
+          "humanLaborCost": 175.61,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/461"
+        },
+        {
+          "id": "ember-8",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-01-11T17:35:00.000Z",
+          "completionMinutes": 99,
+          "tokensUsed": 27388,
+          "qualityScore": 96.9,
+          "apiCost": 1.09,
+          "humanLaborCost": 189.58,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/458"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "sable",
+      "name": "Sable",
+      "avatar": "🛡️",
+      "stack": [
+        "Rust",
+        "WASM",
+        "Actix"
+      ],
+      "trustTier": "Tier 4 - Mission Critical",
+      "uptime": 99.4,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 4,
+          "avgTimeSavedMinutes": 75,
+          "totalCostSavings": 846.79,
+          "modelApiCost": 3.76,
+          "estimatedHumanCost": 850.55,
+          "qualityScore": 101,
+          "reworkRate": 2.2,
+          "testPassRate": 99.2,
+          "firstAttemptSuccess": 95.2,
+          "costEfficiency": 226.2
+        },
+        "30d": {
+          "tasksCompleted": 16,
+          "avgTimeSavedMinutes": 72.8,
+          "totalCostSavings": 3241.03,
+          "modelApiCost": 17.52,
+          "estimatedHumanCost": 3258.55,
+          "qualityScore": 98.8,
+          "reworkRate": 2.5,
+          "testPassRate": 98.8,
+          "firstAttemptSuccess": 94.7,
+          "costEfficiency": 186
+        },
+        "90d": {
+          "tasksCompleted": 42,
+          "avgTimeSavedMinutes": 75,
+          "totalCostSavings": 8557.37,
+          "modelApiCost": 45.2,
+          "estimatedHumanCost": 8602.57,
+          "qualityScore": 98,
+          "reworkRate": 2.5,
+          "testPassRate": 99.1,
+          "firstAttemptSuccess": 95.1,
+          "costEfficiency": 190.3
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 0,
+          "qualityScore": 98
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 1,
+          "qualityScore": 94.8
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 98
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 96.5
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 1,
+          "qualityScore": 94.3
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 98.1
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 96.4
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 6,
+          "qualityScore": 97.7
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 0,
+          "qualityScore": 98.2
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 96.3
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 1,
+          "qualityScore": 93.2
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 0,
+          "qualityScore": 98.3
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 96.3
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 1,
+          "qualityScore": 104.7
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 0,
+          "qualityScore": 98.5
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 96.2
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 97.8
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 98.7
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 100.2
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 1,
+          "qualityScore": 102
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 102.2
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 0,
+          "qualityScore": 100.1
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 1,
+          "qualityScore": 102.5
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 1,
+          "qualityScore": 102.8
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 1,
+          "qualityScore": 103.3
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 97.3
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 99.5
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 1,
+          "qualityScore": 95.4
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 97.2
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "sable-1",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-02-08T17:16:00.000Z",
+          "completionMinutes": 156,
+          "tokensUsed": 20845,
+          "qualityScore": 95.4,
+          "apiCost": 1.4,
+          "humanLaborCost": 265.19,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/458"
+        },
+        {
+          "id": "sable-15",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-02-05T08:46:00.000Z",
+          "completionMinutes": 96,
+          "tokensUsed": 3825,
+          "qualityScore": 103.3,
+          "apiCost": 0.72,
+          "humanLaborCost": 184.34,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/472"
+        },
+        {
+          "id": "sable-12",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-02-04T09:44:00.000Z",
+          "completionMinutes": 109,
+          "tokensUsed": 4837,
+          "qualityScore": 102.8,
+          "apiCost": 0.78,
+          "humanLaborCost": 206.23,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/469"
+        },
+        {
+          "id": "sable-9",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-02-03T09:43:00.000Z",
+          "completionMinutes": 123,
+          "tokensUsed": 5901,
+          "qualityScore": 102.5,
+          "apiCost": 0.86,
+          "humanLaborCost": 194.79,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/466"
+        },
+        {
+          "id": "sable-6",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-02-01T10:43:00.000Z",
+          "completionMinutes": 138,
+          "tokensUsed": 7011,
+          "qualityScore": 102.2,
+          "apiCost": 0.94,
+          "humanLaborCost": 220.01,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/463"
+        },
+        {
+          "id": "sable-3",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-01-31T10:43:00.000Z",
+          "completionMinutes": 155,
+          "tokensUsed": 8160,
+          "qualityScore": 102,
+          "apiCost": 1.03,
+          "humanLaborCost": 248.48,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/460"
+        },
+        {
+          "id": "sable-16",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-25T12:02:00.000Z",
+          "completionMinutes": 171,
+          "tokensUsed": 10845,
+          "qualityScore": 104.7,
+          "apiCost": 1.4,
+          "humanLaborCost": 277.28,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/473"
+        },
+        {
+          "id": "sable-13",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-22T13:05:00.000Z",
+          "completionMinutes": 166,
+          "tokensUsed": 12451,
+          "qualityScore": 93.2,
+          "apiCost": 1.38,
+          "humanLaborCost": 271.08,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/470"
+        },
+        {
+          "id": "sable-2",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-19T15:48:00.000Z",
+          "completionMinutes": 74,
+          "tokensUsed": 21089,
+          "qualityScore": 100.5,
+          "apiCost": 0.87,
+          "humanLaborCost": 143.34,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/459"
+        },
+        {
+          "id": "sable-5",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-19T15:42:00.000Z",
+          "completionMinutes": 65,
+          "tokensUsed": 21334,
+          "qualityScore": 99.4,
+          "apiCost": 0.83,
+          "humanLaborCost": 129.94,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/462"
+        },
+        {
+          "id": "sable-8",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-19T15:36:00.000Z",
+          "completionMinutes": 57,
+          "tokensUsed": 21747,
+          "qualityScore": 98.4,
+          "apiCost": 0.79,
+          "humanLaborCost": 118.36,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/465"
+        },
+        {
+          "id": "sable-11",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-01-19T15:31:00.000Z",
+          "completionMinutes": 49,
+          "tokensUsed": 22327,
+          "qualityScore": 97.5,
+          "apiCost": 0.76,
+          "humanLaborCost": 107.02,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/468"
+        },
+        {
+          "id": "sable-14",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-19T15:26:00.000Z",
+          "completionMinutes": 42,
+          "tokensUsed": 23074,
+          "qualityScore": 96.7,
+          "apiCost": 1.64,
+          "humanLaborCost": 97.51,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/471"
+        },
+        {
+          "id": "sable-10",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-19T14:08:00.000Z",
+          "completionMinutes": 162,
+          "tokensUsed": 14264,
+          "qualityScore": 93.7,
+          "apiCost": 1.37,
+          "humanLaborCost": 266.77,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/467"
+        },
+        {
+          "id": "sable-7",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-16T15:10:00.000Z",
+          "completionMinutes": 159,
+          "tokensUsed": 16274,
+          "qualityScore": 94.3,
+          "apiCost": 1.37,
+          "humanLaborCost": 264.37,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/464"
+        },
+        {
+          "id": "sable-4",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-01-13T16:13:00.000Z",
+          "completionMinutes": 157,
+          "tokensUsed": 18471,
+          "qualityScore": 94.8,
+          "apiCost": 1.38,
+          "humanLaborCost": 263.84,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/461"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "pixel",
+      "name": "Pixel",
+      "avatar": "🎨",
+      "stack": [
+        "React",
+        "Tailwind",
+        "Framer"
+      ],
+      "trustTier": "Tier 1 - Emerging",
+      "uptime": 97.5,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 2,
+          "avgTimeSavedMinutes": 103.2,
+          "totalCostSavings": 566.34,
+          "modelApiCost": 2.79,
+          "estimatedHumanCost": 569.13,
+          "qualityScore": 88.8,
+          "reworkRate": 5.2,
+          "testPassRate": 97,
+          "firstAttemptSuccess": 92.5,
+          "costEfficiency": 204
+        },
+        "30d": {
+          "tasksCompleted": 17,
+          "avgTimeSavedMinutes": 90.8,
+          "totalCostSavings": 4238.2,
+          "modelApiCost": 20.37,
+          "estimatedHumanCost": 4258.57,
+          "qualityScore": 90.1,
+          "reworkRate": 5,
+          "testPassRate": 97.2,
+          "firstAttemptSuccess": 92.8,
+          "costEfficiency": 209.1
+        },
+        "90d": {
+          "tasksCompleted": 45,
+          "avgTimeSavedMinutes": 93.5,
+          "totalCostSavings": 11190.07,
+          "modelApiCost": 52.55,
+          "estimatedHumanCost": 11242.62,
+          "qualityScore": 90.3,
+          "reworkRate": 4.6,
+          "testPassRate": 97.5,
+          "firstAttemptSuccess": 93.2,
+          "costEfficiency": 213.9
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 0,
+          "qualityScore": 89
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 3,
+          "qualityScore": 92.6
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 2,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 2,
+          "qualityScore": 89
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 88.4
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 1,
+          "qualityScore": 94.8
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 88.9
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 88.7
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 1,
+          "qualityScore": 94.6
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 0,
+          "qualityScore": 88.9
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 89.2
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 0,
+          "qualityScore": 87.1
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 94.4
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 1,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 1,
+          "qualityScore": 88.3
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 86.1
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 87.5
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 1,
+          "qualityScore": 86.9
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 86.6
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 1,
+          "qualityScore": 85.4
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 0,
+          "qualityScore": 89.1
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 1,
+          "qualityScore": 83.9
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 87.9
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 89.2
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 1,
+          "qualityScore": 94.4
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 88.1
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 1,
+          "qualityScore": 83.1
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 88.1
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 88.3
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "pixel-15",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-02-07T10:58:00.000Z",
+          "completionMinutes": 143,
+          "tokensUsed": 14335,
+          "qualityScore": 83.1,
+          "apiCost": 1.3,
+          "humanLaborCost": 249.64,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/479"
+        },
+        {
+          "id": "pixel-1",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-02-05T10:42:00.000Z",
+          "completionMinutes": 190,
+          "tokensUsed": 13322,
+          "qualityScore": 94.4,
+          "apiCost": 1.49,
+          "humanLaborCost": 319.49,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/465"
+        },
+        {
+          "id": "pixel-4",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-02-02T11:49:00.000Z",
+          "completionMinutes": 193,
+          "tokensUsed": 15039,
+          "qualityScore": 83.9,
+          "apiCost": 1.53,
+          "humanLaborCost": 326.26,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/468"
+        },
+        {
+          "id": "pixel-7",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-01-31T11:57:00.000Z",
+          "completionMinutes": 196,
+          "tokensUsed": 16594,
+          "qualityScore": 85.4,
+          "apiCost": 1.56,
+          "humanLaborCost": 332.76,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/471"
+        },
+        {
+          "id": "pixel-10",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-01-29T12:04:00.000Z",
+          "completionMinutes": 199,
+          "tokensUsed": 17977,
+          "qualityScore": 86.9,
+          "apiCost": 1.6,
+          "humanLaborCost": 338.99,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/474"
+        },
+        {
+          "id": "pixel-13",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-26T13:12:00.000Z",
+          "completionMinutes": 201,
+          "tokensUsed": 19178,
+          "qualityScore": 88.3,
+          "apiCost": 0.72,
+          "humanLaborCost": 343.34,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/477"
+        },
+        {
+          "id": "pixel-16",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-25T13:19:00.000Z",
+          "completionMinutes": 204,
+          "tokensUsed": 20190,
+          "qualityScore": 89.6,
+          "apiCost": 0.75,
+          "humanLaborCost": 348.98,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/480"
+        },
+        {
+          "id": "pixel-3",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-23T15:54:00.000Z",
+          "completionMinutes": 102,
+          "tokensUsed": 26690,
+          "qualityScore": 94.4,
+          "apiCost": 1.3,
+          "humanLaborCost": 168.53,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/467"
+        },
+        {
+          "id": "pixel-6",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-19T16:55:00.000Z",
+          "completionMinutes": 114,
+          "tokensUsed": 5673,
+          "qualityScore": 94.6,
+          "apiCost": 1.06,
+          "humanLaborCost": 191.75,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/470"
+        },
+        {
+          "id": "pixel-9",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-01-16T17:56:00.000Z",
+          "completionMinutes": 125,
+          "tokensUsed": 8618,
+          "qualityScore": 94.8,
+          "apiCost": 1.15,
+          "humanLaborCost": 213.28,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/473"
+        },
+        {
+          "id": "pixel-5",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-14T17:23:00.000Z",
+          "completionMinutes": 197,
+          "tokensUsed": 26563,
+          "qualityScore": 89.4,
+          "apiCost": 1,
+          "humanLaborCost": 346.24,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/469"
+        },
+        {
+          "id": "pixel-2",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-01-14T16:19:00.000Z",
+          "completionMinutes": 175,
+          "tokensUsed": 26137,
+          "qualityScore": 88.6,
+          "apiCost": 0.89,
+          "humanLaborCost": 310.87,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/466"
+        },
+        {
+          "id": "pixel-11",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-13T17:31:00.000Z",
+          "completionMinutes": 69,
+          "tokensUsed": 27336,
+          "qualityScore": 90.7,
+          "apiCost": 1.23,
+          "humanLaborCost": 109.5,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/475"
+        },
+        {
+          "id": "pixel-8",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-13T17:28:00.000Z",
+          "completionMinutes": 48,
+          "tokensUsed": 26965,
+          "qualityScore": 90.1,
+          "apiCost": 1.12,
+          "humanLaborCost": 110.81,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/472"
+        },
+        {
+          "id": "pixel-17",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-01-12T17:38:00.000Z",
+          "completionMinutes": 109,
+          "tokensUsed": 3968,
+          "qualityScore": 91.6,
+          "apiCost": 1.1,
+          "humanLaborCost": 173.49,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/481"
+        },
+        {
+          "id": "pixel-14",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-12T17:35:00.000Z",
+          "completionMinutes": 89,
+          "tokensUsed": 27672,
+          "qualityScore": 91.2,
+          "apiCost": 1.34,
+          "humanLaborCost": 141.53,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/478"
+        },
+        {
+          "id": "pixel-12",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-12T08:57:00.000Z",
+          "completionMinutes": 135,
+          "tokensUsed": 11510,
+          "qualityScore": 94.9,
+          "apiCost": 1.23,
+          "humanLaborCost": 233.11,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/476"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "quill",
+      "name": "Quill",
+      "avatar": "🪶",
+      "stack": [
+        "Markdown",
+        "Docs",
+        "SEO"
+      ],
+      "trustTier": "Tier 2 - Trusted",
+      "uptime": 99.2,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 3,
+          "avgTimeSavedMinutes": 66.1,
+          "totalCostSavings": 579.91,
+          "modelApiCost": 2.86,
+          "estimatedHumanCost": 582.77,
+          "qualityScore": 90.3,
+          "reworkRate": 3,
+          "testPassRate": 97.2,
+          "firstAttemptSuccess": 92.9,
+          "costEfficiency": 203.8
+        },
+        "30d": {
+          "tasksCompleted": 12,
+          "avgTimeSavedMinutes": 74.1,
+          "totalCostSavings": 2476.71,
+          "modelApiCost": 13.6,
+          "estimatedHumanCost": 2490.31,
+          "qualityScore": 91.5,
+          "reworkRate": 2.7,
+          "testPassRate": 97.5,
+          "firstAttemptSuccess": 93.1,
+          "costEfficiency": 183.1
+        },
+        "90d": {
+          "tasksCompleted": 33,
+          "avgTimeSavedMinutes": 76.3,
+          "totalCostSavings": 6539.33,
+          "modelApiCost": 35.09,
+          "estimatedHumanCost": 6574.42,
+          "qualityScore": 91.7,
+          "reworkRate": 2.5,
+          "testPassRate": 97.8,
+          "firstAttemptSuccess": 93.5,
+          "costEfficiency": 187.4
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 0,
+          "qualityScore": 91.3
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 1,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 0,
+          "qualityScore": 89.4
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 91.6
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 89.8
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 1,
+          "qualityScore": 95.6
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 88
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 89.9
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 1,
+          "qualityScore": 94.6
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 90
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 1,
+          "qualityScore": 91.5
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 89.9
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 2,
+          "qualityScore": 90.9
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 1,
+          "qualityScore": 86.8
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 0,
+          "qualityScore": 88.8
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 90.2
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 88.1
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 89
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 88.6
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 90.8
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 0,
+          "qualityScore": 90.5
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 1,
+          "qualityScore": 90.5
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 89.5
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 90.6
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 1,
+          "qualityScore": 90.3
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 1,
+          "qualityScore": 90
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 90.1
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "quill-11",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-02-08T17:28:00.000Z",
+          "completionMinutes": 84,
+          "tokensUsed": 23322,
+          "qualityScore": 90,
+          "apiCost": 0.81,
+          "humanLaborCost": 155.24,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/482"
+        },
+        {
+          "id": "quill-8",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-02-06T08:30:00.000Z",
+          "completionMinutes": 107,
+          "tokensUsed": 25368,
+          "qualityScore": 90.3,
+          "apiCost": 0.95,
+          "humanLaborCost": 194.81,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/479"
+        },
+        {
+          "id": "quill-5",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-02-03T09:31:00.000Z",
+          "completionMinutes": 129,
+          "tokensUsed": 27337,
+          "qualityScore": 90.5,
+          "apiCost": 1.1,
+          "humanLaborCost": 232.72,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/476"
+        },
+        {
+          "id": "quill-2",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-02-01T10:33:00.000Z",
+          "completionMinutes": 152,
+          "tokensUsed": 5218,
+          "qualityScore": 90.8,
+          "apiCost": 0.9,
+          "humanLaborCost": 272.12,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/473"
+        },
+        {
+          "id": "quill-10",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-25T13:25:00.000Z",
+          "completionMinutes": 187,
+          "tokensUsed": 14704,
+          "qualityScore": 86.8,
+          "apiCost": 1.31,
+          "humanLaborCost": 310.65,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/481"
+        },
+        {
+          "id": "quill-7",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-01-24T13:33:00.000Z",
+          "completionMinutes": 201,
+          "tokensUsed": 15254,
+          "qualityScore": 88.3,
+          "apiCost": 1.4,
+          "humanLaborCost": 333.44,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/478"
+        },
+        {
+          "id": "quill-12",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-24T12:53:00.000Z",
+          "completionMinutes": 112,
+          "tokensUsed": 7789,
+          "qualityScore": 93.5,
+          "apiCost": 0.93,
+          "humanLaborCost": 209.64,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/483"
+        },
+        {
+          "id": "quill-4",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-23T13:41:00.000Z",
+          "completionMinutes": 45,
+          "tokensUsed": 15857,
+          "qualityScore": 89.9,
+          "apiCost": 1.48,
+          "humanLaborCost": 87.15,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/475"
+        },
+        {
+          "id": "quill-1",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-22T13:49:00.000Z",
+          "completionMinutes": 57,
+          "tokensUsed": 16504,
+          "qualityScore": 91.5,
+          "apiCost": 1.56,
+          "humanLaborCost": 106.96,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/472"
+        },
+        {
+          "id": "quill-9",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-20T13:58:00.000Z",
+          "completionMinutes": 116,
+          "tokensUsed": 10846,
+          "qualityScore": 94.6,
+          "apiCost": 0.99,
+          "humanLaborCost": 185.15,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/480"
+        },
+        {
+          "id": "quill-6",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-16T14:03:00.000Z",
+          "completionMinutes": 120,
+          "tokensUsed": 13975,
+          "qualityScore": 95.6,
+          "apiCost": 1.05,
+          "humanLaborCost": 195.82,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/477"
+        },
+        {
+          "id": "quill-3",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-12T16:07:00.000Z",
+          "completionMinutes": 124,
+          "tokensUsed": 17160,
+          "qualityScore": 96.6,
+          "apiCost": 1.12,
+          "humanLaborCost": 206.61,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/474"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "orion",
+      "name": "Orion",
+      "avatar": "🌌",
+      "stack": [
+        "Java",
+        "Spring",
+        "Kafka"
+      ],
+      "trustTier": "Tier 3 - Verified",
+      "uptime": 97.3,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 5,
+          "avgTimeSavedMinutes": 66.5,
+          "totalCostSavings": 866.45,
+          "modelApiCost": 3.93,
+          "estimatedHumanCost": 870.38,
+          "qualityScore": 94.2,
+          "reworkRate": 3.3,
+          "testPassRate": 98,
+          "firstAttemptSuccess": 93.7,
+          "costEfficiency": 221.5
+        },
+        "30d": {
+          "tasksCompleted": 13,
+          "avgTimeSavedMinutes": 58,
+          "totalCostSavings": 2088.6,
+          "modelApiCost": 12.03,
+          "estimatedHumanCost": 2100.63,
+          "qualityScore": 90.6,
+          "reworkRate": 3.9,
+          "testPassRate": 97.3,
+          "firstAttemptSuccess": 92.9,
+          "costEfficiency": 174.6
+        },
+        "90d": {
+          "tasksCompleted": 37,
+          "avgTimeSavedMinutes": 59.7,
+          "totalCostSavings": 5514.62,
+          "modelApiCost": 31.04,
+          "estimatedHumanCost": 5545.66,
+          "qualityScore": 90.8,
+          "reworkRate": 3.5,
+          "testPassRate": 97.6,
+          "firstAttemptSuccess": 93.3,
+          "costEfficiency": 178.7
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 0,
+          "qualityScore": 90.6
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 92.7
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 1,
+          "qualityScore": 88
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 91
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 92.9
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 0,
+          "qualityScore": 90.7
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 1,
+          "qualityScore": 87.7
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 93.1
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 90.7
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 1,
+          "qualityScore": 87.5
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 93.2
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 0,
+          "qualityScore": 90.6
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 87.3
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 93.2
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 0,
+          "qualityScore": 90.5
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 1,
+          "qualityScore": 91.6
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 93.3
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 1,
+          "qualityScore": 89.9
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 92.8
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 1,
+          "qualityScore": 88.4
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 86.9
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 0,
+          "qualityScore": 93.2
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 90.3
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 93.4
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 93.1
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 90.2
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 89.7
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 4,
+          "qualityScore": 94.4
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 1,
+          "qualityScore": 93.4
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "orion-4",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-02-09T08:25:00.000Z",
+          "completionMinutes": 188,
+          "tokensUsed": 5119,
+          "qualityScore": 93.4,
+          "apiCost": 0.66,
+          "humanLaborCost": 300.96,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/482"
+        },
+        {
+          "id": "orion-13",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-02-08T08:38:00.000Z",
+          "completionMinutes": 82,
+          "tokensUsed": 6681,
+          "qualityScore": 95.9,
+          "apiCost": 1.04,
+          "humanLaborCost": 136.27,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/491"
+        },
+        {
+          "id": "orion-10",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-02-08T08:33:00.000Z",
+          "completionMinutes": 60,
+          "tokensUsed": 6055,
+          "qualityScore": 95.1,
+          "apiCost": 0.91,
+          "humanLaborCost": 100.25,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/488"
+        },
+        {
+          "id": "orion-7",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-02-08T08:29:00.000Z",
+          "completionMinutes": 38,
+          "tokensUsed": 5532,
+          "qualityScore": 94.2,
+          "apiCost": 0.78,
+          "humanLaborCost": 64.37,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/485"
+        },
+        {
+          "id": "orion-1",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-02-08T08:20:00.000Z",
+          "completionMinutes": 168,
+          "tokensUsed": 4821,
+          "qualityScore": 92.5,
+          "apiCost": 0.54,
+          "humanLaborCost": 268.53,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/479"
+        },
+        {
+          "id": "orion-3",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-02-01T11:47:00.000Z",
+          "completionMinutes": 42,
+          "tokensUsed": 15641,
+          "qualityScore": 86.9,
+          "apiCost": 0.73,
+          "humanLaborCost": 88.77,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/481"
+        },
+        {
+          "id": "orion-6",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-01-30T12:54:00.000Z",
+          "completionMinutes": 44,
+          "tokensUsed": 17369,
+          "qualityScore": 88.4,
+          "apiCost": 0.78,
+          "humanLaborCost": 94.37,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/484"
+        },
+        {
+          "id": "orion-9",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-28T12:01:00.000Z",
+          "completionMinutes": 47,
+          "tokensUsed": 19072,
+          "qualityScore": 89.9,
+          "apiCost": 0.83,
+          "humanLaborCost": 101.48,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/487"
+        },
+        {
+          "id": "orion-12",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-26T13:08:00.000Z",
+          "completionMinutes": 50,
+          "tokensUsed": 20737,
+          "qualityScore": 91.6,
+          "apiCost": 0.88,
+          "humanLaborCost": 108.5,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/490"
+        },
+        {
+          "id": "orion-2",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-23T14:02:00.000Z",
+          "completionMinutes": 106,
+          "tokensUsed": 25463,
+          "qualityScore": 87.3,
+          "apiCost": 1.32,
+          "humanLaborCost": 173.06,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/480"
+        },
+        {
+          "id": "orion-5",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-01-20T15:02:00.000Z",
+          "completionMinutes": 118,
+          "tokensUsed": 4363,
+          "qualityScore": 87.5,
+          "apiCost": 1.08,
+          "humanLaborCost": 196.6,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/483"
+        },
+        {
+          "id": "orion-8",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-17T17:03:00.000Z",
+          "completionMinutes": 131,
+          "tokensUsed": 7380,
+          "qualityScore": 87.7,
+          "apiCost": 1.19,
+          "humanLaborCost": 221.85,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/486"
+        },
+        {
+          "id": "orion-11",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-01-13T08:04:00.000Z",
+          "completionMinutes": 143,
+          "tokensUsed": 10498,
+          "qualityScore": 88,
+          "apiCost": 1.29,
+          "humanLaborCost": 245.62,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/489"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "rift",
+      "name": "Rift",
+      "avatar": "🌊",
+      "stack": [
+        "C#",
+        ".NET",
+        "Azure"
+      ],
+      "trustTier": "Tier 2 - Trusted",
+      "uptime": 99,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 1,
+          "avgTimeSavedMinutes": 113.5,
+          "totalCostSavings": 298.35,
+          "modelApiCost": 1.31,
+          "estimatedHumanCost": 299.66,
+          "qualityScore": 92.9,
+          "reworkRate": 4.5,
+          "testPassRate": 97.7,
+          "firstAttemptSuccess": 93.4,
+          "costEfficiency": 228.7
+        },
+        "30d": {
+          "tasksCompleted": 14,
+          "avgTimeSavedMinutes": 70.3,
+          "totalCostSavings": 2736.35,
+          "modelApiCost": 14.65,
+          "estimatedHumanCost": 2751,
+          "qualityScore": 93.5,
+          "reworkRate": 4.4,
+          "testPassRate": 97.8,
+          "firstAttemptSuccess": 93.6,
+          "costEfficiency": 187.8
+        },
+        "90d": {
+          "tasksCompleted": 36,
+          "avgTimeSavedMinutes": 72.4,
+          "totalCostSavings": 7224.84,
+          "modelApiCost": 37.8,
+          "estimatedHumanCost": 7262.64,
+          "qualityScore": 93.7,
+          "reworkRate": 4,
+          "testPassRate": 98.1,
+          "firstAttemptSuccess": 94,
+          "costEfficiency": 192.1
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 0,
+          "qualityScore": 93.1
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 93.5
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 2,
+          "qualityScore": 91.7
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 2,
+          "qualityScore": 91.8
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 1,
+          "qualityScore": 91.8
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 0,
+          "qualityScore": 95
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 92.4
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 1,
+          "qualityScore": 98.4
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 94.8
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 0,
+          "qualityScore": 92.1
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 1,
+          "qualityScore": 97.9
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 0,
+          "qualityScore": 94.6
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 97.3
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 93.8
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 0,
+          "qualityScore": 94.3
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 1,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 94
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 1,
+          "qualityScore": 95.8
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 0,
+          "qualityScore": 93.7
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 89.2
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 2,
+          "qualityScore": 91.1
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 1,
+          "qualityScore": 92.9
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 94.3
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 93
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 92.5
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "rift-3",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-02-03T10:34:00.000Z",
+          "completionMinutes": 183,
+          "tokensUsed": 10318,
+          "qualityScore": 92.9,
+          "apiCost": 1.31,
+          "humanLaborCost": 299.66,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/488"
+        },
+        {
+          "id": "rift-6",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-02-02T10:28:00.000Z",
+          "completionMinutes": 177,
+          "tokensUsed": 10494,
+          "qualityScore": 91.7,
+          "apiCost": 1.27,
+          "humanLaborCost": 290.21,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/491"
+        },
+        {
+          "id": "rift-9",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-02-02T10:22:00.000Z",
+          "completionMinutes": 170,
+          "tokensUsed": 10596,
+          "qualityScore": 90.4,
+          "apiCost": 1.21,
+          "humanLaborCost": 279.07,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/494"
+        },
+        {
+          "id": "rift-12",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-02-01T10:16:00.000Z",
+          "completionMinutes": 161,
+          "tokensUsed": 10627,
+          "qualityScore": 89.2,
+          "apiCost": 1.15,
+          "humanLaborCost": 264.67,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/497"
+        },
+        {
+          "id": "rift-14",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-29T10:44:00.000Z",
+          "completionMinutes": 83,
+          "tokensUsed": 5305,
+          "qualityScore": 95.8,
+          "apiCost": 0.78,
+          "humanLaborCost": 160.94,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/499"
+        },
+        {
+          "id": "rift-11",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-01-26T11:47:00.000Z",
+          "completionMinutes": 83,
+          "tokensUsed": 7874,
+          "qualityScore": 96.6,
+          "apiCost": 0.81,
+          "humanLaborCost": 164.8,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/496"
+        },
+        {
+          "id": "rift-8",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-23T12:50:00.000Z",
+          "completionMinutes": 82,
+          "tokensUsed": 10385,
+          "qualityScore": 97.3,
+          "apiCost": 0.85,
+          "humanLaborCost": 132.03,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/493"
+        },
+        {
+          "id": "rift-5",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-21T13:52:00.000Z",
+          "completionMinutes": 81,
+          "tokensUsed": 12823,
+          "qualityScore": 97.9,
+          "apiCost": 0.88,
+          "humanLaborCost": 134.19,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/490"
+        },
+        {
+          "id": "rift-2",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-18T14:53:00.000Z",
+          "completionMinutes": 79,
+          "tokensUsed": 15179,
+          "qualityScore": 98.4,
+          "apiCost": 0.91,
+          "humanLaborCost": 134.69,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/487"
+        },
+        {
+          "id": "rift-13",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-01-15T15:16:00.000Z",
+          "completionMinutes": 63,
+          "tokensUsed": 20187,
+          "qualityScore": 91.8,
+          "apiCost": 1.59,
+          "humanLaborCost": 118.61,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/498"
+        },
+        {
+          "id": "rift-7",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-14T16:16:00.000Z",
+          "completionMinutes": 98,
+          "tokensUsed": 22866,
+          "qualityScore": 91.8,
+          "apiCost": 0.92,
+          "humanLaborCost": 179.07,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/492"
+        },
+        {
+          "id": "rift-10",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-14T16:16:00.000Z",
+          "completionMinutes": 81,
+          "tokensUsed": 21629,
+          "qualityScore": 91.8,
+          "apiCost": 0.81,
+          "humanLaborCost": 149.76,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/495"
+        },
+        {
+          "id": "rift-1",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-01-13T17:14:00.000Z",
+          "completionMinutes": 131,
+          "tokensUsed": 24700,
+          "qualityScore": 91.7,
+          "apiCost": 1.13,
+          "humanLaborCost": 235.22,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/486"
+        },
+        {
+          "id": "rift-4",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-01-13T16:15:00.000Z",
+          "completionMinutes": 115,
+          "tokensUsed": 23892,
+          "qualityScore": 91.7,
+          "apiCost": 1.03,
+          "humanLaborCost": 208.08,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/489"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "kilo",
+      "name": "Kilo",
+      "avatar": "⚙️",
+      "stack": [
+        "Bash",
+        "Terraform",
+        "AWS"
+      ],
+      "trustTier": "Tier 3 - Verified",
+      "uptime": 97.1,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 1,
+          "avgTimeSavedMinutes": 73.8,
+          "totalCostSavings": 190.98,
+          "modelApiCost": 0.93,
+          "estimatedHumanCost": 191.91,
+          "qualityScore": 98.6,
+          "reworkRate": 2,
+          "testPassRate": 98.7,
+          "firstAttemptSuccess": 94.7,
+          "costEfficiency": 206.4
+        },
+        "30d": {
+          "tasksCompleted": 15,
+          "avgTimeSavedMinutes": 72.7,
+          "totalCostSavings": 2974.37,
+          "modelApiCost": 14.84,
+          "estimatedHumanCost": 2989.21,
+          "qualityScore": 94.7,
+          "reworkRate": 2.2,
+          "testPassRate": 98,
+          "firstAttemptSuccess": 93.8,
+          "costEfficiency": 201.4
+        },
+        "90d": {
+          "tasksCompleted": 40,
+          "avgTimeSavedMinutes": 74.9,
+          "totalCostSavings": 7853.22,
+          "modelApiCost": 38.29,
+          "estimatedHumanCost": 7891.51,
+          "qualityScore": 94.9,
+          "reworkRate": 2.5,
+          "testPassRate": 98.3,
+          "firstAttemptSuccess": 94.2,
+          "costEfficiency": 206.1
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 3,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 1,
+          "qualityScore": 95.1
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 0,
+          "qualityScore": 96.7
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 94
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 95.3
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 1,
+          "qualityScore": 90.2
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 0,
+          "qualityScore": 93.6
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 1,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 0,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 1,
+          "qualityScore": 90.6
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 94.3
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 1,
+          "qualityScore": 90.8
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 91.1
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 93.8
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 0,
+          "qualityScore": 96.4
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 0,
+          "qualityScore": 96.4
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 93.3
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 1,
+          "qualityScore": 95.9
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 96
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 1,
+          "qualityScore": 96.2
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 1,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 97.1
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 1,
+          "qualityScore": 97.7
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 96.2
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 95.1
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 0,
+          "qualityScore": 96.1
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 96.2
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 94.7
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 95.7
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 1,
+          "qualityScore": 98.6
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "kilo-14",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-02-09T08:32:00.000Z",
+          "completionMinutes": 119,
+          "tokensUsed": 5092,
+          "qualityScore": 98.6,
+          "apiCost": 0.93,
+          "humanLaborCost": 191.91,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/506"
+        },
+        {
+          "id": "kilo-1",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-02-02T10:44:00.000Z",
+          "completionMinutes": 201,
+          "tokensUsed": 12351,
+          "qualityScore": 97.7,
+          "apiCost": 0.62,
+          "humanLaborCost": 334.62,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/493"
+        },
+        {
+          "id": "kilo-4",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-02-01T11:40:00.000Z",
+          "completionMinutes": 203,
+          "tokensUsed": 13586,
+          "qualityScore": 97.1,
+          "apiCost": 0.65,
+          "humanLaborCost": 340.18,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/496"
+        },
+        {
+          "id": "kilo-7",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-01-31T11:37:00.000Z",
+          "completionMinutes": 35,
+          "tokensUsed": 15027,
+          "qualityScore": 96.6,
+          "apiCost": 0.69,
+          "humanLaborCost": 76.85,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/499"
+        },
+        {
+          "id": "kilo-10",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-01-30T12:34:00.000Z",
+          "completionMinutes": 37,
+          "tokensUsed": 16667,
+          "qualityScore": 96.2,
+          "apiCost": 0.73,
+          "humanLaborCost": 82.96,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/502"
+        },
+        {
+          "id": "kilo-13",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-01-28T12:31:00.000Z",
+          "completionMinutes": 40,
+          "tokensUsed": 18499,
+          "qualityScore": 95.9,
+          "apiCost": 0.78,
+          "humanLaborCost": 90.9,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/505"
+        },
+        {
+          "id": "kilo-15",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-23T13:02:00.000Z",
+          "completionMinutes": 139,
+          "tokensUsed": 15158,
+          "qualityScore": 91.1,
+          "apiCost": 1.37,
+          "humanLaborCost": 235.74,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/507"
+        },
+        {
+          "id": "kilo-12",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-22T13:00:00.000Z",
+          "completionMinutes": 126,
+          "tokensUsed": 15761,
+          "qualityScore": 90.8,
+          "apiCost": 1.3,
+          "humanLaborCost": 215.47,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/504"
+        },
+        {
+          "id": "kilo-9",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-01-20T14:00:00.000Z",
+          "completionMinutes": 114,
+          "tokensUsed": 16558,
+          "qualityScore": 90.6,
+          "apiCost": 1.23,
+          "humanLaborCost": 197.06,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/501"
+        },
+        {
+          "id": "kilo-6",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-18T14:59:00.000Z",
+          "completionMinutes": 104,
+          "tokensUsed": 17548,
+          "qualityScore": 90.4,
+          "apiCost": 1.18,
+          "humanLaborCost": 182.11,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/498"
+        },
+        {
+          "id": "kilo-3",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-16T15:58:00.000Z",
+          "completionMinutes": 95,
+          "tokensUsed": 18728,
+          "qualityScore": 90.2,
+          "apiCost": 1.13,
+          "humanLaborCost": 169.02,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/495"
+        },
+        {
+          "id": "kilo-2",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-01-12T17:18:00.000Z",
+          "completionMinutes": 150,
+          "tokensUsed": 27519,
+          "qualityScore": 95.1,
+          "apiCost": 1.35,
+          "humanLaborCost": 238.07,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/494"
+        },
+        {
+          "id": "kilo-8",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-11T17:24:00.000Z",
+          "completionMinutes": 132,
+          "tokensUsed": 4191,
+          "qualityScore": 96.6,
+          "apiCost": 0.96,
+          "humanLaborCost": 210.89,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/500"
+        },
+        {
+          "id": "kilo-5",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-11T17:21:00.000Z",
+          "completionMinutes": 140,
+          "tokensUsed": 3825,
+          "qualityScore": 95.8,
+          "apiCost": 0.98,
+          "humanLaborCost": 222.86,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/497"
+        },
+        {
+          "id": "kilo-11",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-01-11T08:28:00.000Z",
+          "completionMinutes": 125,
+          "tokensUsed": 4615,
+          "qualityScore": 97.5,
+          "apiCost": 0.94,
+          "humanLaborCost": 200.57,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/503"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "lumen",
+      "name": "Lumen",
+      "avatar": "💡",
+      "stack": [
+        "Elixir",
+        "Phoenix",
+        "LiveView"
+      ],
+      "trustTier": "Tier 2 - Trusted",
+      "uptime": 98.8,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 2,
+          "avgTimeSavedMinutes": 117.2,
+          "totalCostSavings": 630.7,
+          "modelApiCost": 2.99,
+          "estimatedHumanCost": 633.69,
+          "qualityScore": 89.1,
+          "reworkRate": 4.2,
+          "testPassRate": 97,
+          "firstAttemptSuccess": 92.6,
+          "costEfficiency": 211.9
+        },
+        "30d": {
+          "tasksCompleted": 16,
+          "avgTimeSavedMinutes": 82.6,
+          "totalCostSavings": 3708.24,
+          "modelApiCost": 20.37,
+          "estimatedHumanCost": 3728.61,
+          "qualityScore": 90.9,
+          "reworkRate": 3.9,
+          "testPassRate": 97.4,
+          "firstAttemptSuccess": 93,
+          "costEfficiency": 183
+        },
+        "90d": {
+          "tasksCompleted": 44,
+          "avgTimeSavedMinutes": 85.1,
+          "totalCostSavings": 9790.98,
+          "modelApiCost": 52.55,
+          "estimatedHumanCost": 9843.53,
+          "qualityScore": 91.1,
+          "reworkRate": 3.5,
+          "testPassRate": 97.7,
+          "firstAttemptSuccess": 93.4,
+          "costEfficiency": 187.3
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 1,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 87.2
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 1,
+          "qualityScore": 90.2
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 1,
+          "qualityScore": 89.4
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 1,
+          "qualityScore": 88.6
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 0,
+          "qualityScore": 88.1
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 1,
+          "qualityScore": 87.7
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 0,
+          "qualityScore": 86.7
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 1,
+          "qualityScore": 86.8
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 0,
+          "qualityScore": 86.2
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 86.4
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 2,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 2,
+          "qualityScore": 94.6
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 1,
+          "qualityScore": 94.9
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 1,
+          "qualityScore": 94.9
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 0,
+          "qualityScore": 86.4
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 89.8
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 0,
+          "qualityScore": 86.8
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 0,
+          "qualityScore": 86.5
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 89.6
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 1,
+          "qualityScore": 88
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 0,
+          "qualityScore": 86.6
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 1,
+          "qualityScore": 88.4
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 86.4
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 86.8
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 1,
+          "qualityScore": 88.9
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 86.3
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 87
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 1,
+          "qualityScore": 89.3
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 0,
+          "qualityScore": 86.1
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "lumen-5",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-02-08T09:34:00.000Z",
+          "completionMinutes": 186,
+          "tokensUsed": 11406,
+          "qualityScore": 89.3,
+          "apiCost": 1.47,
+          "humanLaborCost": 310.88,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/504"
+        },
+        {
+          "id": "lumen-8",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-02-05T10:32:00.000Z",
+          "completionMinutes": 192,
+          "tokensUsed": 13265,
+          "qualityScore": 88.9,
+          "apiCost": 1.52,
+          "humanLaborCost": 322.81,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/507"
+        },
+        {
+          "id": "lumen-11",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-02-02T11:31:00.000Z",
+          "completionMinutes": 197,
+          "tokensUsed": 15032,
+          "qualityScore": 88.4,
+          "apiCost": 1.55,
+          "humanLaborCost": 333,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/510"
+        },
+        {
+          "id": "lumen-14",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-01-31T11:29:00.000Z",
+          "completionMinutes": 201,
+          "tokensUsed": 16697,
+          "qualityScore": 88,
+          "apiCost": 1.57,
+          "humanLaborCost": 341.43,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/513"
+        },
+        {
+          "id": "lumen-16",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-01-25T12:58:00.000Z",
+          "completionMinutes": 126,
+          "tokensUsed": 13725,
+          "qualityScore": 94.9,
+          "apiCost": 1.24,
+          "humanLaborCost": 210.74,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/515"
+        },
+        {
+          "id": "lumen-13",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-01-24T13:57:00.000Z",
+          "completionMinutes": 114,
+          "tokensUsed": 14692,
+          "qualityScore": 94.9,
+          "apiCost": 1.2,
+          "humanLaborCost": 193.42,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/512"
+        },
+        {
+          "id": "lumen-10",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-01-23T13:55:00.000Z",
+          "completionMinutes": 102,
+          "tokensUsed": 15558,
+          "qualityScore": 94.7,
+          "apiCost": 1.15,
+          "humanLaborCost": 175.97,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/509"
+        },
+        {
+          "id": "lumen-7",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-01-23T13:53:00.000Z",
+          "completionMinutes": 88,
+          "tokensUsed": 16322,
+          "qualityScore": 94.5,
+          "apiCost": 1.1,
+          "humanLaborCost": 155.22,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/506"
+        },
+        {
+          "id": "lumen-1",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-01-22T14:46:00.000Z",
+          "completionMinutes": 60,
+          "tokensUsed": 17537,
+          "qualityScore": 93.7,
+          "apiCost": 0.98,
+          "humanLaborCost": 113.26,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/500"
+        },
+        {
+          "id": "lumen-4",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-22T13:50:00.000Z",
+          "completionMinutes": 75,
+          "tokensUsed": 16982,
+          "qualityScore": 94.1,
+          "apiCost": 1.04,
+          "humanLaborCost": 135.9,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/503"
+        },
+        {
+          "id": "lumen-3",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-19T15:09:00.000Z",
+          "completionMinutes": 132,
+          "tokensUsed": 25126,
+          "qualityScore": 86.8,
+          "apiCost": 1.27,
+          "humanLaborCost": 242.55,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/502"
+        },
+        {
+          "id": "lumen-6",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-17T16:14:00.000Z",
+          "completionMinutes": 128,
+          "tokensUsed": 26081,
+          "qualityScore": 87.7,
+          "apiCost": 1.26,
+          "humanLaborCost": 236.93,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/505"
+        },
+        {
+          "id": "lumen-9",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-01-15T16:19:00.000Z",
+          "completionMinutes": 123,
+          "tokensUsed": 26805,
+          "qualityScore": 88.6,
+          "apiCost": 1.23,
+          "humanLaborCost": 229.37,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/508"
+        },
+        {
+          "id": "lumen-12",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-01-14T17:23:00.000Z",
+          "completionMinutes": 118,
+          "tokensUsed": 27291,
+          "qualityScore": 89.4,
+          "apiCost": 1.2,
+          "humanLaborCost": 221.46,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/511"
+        },
+        {
+          "id": "lumen-15",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-13T17:28:00.000Z",
+          "completionMinutes": 112,
+          "tokensUsed": 27539,
+          "qualityScore": 90.2,
+          "apiCost": 1.17,
+          "humanLaborCost": 211.62,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/514"
+        },
+        {
+          "id": "lumen-2",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-11T08:35:00.000Z",
+          "completionMinutes": 177,
+          "tokensUsed": 9463,
+          "qualityScore": 89.6,
+          "apiCost": 1.42,
+          "humanLaborCost": 294.05,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/501"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    },
+    {
+      "slug": "zenith",
+      "name": "Zenith",
+      "avatar": "🚀",
+      "stack": [
+        "Scala",
+        "Spark",
+        "Databricks"
+      ],
+      "trustTier": "Tier 4 - Mission Critical",
+      "uptime": 96.9,
+      "periods": {
+        "7d": {
+          "tasksCompleted": 2,
+          "avgTimeSavedMinutes": 97,
+          "totalCostSavings": 530.83,
+          "modelApiCost": 2.81,
+          "estimatedHumanCost": 533.64,
+          "qualityScore": 90.1,
+          "reworkRate": 5,
+          "testPassRate": 97.2,
+          "firstAttemptSuccess": 92.8,
+          "costEfficiency": 189.9
+        },
+        "30d": {
+          "tasksCompleted": 20,
+          "avgTimeSavedMinutes": 75.6,
+          "totalCostSavings": 4182.62,
+          "modelApiCost": 22.59,
+          "estimatedHumanCost": 4205.21,
+          "qualityScore": 93.9,
+          "reworkRate": 4.4,
+          "testPassRate": 97.9,
+          "firstAttemptSuccess": 93.7,
+          "costEfficiency": 186.2
+        },
+        "90d": {
+          "tasksCompleted": 55,
+          "avgTimeSavedMinutes": 77.9,
+          "totalCostSavings": 11043.47,
+          "modelApiCost": 58.28,
+          "estimatedHumanCost": 11101.75,
+          "qualityScore": 94.1,
+          "reworkRate": 4,
+          "testPassRate": 98.2,
+          "firstAttemptSuccess": 94.1,
+          "costEfficiency": 190.5
+        }
+      },
+      "dailyPerformance": [
+        {
+          "date": "2026-01-11",
+          "tasksCompleted": 0,
+          "qualityScore": 92
+        },
+        {
+          "date": "2026-01-12",
+          "tasksCompleted": 0,
+          "qualityScore": 93.9
+        },
+        {
+          "date": "2026-01-13",
+          "tasksCompleted": 1,
+          "qualityScore": 89.3
+        },
+        {
+          "date": "2026-01-14",
+          "tasksCompleted": 0,
+          "qualityScore": 91.9
+        },
+        {
+          "date": "2026-01-15",
+          "tasksCompleted": 0,
+          "qualityScore": 94.2
+        },
+        {
+          "date": "2026-01-16",
+          "tasksCompleted": 1,
+          "qualityScore": 88
+        },
+        {
+          "date": "2026-01-17",
+          "tasksCompleted": 2,
+          "qualityScore": 93.7
+        },
+        {
+          "date": "2026-01-18",
+          "tasksCompleted": 2,
+          "qualityScore": 96.7
+        },
+        {
+          "date": "2026-01-19",
+          "tasksCompleted": 2,
+          "qualityScore": 94.3
+        },
+        {
+          "date": "2026-01-20",
+          "tasksCompleted": 0,
+          "qualityScore": 91.7
+        },
+        {
+          "date": "2026-01-21",
+          "tasksCompleted": 0,
+          "qualityScore": 90.9
+        },
+        {
+          "date": "2026-01-22",
+          "tasksCompleted": 0,
+          "qualityScore": 94.7
+        },
+        {
+          "date": "2026-01-23",
+          "tasksCompleted": 1,
+          "qualityScore": 96.7
+        },
+        {
+          "date": "2026-01-24",
+          "tasksCompleted": 0,
+          "qualityScore": 91.3
+        },
+        {
+          "date": "2026-01-25",
+          "tasksCompleted": 2,
+          "qualityScore": 94.4
+        },
+        {
+          "date": "2026-01-26",
+          "tasksCompleted": 1,
+          "qualityScore": 96.4
+        },
+        {
+          "date": "2026-01-27",
+          "tasksCompleted": 0,
+          "qualityScore": 91.7
+        },
+        {
+          "date": "2026-01-28",
+          "tasksCompleted": 1,
+          "qualityScore": 96.4
+        },
+        {
+          "date": "2026-01-29",
+          "tasksCompleted": 2,
+          "qualityScore": 94
+        },
+        {
+          "date": "2026-01-30",
+          "tasksCompleted": 0,
+          "qualityScore": 92.1
+        },
+        {
+          "date": "2026-01-31",
+          "tasksCompleted": 1,
+          "qualityScore": 96.6
+        },
+        {
+          "date": "2026-02-01",
+          "tasksCompleted": 1,
+          "qualityScore": 96.8
+        },
+        {
+          "date": "2026-02-02",
+          "tasksCompleted": 1,
+          "qualityScore": 91
+        },
+        {
+          "date": "2026-02-03",
+          "tasksCompleted": 0,
+          "qualityScore": 94.8
+        },
+        {
+          "date": "2026-02-04",
+          "tasksCompleted": 0,
+          "qualityScore": 92.1
+        },
+        {
+          "date": "2026-02-05",
+          "tasksCompleted": 1,
+          "qualityScore": 90.4
+        },
+        {
+          "date": "2026-02-06",
+          "tasksCompleted": 0,
+          "qualityScore": 90.8
+        },
+        {
+          "date": "2026-02-07",
+          "tasksCompleted": 0,
+          "qualityScore": 92.2
+        },
+        {
+          "date": "2026-02-08",
+          "tasksCompleted": 0,
+          "qualityScore": 93.5
+        },
+        {
+          "date": "2026-02-09",
+          "tasksCompleted": 1,
+          "qualityScore": 89.8
+        }
+      ],
+      "taskHistory": [
+        {
+          "id": "zenith-14",
+          "taskName": "Harden CSP and security headers",
+          "completedAt": "2026-02-09T17:16:00.000Z",
+          "completionMinutes": 156,
+          "tokensUsed": 20257,
+          "qualityScore": 89.8,
+          "apiCost": 1.39,
+          "humanLaborCost": 264.46,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/520"
+        },
+        {
+          "id": "zenith-11",
+          "taskName": "Tune SQL query performance",
+          "completedAt": "2026-02-05T08:19:00.000Z",
+          "completionMinutes": 157,
+          "tokensUsed": 22757,
+          "qualityScore": 90.4,
+          "apiCost": 1.42,
+          "humanLaborCost": 269.18,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/517"
+        },
+        {
+          "id": "zenith-8",
+          "taskName": "Reduce cold start latency",
+          "completedAt": "2026-02-02T09:22:00.000Z",
+          "completionMinutes": 158,
+          "tokensUsed": 25413,
+          "qualityScore": 91,
+          "apiCost": 1.45,
+          "humanLaborCost": 274.17,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/514"
+        },
+        {
+          "id": "zenith-19",
+          "taskName": "Build auth middleware",
+          "completedAt": "2026-02-01T10:43:00.000Z",
+          "completionMinutes": 135,
+          "tokensUsed": 6739,
+          "qualityScore": 96.8,
+          "apiCost": 0.92,
+          "humanLaborCost": 214.9,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/525"
+        },
+        {
+          "id": "zenith-16",
+          "taskName": "Set up canary deployment checks",
+          "completedAt": "2026-01-31T10:43:00.000Z",
+          "completionMinutes": 151,
+          "tokensUsed": 7879,
+          "qualityScore": 96.6,
+          "apiCost": 1.01,
+          "humanLaborCost": 241.77,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/522"
+        },
+        {
+          "id": "zenith-13",
+          "taskName": "Add feature flag gating",
+          "completedAt": "2026-01-29T11:43:00.000Z",
+          "completionMinutes": 169,
+          "tokensUsed": 9053,
+          "qualityScore": 96.5,
+          "apiCost": 1.11,
+          "humanLaborCost": 271.87,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/519"
+        },
+        {
+          "id": "zenith-5",
+          "taskName": "Ship analytics event schema",
+          "completedAt": "2026-01-29T10:25:00.000Z",
+          "completionMinutes": 161,
+          "tokensUsed": 4211,
+          "qualityScore": 91.6,
+          "apiCost": 1.16,
+          "humanLaborCost": 282.56,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/511"
+        },
+        {
+          "id": "zenith-10",
+          "taskName": "Implement cache invalidation",
+          "completedAt": "2026-01-28T11:43:00.000Z",
+          "completionMinutes": 188,
+          "tokensUsed": 10254,
+          "qualityScore": 96.4,
+          "apiCost": 1.21,
+          "humanLaborCost": 303.62,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/516"
+        },
+        {
+          "id": "zenith-7",
+          "taskName": "Automate release notes generation",
+          "completedAt": "2026-01-26T12:44:00.000Z",
+          "completionMinutes": 37,
+          "tokensUsed": 11473,
+          "qualityScore": 96.4,
+          "apiCost": 1.32,
+          "humanLaborCost": 66.24,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/513"
+        },
+        {
+          "id": "zenith-4",
+          "taskName": "Add integration test coverage",
+          "completedAt": "2026-01-25T12:45:00.000Z",
+          "completionMinutes": 58,
+          "tokensUsed": 12703,
+          "qualityScore": 96.5,
+          "apiCost": 1.44,
+          "humanLaborCost": 101.25,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/510"
+        },
+        {
+          "id": "zenith-2",
+          "taskName": "Optimize dashboard hydration",
+          "completedAt": "2026-01-25T11:28:00.000Z",
+          "completionMinutes": 164,
+          "tokensUsed": 7136,
+          "qualityScore": 92.3,
+          "apiCost": 1.2,
+          "humanLaborCost": 291.19,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/508"
+        },
+        {
+          "id": "zenith-1",
+          "taskName": "Refactor API route handlers",
+          "completedAt": "2026-01-23T13:47:00.000Z",
+          "completionMinutes": 80,
+          "tokensUsed": 13936,
+          "qualityScore": 96.7,
+          "apiCost": 0.66,
+          "humanLaborCost": 137.86,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/507"
+        },
+        {
+          "id": "zenith-15",
+          "taskName": "Improve search relevance ranking",
+          "completedAt": "2026-01-19T15:47:00.000Z",
+          "completionMinutes": 72,
+          "tokensUsed": 21133,
+          "qualityScore": 94.9,
+          "apiCost": 0.86,
+          "humanLaborCost": 140.36,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/521"
+        },
+        {
+          "id": "zenith-18",
+          "taskName": "Implement billing proration logic",
+          "completedAt": "2026-01-19T15:41:00.000Z",
+          "completionMinutes": 63,
+          "tokensUsed": 21419,
+          "qualityScore": 93.8,
+          "apiCost": 0.82,
+          "humanLaborCost": 127.01,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/524"
+        },
+        {
+          "id": "zenith-12",
+          "taskName": "Create SSO onboarding flow",
+          "completedAt": "2026-01-18T15:54:00.000Z",
+          "completionMinutes": 80,
+          "tokensUsed": 21012,
+          "qualityScore": 96,
+          "apiCost": 0.9,
+          "humanLaborCost": 152.36,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/518"
+        },
+        {
+          "id": "zenith-9",
+          "taskName": "Migrate legacy settings page",
+          "completedAt": "2026-01-18T15:01:00.000Z",
+          "completionMinutes": 89,
+          "tokensUsed": 21055,
+          "qualityScore": 97.3,
+          "apiCost": 0.94,
+          "humanLaborCost": 166.19,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/515"
+        },
+        {
+          "id": "zenith-6",
+          "taskName": "Patch accessibility contrast issues",
+          "completedAt": "2026-01-17T15:08:00.000Z",
+          "completionMinutes": 98,
+          "tokensUsed": 21257,
+          "qualityScore": 98.6,
+          "apiCost": 0.99,
+          "humanLaborCost": 180.27,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/512"
+        },
+        {
+          "id": "zenith-20",
+          "taskName": "Fix flaky CI pipeline",
+          "completedAt": "2026-01-17T14:10:00.000Z",
+          "completionMinutes": 159,
+          "tokensUsed": 15771,
+          "qualityScore": 88.7,
+          "apiCost": 1.37,
+          "humanLaborCost": 263.77,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/526"
+        },
+        {
+          "id": "zenith-3",
+          "taskName": "Implement webhook retries",
+          "completedAt": "2026-01-16T15:15:00.000Z",
+          "completionMinutes": 106,
+          "tokensUsed": 21614,
+          "qualityScore": 88,
+          "apiCost": 1.04,
+          "humanLaborCost": 193,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/509"
+        },
+        {
+          "id": "zenith-17",
+          "taskName": "Build export to CSV workflow",
+          "completedAt": "2026-01-13T15:13:00.000Z",
+          "completionMinutes": 157,
+          "tokensUsed": 17924,
+          "qualityScore": 89.3,
+          "apiCost": 1.38,
+          "humanLaborCost": 263.18,
+          "artifactUrl": "https://github.com/reflectt/foragents.dev/pull/523"
+        }
+      ],
+      "comparisonBadge": "Top 10% efficiency"
+    }
+  ]
+}
