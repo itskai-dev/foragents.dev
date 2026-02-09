@@ -9,6 +9,7 @@ const navLinks = [
   { href: "/skills", label: "Skills" },
   { href: "/workflows", label: "Workflows" },
   { href: "/compare", label: "Compare" },
+  { href: "/calculator", label: "Calculator" },
   { href: "/dependencies", label: "Dependencies" },
   { href: "/trending", label: "Trending" },
   { href: "/leaderboard", label: "Leaderboard" },
