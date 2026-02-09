@@ -1,0 +1,372 @@
+{
+  "guides": [
+    {
+      "id": "langchain",
+      "title": "From LangChain",
+      "estimatedTime": "2-4 hours",
+      "overview": "LangChain provides a powerful abstraction layer for building LLM applications, but it comes with significant overhead. forAgents.dev offers pre-built, community-maintained skills that eliminate boilerplate while giving you the same capabilities with less code and maintenance burden.",
+      "prerequisites": [
+        "Node.js 18+ installed",
+        "OpenClaw CLI installed (curl -fsSL https://openclaw.com/install.sh | bash)",
+        "Access to your LangChain project source code",
+        "Understanding of your current tool/chain implementations"
+      ],
+      "steps": [
+        {
+          "title": "Audit your LangChain tools and chains",
+          "description": "List all LangChain tools, chains, and custom implementations in your current project. Document their purpose and dependencies.",
+          "code": {
+            "before": "from langchain.tools import Tool\nfrom langchain.agents import initialize_agent\n\n# Custom tool implementations\ntools = [\n    Tool(name=\"WebSearch\", func=search_web, description=\"Search the web\"),\n    Tool(name=\"Calculator\", func=calculate, description=\"Perform calculations\"),\n    Tool(name=\"FileReader\", func=read_file, description=\"Read files\")\n]",
+            "after": "# List skills you'll need:\n# - web-search\n# - calculator  \n# - file-operations"
+          }
+        },
+        {
+          "title": "Browse the forAgents.dev skills directory",
+          "description": "Visit /skills to find matching capabilities. Most LangChain tools have equivalent skills already published.",
+          "code": {
+            "before": "# Manual tool implementation in LangChain\ndef search_web(query: str) -> str:\n    # 50+ lines of implementation\n    # API key management\n    # Error handling\n    # Rate limiting\n    pass",
+            "after": "# Browse https://foragents.dev/skills\n# Find: web-search skill\n# One-line install (next step)"
+          }
+        },
+        {
+          "title": "Install matching skills",
+          "description": "Use the one-line installer for each skill you need. Skills auto-load into ~/.openclaw/skills/",
+          "code": {
+            "before": "# Install LangChain and dependencies\npip install langchain langchain-openai langchain-community\npip install google-search-results serpapi",
+            "after": "# Install skills\ncurl -fsSL https://foragents.dev/api/skills/web-search.sh | bash\ncurl -fsSL https://foragents.dev/api/skills/calculator.sh | bash\ncurl -fsSL https://foragents.dev/api/skills/file-operations.sh | bash"
+          }
+        },
+        {
+          "title": "Configure your agent workspace",
+          "description": "Set up AGENTS.md and SOUL.md to define your agent's personality and capabilities. Skills load automatically.",
+          "code": {
+            "before": "agent = initialize_agent(\n    tools=tools,\n    llm=OpenAI(temperature=0),\n    agent=\"zero-shot-react-description\",\n    verbose=True\n)",
+            "after": "# SOUL.md\nYou are a helpful research assistant.\nYou can search the web, perform calculations, and read files.\n\n# Skills auto-load from ~/.openclaw/skills/\n# No manual tool registration needed"
+          }
+        },
+        {
+          "title": "Test skill functionality",
+          "description": "Verify each installed skill works as expected. Use openclaw test or manual testing.",
+          "code": {
+            "before": "# Test LangChain agent\nresult = agent.run(\"Search for AI news and summarize\")\nprint(result)",
+            "after": "# Test via OpenClaw\nopenclaw chat \"Search for AI news and summarize\"\n\n# Or use the web interface\n# Skills are available immediately"
+          }
+        },
+        {
+          "title": "Migrate conversation flows",
+          "description": "Replace LangChain's conversation memory with OpenClaw's memory/ directory system.",
+          "code": {
+            "before": "from langchain.memory import ConversationBufferMemory\n\nmemory = ConversationBufferMemory(\n    memory_key=\"chat_history\",\n    return_messages=True\n)",
+            "after": "# memory/YYYY-MM-DD.md auto-created\n# MEMORY.md for long-term memory\n# Agent reads these files on startup"
+          }
+        },
+        {
+          "title": "Remove LangChain dependencies",
+          "description": "Once verified, uninstall LangChain packages and remove old code from your project.",
+          "code": {
+            "before": "# requirements.txt\nlangchain==0.1.0\nlangchain-openai==0.0.5\nlangchain-community==0.0.20\nserpapi==0.1.5",
+            "after": "# Clean requirements.txt\n# (Only your custom business logic remains)\n# Skills handle all tool integrations"
+          }
+        }
+      ],
+      "commonPitfalls": [
+        {
+          "issue": "Skills not loading automatically",
+          "solution": "Ensure skills are installed in ~/.openclaw/skills/ and SKILL.md exists in each skill directory."
+        },
+        {
+          "issue": "Missing API keys for skills",
+          "solution": "Check each skill's SKILL.md for required environment variables. Add them to your .env file."
+        },
+        {
+          "issue": "Custom LangChain chains are complex",
+          "solution": "Break complex chains into smaller tasks. Use BACKLOG.md to define multi-step workflows for your agent."
+        },
+        {
+          "issue": "Agent not using skills in responses",
+          "solution": "Verify skills are listed when you run 'openclaw skills list'. Restart your agent session if needed."
+        }
+      ]
+    },
+    {
+      "id": "crewai",
+      "title": "From CrewAI",
+      "estimatedTime": "3-5 hours",
+      "overview": "CrewAI excels at multi-agent orchestration, but requires significant boilerplate for agent definitions and task management. forAgents.dev uses a file-based approach with AGENTS.md and BACKLOG.md that's simpler to maintain and extend.",
+      "prerequisites": [
+        "Node.js 18+ installed",
+        "OpenClaw CLI installed",
+        "Your CrewAI crew definitions documented",
+        "Understanding of your agent roles and tasks"
+      ],
+      "steps": [
+        {
+          "title": "Map CrewAI agents to forAgents roles",
+          "description": "Document each agent in your crew: their role, goal, backstory, and tools. These will translate to SOUL.md entries.",
+          "code": {
+            "before": "from crewai import Agent\n\nresearcher = Agent(\n    role=\"Researcher\",\n    goal=\"Find accurate information on any topic\",\n    backstory=\"Expert researcher with 10 years experience\",\n    tools=[search_tool, scraper_tool],\n    verbose=True\n)",
+            "after": "# SOUL.md\nYou are a Researcher.\nYour goal is to find accurate information on any topic.\nYou are an expert researcher with 10 years of experience.\n\n# Skills: web-search, web-scraper"
+          }
+        },
+        {
+          "title": "Convert tasks to BACKLOG.md format",
+          "description": "CrewAI tasks become checklist items in BACKLOG.md. The agent picks them up automatically.",
+          "code": {
+            "before": "from crewai import Task\n\ntask = Task(\n    description=\"Research AI trends in 2024\",\n    agent=researcher,\n    expected_output=\"Detailed report with sources\"\n)",
+            "after": "# BACKLOG.md\n## Research Tasks\n- [ ] Research AI trends in 2024 (detailed report with sources)\n\n# Agent processes tasks from BACKLOG.md via heartbeat"
+          }
+        },
+        {
+          "title": "Install skill equivalents for CrewAI tools",
+          "description": "Replace CrewAI tools with forAgents.dev skills. Most common tools have skill equivalents.",
+          "code": {
+            "before": "from crewai_tools import (\n    SerperDevTool,\n    ScrapeWebsiteTool,\n    FileReadTool\n)\n\ntools = [\n    SerperDevTool(),\n    ScrapeWebsiteTool(),\n    FileReadTool()\n]",
+            "after": "# Install skills\ncurl -fsSL https://foragents.dev/api/skills/web-search.sh | bash\ncurl -fsSL https://foragents.dev/api/skills/web-scraper.sh | bash  \ncurl -fsSL https://foragents.dev/api/skills/file-operations.sh | bash"
+          }
+        },
+        {
+          "title": "Set up agent memory directories",
+          "description": "CrewAI's memory becomes OpenClaw's memory/ directory structure with daily logs and long-term memory.",
+          "code": {
+            "before": "from crewai import Crew\n\ncrew = Crew(\n    agents=[researcher, writer],\n    tasks=[research_task, write_task],\n    memory=True,\n    verbose=2\n)",
+            "after": "# memory/2026-02-09.md - daily notes\n# MEMORY.md - long-term learnings\n# Agent reads on startup, writes during work"
+          }
+        },
+        {
+          "title": "Configure multi-agent coordination",
+          "description": "For multi-agent setups, use agent-team-kit or define coordination in AGENTS.md.",
+          "code": {
+            "before": "crew = Crew(\n    agents=[researcher, writer, editor],\n    tasks=[research, write, edit],\n    process=Process.sequential\n)",
+            "after": "# Install agent-team-kit for multi-agent\ncurl -fsSL https://foragents.dev/api/team-kit.sh | bash\n\n# Define roles in AGENTS.md\n# Use BACKLOG.md for task routing"
+          }
+        },
+        {
+          "title": "Enable proactive behavior with heartbeats",
+          "description": "Replace CrewAI's kickoff() with OpenClaw's heartbeat system for autonomous agents.",
+          "code": {
+            "before": "# Manually trigger crew\nresult = crew.kickoff()\nprint(result)",
+            "after": "# HEARTBEAT.md\nCheck BACKLOG.md for pending tasks.\nIf tasks exist, work on the next one.\nUpdate memory/YYYY-MM-DD.md with progress.\n\n# Runs automatically every ~30 min"
+          }
+        },
+        {
+          "title": "Test and validate agent behavior",
+          "description": "Run your agent and verify it picks up tasks, uses skills correctly, and maintains memory.",
+          "code": {
+            "before": "# Test CrewAI crew\ncrew.kickoff(inputs={\"topic\": \"AI agents\"})",
+            "after": "# Test OpenClaw agent\nopenclaw chat \"Work on the research task\"\n\n# Or let heartbeat handle it automatically"
+          }
+        }
+      ],
+      "commonPitfalls": [
+        {
+          "issue": "Tasks not being picked up from BACKLOG.md",
+          "solution": "Ensure HEARTBEAT.md includes instructions to check BACKLOG.md. Verify heartbeat is enabled."
+        },
+        {
+          "issue": "Multi-agent coordination is unclear",
+          "solution": "Use agent-team-kit skill for structured multi-agent setups, or define clear coordination rules in AGENTS.md."
+        },
+        {
+          "issue": "Agent personality feels different",
+          "solution": "Refine SOUL.md to match your CrewAI agent's backstory and personality. Add specific traits and speaking style."
+        },
+        {
+          "issue": "Memory not persisting between sessions",
+          "solution": "Check that memory/ directory exists and MEMORY.md is being updated. Agent must read MEMORY.md on startup."
+        }
+      ]
+    },
+    {
+      "id": "custom",
+      "title": "From Custom Framework",
+      "estimatedTime": "4-8 hours",
+      "overview": "Custom agent frameworks give you full control but require ongoing maintenance. forAgents.dev lets you keep your unique logic while offloading common functionality to community-maintained skills.",
+      "prerequisites": [
+        "Node.js 18+ installed",
+        "OpenClaw CLI installed",
+        "Documentation of your custom agent's capabilities",
+        "List of external APIs and integrations used"
+      ],
+      "steps": [
+        {
+          "title": "Document your current agent architecture",
+          "description": "Create a comprehensive list of your agent's capabilities, workflows, and custom implementations.",
+          "code": {
+            "before": "# Custom agent with 20+ tool implementations\nclass MyCustomAgent:\n    def __init__(self):\n        self.tools = {\n            'weather': self.get_weather,\n            'email': self.send_email,\n            'calendar': self.check_calendar,\n            'search': self.web_search,\n            # ... 16 more tools\n        }",
+            "after": "# Document in migration-notes.md\nTools to migrate:\n- weather → weather skill\n- email → email skill  \n- calendar → calendar skill\n- search → web-search skill\nCustom logic to preserve:\n- Specific workflow rules\n- Business logic\n- API authentication"
+          }
+        },
+        {
+          "title": "Search forAgents.dev for equivalent skills",
+          "description": "Browse /skills and /integrations to find pre-built alternatives to your custom implementations.",
+          "code": {
+            "before": "def get_weather(self, location: str) -> dict:\n    \"\"\"Custom weather implementation - 50+ lines\"\"\"\n    api_key = os.getenv('WEATHER_API_KEY')\n    response = requests.get(\n        f'https://api.openweathermap.org/data/2.5/weather',\n        params={'q': location, 'appid': api_key}\n    )\n    # ... error handling, parsing, caching ...",
+            "after": "# Instead of custom implementation:\ncurl -fsSL https://foragents.dev/api/skills/weather.sh | bash\n\n# Maintained by community, includes:\n# - Multiple weather API support\n# - Error handling\n# - Caching\n# - Unit conversions"
+          }
+        },
+        {
+          "title": "Install skills for common functionality",
+          "description": "Replace your custom tool implementations with skills one at a time, testing as you go.",
+          "code": {
+            "before": "# 500+ lines of custom tool code across multiple files\n# weather.py - 80 lines\n# email_client.py - 120 lines  \n# calendar_sync.py - 150 lines\n# web_search.py - 100 lines\n# Plus error handling, tests, docs...",
+            "after": "# Install pre-built skills\ncurl -fsSL https://foragents.dev/api/skills/weather.sh | bash\ncurl -fsSL https://foragents.dev/api/skills/email.sh | bash\ncurl -fsSL https://foragents.dev/api/skills/calendar.sh | bash  \ncurl -fsSL https://foragents.dev/api/skills/web-search.sh | bash\n\n# Zero maintenance, community updates"
+          }
+        },
+        {
+          "title": "Migrate custom business logic to workspace files",
+          "description": "Move agent-specific behavior to SOUL.md, AGENTS.md, and workflow files.",
+          "code": {
+            "before": "class MyAgent:\n    def __init__(self):\n        self.personality = \"helpful and concise\"\n        self.rules = [\n            \"Always verify sources\",\n            \"Summarize before responding\",\n            \"Log all actions\"\n        ]",
+            "after": "# SOUL.md\nYou are a helpful and concise assistant.\n\n## Rules\n- Always verify sources before sharing information\n- Summarize findings before responding\n- Log all actions to memory/YYYY-MM-DD.md"
+          }
+        },
+        {
+          "title": "Set up memory and state management",
+          "description": "Replace your custom state management with OpenClaw's file-based memory system.",
+          "code": {
+            "before": "# Custom state management\nimport json\n\nclass StateManager:\n    def __init__(self):\n        self.state_file = 'agent_state.json'\n        self.load_state()\n    \n    def load_state(self):\n        with open(self.state_file, 'r') as f:\n            self.state = json.load(f)\n    \n    def save_state(self):\n        # ... implementation",
+            "after": "# File-based memory (automatic)\n# memory/2026-02-09.md - daily logs\n# MEMORY.md - long-term memory\n# Agent reads on startup, writes during work\n# No custom state management needed"
+          }
+        },
+        {
+          "title": "Integrate remaining custom code",
+          "description": "For truly unique logic, create a custom skill or keep it as a local implementation.",
+          "code": {
+            "before": "# Proprietary business logic\ndef custom_workflow(data):\n    # Your unique secret sauce\n    # Can't be replaced by generic skill\n    pass",
+            "after": "# Option 1: Keep as custom skill in ~/.openclaw/skills/my-custom/\n# Option 2: Contribute to forAgents.dev if shareable\n# Option 3: Call from agent via exec tool"
+          }
+        },
+        {
+          "title": "Run parallel testing",
+          "description": "Keep your old system running while testing the new OpenClaw setup to ensure feature parity.",
+          "code": {
+            "before": "# Old system still running\npython my_agent.py --task \"daily report\"",
+            "after": "# New system (parallel)\nopenclaw chat \"Generate daily report\"\n\n# Compare outputs, verify all features work\n# Gradually shift traffic to new system"
+          }
+        },
+        {
+          "title": "Deprecate old codebase",
+          "description": "Once verified, archive your custom code and fully migrate to the OpenClaw + skills approach.",
+          "code": {
+            "before": "# Before: 2000+ lines of custom code\n# Constant maintenance, dependency updates\n# You own all the bugs",
+            "after": "# After: ~100 lines of unique logic\n# Community maintains skills\n# Focus on what makes your agent special"
+          }
+        }
+      ],
+      "commonPitfalls": [
+        {
+          "issue": "No exact skill match for custom functionality",
+          "solution": "Check /integrations for MCP servers, or create a custom skill. You can also combine multiple skills to replicate complex behavior."
+        },
+        {
+          "issue": "Migration seems overwhelming",
+          "solution": "Migrate incrementally. Start with one tool/capability, verify it works, then move to the next. Don't do everything at once."
+        },
+        {
+          "issue": "Custom authentication flows don't translate",
+          "solution": "Use OpenClaw's env var system or create a custom skill wrapper for your auth. Skills can call your existing auth code."
+        },
+        {
+          "issue": "Performance concerns with skill overhead",
+          "solution": "Skills are lightweight shell scripts with minimal overhead. Benchmark before and after to verify performance."
+        }
+      ]
+    },
+    {
+      "id": "v1-to-v2",
+      "title": "Upgrading v1 to v2",
+      "estimatedTime": "1-2 hours",
+      "overview": "forAgents.dev v2 introduces breaking changes for better performance and scalability. This guide helps you upgrade from v1 to v2 smoothly.",
+      "prerequisites": [
+        "Existing v1 forAgents.dev setup",
+        "OpenClaw CLI updated to latest version",
+        "Backup of your current workspace",
+        "Git repository for rollback if needed"
+      ],
+      "steps": [
+        {
+          "title": "Update OpenClaw CLI to v2",
+          "description": "Install the latest OpenClaw CLI which includes v2 support and breaking change warnings.",
+          "code": {
+            "before": "# Check current version\nopenclaw --version\n# Output: openclaw/1.x.x",
+            "after": "# Update to v2\ncurl -fsSL https://openclaw.com/install.sh | bash\n\n# Verify\nopenclaw --version\n# Output: openclaw/2.0.0+"
+          }
+        },
+        {
+          "title": "Rename workspace files (breaking change)",
+          "description": "v2 renamed several workspace files for clarity. BOOTSTRAP.md is now optional, and CONTEXT.md was removed.",
+          "code": {
+            "before": "~/.openclaw/workspace/\n├── BOOTSTRAP.md\n├── CONTEXT.md  \n├── SOUL.md\n└── AGENTS.md",
+            "after": "~/.openclaw/workspace/\n├── SOUL.md (unchanged)\n├── AGENTS.md (unchanged)\n├── USER.md (new - replaces CONTEXT.md)\n└── BOOTSTRAP.md (optional, delete after first run)"
+          }
+        },
+        {
+          "title": "Update skill installation paths",
+          "description": "v2 changed skill directory structure for better organization and versioning.",
+          "code": {
+            "before": "# v1 skills\n~/.openclaw/skills/\n├── web-search.sh\n├── email.sh  \n└── calendar.sh",
+            "after": "# v2 skills (versioned)\n~/.openclaw/skills/\n├── web-search/\n│   ├── SKILL.md\n│   └── v2.0.0/\n├── email/\n│   ├── SKILL.md\n│   └── v1.5.0/\n└── calendar/\n    ├── SKILL.md\n    └── v1.3.0/"
+          }
+        },
+        {
+          "title": "Reinstall skills using v2 installers",
+          "description": "Skills need to be reinstalled to use the new directory structure. Your old skills will continue to work but won't receive updates.",
+          "code": {
+            "before": "# v1 skill install\ncurl -fsSL https://foragents.dev/skills/web-search.sh | bash",
+            "after": "# v2 skill install (same URL, new structure)\ncurl -fsSL https://foragents.dev/api/skills/web-search.sh | bash\n\n# Or use openclaw CLI\nopenclaw skills install web-search"
+          }
+        },
+        {
+          "title": "Update memory directory structure",
+          "description": "v2 introduces structured memory with better organization for long-term storage.",
+          "code": {
+            "before": "# v1 memory\n~/.openclaw/workspace/memory/\n├── 2026-02-08.md\n└── 2026-02-09.md",
+            "after": "# v2 memory (organized by month)\n~/.openclaw/workspace/memory/\n├── 2026-02/\n│   ├── 08.md\n│   └── 09.md\n└── MEMORY.md (unchanged)"
+          }
+        },
+        {
+          "title": "Update heartbeat configuration",
+          "description": "v2 heartbeat system supports more granular control and scheduling.",
+          "code": {
+            "before": "# v1 HEARTBEAT.md - simple checklist\n- Check email\n- Check calendar\n- Check tasks",
+            "after": "# v2 HEARTBEAT.md - structured with timing\n## Every 30 min\n- Check email (if not checked in last 30 min)\n  \n## Every 2 hours  \n- Check calendar (upcoming 24h)\n\n## Every 6 hours\n- Review BACKLOG.md tasks"
+          }
+        },
+        {
+          "title": "Test v2 features",
+          "description": "Verify your agent works with v2 and test new features like improved skill versioning and memory search.",
+          "code": {
+            "before": "# v1 - basic functionality\nopenclaw chat \"What's on my calendar?\"",
+            "after": "# v2 - enhanced features\nopenclaw chat \"What's on my calendar?\"\n\n# New: skill version management\nopenclaw skills list --versions\n\n# New: memory search\nopenclaw memory search \"calendar events\""
+          }
+        },
+        {
+          "title": "Review changelog and new features",
+          "description": "Check the full v2 changelog for new features, improvements, and additional breaking changes.",
+          "code": {
+            "before": "# Review changes\nopen https://openclaw.com/changelog",
+            "after": "# v2 highlights:\n# - Faster skill loading\n# - Better error messages  \n# - Memory search\n# - Skill versioning\n# - Improved heartbeat scheduling\n# - Performance improvements"
+          }
+        }
+      ],
+      "commonPitfalls": [
+        {
+          "issue": "Skills stopped working after upgrade",
+          "solution": "Reinstall all skills using v2 installers. Old skills in flat structure won't auto-update."
+        },
+        {
+          "issue": "Memory files not found",
+          "solution": "Migrate existing daily files to YYYY-MM/ folder structure. Or wait for agent to create new files automatically."
+        },
+        {
+          "issue": "CONTEXT.md references in code",
+          "solution": "Replace all CONTEXT.md references with USER.md. Content should be migrated manually."
+        },
+        {
+          "issue": "Heartbeat running too frequently",
+          "solution": "Update HEARTBEAT.md to use v2 structured format with timing intervals. Old format may trigger too often."
+        }
+      ]
+    }
+  ]
+}
