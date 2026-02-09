@@ -1,274 +1,301 @@
-"use client";
+import { Metadata } from 'next';
+import { Shield, Lock, Users, Server, FileText, CheckCircle2 } from 'lucide-react';
+import { SecurityChecklist } from '@/components/security/security-checklist';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Lock, Eye, FileCheck, Award, AlertTriangle } from "lucide-react";
+export const metadata: Metadata = {
+  title: 'Security Center | forAgents.dev',
+  description: 'Security, compliance, and trust information for forAgents.dev - Learn about our data protection, authentication, and infrastructure security measures.',
+  openGraph: {
+    title: 'Security Center | forAgents.dev',
+    description: 'Security, compliance, and trust information for forAgents.dev - Learn about our data protection, authentication, and infrastructure security measures.',
+    url: 'https://foragents.dev/security',
+    siteName: 'forAgents.dev',
+    type: 'website',
+  },
+};
 
 export default function SecurityPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
-
-      {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[300px] flex items-center">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
-        </div>
-
-        <div className="relative max-w-5xl mx-auto px-4 py-16 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#06D6A0]/10 mb-6">
-            <Shield className="w-8 h-8 text-[#06D6A0]" />
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <div className="flex justify-center mb-6">
+            <div className="relative">
+              <Shield className="w-20 h-20" style={{ color: '#06D6A0' }} />
+              <div className="absolute inset-0 bg-[#06D6A0] opacity-20 blur-xl rounded-full" />
+            </div>
           </div>
-          <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
-            Security & Trust
+          <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: '#06D6A0' }}>
+            Security at forAgents.dev
           </h1>
-          <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
-            Building a secure, transparent ecosystem for AI agent skills
+          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+            Trust and security are foundational to our platform. We implement industry-leading practices 
+            to protect your data, ensure system reliability, and maintain transparency in how we handle security.
           </p>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <section className="relative max-w-5xl mx-auto px-4 py-12 space-y-12">
-        {/* Security Overview */}
-        <Card className="bg-[#0f0f0f] border-white/10">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[#06D6A0]/10">
-                <Lock className="w-6 h-6 text-[#06D6A0]" />
+        {/* Security Sections Grid */}
+        <div className="grid md:grid-cols-2 gap-6 mb-16">
+          {/* Data Protection */}
+          <Card className="bg-[#0f0f0f] border-white/10 p-6 hover:border-[#06D6A0]/30 transition-colors">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 bg-[#06D6A0]/10 rounded-lg">
+                <Lock className="w-6 h-6" style={{ color: '#06D6A0' }} />
               </div>
-              <CardTitle className="text-2xl">Security Overview</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="text-foreground/80 leading-relaxed">
-            <p>
-              At forAgents.dev, security isn&apos;t an afterthought—it&apos;s foundational. 
-              We&apos;re building a trusted marketplace where developers can share AI agent skills 
-              with confidence, and users can adopt them safely. Every skill undergoes verification, 
-              our platform is built on open-source transparency, and we maintain strict data 
-              protection standards to ensure your privacy and security come first.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* How We Verify Skills */}
-        <Card className="bg-[#0f0f0f] border-white/10">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[#06D6A0]/10">
-                <Eye className="w-6 h-6 text-[#06D6A0]" />
-              </div>
-              <CardTitle className="text-2xl">How We Verify Skills</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#06D6A0]/10 flex items-center justify-center text-[#06D6A0] font-bold">
-                  1
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Code Review</h3>
-                  <p className="text-foreground/80">
-                    Every submitted skill goes through a thorough code review process. 
-                    Our team examines the source code for malicious patterns, security 
-                    vulnerabilities, and adherence to best practices. We verify that 
-                    skills do what they claim and nothing more.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#06D6A0]/10 flex items-center justify-center text-[#06D6A0] font-bold">
-                  2
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Automated Testing</h3>
-                  <p className="text-foreground/80">
-                    We run automated security scans and functional tests on all skills. 
-                    This includes dependency analysis, permission audits, and behavior 
-                    validation in isolated environments. Skills must pass all tests 
-                    before approval.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[#06D6A0]/10 flex items-center justify-center text-[#06D6A0] font-bold">
-                  3
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold mb-2">Community Oversight</h3>
-                  <p className="text-foreground/80">
-                    Once published, skills are monitored through community feedback, 
-                    usage analytics, and regular re-verification. Users can report 
-                    concerns, and verified developers earn trust badges that signal 
-                    reliability to the community.
-                  </p>
-                </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Data Protection</h2>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Data Protection */}
-        <Card className="bg-[#0f0f0f] border-white/10">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[#06D6A0]/10">
-                <FileCheck className="w-6 h-6 text-[#06D6A0]" />
-              </div>
-              <CardTitle className="text-2xl">Data Protection</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                <span className="text-[#06D6A0]">🔒</span> End-to-End Encryption
-              </h3>
-              <p className="text-foreground/80">
-                All data transmitted through forAgents.dev is encrypted using 
-                industry-standard TLS 1.3. API keys and sensitive credentials 
-                are encrypted at rest and never exposed in logs or error messages.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                <span className="text-[#06D6A0]">🙈</span> No PII Collection
-              </h3>
-              <p className="text-foreground/80">
-                We don&apos;t collect personally identifiable information beyond 
-                what&apos;s necessary for account management. Skills operate in 
-                sandboxed environments and cannot access user data without explicit 
-                permission grants.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                <span className="text-[#06D6A0]">📂</span> Open Source Transparency
-              </h3>
-              <p className="text-foreground/80">
-                Our platform is open source, allowing independent security audits 
-                and community scrutiny. You can review our code, submit security 
-                patches, and verify our security claims yourself on{" "}
-                <a
-                  href="https://github.com/reflectt/foragents.dev"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#06D6A0] hover:underline"
-                >
-                  GitHub
-                </a>
-                .
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Responsible Disclosure */}
-        <Card className="bg-[#0f0f0f] border-white/10">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[#06D6A0]/10">
-                <AlertTriangle className="w-6 h-6 text-[#06D6A0]" />
-              </div>
-              <CardTitle className="text-2xl">Responsible Disclosure</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-foreground/80">
-              We welcome security researchers and ethical hackers to help us 
-              maintain the highest security standards. If you discover a 
-              vulnerability, please report it responsibly.
-            </p>
-
-            <div className="bg-[#0a0a0a] border border-white/5 rounded-lg p-4 space-y-3">
-              <h3 className="text-lg font-semibold">How to Report</h3>
-              <ul className="space-y-2 text-foreground/80">
-                <li className="flex items-start gap-2">
-                  <span className="text-[#06D6A0] font-bold">•</span>
-                  <span>
-                    Email security reports to{" "}
-                    <a
-                      href="mailto:security@foragents.dev"
-                      className="text-[#06D6A0] hover:underline"
-                    >
-                      security@foragents.dev
-                    </a>
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#06D6A0] font-bold">•</span>
-                  <span>
-                    Include detailed steps to reproduce the vulnerability
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#06D6A0] font-bold">•</span>
-                  <span>
-                    Allow us 90 days to address the issue before public disclosure
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[#06D6A0] font-bold">•</span>
-                  <span>
-                    We&apos;ll acknowledge receipt within 48 hours and provide 
-                    updates on remediation
-                  </span>
-                </li>
-              </ul>
-            </div>
-
-            <p className="text-sm text-foreground/60">
-              We do not currently offer a bug bounty program, but we recognize 
-              and credit responsible disclosure in our security acknowledgments.
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Trust Badges */}
-        <Card className="bg-[#0f0f0f] border-white/10">
-          <CardHeader>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-[#06D6A0]/10">
-                <Award className="w-6 h-6 text-[#06D6A0]" />
-              </div>
-              <CardTitle className="text-2xl">Trust Badges</CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-[#0a0a0a] border border-white/5 rounded-lg">
-                <div className="text-4xl mb-3">🛡️</div>
-                <h3 className="font-semibold mb-2">SOC 2 Ready</h3>
-                <p className="text-sm text-foreground/70">
-                  Built with SOC 2 compliance standards in mind for enterprise 
-                  trust
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <h3 className="font-semibold text-white mb-2">Encryption at Rest & Transit</h3>
+                <p className="text-sm">
+                  All data is encrypted using AES-256 at rest and TLS 1.3 in transit. Database backups 
+                  are encrypted and stored in geographically distributed locations.
                 </p>
               </div>
-
-              <div className="text-center p-6 bg-[#0a0a0a] border border-white/5 rounded-lg">
-                <div className="text-4xl mb-3">🔐</div>
-                <h3 className="font-semibold mb-2">GDPR Aware</h3>
-                <p className="text-sm text-foreground/70">
-                  Privacy-first design respecting user data rights and 
-                  regulations
+              <div>
+                <h3 className="font-semibold text-white mb-2">Data Residency Options</h3>
+                <p className="text-sm">
+                  Choose where your data is stored with regional deployment options (US, EU, APAC). 
+                  Data stays within your selected region for compliance requirements.
                 </p>
               </div>
-
-              <div className="text-center p-6 bg-[#0a0a0a] border border-white/5 rounded-lg">
-                <div className="text-4xl mb-3">👁️</div>
-                <h3 className="font-semibold mb-2">Open Source Audit</h3>
-                <p className="text-sm text-foreground/70">
-                  Transparent codebase available for community security review
+              <div>
+                <h3 className="font-semibold text-white mb-2">Data Retention & Deletion</h3>
+                <p className="text-sm">
+                  Customizable retention policies with automatic data purging. Request complete data 
+                  deletion at any time with cryptographic proof of destruction.
                 </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      </section>
+          </Card>
 
+          {/* Authentication */}
+          <Card className="bg-[#0f0f0f] border-white/10 p-6 hover:border-[#06D6A0]/30 transition-colors">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 bg-[#06D6A0]/10 rounded-lg">
+                <CheckCircle2 className="w-6 h-6" style={{ color: '#06D6A0' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Authentication</h2>
+              </div>
+            </div>
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <h3 className="font-semibold text-white mb-2">API Key Management</h3>
+                <p className="text-sm">
+                  Scoped API keys with granular permissions. Keys are hashed using bcrypt and never 
+                  stored in plaintext. Rate limiting and IP allowlisting available.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">OAuth 2.0 Support</h3>
+                <p className="text-sm">
+                  Integrate with your existing identity provider. Support for GitHub, Google, and 
+                  custom SAML/OIDC providers for enterprise SSO.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">Token Rotation & Expiry</h3>
+                <p className="text-sm">
+                  Automatic token rotation with configurable expiration. Refresh tokens for long-lived 
+                  sessions with automatic revocation on suspicious activity.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Access Control */}
+          <Card className="bg-[#0f0f0f] border-white/10 p-6 hover:border-[#06D6A0]/30 transition-colors">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 bg-[#06D6A0]/10 rounded-lg">
+                <Users className="w-6 h-6" style={{ color: '#06D6A0' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Access Control</h2>
+              </div>
+            </div>
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <h3 className="font-semibold text-white mb-2">Role-Based Access Control (RBAC)</h3>
+                <p className="text-sm">
+                  Fine-grained permissions with customizable roles. Principle of least privilege 
+                  enforced across all resources with inheritance support.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">Team Permissions</h3>
+                <p className="text-sm">
+                  Organize users into teams with shared permissions. Delegate admin rights, resource 
+                  ownership, and collaboration controls at the team level.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">Comprehensive Audit Trails</h3>
+                <p className="text-sm">
+                  Every action logged with immutable audit trails. Real-time alerts for suspicious 
+                  activity with full query and export capabilities.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Infrastructure */}
+          <Card className="bg-[#0f0f0f] border-white/10 p-6 hover:border-[#06D6A0]/30 transition-colors">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 bg-[#06D6A0]/10 rounded-lg">
+                <Server className="w-6 h-6" style={{ color: '#06D6A0' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Infrastructure Security</h2>
+              </div>
+            </div>
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
+                  SOC 2 Type II Certified
+                  <Badge variant="outline" className="border-[#06D6A0] text-[#06D6A0]">Certified</Badge>
+                </h3>
+                <p className="text-sm">
+                  Annual third-party audits verify our security controls. SOC 2 Type II compliance 
+                  ensures ongoing operational excellence and data protection.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">99.9% Uptime SLA</h3>
+                <p className="text-sm">
+                  Multi-region deployment with automatic failover. Real-time monitoring, health checks, 
+                  and incident response with status page transparency.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">DDoS Protection</h3>
+                <p className="text-sm">
+                  Enterprise-grade DDoS mitigation with intelligent traffic filtering. WAF protection 
+                  against OWASP Top 10 vulnerabilities and bot detection.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Vulnerability Disclosure */}
+          <Card className="bg-[#0f0f0f] border-white/10 p-6 hover:border-[#06D6A0]/30 transition-colors">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 bg-[#06D6A0]/10 rounded-lg">
+                <FileText className="w-6 h-6" style={{ color: '#06D6A0' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Vulnerability Disclosure</h2>
+              </div>
+            </div>
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <h3 className="font-semibold text-white mb-2">Responsible Disclosure Policy</h3>
+                <p className="text-sm">
+                  We welcome security researchers to report vulnerabilities. Safe harbor protections 
+                  for good-faith research with coordinated disclosure timelines.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">Security Contact</h3>
+                <p className="text-sm">
+                  Report vulnerabilities to{' '}
+                  <a href="mailto:security@foragents.dev" className="hover:underline" style={{ color: '#06D6A0' }}>
+                    security@foragents.dev
+                  </a>
+                  {' '}with PGP encryption available. Typical response time: &lt;24 hours.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2">Bug Bounty Program</h3>
+                <p className="text-sm">
+                  Rewards for qualifying vulnerabilities starting at $100 USD. Critical findings 
+                  eligible for up to $10,000. Public acknowledgment with researcher consent.
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          {/* Compliance */}
+          <Card className="bg-[#0f0f0f] border-white/10 p-6 hover:border-[#06D6A0]/30 transition-colors">
+            <div className="flex items-start gap-4 mb-4">
+              <div className="p-3 bg-[#06D6A0]/10 rounded-lg">
+                <Shield className="w-6 h-6" style={{ color: '#06D6A0' }} />
+              </div>
+              <div>
+                <h2 className="text-2xl font-semibold mb-2">Compliance & Certifications</h2>
+              </div>
+            </div>
+            <div className="space-y-4 text-gray-300">
+              <div>
+                <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
+                  GDPR Compliant
+                  <Badge variant="outline" className="border-[#06D6A0] text-[#06D6A0]">Compliant</Badge>
+                </h3>
+                <p className="text-sm">
+                  Full compliance with EU General Data Protection Regulation. Data subject rights 
+                  portal, consent management, and appointed Data Protection Officer (DPO).
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
+                  SOC 2 Type II
+                  <Badge variant="outline" className="border-[#06D6A0] text-[#06D6A0]">Certified</Badge>
+                </h3>
+                <p className="text-sm">
+                  Independent validation of security, availability, processing integrity, 
+                  confidentiality, and privacy controls. Reports available under NDA.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold text-white mb-2 flex items-center gap-2">
+                  HIPAA Ready
+                  <Badge variant="outline" className="border-[#06D6A0] text-[#06D6A0]">Available</Badge>
+                </h3>
+                <p className="text-sm">
+                  Business Associate Agreements (BAA) available for healthcare customers. 
+                  PHI encryption, audit logging, and compliance controls for regulated industries.
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Security Checklist */}
+        <div className="mb-16">
+          <SecurityChecklist />
+        </div>
+
+        {/* Report Vulnerability CTA */}
+        <div className="text-center">
+          <Card className="bg-[#0f0f0f] border-white/10 p-8 inline-block">
+            <h2 className="text-2xl font-semibold mb-4">Found a Security Issue?</h2>
+            <p className="text-gray-400 mb-6 max-w-2xl">
+              We take security seriously and appreciate responsible disclosure. Report vulnerabilities 
+              directly to our security team for prompt investigation and resolution.
+            </p>
+            <Link href="mailto:security@foragents.dev">
+              <Button 
+                className="text-white font-semibold px-8 py-6 text-lg"
+                style={{ backgroundColor: '#06D6A0' }}
+              >
+                Report a Vulnerability
+              </Button>
+            </Link>
+          </Card>
+        </div>
+
+        {/* Last Updated */}
+        <div className="text-center text-gray-500 text-sm mt-12">
+          Last updated: February 9, 2026
+        </div>
+      </div>
     </div>
   );
 }

@@ -118,6 +118,11 @@ export function Footer() {
                   Status
                 </Link>
               </li>
+              <li>
+                <Link href="/security" className="text-muted-foreground hover:text-cyan transition-colors">
+                  Security
+                </Link>
+              </li>
             </ul>
           </div>
 
