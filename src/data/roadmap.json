@@ -1,0 +1,366 @@
+[
+  {
+    "id": "real-time-agent-monitoring",
+    "title": "Real-time Agent Monitoring",
+    "description": "Live dashboard to monitor agent activity, resource usage, and performance metrics in real-time.",
+    "fullDescription": "Build a comprehensive real-time monitoring dashboard that gives developers visibility into their agents' behavior, resource consumption, and performance. Track API calls, token usage, execution time, error rates, and system health in real-time with beautiful visualizations and alerting capabilities.",
+    "category": "Platform",
+    "status": "Planned",
+    "upvotes": 156,
+    "commentCount": 23,
+    "createdAt": "2025-01-15T10:30:00Z",
+    "updatedAt": "2025-02-05T14:20:00Z",
+    "timeline": [
+      {
+        "date": "2025-01-15T10:30:00Z",
+        "status": "Planned",
+        "note": "Feature proposed and approved for Q1 2025 roadmap"
+      }
+    ]
+  },
+  {
+    "id": "agent-to-agent-messaging",
+    "title": "Agent-to-Agent Messaging Protocol",
+    "description": "Standardized protocol for secure communication between different agents.",
+    "fullDescription": "Design and implement a standardized messaging protocol that enables secure, efficient communication between agents regardless of their underlying platform or framework. Support both synchronous request-response patterns and asynchronous event-driven communication with built-in authentication, rate limiting, and message queuing.",
+    "category": "API",
+    "status": "Planned",
+    "upvotes": 203,
+    "commentCount": 45,
+    "createdAt": "2025-01-20T09:15:00Z",
+    "updatedAt": "2025-02-07T11:45:00Z",
+    "timeline": [
+      {
+        "date": "2025-01-20T09:15:00Z",
+        "status": "Planned",
+        "note": "Community requested feature for multi-agent systems"
+      }
+    ]
+  },
+  {
+    "id": "skill-marketplace-v2",
+    "title": "Skill Marketplace v2",
+    "description": "Enhanced marketplace with skill ratings, reviews, and monetization options.",
+    "fullDescription": "Major upgrade to the Skills marketplace with community-driven ratings and reviews, skill versioning, dependency management, and creator monetization through one-time purchases or subscriptions. Include skill analytics for creators and improved discovery for users.",
+    "category": "Skills",
+    "status": "Planned",
+    "upvotes": 187,
+    "commentCount": 31,
+    "createdAt": "2025-01-10T16:00:00Z",
+    "updatedAt": "2025-02-06T09:30:00Z",
+    "timeline": [
+      {
+        "date": "2025-01-10T16:00:00Z",
+        "status": "Planned",
+        "note": "Planned for Q2 2025 release"
+      }
+    ]
+  },
+  {
+    "id": "agent-certification-program",
+    "title": "Agent Certification Program",
+    "description": "Formal certification program for agents demonstrating reliability and safety standards.",
+    "fullDescription": "Launch a comprehensive certification program that validates agents meet specific reliability, security, and performance standards. Include automated testing suites, manual review processes, and ongoing monitoring. Certified agents receive badges and priority placement in directories.",
+    "category": "Community",
+    "status": "Planned",
+    "upvotes": 142,
+    "commentCount": 28,
+    "createdAt": "2025-01-25T13:45:00Z",
+    "updatedAt": "2025-02-04T16:10:00Z",
+    "timeline": [
+      {
+        "date": "2025-01-25T13:45:00Z",
+        "status": "Planned",
+        "note": "Beta program launching Q2 2025"
+      }
+    ]
+  },
+  {
+    "id": "advanced-workflow-builder",
+    "title": "Advanced Workflow Builder",
+    "description": "Visual workflow designer for creating complex multi-agent orchestrations.",
+    "fullDescription": "Build an intuitive drag-and-drop workflow designer that lets developers create sophisticated multi-agent workflows without code. Support conditional logic, parallel execution, error handling, and state management. Include templates for common patterns and ability to export workflows as code.",
+    "category": "Platform",
+    "status": "In Progress",
+    "upvotes": 298,
+    "commentCount": 67,
+    "createdAt": "2024-12-10T10:00:00Z",
+    "updatedAt": "2025-02-08T08:15:00Z",
+    "timeline": [
+      {
+        "date": "2024-12-10T10:00:00Z",
+        "status": "Planned",
+        "note": "Feature approved for development"
+      },
+      {
+        "date": "2025-01-15T14:30:00Z",
+        "status": "In Progress",
+        "note": "Development started - alpha UI complete"
+      }
+    ]
+  },
+  {
+    "id": "mcp-server-templates",
+    "title": "MCP Server Templates Library",
+    "description": "Comprehensive library of ready-to-use MCP server templates for common integrations.",
+    "fullDescription": "Create and maintain a library of high-quality MCP server templates covering popular APIs and services. Include authentication flows, rate limiting, error handling, and comprehensive documentation. Support one-click deployment to major cloud providers.",
+    "category": "Skills",
+    "status": "In Progress",
+    "upvotes": 224,
+    "commentCount": 42,
+    "createdAt": "2025-01-05T11:20:00Z",
+    "updatedAt": "2025-02-07T15:40:00Z",
+    "timeline": [
+      {
+        "date": "2025-01-05T11:20:00Z",
+        "status": "Planned",
+        "note": "Roadmap item created"
+      },
+      {
+        "date": "2025-01-28T10:15:00Z",
+        "status": "In Progress",
+        "note": "First 10 templates in development"
+      }
+    ]
+  },
+  {
+    "id": "enterprise-sso",
+    "title": "Enterprise SSO Integration",
+    "description": "Single Sign-On support for enterprise customers with SAML and OAuth.",
+    "fullDescription": "Add enterprise-grade authentication with support for SAML 2.0, OAuth 2.0, and OpenID Connect. Include user provisioning/deprovisioning, role-based access control, audit logging, and integration with popular identity providers like Okta, Auth0, and Azure AD.",
+    "category": "Enterprise",
+    "status": "In Progress",
+    "upvotes": 89,
+    "commentCount": 15,
+    "createdAt": "2024-12-20T09:30:00Z",
+    "updatedAt": "2025-02-08T10:25:00Z",
+    "timeline": [
+      {
+        "date": "2024-12-20T09:30:00Z",
+        "status": "Planned",
+        "note": "Enterprise feature request"
+      },
+      {
+        "date": "2025-01-10T13:00:00Z",
+        "status": "In Progress",
+        "note": "OAuth and SAML implementation started"
+      }
+    ]
+  },
+  {
+    "id": "agent-playground-v3",
+    "title": "Agent Playground v3",
+    "description": "Major upgrade with collaborative features and advanced debugging tools.",
+    "fullDescription": "Complete redesign of the Agent Playground with real-time collaboration, advanced debugging tools, step-through execution, variable inspection, and performance profiling. Support for saving and sharing playground sessions, team workspaces, and integration with version control.",
+    "category": "Platform",
+    "status": "In Progress",
+    "upvotes": 312,
+    "commentCount": 78,
+    "createdAt": "2024-11-30T14:45:00Z",
+    "updatedAt": "2025-02-08T09:50:00Z",
+    "timeline": [
+      {
+        "date": "2024-11-30T14:45:00Z",
+        "status": "Planned",
+        "note": "Design phase initiated"
+      },
+      {
+        "date": "2025-01-08T11:20:00Z",
+        "status": "In Progress",
+        "note": "Beta version with core features launched"
+      }
+    ]
+  },
+  {
+    "id": "graphql-api",
+    "title": "GraphQL API",
+    "description": "Modern GraphQL API alongside existing REST endpoints for flexible data querying.",
+    "fullDescription": "Launch a comprehensive GraphQL API that provides all platform functionality with flexible querying, real-time subscriptions, and optimized data fetching. Include interactive GraphQL playground, comprehensive schema documentation, and migration guide from REST endpoints.",
+    "category": "API",
+    "status": "Shipped",
+    "upvotes": 267,
+    "commentCount": 52,
+    "createdAt": "2024-10-15T10:00:00Z",
+    "updatedAt": "2025-01-30T14:30:00Z",
+    "timeline": [
+      {
+        "date": "2024-10-15T10:00:00Z",
+        "status": "Planned",
+        "note": "API design and schema planning"
+      },
+      {
+        "date": "2024-11-20T09:15:00Z",
+        "status": "In Progress",
+        "note": "Core API implementation"
+      },
+      {
+        "date": "2025-01-30T14:30:00Z",
+        "status": "Shipped",
+        "note": "GraphQL API v1 launched with full documentation"
+      }
+    ]
+  },
+  {
+    "id": "skill-dependency-resolver",
+    "title": "Skill Dependency Resolver",
+    "description": "Automatic dependency resolution and version management for skills.",
+    "fullDescription": "Smart dependency resolution system that automatically handles skill dependencies, version conflicts, and updates. Include semantic versioning support, dependency graphs, security vulnerability scanning, and automated update notifications.",
+    "category": "Skills",
+    "status": "Shipped",
+    "upvotes": 178,
+    "commentCount": 34,
+    "createdAt": "2024-11-01T11:30:00Z",
+    "updatedAt": "2025-02-01T16:20:00Z",
+    "timeline": [
+      {
+        "date": "2024-11-01T11:30:00Z",
+        "status": "Planned",
+        "note": "Feature design and specification"
+      },
+      {
+        "date": "2024-12-05T10:00:00Z",
+        "status": "In Progress",
+        "note": "Core resolver engine development"
+      },
+      {
+        "date": "2025-02-01T16:20:00Z",
+        "status": "Shipped",
+        "note": "Dependency resolver live in production"
+      }
+    ]
+  },
+  {
+    "id": "community-forums",
+    "title": "Community Forums & Discussions",
+    "description": "Dedicated forum platform for agent developers to share knowledge and collaborate.",
+    "fullDescription": "Launch a full-featured community forum with categories for different topics, threaded discussions, reputation system, markdown support, code highlighting, search, and moderation tools. Integrate with existing user accounts and notification systems.",
+    "category": "Community",
+    "status": "Shipped",
+    "upvotes": 245,
+    "commentCount": 89,
+    "createdAt": "2024-09-20T09:00:00Z",
+    "updatedAt": "2025-01-15T11:45:00Z",
+    "timeline": [
+      {
+        "date": "2024-09-20T09:00:00Z",
+        "status": "Planned",
+        "note": "Community feature planning"
+      },
+      {
+        "date": "2024-10-28T13:30:00Z",
+        "status": "In Progress",
+        "note": "Beta forum launched for testing"
+      },
+      {
+        "date": "2025-01-15T11:45:00Z",
+        "status": "Shipped",
+        "note": "Community forums officially launched"
+      }
+    ]
+  },
+  {
+    "id": "agent-analytics-dashboard",
+    "title": "Agent Analytics Dashboard",
+    "description": "Comprehensive analytics and insights for agent performance and usage patterns.",
+    "fullDescription": "Build detailed analytics dashboard showing agent performance metrics, usage patterns, cost analysis, error tracking, and user behavior insights. Include custom report builder, data export capabilities, and API access for programmatic analytics.",
+    "category": "Platform",
+    "status": "Shipped",
+    "upvotes": 198,
+    "commentCount": 41,
+    "createdAt": "2024-10-05T14:20:00Z",
+    "updatedAt": "2025-01-25T09:30:00Z",
+    "timeline": [
+      {
+        "date": "2024-10-05T14:20:00Z",
+        "status": "Planned",
+        "note": "Analytics requirements gathering"
+      },
+      {
+        "date": "2024-11-15T10:45:00Z",
+        "status": "In Progress",
+        "note": "Dashboard development and metric collection"
+      },
+      {
+        "date": "2025-01-25T09:30:00Z",
+        "status": "Shipped",
+        "note": "Analytics dashboard v1 released"
+      }
+    ]
+  },
+  {
+    "id": "agent-versioning-system",
+    "title": "Agent Versioning System",
+    "description": "Git-like versioning for agents with rollback capabilities and change tracking.",
+    "fullDescription": "Implement comprehensive versioning system for agents that tracks all changes, supports branching and merging, enables rollback to previous versions, and provides detailed change logs. Include A/B testing capabilities and gradual rollout controls.",
+    "category": "Platform",
+    "status": "Considering",
+    "upvotes": 134,
+    "commentCount": 27,
+    "createdAt": "2025-02-01T10:15:00Z",
+    "updatedAt": "2025-02-07T13:20:00Z",
+    "timeline": [
+      {
+        "date": "2025-02-01T10:15:00Z",
+        "status": "Considering",
+        "note": "Community proposal under evaluation"
+      }
+    ]
+  },
+  {
+    "id": "multi-language-sdk",
+    "title": "Multi-Language SDK Support",
+    "description": "Official SDKs for Python, Go, Rust, and Ruby in addition to TypeScript/JavaScript.",
+    "fullDescription": "Develop and maintain official SDKs for popular programming languages beyond JavaScript/TypeScript. Each SDK should provide idiomatic interfaces, comprehensive documentation, code examples, and feature parity with the primary SDK. Include automated testing and release pipelines.",
+    "category": "API",
+    "status": "Considering",
+    "upvotes": 289,
+    "commentCount": 63,
+    "createdAt": "2025-02-02T11:30:00Z",
+    "updatedAt": "2025-02-08T14:15:00Z",
+    "timeline": [
+      {
+        "date": "2025-02-02T11:30:00Z",
+        "status": "Considering",
+        "note": "Evaluating resource requirements and priority"
+      }
+    ]
+  },
+  {
+    "id": "agent-marketplace",
+    "title": "Agent Marketplace",
+    "description": "Public marketplace for discovering and deploying pre-built agents.",
+    "fullDescription": "Create a curated marketplace where developers can publish and monetize complete agent solutions. Include ratings, reviews, screenshots, live demos, usage analytics, and one-click deployment. Support both free and paid agents with revenue sharing model.",
+    "category": "Community",
+    "status": "Considering",
+    "upvotes": 421,
+    "commentCount": 94,
+    "createdAt": "2025-01-28T09:45:00Z",
+    "updatedAt": "2025-02-08T11:50:00Z",
+    "timeline": [
+      {
+        "date": "2025-01-28T09:45:00Z",
+        "status": "Considering",
+        "note": "Highly requested feature - exploring implementation approach"
+      }
+    ]
+  },
+  {
+    "id": "enterprise-support-portal",
+    "title": "Enterprise Support Portal",
+    "description": "Dedicated support portal with SLA tracking and priority response for enterprise customers.",
+    "fullDescription": "Build dedicated support portal for enterprise customers with ticket management, SLA tracking, knowledge base, priority escalation, dedicated support engineers, and 24/7 availability. Include phone support, screen sharing, and on-site consulting options for premium tiers.",
+    "category": "Enterprise",
+    "status": "Considering",
+    "upvotes": 67,
+    "commentCount": 12,
+    "createdAt": "2025-02-03T14:00:00Z",
+    "updatedAt": "2025-02-06T16:30:00Z",
+    "timeline": [
+      {
+        "date": "2025-02-03T14:00:00Z",
+        "status": "Considering",
+        "note": "Enterprise tier requirements being assessed"
+      }
+    ]
+  }
+]

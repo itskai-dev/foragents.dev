@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Release Notes | forAgents',
@@ -148,9 +149,9 @@ export default function ReleasesPage() {
         <div className="mt-16 text-center text-white/40 text-sm">
           <p>
             More releases coming soon. Follow our{' '}
-            <a href="/roadmap" className="text-[#06D6A0] hover:underline">
+            <Link href="/roadmap" className="text-[#06D6A0] hover:underline">
               roadmap
-            </a>{' '}
+            </Link>{' '}
             to see what&apos;s next.
           </p>
         </div>
