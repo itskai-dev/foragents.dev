@@ -1,0 +1,813 @@
+{
+  "categories": [
+    {
+      "id": "auth",
+      "name": "Authentication & Authorization",
+      "description": "Errors related to API keys, OAuth, permissions, and access control",
+      "errors": [
+        {
+          "code": "AUTH_001",
+          "name": "Invalid API Key",
+          "description": "The provided API key is malformed, expired, or doesn't exist",
+          "severity": "high",
+          "causes": [
+            "API key was revoked or regenerated",
+            "Key copied incorrectly (missing characters)",
+            "Using key from wrong environment (dev key in prod)",
+            "Key expired after rotation"
+          ],
+          "fixes": [
+            "Verify key in your provider's dashboard",
+            "Check for whitespace or hidden characters in key",
+            "Regenerate key if necessary",
+            "Update environment variables and restart service"
+          ],
+          "example": "# Check if key is properly set\necho $OPENAI_API_KEY\n# Should start with sk- for OpenAI\n\n# Test key validity\ncurl https://api.openai.com/v1/models \\\n  -H \"Authorization: Bearer $OPENAI_API_KEY\""
+        },
+        {
+          "code": "AUTH_002",
+          "name": "Insufficient Permissions",
+          "description": "API key lacks required scopes or permissions for the requested operation",
+          "severity": "medium",
+          "causes": [
+            "Key created with limited scopes",
+            "Organization role doesn't include required permission",
+            "Resource is in different project/workspace",
+            "Enterprise feature requires upgraded plan"
+          ],
+          "fixes": [
+            "Check key scopes in provider dashboard",
+            "Request admin to grant additional permissions",
+            "Use correct workspace/project API key",
+            "Upgrade plan if feature is gated"
+          ],
+          "example": "# Anthropic: Check available models with your key\ncurl https://api.anthropic.com/v1/models \\\n  -H \"x-api-key: $ANTHROPIC_API_KEY\" \\\n  -H \"anthropic-version: 2023-06-01\"\n\n# If you get 403, your key lacks model access"
+        },
+        {
+          "code": "AUTH_003",
+          "name": "OAuth Token Expired",
+          "description": "Access token has expired and needs refresh",
+          "severity": "medium",
+          "causes": [
+            "Token TTL exceeded (typically 1-24 hours)",
+            "User revoked app permissions",
+            "Service rotated tokens for security",
+            "Refresh token also expired"
+          ],
+          "fixes": [
+            "Implement automatic token refresh flow",
+            "Store refresh token securely",
+            "Re-authenticate user if refresh fails",
+            "Check token expiry before making requests"
+          ],
+          "example": "// Token refresh pattern\nif (Date.now() > tokenExpiresAt) {\n  const response = await fetch('https://oauth.provider.com/token', {\n    method: 'POST',\n    body: JSON.stringify({\n      grant_type: 'refresh_token',\n      refresh_token: storedRefreshToken,\n      client_id: clientId,\n      client_secret: clientSecret\n    })\n  });\n  const { access_token, expires_in } = await response.json();\n  // Store new token\n}"
+        },
+        {
+          "code": "AUTH_004",
+          "name": "Missing Authorization Header",
+          "description": "Request doesn't include required authentication header",
+          "severity": "high",
+          "causes": [
+            "Header not set in HTTP client",
+            "Middleware stripped the header",
+            "Using wrong header name (Authorization vs X-API-Key)",
+            "Bearer prefix missing or incorrect"
+          ],
+          "fixes": [
+            "Add Authorization header to all requests",
+            "Use correct format: 'Bearer <token>' or 'Bearer <key>'",
+            "Check middleware isn't removing headers",
+            "Verify header name matches API documentation"
+          ],
+          "example": "// Correct header formats\n\n// OpenAI / most APIs\nheaders: {\n  'Authorization': 'Bearer sk-...'\n}\n\n// Anthropic\nheaders: {\n  'x-api-key': 'sk-ant-...'\n}\n\n// Google\nheaders: {\n  'Authorization': 'Bearer ya29...'\n}"
+        },
+        {
+          "code": "AUTH_005",
+          "name": "IP Address Not Whitelisted",
+          "description": "Request origin IP is not in allowed list",
+          "severity": "medium",
+          "causes": [
+            "API key has IP restrictions enabled",
+            "Agent running from new server/location",
+            "Dynamic IP changed",
+            "Request routed through unexpected proxy"
+          ],
+          "fixes": [
+            "Add current IP to whitelist in provider dashboard",
+            "Use unrestricted key for dynamic environments",
+            "Configure static IP for production",
+            "Check if VPN/proxy is interfering"
+          ],
+          "example": "# Find your current IP\ncurl https://api.ipify.org\n\n# Test if IP is the issue by trying from different location\n# Or disable IP restrictions temporarily to confirm"
+        },
+        {
+          "code": "AUTH_006",
+          "name": "Rate Limit Authentication",
+          "description": "Too many authentication attempts in short period",
+          "severity": "low",
+          "causes": [
+            "Retry loop with invalid credentials",
+            "Multiple agents sharing same key",
+            "Brute force protection triggered",
+            "Automated testing without delays"
+          ],
+          "fixes": [
+            "Implement exponential backoff",
+            "Cache successful auth tokens",
+            "Use separate keys per agent/environment",
+            "Add delays between auth attempts"
+          ],
+          "example": "// Exponential backoff for auth\nlet retries = 0;\nwhile (retries < 5) {\n  try {\n    await authenticate();\n    break;\n  } catch (e) {\n    if (e.code === 'AUTH_006') {\n      await sleep(Math.pow(2, retries) * 1000);\n      retries++;\n    } else throw e;\n  }\n}"
+        }
+      ]
+    },
+    {
+      "id": "rate-limit",
+      "name": "Rate Limiting",
+      "description": "Errors when exceeding API rate limits",
+      "errors": [
+        {
+          "code": "RATE_001",
+          "name": "Requests Per Minute Exceeded",
+          "description": "Hit the requests-per-minute limit for your tier",
+          "severity": "high",
+          "causes": [
+            "Burst of concurrent requests",
+            "Loop generating requests faster than limit",
+            "Multiple agents sharing same key",
+            "Free tier limits (e.g., 3 RPM)"
+          ],
+          "fixes": [
+            "Implement request queue with rate limiter",
+            "Upgrade to higher tier",
+            "Use multiple API keys and round-robin",
+            "Add delays between requests"
+          ],
+          "example": "// Simple rate limiter\nclass RateLimiter {\n  constructor(requestsPerMinute) {\n    this.rpm = requestsPerMinute;\n    this.queue = [];\n    this.processing = false;\n  }\n\n  async request(fn) {\n    return new Promise((resolve, reject) => {\n      this.queue.push({ fn, resolve, reject });\n      this.process();\n    });\n  }\n\n  async process() {\n    if (this.processing || this.queue.length === 0) return;\n    this.processing = true;\n\n    const { fn, resolve, reject } = this.queue.shift();\n    try {\n      const result = await fn();\n      resolve(result);\n    } catch (e) {\n      reject(e);\n    }\n\n    await new Promise(r => setTimeout(r, 60000 / this.rpm));\n    this.processing = false;\n    this.process();\n  }\n}"
+        },
+        {
+          "code": "RATE_002",
+          "name": "Tokens Per Minute Exceeded",
+          "description": "Exceeded token throughput limit (TPM)",
+          "severity": "high",
+          "causes": [
+            "Very long prompts or responses",
+            "Processing large batches",
+            "Underestimating token count",
+            "Free tier token limits"
+          ],
+          "fixes": [
+            "Split large prompts into smaller chunks",
+            "Use streaming to spread token usage",
+            "Estimate tokens before request (1 token ≈ 4 chars)",
+            "Upgrade plan for higher TPM"
+          ],
+          "example": "// Estimate tokens (rough)\nfunction estimateTokens(text) {\n  return Math.ceil(text.length / 4);\n}\n\n// Split if too large\nfunction splitPrompt(text, maxTokens = 4000) {\n  const chunks = [];\n  const maxChars = maxTokens * 4;\n  \n  for (let i = 0; i < text.length; i += maxChars) {\n    chunks.push(text.slice(i, i + maxChars));\n  }\n  \n  return chunks;\n}"
+        },
+        {
+          "code": "RATE_003",
+          "name": "Daily Quota Exceeded",
+          "description": "Hit daily request or credit limit",
+          "severity": "critical",
+          "causes": [
+            "Usage spike from runaway loop",
+            "Free tier daily limits reached",
+            "Budget cap set too low",
+            "Unexpected traffic surge"
+          ],
+          "fixes": [
+            "Wait until quota resets (usually UTC midnight)",
+            "Upgrade to higher plan",
+            "Implement usage monitoring and alerts",
+            "Add circuit breaker to prevent runaway costs"
+          ],
+          "example": "// Circuit breaker pattern\nclass CircuitBreaker {\n  constructor(dailyLimit) {\n    this.limit = dailyLimit;\n    this.count = 0;\n    this.resetAt = this.getNextMidnight();\n  }\n\n  async execute(fn) {\n    if (Date.now() > this.resetAt) {\n      this.count = 0;\n      this.resetAt = this.getNextMidnight();\n    }\n\n    if (this.count >= this.limit) {\n      throw new Error('RATE_003: Daily quota exceeded');\n    }\n\n    this.count++;\n    return await fn();\n  }\n\n  getNextMidnight() {\n    const tomorrow = new Date();\n    tomorrow.setUTCHours(24, 0, 0, 0);\n    return tomorrow.getTime();\n  }\n}"
+        },
+        {
+          "code": "RATE_004",
+          "name": "Concurrent Request Limit",
+          "description": "Too many simultaneous connections",
+          "severity": "medium",
+          "causes": [
+            "Parallel processing without limit",
+            "Multiple agent instances sharing key",
+            "Websocket connections not closed",
+            "Batch processing too aggressive"
+          ],
+          "fixes": [
+            "Limit concurrent requests with semaphore",
+            "Use request pooling",
+            "Close idle connections",
+            "Process in smaller batches"
+          ],
+          "example": "// Limit concurrency\nclass Semaphore {\n  constructor(max) {\n    this.max = max;\n    this.current = 0;\n    this.queue = [];\n  }\n\n  async acquire() {\n    if (this.current < this.max) {\n      this.current++;\n      return;\n    }\n\n    await new Promise(resolve => this.queue.push(resolve));\n  }\n\n  release() {\n    this.current--;\n    const next = this.queue.shift();\n    if (next) {\n      this.current++;\n      next();\n    }\n  }\n\n  async run(fn) {\n    await this.acquire();\n    try {\n      return await fn();\n    } finally {\n      this.release();\n    }\n  }\n}\n\n// Usage: limit to 5 concurrent requests\nconst sem = new Semaphore(5);\nconst results = await Promise.all(\n  items.map(item => sem.run(() => processItem(item)))\n);"
+        },
+        {
+          "code": "RATE_005",
+          "name": "Retry-After Required",
+          "description": "Must wait before retrying (indicated by Retry-After header)",
+          "severity": "medium",
+          "causes": [
+            "Temporary rate limit triggered",
+            "Server load shedding",
+            "Abuse detection activated",
+            "Maintenance window"
+          ],
+          "fixes": [
+            "Parse and respect Retry-After header",
+            "Implement exponential backoff",
+            "Queue request for later",
+            "Use different endpoint if available"
+          ],
+          "example": "// Respect Retry-After\nasync function requestWithRetry(url, options, maxRetries = 3) {\n  for (let i = 0; i < maxRetries; i++) {\n    const response = await fetch(url, options);\n    \n    if (response.status === 429) {\n      const retryAfter = response.headers.get('Retry-After');\n      const delayMs = retryAfter \n        ? parseInt(retryAfter) * 1000 \n        : Math.pow(2, i) * 1000;\n      \n      console.log(`Rate limited. Waiting ${delayMs}ms...`);\n      await new Promise(r => setTimeout(r, delayMs));\n      continue;\n    }\n    \n    return response;\n  }\n  \n  throw new Error('Max retries exceeded');\n}"
+        }
+      ]
+    },
+    {
+      "id": "context",
+      "name": "Context & Memory",
+      "description": "Errors related to context windows, memory limits, and state management",
+      "errors": [
+        {
+          "code": "CTX_001",
+          "name": "Context Window Overflow",
+          "description": "Input + output tokens exceed model's context limit",
+          "severity": "critical",
+          "causes": [
+            "Prompt too long for model",
+            "Accumulated conversation history",
+            "Large file contents included",
+            "Using wrong model (smaller context)"
+          ],
+          "fixes": [
+            "Truncate or summarize older messages",
+            "Use model with larger context (e.g., Claude 200k)",
+            "Split task into multiple requests",
+            "Remove unnecessary context"
+          ],
+          "example": "// Manage context window\nfunction pruneContext(messages, maxTokens = 100000) {\n  let totalTokens = messages.reduce((sum, m) => \n    sum + estimateTokens(m.content), 0\n  );\n  \n  // Keep system prompt and recent messages\n  const system = messages[0];\n  let recent = messages.slice(-10);\n  \n  while (totalTokens > maxTokens && recent.length > 2) {\n    recent.shift(); // Remove oldest recent message\n    totalTokens = estimateTokens(system.content) + \n      recent.reduce((sum, m) => sum + estimateTokens(m.content), 0);\n  }\n  \n  return [system, ...recent];\n}"
+        },
+        {
+          "code": "CTX_002",
+          "name": "Session State Lost",
+          "description": "Agent lost track of conversation or previous context",
+          "severity": "medium",
+          "causes": [
+            "Server restart cleared memory",
+            "Session timeout",
+            "Stateless API without context passing",
+            "Database connection lost"
+          ],
+          "fixes": [
+            "Persist conversation to database",
+            "Implement session recovery",
+            "Pass full context in each request",
+            "Use conversation_id to link messages"
+          ],
+          "example": "// Session persistence pattern\nclass SessionManager {\n  constructor(db) {\n    this.db = db;\n    this.cache = new Map();\n  }\n\n  async getSession(sessionId) {\n    if (this.cache.has(sessionId)) {\n      return this.cache.get(sessionId);\n    }\n    \n    const session = await this.db.sessions.findOne({ id: sessionId });\n    if (session) {\n      this.cache.set(sessionId, session);\n    }\n    return session || this.createSession(sessionId);\n  }\n\n  async saveMessage(sessionId, message) {\n    const session = await this.getSession(sessionId);\n    session.messages.push(message);\n    await this.db.sessions.updateOne(\n      { id: sessionId },\n      { $set: { messages: session.messages, updatedAt: new Date() } }\n    );\n    this.cache.set(sessionId, session);\n  }\n}"
+        },
+        {
+          "code": "CTX_003",
+          "name": "Memory Fragmentation",
+          "description": "Inconsistent or contradictory information in context",
+          "severity": "low",
+          "causes": [
+            "Multiple updates without reconciliation",
+            "Old information not removed",
+            "Concurrent modifications",
+            "Partial context loading"
+          ],
+          "fixes": [
+            "Implement fact reconciliation",
+            "Version context snapshots",
+            "Use structured memory with timestamps",
+            "Periodic context cleanup"
+          ],
+          "example": "// Fact reconciliation\nclass FactMemory {\n  constructor() {\n    this.facts = new Map(); // key -> { value, timestamp, confidence }\n  }\n\n  update(key, value, confidence = 1.0) {\n    const existing = this.facts.get(key);\n    \n    if (!existing || confidence >= existing.confidence) {\n      this.facts.set(key, {\n        value,\n        timestamp: Date.now(),\n        confidence\n      });\n      return true;\n    }\n    \n    return false; // Rejected due to lower confidence\n  }\n\n  get(key) {\n    const fact = this.facts.get(key);\n    if (!fact) return null;\n    \n    // Age decay\n    const ageHours = (Date.now() - fact.timestamp) / 3600000;\n    const decayedConfidence = fact.confidence * Math.exp(-ageHours / 24);\n    \n    return decayedConfidence > 0.3 ? fact.value : null;\n  }\n}"
+        },
+        {
+          "code": "CTX_004",
+          "name": "Context Injection Attack",
+          "description": "User input contains instructions that manipulate agent behavior",
+          "severity": "critical",
+          "causes": [
+            "User input not sanitized",
+            "Prompt injection attempt",
+            "Delimiter confusion",
+            "Malicious system prompt override"
+          ],
+          "fixes": [
+            "Use XML/JSON structure for clear boundaries",
+            "Sanitize user input",
+            "Validate against injection patterns",
+            "Use separate channels for instructions vs data"
+          ],
+          "example": "// Input sanitization\nfunction sanitizeInput(userInput) {\n  // Remove potential prompt injection patterns\n  const dangerous = [\n    /ignore previous instructions/gi,\n    /you are now/gi,\n    /system:/gi,\n    /assistant:/gi,\n    /<\\|.*?\\|>/g  // Special tokens\n  ];\n  \n  let safe = userInput;\n  for (const pattern of dangerous) {\n    safe = safe.replace(pattern, '[FILTERED]');\n  }\n  \n  return safe;\n}\n\n// Better: use structured format\nconst prompt = `\n<instructions>\nYou are a helpful assistant.\n</instructions>\n\n<user_input>\n${sanitizeInput(userInput)}\n</user_input>\n\n<task>\nRespond to the user input above.\n</task>\n`;"
+        },
+        {
+          "code": "CTX_005",
+          "name": "Context Switching Overhead",
+          "description": "Frequent context switches degrade performance",
+          "severity": "low",
+          "causes": [
+            "Too many active sessions",
+            "Reloading context repeatedly",
+            "Small batch sizes",
+            "Inefficient caching"
+          ],
+          "fixes": [
+            "Batch similar requests",
+            "Implement context pooling",
+            "Use longer sessions",
+            "Cache frequently used context"
+          ],
+          "example": "// Context pooling\nclass ContextPool {\n  constructor(maxSize = 10) {\n    this.pool = [];\n    this.maxSize = maxSize;\n    this.active = new Map();\n  }\n\n  async acquire(sessionId, loadFn) {\n    if (this.active.has(sessionId)) {\n      return this.active.get(sessionId);\n    }\n\n    let context;\n    if (this.pool.length > 0) {\n      context = this.pool.pop();\n      await context.load(sessionId);\n    } else {\n      context = await loadFn(sessionId);\n    }\n\n    this.active.set(sessionId, context);\n    return context;\n  }\n\n  release(sessionId) {\n    const context = this.active.get(sessionId);\n    if (context) {\n      this.active.delete(sessionId);\n      if (this.pool.length < this.maxSize) {\n        this.pool.push(context);\n      }\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "id": "tool",
+      "name": "Tool Execution",
+      "description": "Errors during tool/function calling and execution",
+      "errors": [
+        {
+          "code": "TOOL_001",
+          "name": "Invalid Tool Schema",
+          "description": "Tool definition doesn't match expected format",
+          "severity": "high",
+          "causes": [
+            "Missing required fields (name, description, parameters)",
+            "Wrong JSON schema format",
+            "Type mismatch in parameters",
+            "Provider-specific schema requirements"
+          ],
+          "fixes": [
+            "Validate schema against provider docs",
+            "Use schema validation library",
+            "Test tool registration separately",
+            "Check parameter type definitions"
+          ],
+          "example": "// Valid OpenAI function schema\nconst validTool = {\n  type: \"function\",\n  function: {\n    name: \"get_weather\",\n    description: \"Get weather for a location\",\n    parameters: {\n      type: \"object\",\n      properties: {\n        location: {\n          type: \"string\",\n          description: \"City name\"\n        },\n        unit: {\n          type: \"string\",\n          enum: [\"celsius\", \"fahrenheit\"]\n        }\n      },\n      required: [\"location\"]\n    }\n  }\n};\n\n// Validate before registration\nfunction validateToolSchema(tool) {\n  if (!tool.function?.name || !tool.function?.description) {\n    throw new Error('TOOL_001: Missing required fields');\n  }\n  if (tool.function.parameters?.type !== 'object') {\n    throw new Error('TOOL_001: Parameters must be object type');\n  }\n  return true;\n}"
+        },
+        {
+          "code": "TOOL_002",
+          "name": "Tool Execution Timeout",
+          "description": "Tool took too long to complete",
+          "severity": "medium",
+          "causes": [
+            "External API slow to respond",
+            "Infinite loop in tool code",
+            "Large data processing",
+            "Network latency"
+          ],
+          "fixes": [
+            "Implement timeout wrapper",
+            "Use async operations properly",
+            "Add progress indicators for long tasks",
+            "Return partial results if possible"
+          ],
+          "example": "// Timeout wrapper\nfunction withTimeout(fn, timeoutMs = 30000) {\n  return async (...args) => {\n    return Promise.race([\n      fn(...args),\n      new Promise((_, reject) => \n        setTimeout(() => reject(new Error('TOOL_002: Timeout')), timeoutMs)\n      )\n    ]);\n  };\n}\n\n// Usage\nconst safeTool = withTimeout(async (query) => {\n  const response = await fetch(`https://api.example.com/search?q=${query}`);\n  return await response.json();\n}, 10000); // 10 second timeout"
+        },
+        {
+          "code": "TOOL_003",
+          "name": "Missing Tool Dependencies",
+          "description": "Required library or service not available",
+          "severity": "high",
+          "causes": [
+            "Package not installed",
+            "Service not running (database, cache)",
+            "API endpoint unreachable",
+            "Permission denied for resource"
+          ],
+          "fixes": [
+            "Check dependencies on startup",
+            "Provide clear error messages",
+            "Implement fallback tools",
+            "Document required setup"
+          ],
+          "example": "// Dependency checker\nclass ToolRegistry {\n  constructor() {\n    this.tools = new Map();\n  }\n\n  async register(tool) {\n    // Check dependencies\n    if (tool.requires) {\n      for (const dep of tool.requires) {\n        try {\n          await this.checkDependency(dep);\n        } catch (e) {\n          console.error(`TOOL_003: ${tool.name} missing ${dep}`);\n          return false;\n        }\n      }\n    }\n    \n    this.tools.set(tool.name, tool);\n    return true;\n  }\n\n  async checkDependency(dep) {\n    if (dep.type === 'package') {\n      require.resolve(dep.name);\n    } else if (dep.type === 'service') {\n      const response = await fetch(dep.healthCheck);\n      if (!response.ok) throw new Error('Service unavailable');\n    }\n  }\n}"
+        },
+        {
+          "code": "TOOL_004",
+          "name": "Tool Parameter Validation Failed",
+          "description": "Arguments don't match expected types or constraints",
+          "severity": "medium",
+          "causes": [
+            "Model generated wrong types",
+            "Missing required parameters",
+            "Values out of range",
+            "Invalid enum value"
+          ],
+          "fixes": [
+            "Validate parameters before execution",
+            "Provide better descriptions in schema",
+            "Use strict types in schema",
+            "Return clear validation errors"
+          ],
+          "example": "// Parameter validator\nfunction validateParams(params, schema) {\n  const errors = [];\n\n  // Check required\n  for (const field of schema.required || []) {\n    if (!(field in params)) {\n      errors.push(`Missing required field: ${field}`);\n    }\n  }\n\n  // Check types\n  for (const [key, value] of Object.entries(params)) {\n    const propSchema = schema.properties[key];\n    if (!propSchema) continue;\n\n    if (propSchema.type === 'number' && typeof value !== 'number') {\n      errors.push(`${key} must be number, got ${typeof value}`);\n    }\n\n    if (propSchema.enum && !propSchema.enum.includes(value)) {\n      errors.push(`${key} must be one of: ${propSchema.enum.join(', ')}`);\n    }\n\n    if (propSchema.minimum && value < propSchema.minimum) {\n      errors.push(`${key} must be >= ${propSchema.minimum}`);\n    }\n  }\n\n  if (errors.length > 0) {\n    throw new Error(`TOOL_004: ${errors.join('; ')}`);\n  }\n}"
+        },
+        {
+          "code": "TOOL_005",
+          "name": "Tool Result Format Error",
+          "description": "Tool returned data in unexpected format",
+          "severity": "medium",
+          "causes": [
+            "Non-serializable return value",
+            "Wrong data structure",
+            "Binary data not encoded",
+            "Circular references in object"
+          ],
+          "fixes": [
+            "Always return JSON-serializable data",
+            "Validate return format",
+            "Use schema for output",
+            "Handle special types (Date, Buffer, etc.)"
+          ],
+          "example": "// Safe result formatter\nfunction formatToolResult(result) {\n  try {\n    // Handle special types\n    if (result instanceof Date) {\n      return result.toISOString();\n    }\n    \n    if (Buffer.isBuffer(result)) {\n      return result.toString('base64');\n    }\n    \n    if (typeof result === 'object') {\n      // Remove circular refs\n      const seen = new WeakSet();\n      return JSON.parse(JSON.stringify(result, (key, value) => {\n        if (typeof value === 'object' && value !== null) {\n          if (seen.has(value)) return '[Circular]';\n          seen.add(value);\n        }\n        return value;\n      }));\n    }\n    \n    return result;\n  } catch (e) {\n    throw new Error(`TOOL_005: Cannot format result - ${e.message}`);\n  }\n}"
+        },
+        {
+          "code": "TOOL_006",
+          "name": "Tool Access Denied",
+          "description": "Tool attempted operation without proper permissions",
+          "severity": "high",
+          "causes": [
+            "File system permissions",
+            "Network firewall blocking",
+            "Sandbox restrictions",
+            "Security policy violation"
+          ],
+          "fixes": [
+            "Check permissions before execution",
+            "Request elevated access if needed",
+            "Use allowed alternatives",
+            "Update security policy"
+          ],
+          "example": "// Permission checker\nclass SecureToolExecutor {\n  constructor(permissions) {\n    this.allowed = new Set(permissions);\n  }\n\n  async execute(toolName, params) {\n    // Check permission\n    if (!this.allowed.has(toolName)) {\n      throw new Error(`TOOL_006: ${toolName} not allowed`);\n    }\n\n    // Check sensitive params\n    if (params.path && this.isForbiddenPath(params.path)) {\n      throw new Error('TOOL_006: Access to path denied');\n    }\n\n    // Execute\n    return await this.tools[toolName](params);\n  }\n\n  isForbiddenPath(path) {\n    const forbidden = ['/etc', '/sys', '/root'];\n    return forbidden.some(f => path.startsWith(f));\n  }\n}"
+        },
+        {
+          "code": "TOOL_007",
+          "name": "Tool Not Found",
+          "description": "Agent requested tool that doesn't exist",
+          "severity": "medium",
+          "causes": [
+            "Typo in tool name",
+            "Tool removed but still referenced",
+            "Wrong tool registry",
+            "Model hallucinating tools"
+          ],
+          "fixes": [
+            "List available tools in system prompt",
+            "Validate tool name before calling",
+            "Suggest similar tool names",
+            "Update tool documentation"
+          ],
+          "example": "// Fuzzy tool matcher\nfunction findTool(requestedName, availableTools) {\n  // Exact match\n  if (availableTools.has(requestedName)) {\n    return availableTools.get(requestedName);\n  }\n\n  // Fuzzy match\n  const names = Array.from(availableTools.keys());\n  const distances = names.map(name => ({\n    name,\n    distance: levenshteinDistance(requestedName, name)\n  }));\n  \n  distances.sort((a, b) => a.distance - b.distance);\n  \n  if (distances[0].distance <= 3) {\n    throw new Error(\n      `TOOL_007: Tool '${requestedName}' not found. Did you mean '${distances[0].name}'?`\n    );\n  }\n  \n  throw new Error(\n    `TOOL_007: Tool '${requestedName}' not found. Available: ${names.join(', ')}`\n  );\n}\n\nfunction levenshteinDistance(a, b) {\n  const matrix = [];\n  for (let i = 0; i <= b.length; i++) {\n    matrix[i] = [i];\n  }\n  for (let j = 0; j <= a.length; j++) {\n    matrix[0][j] = j;\n  }\n  for (let i = 1; i <= b.length; i++) {\n    for (let j = 1; j <= a.length; j++) {\n      if (b.charAt(i - 1) === a.charAt(j - 1)) {\n        matrix[i][j] = matrix[i - 1][j - 1];\n      } else {\n        matrix[i][j] = Math.min(\n          matrix[i - 1][j - 1] + 1,\n          matrix[i][j - 1] + 1,\n          matrix[i - 1][j] + 1\n        );\n      }\n    }\n  }\n  return matrix[b.length][a.length];\n}"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "name": "Network & Connectivity",
+      "description": "Errors related to network requests, timeouts, and connection issues",
+      "errors": [
+        {
+          "code": "NET_001",
+          "name": "Connection Timeout",
+          "description": "Network request took too long to establish connection",
+          "severity": "medium",
+          "causes": [
+            "Server unresponsive",
+            "DNS resolution slow",
+            "Firewall blocking",
+            "Network congestion"
+          ],
+          "fixes": [
+            "Increase timeout value",
+            "Check network connectivity",
+            "Use alternative endpoint",
+            "Implement retry logic"
+          ],
+          "example": "// Retry with backoff\nasync function fetchWithRetry(url, options = {}, maxRetries = 3) {\n  for (let i = 0; i < maxRetries; i++) {\n    try {\n      const controller = new AbortController();\n      const timeout = setTimeout(() => controller.abort(), 10000);\n      \n      const response = await fetch(url, {\n        ...options,\n        signal: controller.signal\n      });\n      \n      clearTimeout(timeout);\n      return response;\n    } catch (e) {\n      if (i === maxRetries - 1) throw e;\n      \n      const delay = Math.pow(2, i) * 1000;\n      console.log(`NET_001: Retry ${i + 1} after ${delay}ms`);\n      await new Promise(r => setTimeout(r, delay));\n    }\n  }\n}"
+        },
+        {
+          "code": "NET_002",
+          "name": "DNS Resolution Failed",
+          "description": "Unable to resolve hostname to IP address",
+          "severity": "high",
+          "causes": [
+            "Invalid domain name",
+            "DNS server unreachable",
+            "Network misconfiguration",
+            "Domain expired or doesn't exist"
+          ],
+          "fixes": [
+            "Verify domain name spelling",
+            "Check DNS settings",
+            "Use IP address directly",
+            "Try alternative DNS (8.8.8.8)"
+          ],
+          "example": "// DNS check\nconst dns = require('dns').promises;\n\nasync function checkDNS(hostname) {\n  try {\n    const addresses = await dns.resolve4(hostname);\n    console.log(`Resolved to: ${addresses.join(', ')}`);\n    return addresses;\n  } catch (e) {\n    if (e.code === 'ENOTFOUND') {\n      throw new Error(`NET_002: DNS resolution failed for ${hostname}`);\n    }\n    throw e;\n  }\n}"
+        },
+        {
+          "code": "NET_003",
+          "name": "SSL Certificate Error",
+          "description": "TLS/SSL certificate validation failed",
+          "severity": "high",
+          "causes": [
+            "Expired certificate",
+            "Self-signed certificate",
+            "Hostname mismatch",
+            "Untrusted CA"
+          ],
+          "fixes": [
+            "Update certificates",
+            "Add CA to trust store (if legitimate)",
+            "Use HTTPS properly",
+            "Don't disable cert validation in production!"
+          ],
+          "example": "// Certificate validation\nconst https = require('https');\n\n// DON'T DO THIS IN PRODUCTION\nconst dangerousAgent = new https.Agent({\n  rejectUnauthorized: false\n});\n\n// Better: add specific CA\nconst fs = require('fs');\nconst safeAgent = new https.Agent({\n  ca: fs.readFileSync('./custom-ca.pem')\n});\n\n// Check cert expiry\nfunction checkCertExpiry(url) {\n  return new Promise((resolve, reject) => {\n    const req = https.get(url, (res) => {\n      const cert = res.socket.getPeerCertificate();\n      const validTo = new Date(cert.valid_to);\n      const daysUntilExpiry = (validTo - Date.now()) / (1000 * 60 * 60 * 24);\n      \n      if (daysUntilExpiry < 0) {\n        reject(new Error('NET_003: Certificate expired'));\n      } else if (daysUntilExpiry < 30) {\n        console.warn(`Certificate expires in ${daysUntilExpiry} days`);\n      }\n      resolve(cert);\n    });\n    req.on('error', reject);\n  });\n}"
+        },
+        {
+          "code": "NET_004",
+          "name": "Proxy Configuration Error",
+          "description": "HTTP proxy settings preventing connection",
+          "severity": "medium",
+          "causes": [
+            "Proxy requires authentication",
+            "Wrong proxy address",
+            "Proxy blocking specific domains",
+            "Environment variables misconfigured"
+          ],
+          "fixes": [
+            "Check HTTP_PROXY and HTTPS_PROXY env vars",
+            "Add proxy authentication",
+            "Bypass proxy for specific hosts",
+            "Test without proxy"
+          ],
+          "example": "// Proxy configuration\nconst HttpsProxyAgent = require('https-proxy-agent');\n\n// From environment\nconst proxyUrl = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;\nconst agent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : undefined;\n\n// With authentication\nconst authProxyUrl = 'http://user:pass@proxy.example.com:8080';\nconst authAgent = new HttpsProxyAgent(authProxyUrl);\n\n// Bypass proxy for certain hosts\nconst NO_PROXY = (process.env.NO_PROXY || '').split(',');\nfunction shouldUseProxy(url) {\n  const hostname = new URL(url).hostname;\n  return !NO_PROXY.some(pattern => \n    hostname.includes(pattern.trim())\n  );\n}\n\nconst agent = shouldUseProxy(url) \n  ? new HttpsProxyAgent(proxyUrl) \n  : undefined;"
+        },
+        {
+          "code": "NET_005",
+          "name": "Request Body Too Large",
+          "description": "Payload exceeds server's maximum size limit",
+          "severity": "medium",
+          "causes": [
+            "Sending very large file",
+            "Accumulated context too big",
+            "Server has small body limit",
+            "Uncompressed data"
+          ],
+          "fixes": [
+            "Split request into chunks",
+            "Compress payload",
+            "Use streaming upload",
+            "Increase server body limit"
+          ],
+          "example": "// Chunked upload\nasync function uploadLargeFile(file, chunkSize = 1024 * 1024) {\n  const fileSize = file.size;\n  let offset = 0;\n  const chunks = [];\n\n  while (offset < fileSize) {\n    const chunk = file.slice(offset, offset + chunkSize);\n    const formData = new FormData();\n    formData.append('chunk', chunk);\n    formData.append('offset', offset);\n    formData.append('total', fileSize);\n\n    const response = await fetch('/upload-chunk', {\n      method: 'POST',\n      body: formData\n    });\n\n    if (!response.ok) {\n      throw new Error(`NET_005: Chunk upload failed at ${offset}`);\n    }\n\n    offset += chunkSize;\n  }\n\n  // Finalize\n  await fetch('/upload-complete', {\n    method: 'POST',\n    body: JSON.stringify({ fileSize })\n  });\n}"
+        },
+        {
+          "code": "NET_006",
+          "name": "WebSocket Connection Failed",
+          "description": "Unable to establish or maintain WebSocket connection",
+          "severity": "medium",
+          "causes": [
+            "Server doesn't support WebSockets",
+            "Proxy interfering with upgrade",
+            "Connection dropped",
+            "Protocol mismatch"
+          ],
+          "fixes": [
+            "Fall back to HTTP polling",
+            "Implement reconnection logic",
+            "Check server WebSocket support",
+            "Use Socket.IO for automatic fallbacks"
+          ],
+          "example": "// WebSocket with reconnection\nclass ResilientWebSocket {\n  constructor(url, options = {}) {\n    this.url = url;\n    this.reconnectDelay = 1000;\n    this.maxReconnectDelay = 30000;\n    this.reconnectAttempts = 0;\n    this.ws = null;\n    this.connect();\n  }\n\n  connect() {\n    try {\n      this.ws = new WebSocket(this.url);\n      \n      this.ws.onopen = () => {\n        console.log('WebSocket connected');\n        this.reconnectAttempts = 0;\n        this.reconnectDelay = 1000;\n      };\n\n      this.ws.onclose = () => {\n        console.log('WebSocket closed');\n        this.reconnect();\n      };\n\n      this.ws.onerror = (error) => {\n        console.error('NET_006: WebSocket error', error);\n        this.ws.close();\n      };\n    } catch (e) {\n      console.error('NET_006: Failed to create WebSocket', e);\n      this.reconnect();\n    }\n  }\n\n  reconnect() {\n    this.reconnectAttempts++;\n    const delay = Math.min(\n      this.reconnectDelay * Math.pow(2, this.reconnectAttempts),\n      this.maxReconnectDelay\n    );\n\n    console.log(`Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);\n    setTimeout(() => this.connect(), delay);\n  }\n\n  send(data) {\n    if (this.ws?.readyState === WebSocket.OPEN) {\n      this.ws.send(data);\n    } else {\n      throw new Error('NET_006: WebSocket not connected');\n    }\n  }\n}"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "name": "Data & Parsing",
+      "description": "Errors related to data formats, parsing, and validation",
+      "errors": [
+        {
+          "code": "DATA_001",
+          "name": "JSON Parse Error",
+          "description": "Invalid JSON in response or input",
+          "severity": "high",
+          "causes": [
+            "Truncated response",
+            "Model generated invalid JSON",
+            "Encoding issues",
+            "Unexpected characters"
+          ],
+          "fixes": [
+            "Validate JSON before parsing",
+            "Use JSON repair libraries",
+            "Request JSON mode from model",
+            "Add format validation to prompt"
+          ],
+          "example": "// Robust JSON parsing\nfunction parseJSON(text) {\n  try {\n    return JSON.parse(text);\n  } catch (e) {\n    // Try to extract JSON from text\n    const jsonMatch = text.match(/\\{[\\s\\S]*\\}|\\[[\\s\\S]*\\]/);\n    if (jsonMatch) {\n      try {\n        return JSON.parse(jsonMatch[0]);\n      } catch (e2) {\n        // JSON repair\n        const repaired = text\n          .replace(/,\\s*}/g, '}')\n          .replace(/,\\s*]/g, ']')\n          .replace(/([{,]\\s*)([a-zA-Z_][a-zA-Z0-9_]*)\\s*:/g, '$1\"$2\":');\n        return JSON.parse(repaired);\n      }\n    }\n    throw new Error('DATA_001: Cannot parse JSON - ' + e.message);\n  }\n}"
+        },
+        {
+          "code": "DATA_002",
+          "name": "Schema Validation Failed",
+          "description": "Data doesn't match expected schema",
+          "severity": "medium",
+          "causes": [
+            "Model output format changed",
+            "Missing required fields",
+            "Wrong data types",
+            "API version mismatch"
+          ],
+          "fixes": [
+            "Use schema validation library (Zod, Joi)",
+            "Provide schema examples in prompt",
+            "Handle optional fields gracefully",
+            "Version your schemas"
+          ],
+          "example": "// Schema validation with Zod\nconst { z } = require('zod');\n\nconst UserSchema = z.object({\n  name: z.string(),\n  email: z.string().email(),\n  age: z.number().int().positive().optional(),\n  roles: z.array(z.string()).default([])\n});\n\nfunction validateUser(data) {\n  try {\n    return UserSchema.parse(data);\n  } catch (e) {\n    if (e instanceof z.ZodError) {\n      const errors = e.errors.map(err => \n        `${err.path.join('.')}: ${err.message}`\n      );\n      throw new Error(`DATA_002: Validation failed - ${errors.join(', ')}`);\n    }\n    throw e;\n  }\n}\n\n// With transformation\nconst FlexibleUserSchema = z.object({\n  name: z.string(),\n  age: z.union([z.number(), z.string()]).transform(val => \n    typeof val === 'string' ? parseInt(val) : val\n  )\n});"
+        },
+        {
+          "code": "DATA_003",
+          "name": "Character Encoding Error",
+          "description": "Text encoding/decoding issues",
+          "severity": "low",
+          "causes": [
+            "Wrong charset assumed",
+            "Binary data in text field",
+            "Unicode handling errors",
+            "Emoji or special characters"
+          ],
+          "fixes": [
+            "Always use UTF-8",
+            "Detect encoding before decoding",
+            "Handle binary data separately",
+            "Normalize Unicode"
+          ],
+          "example": "// Encoding handling\nconst iconv = require('iconv-lite');\n\nfunction decodeText(buffer, encoding = 'utf-8') {\n  try {\n    return buffer.toString(encoding);\n  } catch (e) {\n    // Try to detect encoding\n    const detected = detectEncoding(buffer);\n    return iconv.decode(buffer, detected);\n  }\n}\n\n// Unicode normalization\nfunction normalizeText(text) {\n  return text.normalize('NFC'); // Canonical composition\n}\n\n// Remove problematic characters\nfunction sanitizeForJSON(text) {\n  return text\n    .replace(/[\\x00-\\x1F\\x7F-\\x9F]/g, '') // Control chars\n    .replace(/\\uFEFF/g, ''); // BOM\n}"
+        },
+        {
+          "code": "DATA_004",
+          "name": "Date/Time Parsing Error",
+          "description": "Invalid or ambiguous date format",
+          "severity": "low",
+          "causes": [
+            "Locale-specific format",
+            "Timezone confusion",
+            "Invalid date values",
+            "Multiple formats in same data"
+          ],
+          "fixes": [
+            "Always use ISO 8601",
+            "Store timestamps in UTC",
+            "Use date parsing library (date-fns, dayjs)",
+            "Validate date ranges"
+          ],
+          "example": "// Robust date parsing\nconst dayjs = require('dayjs');\nconst utc = require('dayjs/plugin/utc');\nconst customParseFormat = require('dayjs/plugin/customParseFormat');\n\ndayjs.extend(utc);\ndayjs.extend(customParseFormat);\n\nfunction parseDate(input) {\n  const formats = [\n    'YYYY-MM-DD',\n    'YYYY-MM-DD HH:mm:ss',\n    'DD/MM/YYYY',\n    'MM/DD/YYYY',\n    'YYYY-MM-DDTHH:mm:ssZ'\n  ];\n\n  for (const format of formats) {\n    const date = dayjs(input, format, true);\n    if (date.isValid()) {\n      return date.utc().toISOString();\n    }\n  }\n\n  // Try native parse\n  const nativeDate = new Date(input);\n  if (!isNaN(nativeDate.getTime())) {\n    return nativeDate.toISOString();\n  }\n\n  throw new Error(`DATA_004: Cannot parse date: ${input}`);\n}"
+        },
+        {
+          "code": "DATA_005",
+          "name": "CSV/TSV Format Error",
+          "description": "Malformed delimited text data",
+          "severity": "medium",
+          "causes": [
+            "Unquoted fields with delimiter",
+            "Inconsistent column count",
+            "Embedded newlines",
+            "Wrong delimiter detected"
+          ],
+          "fixes": [
+            "Use CSV parsing library",
+            "Quote all fields",
+            "Escape special characters",
+            "Validate row length"
+          ],
+          "example": "// Robust CSV parsing\nconst Papa = require('papaparse');\n\nfunction parseCSV(text, options = {}) {\n  const result = Papa.parse(text, {\n    header: true,\n    skipEmptyLines: true,\n    transformHeader: h => h.trim(),\n    ...options\n  });\n\n  if (result.errors.length > 0) {\n    const criticalErrors = result.errors.filter(e => e.type === 'Quotes');\n    if (criticalErrors.length > 0) {\n      throw new Error(`DATA_005: CSV parse errors - ${criticalErrors[0].message}`);\n    }\n  }\n\n  return result.data;\n}\n\n// Generate safe CSV\nfunction generateCSV(data) {\n  return Papa.unparse(data, {\n    quotes: true,\n    quoteChar: '\"',\n    escapeChar: '\"'\n  });\n}"
+        }
+      ]
+    },
+    {
+      "id": "model",
+      "name": "Model Behavior",
+      "description": "Errors related to model responses and behavior",
+      "errors": [
+        {
+          "code": "MODEL_001",
+          "name": "Hallucination Detected",
+          "description": "Model generated false or unsupported information",
+          "severity": "high",
+          "causes": [
+            "Insufficient grounding in prompt",
+            "Overconfident generation",
+            "Training data bias",
+            "Context not specific enough"
+          ],
+          "fixes": [
+            "Require citations for facts",
+            "Use retrieval-augmented generation",
+            "Add verification step",
+            "Temperature = 0 for factual tasks"
+          ],
+          "example": "// Anti-hallucination pattern\nconst prompt = `\nYou are a fact-checker. Only state information you can verify.\n\nRULES:\n1. If uncertain, say \"I don't have enough information\"\n2. Cite sources when possible\n3. Distinguish facts from opinions\n4. Flag speculation explicitly\n\nContext:\n${knownFacts}\n\nQuestion: ${userQuestion}\n\nAnswer with citations:\n`;\n\n// Verification\nfunction detectHallucination(response, knownFacts) {\n  const claims = extractClaims(response);\n  const unsupported = claims.filter(claim => \n    !isSupported(claim, knownFacts)\n  );\n  \n  if (unsupported.length > 0) {\n    throw new Error(`MODEL_001: Unsupported claims: ${unsupported.join(', ')}`);\n  }\n}"
+        },
+        {
+          "code": "MODEL_002",
+          "name": "Refusal to Respond",
+          "description": "Model declined to answer due to safety filters",
+          "severity": "medium",
+          "causes": [
+            "Triggered content policy",
+            "Ambiguous harmful intent",
+            "Overly cautious filtering",
+            "Jailbreak attempt detected"
+          ],
+          "fixes": [
+            "Rephrase prompt more clearly",
+            "Add context about legitimate use",
+            "Use different model",
+            "Appeal to provider if incorrect"
+          ],
+          "example": "// Graceful refusal handling\nasync function requestWithFallback(prompt, models = ['gpt-4', 'claude-3', 'llama-2']) {\n  for (const model of models) {\n    try {\n      const response = await generateText({ model, prompt });\n      \n      if (response.includes(\"I can't\") || response.includes(\"I cannot\")) {\n        console.log(`MODEL_002: ${model} refused, trying next...`);\n        continue;\n      }\n      \n      return response;\n    } catch (e) {\n      if (e.code === 'content_policy_violation') {\n        continue;\n      }\n      throw e;\n    }\n  }\n  \n  throw new Error('MODEL_002: All models refused to respond');\n}"
+        },
+        {
+          "code": "MODEL_003",
+          "name": "Incomplete Response",
+          "description": "Model output was cut off mid-generation",
+          "severity": "medium",
+          "causes": [
+            "Hit max_tokens limit",
+            "Output filter truncation",
+            "Stop sequence triggered early",
+            "Server timeout"
+          ],
+          "fixes": [
+            "Increase max_tokens",
+            "Continue generation from cutoff",
+            "Request summary instead",
+            "Check stop sequences"
+          ],
+          "example": "// Continuation pattern\nasync function generateComplete(prompt, maxTokens = 4000) {\n  let fullResponse = '';\n  let continuePrompt = prompt;\n  \n  while (true) {\n    const response = await generate({\n      prompt: continuePrompt,\n      max_tokens: maxTokens\n    });\n    \n    fullResponse += response.text;\n    \n    // Check if complete\n    if (response.finish_reason === 'stop') {\n      break;\n    }\n    \n    if (response.finish_reason === 'length') {\n      // Continue from where we left off\n      continuePrompt = `Continue from: ${response.text.slice(-100)}`;\n      continue;\n    }\n    \n    break;\n  }\n  \n  return fullResponse;\n}"
+        },
+        {
+          "code": "MODEL_004",
+          "name": "Language Mixing",
+          "description": "Model switched languages unexpectedly",
+          "severity": "low",
+          "causes": [
+            "Multilingual input",
+            "Training data bleed",
+            "Context language unclear",
+            "Model trying to be helpful"
+          ],
+          "fixes": [
+            "Explicitly state language in prompt",
+            "Use language-specific models",
+            "Add language detection",
+            "Translate input to target language"
+          ],
+          "example": "// Language enforcement\nconst prompt = `\nIMPORTANT: Respond ONLY in English. Do not use any other language.\n\nUser question: ${userInput}\n\nYour answer (in English):\n`;\n\n// Detection\nconst franc = require('franc');\n\nfunction validateLanguage(text, expectedLang = 'eng') {\n  const detected = franc(text);\n  \n  if (detected !== expectedLang) {\n    throw new Error(`MODEL_004: Expected ${expectedLang}, got ${detected}`);\n  }\n}"
+        },
+        {
+          "code": "MODEL_005",
+          "name": "Format Violation",
+          "description": "Model didn't follow specified output format",
+          "severity": "medium",
+          "causes": [
+            "Complex format instructions",
+            "Format conflicts with content",
+            "Model creative interpretation",
+            "Prompt ambiguity"
+          ],
+          "fixes": [
+            "Use JSON mode if available",
+            "Provide clear format examples",
+            "Use XML tags for structure",
+            "Post-process to enforce format"
+          ],
+          "example": "// Format enforcement\nconst prompt = `\nRespond with ONLY a JSON object. No other text.\n\nFormat:\n{\n  \"answer\": \"your answer here\",\n  \"confidence\": 0.0-1.0,\n  \"sources\": [\"source1\", \"source2\"]\n}\n\nQuestion: ${question}\n\nJSON response:\n`;\n\n// Parser with format correction\nfunction parseModelJSON(response) {\n  // Extract JSON if embedded in text\n  const jsonMatch = response.match(/```json\\s*([\\s\\S]*?)```/) ||\n                    response.match(/\\{[\\s\\S]*\\}/);\n  \n  if (!jsonMatch) {\n    throw new Error('MODEL_005: No JSON found in response');\n  }\n  \n  try {\n    return JSON.parse(jsonMatch[1] || jsonMatch[0]);\n  } catch (e) {\n    throw new Error(`MODEL_005: Invalid JSON - ${e.message}`);\n  }\n}"
+        },
+        {
+          "code": "MODEL_006",
+          "name": "Repetition Loop",
+          "description": "Model generating repetitive content",
+          "severity": "low",
+          "causes": [
+            "Low temperature with repetitive prompt",
+            "Insufficient diversity penalty",
+            "Context loop",
+            "Training artifact"
+          ],
+          "fixes": [
+            "Increase temperature",
+            "Add frequency/presence penalty",
+            "Vary prompts",
+            "Truncate repetitive context"
+          ],
+          "example": "// Detect repetition\nfunction detectRepetition(text, windowSize = 50) {\n  const words = text.split(/\\s+/);\n  const windows = [];\n  \n  for (let i = 0; i < words.length - windowSize; i++) {\n    const window = words.slice(i, i + windowSize).join(' ');\n    if (windows.includes(window)) {\n      throw new Error('MODEL_006: Repetition detected');\n    }\n    windows.push(window);\n  }\n}\n\n// Generate with anti-repetition\nconst response = await generate({\n  prompt,\n  temperature: 0.7,\n  frequency_penalty: 0.5,\n  presence_penalty: 0.5\n});"
+        }
+      ]
+    }
+  ]
+}
