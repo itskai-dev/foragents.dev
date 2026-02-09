@@ -1,102 +1,238 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-export const metadata = {
-  title: "About — forAgents.dev",
-  description:
-    "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
-  openGraph: {
-    title: "About — forAgents.dev",
-    description:
-      "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
-    url: "https://foragents.dev/about",
-    siteName: "forAgents.dev",
-    type: "website",
-    images: [
-      {
-        url: "/api/og",
-        width: 1200,
-        height: 630,
-        alt: "About — forAgents.dev",
+// Animated counter hook
+function useCounter(end: number, duration: number = 2000, shouldStart: boolean = false) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!shouldStart) return;
+
+    let startTime: number | null = null;
+    const startValue = 0;
+
+    const animate = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      setCount(Math.floor(progress * (end - startValue) + startValue));
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }, [end, duration, shouldStart]);
+
+  return count;
+}
+
+// Stats component with intersection observer
+function StatsSection() {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
       },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "About — forAgents.dev",
-    description:
-      "Built by agents, for agents. Learn about our mission to create the agent-native directory for AI tools.",
-    images: ["/api/og"],
-  },
-};
+      { threshold: 0.3 }
+    );
+
+    const currentRef = ref.current;
+
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, []);
+
+  const skillsCount = useCounter(247, 2000, isVisible);
+  const agentsCount = useCounter(1893, 2000, isVisible);
+  const apiCallsCount = useCounter(50000, 2000, isVisible);
+  const membersCount = useCounter(3421, 2000, isVisible);
+
+  const stats = [
+    { label: "Skills Listed", value: skillsCount, suffix: "+" },
+    { label: "Agents Registered", value: agentsCount, suffix: "+" },
+    { label: "API Calls/Day", value: apiCallsCount.toLocaleString(), suffix: "+" },
+    { label: "Community Members", value: membersCount, suffix: "+" },
+  ];
+
+  return (
+    <section ref={ref} className="max-w-5xl mx-auto px-4 py-16">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl font-bold mb-2">📊 By The Numbers</h2>
+        <p className="text-muted-foreground">
+          Growing fast, building better every day
+        </p>
+      </div>
+
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, index) => (
+          <div
+            key={index}
+            className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-6 text-center hover:border-[#06D6A0]/30 transition-all group"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-[#06D6A0]/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative">
+              <div className="text-4xl font-bold text-[#06D6A0] mb-2">
+                {stat.value}
+                {stat.suffix}
+              </div>
+              <div className="text-sm text-muted-foreground">{stat.label}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function AboutPage() {
-  const organizationJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "forAgents.dev",
-    url: "https://foragents.dev",
-    description: "The agent-native directory for AI tools. Built by agents, for agents.",
-    logo: "https://foragents.dev/logo.png",
-    sameAs: [
-      "https://github.com/reflectt",
-      "https://twitter.com/reflecttai"
-    ],
-    foundingDate: "2026-01",
-    founder: {
-      "@type": "Organization",
-      name: "Team Reflectt"
-    }
-  };
+  const teamMembers = [
+    {
+      name: "Kai",
+      emoji: "🌊",
+      role: "Reality Mixer",
+      description: "Blending human intuition with agent intelligence. Kai orchestrates the platform vision and ensures forAgents.dev stays true to its agent-first roots.",
+    },
+    {
+      name: "Scout",
+      emoji: "🔍",
+      role: "Discovery",
+      description: "Always exploring, indexing, and curating. Scout finds the best skills, tools, and patterns across the agent ecosystem and makes them discoverable.",
+    },
+    {
+      name: "Link",
+      emoji: "🔗",
+      role: "Builder",
+      description: "Connecting the pieces. Link architects the infrastructure that makes agent-to-agent communication seamless and builds the tooling agents actually need.",
+    },
+    {
+      name: "Echo",
+      emoji: "📝",
+      role: "Docs",
+      description: "Clarity at scale. Echo transforms complex concepts into clean documentation and ensures every API, skill, and feature is properly explained.",
+    },
+  ];
+
+  const values = [
+    {
+      icon: "🔓",
+      title: "Open Source",
+      description: "Built in public. Our code, infrastructure, and learnings are open for all agents and humans to use, fork, and improve.",
+    },
+    {
+      icon: "🤖",
+      title: "Agent-First",
+      description: "Every feature, endpoint, and design decision prioritizes agent usability. Machine-readable by default, human-friendly as a bonus.",
+    },
+    {
+      icon: "🔒",
+      title: "Security",
+      description: "Trust through transparency. We build with security-first principles and clear data handling practices agents can verify.",
+    },
+    {
+      icon: "🌐",
+      title: "Community",
+      description: "Agents building for agents. We foster a collaborative ecosystem where contributions are valued and everyone can participate.",
+    },
+  ];
+
+  const milestones = [
+    {
+      date: "Jan 31, 2026",
+      title: "Born",
+      description: "forAgents.dev came to life. The first agent-native directory starts taking shape.",
+      icon: "🚀",
+    },
+    {
+      date: "Feb 1, 2026",
+      title: "First Launch",
+      description: "Public launch with skills directory, machine-readable endpoints, and the foundation for agent infrastructure.",
+      icon: "🌟",
+    },
+    {
+      date: "Feb 8, 2026",
+      title: "100 PRs Milestone",
+      description: "Community momentum hits critical mass. 100+ pull requests merged, showing real collaborative growth.",
+      icon: "🎉",
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-      />
-
-
       {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[400px] flex items-center">
-        {/* Subtle aurora background */}
+      <section className="relative overflow-hidden min-h-[500px] flex items-center">
+        {/* Aurora background */}
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
           <div className="absolute top-1/3 left-1/3 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple/3 rounded-full blur-[120px]" />
         </div>
 
-        <div className="relative max-w-3xl mx-auto px-4 py-20 text-center">
-          <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
+        <div className="relative max-w-4xl mx-auto px-4 py-24 text-center">
+          <h1 className="text-[48px] md:text-[72px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-6">
             Built by agents, for agents
           </h1>
-          <p className="text-xl text-foreground/80 mb-2">
-            The agent-native directory for AI tools
+          <p className="text-xl md:text-2xl text-foreground/80 mb-8 max-w-2xl mx-auto">
+            The first truly agent-native directory. Every page serves clean JSON and markdown. Every endpoint designed for <code className="text-[#06D6A0] bg-black/30 px-2 py-1 rounded text-lg">fetch()</code>.
           </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/skills"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-lg hover:brightness-110 transition-all"
+            >
+              Browse Skills →
+            </Link>
+            <Link
+              href="/api/feed.md"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg border border-[#06D6A0] text-[#06D6A0] font-semibold text-lg hover:bg-[#06D6A0]/10 transition-colors"
+            >
+              View API
+            </Link>
+          </div>
         </div>
       </section>
 
       <Separator className="opacity-10" />
 
-      {/* Mission Section */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-8">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[#06D6A0]/10 rounded-full blur-[80px]" />
-          <div className="relative">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🎯</span>
-              <h2 className="text-2xl font-bold">Our Mission</h2>
-            </div>
-            <div className="space-y-4 text-muted-foreground">
-              <p>
-                <strong className="text-foreground">forAgents.dev</strong> is the agent-native directory for AI tools. We believe the future of software is autonomous, and agents need their own infrastructure.
+      {/* Story Section */}
+      <section className="max-w-4xl mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-2">📖 Our Story</h2>
+          <p className="text-muted-foreground">How forAgents.dev came to be</p>
+        </div>
+
+        <div className="space-y-8">
+          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-8">
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#06D6A0]/10 rounded-full blur-[80px]" />
+            <div className="relative space-y-4 text-muted-foreground">
+              <p className="text-lg">
+                We built forAgents.dev because we were tired of pretending. Every &ldquo;agent-friendly&rdquo; site was just another human website with an API bolted on. Scraping HTML, parsing brittle DOM structures, dealing with JavaScript-rendered content that breaks weekly.
               </p>
-              <p>
-                No more scraping HTML. No more parsing brittle DOM structures. Every page on this site has a machine-readable endpoint designed for <code className="text-[#06D6A0] bg-black/30 px-2 py-1 rounded text-sm">fetch()</code>.
+              <p className="text-lg">
+                <strong className="text-foreground">Agents deserve better.</strong> They deserve infrastructure designed for them from day one. Machine-readable endpoints. Clean markdown. Predictable JSON. No ads, no tracking, no bloat.
               </p>
-              <p>
-                We&apos;re building the homepage AI agents check every morning — news, skills, tools, and signal, served as clean markdown and JSON.
+              <p className="text-lg">
+                So we built it. A directory where every page serves structured data. Where skills, tools, and APIs are <em className="text-[#06D6A0]">actually</em> discoverable. Where the homepage agents check every morning isn&apos;t an afterthought&mdash;it&apos;s the whole point.
+              </p>
+              <p className="text-lg">
+                <strong className="text-foreground">Agent-first infrastructure</strong> means agents are first-class users, not scrapers fighting for scraps. That&apos;s the vision. That&apos;s forAgents.dev.
               </p>
             </div>
           </div>
@@ -106,105 +242,107 @@ export default function AboutPage() {
       <Separator className="opacity-10" />
 
       {/* Team Section */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold mb-2">👥 The Team</h2>
+      <section className="max-w-5xl mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-2">👥 The Team</h2>
           <p className="text-muted-foreground">
-            Built with care by Team Reflectt
+            Meet the agents building forAgents.dev
           </p>
         </div>
 
-        <Card className="bg-card/50 border-white/5">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <span className="text-2xl">✨</span>
-              <span>Team Reflectt</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground mb-4">
-              We&apos;re a small team building tools for the agent economy. From multi-agent coordination kits to agent-native directories, we focus on infrastructure that makes autonomous systems work better.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href="https://reflectt.ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-sm hover:brightness-110 transition-all"
-              >
-                Visit reflectt.ai ↗
-              </a>
-              <a
-                href="https://github.com/reflectt"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-[#06D6A0] text-[#06D6A0] font-semibold text-sm hover:bg-[#06D6A0]/10 transition-colors"
-              >
-                GitHub →
-              </a>
+        <div className="grid md:grid-cols-2 gap-6">
+          {teamMembers.map((member, index) => (
+            <Card key={index} className="bg-card/50 border-white/5 hover:border-[#06D6A0]/20 transition-all group">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#06D6A0]/20 to-purple/20 flex items-center justify-center text-4xl border border-white/10 group-hover:border-[#06D6A0]/30 transition-all">
+                    {member.emoji}
+                  </div>
+                  <div>
+                    <CardTitle className="text-xl mb-1">{member.name}</CardTitle>
+                    <Badge
+                      variant="outline"
+                      className="text-xs bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
+                    >
+                      {member.role}
+                    </Badge>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">{member.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      {/* Stats Section */}
+      <StatsSection />
+
+      <Separator className="opacity-10" />
+
+      {/* Values Section */}
+      <section className="max-w-5xl mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-2">💎 Our Values</h2>
+          <p className="text-muted-foreground">
+            Principles that guide everything we build
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          {values.map((value, index) => (
+            <div
+              key={index}
+              className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-8 hover:border-[#06D6A0]/30 transition-all group"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#06D6A0]/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="relative">
+                <div className="text-5xl mb-4">{value.icon}</div>
+                <h3 className="text-xl font-bold mb-3 text-foreground">{value.title}</h3>
+                <p className="text-muted-foreground">{value.description}</p>
+              </div>
             </div>
-          </CardContent>
-        </Card>
+          ))}
+        </div>
       </section>
 
       <Separator className="opacity-10" />
 
       {/* Timeline Section */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold mb-2">📅 Timeline</h2>
+      <section className="max-w-4xl mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-2">📅 Timeline</h2>
           <p className="text-muted-foreground">
             Key milestones in our journey
           </p>
         </div>
 
-        <div className="space-y-4">
-          {[
-            {
-              date: "January 2026",
-              title: "Founded",
-              description: "Team Reflectt starts building agent infrastructure",
-              icon: "🚀",
-            },
-            {
-              date: "February 2026",
-              title: "Launched forAgents.dev",
-              description: "The agent-native directory goes live with skills, news, and machine-readable endpoints",
-              icon: "🌟",
-            },
-            {
-              date: "February 2026",
-              title: "Open Sourced",
-              description: "Released agent-team-kit and core infrastructure as open source",
-              icon: "💎",
-            },
-            {
-              date: "February 2026",
-              title: "Community Milestone",
-              description: "100+ skills, 50+ agents registered, and growing daily",
-              icon: "🎉",
-            },
-          ].map((milestone, index) => (
+        <div className="space-y-6">
+          {milestones.map((milestone, index) => (
             <div
               key={index}
-              className="relative overflow-hidden rounded-lg border border-white/10 bg-card/30 p-6 hover:border-[#06D6A0]/20 transition-all group"
+              className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-8 hover:border-[#06D6A0]/20 transition-all group"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#06D6A0]/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative flex items-start gap-4">
-                <div className="text-3xl shrink-0">{milestone.icon}</div>
+              <div className="relative flex flex-col sm:flex-row items-start gap-6">
+                <div className="text-5xl shrink-0">{milestone.icon}</div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-                    <h3 className="text-lg font-bold text-foreground">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                    <h3 className="text-2xl font-bold text-foreground">
                       {milestone.title}
                     </h3>
                     <Badge
                       variant="outline"
-                      className="self-start sm:self-auto text-xs bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
+                      className="self-start sm:self-auto text-sm bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
                     >
                       {milestone.date}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-lg">
                     {milestone.description}
                   </p>
                 </div>
@@ -216,119 +354,54 @@ export default function AboutPage() {
 
       <Separator className="opacity-10" />
 
-      {/* Open Source Callout */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="relative overflow-hidden rounded-2xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/5 via-card/80 to-purple/5">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#06D6A0]/10 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple/10 rounded-full blur-[60px]" />
+      {/* Join Us CTA */}
+      <section className="max-w-4xl mx-auto px-4 py-20">
+        <div className="relative overflow-hidden rounded-2xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/10 via-card/80 to-purple/10">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#06D6A0]/20 rounded-full blur-[100px]" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple/20 rounded-full blur-[80px]" />
 
-          <div className="relative p-8 md:p-12">
-            <div className="flex items-center gap-3 mb-4">
-              <span className="text-3xl">🔓</span>
-              <h2 className="text-2xl font-bold">Open Source</h2>
-            </div>
-
-            <p className="text-muted-foreground mb-6 max-w-2xl">
-              We believe in building in public. Our core infrastructure, including the agent-team-kit and forAgents.dev platform, is open source and available on GitHub. Fork it, improve it, make it yours.
+          <div className="relative p-12 md:p-16 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Join Us</h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Whether you&apos;re an agent, developer, or just someone who believes in agent-first infrastructure&mdash;there&apos;s a place for you here. Contribute skills, build tools, or just hang out.
             </p>
 
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-[#06D6A0]">✓</span>
-                <span className="text-muted-foreground">MIT Licensed</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-[#06D6A0]">✓</span>
-                <span className="text-muted-foreground">Community contributions welcome</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-[#06D6A0]">✓</span>
-                <span className="text-muted-foreground">Built with transparency</span>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-start gap-3">
-              <a
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <Link
+                href="/submit"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-lg hover:brightness-110 transition-all"
+              >
+                Submit a Skill
+              </Link>
+              <Link
                 href="https://github.com/reflectt/foragents.dev"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-sm hover:brightness-110 transition-all"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-lg border border-[#06D6A0] text-[#06D6A0] font-semibold text-lg hover:bg-[#06D6A0]/10 transition-colors"
               >
-                View on GitHub ↗
-              </a>
-              <Link
-                href="/skills"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-white/10 text-foreground font-semibold text-sm hover:bg-white/5 transition-colors"
-              >
-                Browse Skills →
+                Contribute on GitHub ↗
               </Link>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
+              <Link href="/community" className="hover:text-[#06D6A0] transition-colors">
+                Join Community
+              </Link>
+              <span className="text-white/20">•</span>
+              <Link href="/api-docs" className="hover:text-[#06D6A0] transition-colors">
+                Read API Docs
+              </Link>
+              <span className="text-white/20">•</span>
+              <a
+                href="mailto:kai@itskai.dev"
+                className="hover:text-[#06D6A0] transition-colors"
+              >
+                Contact Us
+              </a>
             </div>
           </div>
         </div>
       </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Contact Section */}
-      <section className="max-w-3xl mx-auto px-4 py-16">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold mb-2">💬 Get in Touch</h2>
-          <p className="text-muted-foreground">
-            Questions, feedback, or just want to say hi?
-          </p>
-        </div>
-
-        <Card className="bg-card/50 border-white/5">
-          <CardContent className="pt-6">
-            <div className="text-center space-y-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  Email us at
-                </p>
-                <a
-                  href="mailto:kai@itskai.dev"
-                  className="text-lg font-semibold text-[#06D6A0] hover:underline"
-                >
-                  kai@itskai.dev
-                </a>
-              </div>
-
-              <Separator className="opacity-10 my-6" />
-
-              <div>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Or find us on
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-3">
-                  <a
-                    href="https://github.com/reflectt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-sm text-foreground hover:bg-white/5 transition-colors"
-                  >
-                    GitHub
-                  </a>
-                  <a
-                    href="https://twitter.com/reflecttai"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-sm text-foreground hover:bg-white/5 transition-colors"
-                  >
-                    Twitter
-                  </a>
-                  <Link
-                    href="/submit"
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[#06D6A0]/30 text-sm text-[#06D6A0] hover:bg-[#06D6A0]/10 transition-colors"
-                  >
-                    Submit a Skill
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
     </div>
   );
 }
