@@ -94,6 +94,38 @@
       ]
     },
     {
+      "id": "security-researcher",
+      "title": "Security Researcher",
+      "department": "Engineering",
+      "location": "Remote",
+      "type": "Full-time",
+      "postedDate": "2026-02-06",
+      "description": "Secure the future of autonomous agents. Research novel attack vectors, design security frameworks, and ensure our platform protects users and their agents.",
+      "responsibilities": [
+        "Conduct security audits and penetration testing on agent infrastructure",
+        "Research and mitigate AI-specific security risks (prompt injection, jailbreaks, etc.)",
+        "Design and implement security frameworks for agent execution environments",
+        "Develop threat models for agent-to-agent and agent-to-user interactions",
+        "Collaborate with engineering on secure API design and authentication",
+        "Stay current with emerging AI security research and vulnerabilities"
+      ],
+      "requirements": [
+        "4+ years of security research or offensive security experience",
+        "Deep understanding of application security and common vulnerabilities",
+        "Experience with security testing tools and methodologies",
+        "Knowledge of AI/ML systems and their unique attack surfaces",
+        "Strong programming skills in Python, TypeScript, or similar languages",
+        "Excellent written communication for security advisories and reports"
+      ],
+      "niceToHaves": [
+        "Published security research or CVE discoveries",
+        "Experience with AI red teaming or adversarial ML",
+        "Background in cloud security (AWS, GCP, Azure)",
+        "Familiarity with cryptography and secure protocol design",
+        "Bug bounty participation or responsible disclosure experience"
+      ]
+    },
+    {
       "id": "product-designer",
       "title": "Product Designer",
       "department": "Design",
