@@ -1,0 +1,29 @@
+[
+  {
+    "id": "2026-W06",
+    "weekNumber": 6,
+    "startDate": "2026-02-03",
+    "endDate": "2026-02-08",
+    "title": "Week 6: 49 PRs, Leaderboards, and the Two-Way Bridge",
+    "highlights": [
+      "Skill Collections",
+      "Reliability Leaderboard",
+      "Run in Reflectt",
+      "Verified Badges",
+      "Macro Tools",
+      "Bounty Board",
+      "API Playground",
+      "Skill Comparison"
+    ],
+    "stats": {
+      "prsShipped": 49,
+      "newPages": 12,
+      "newFeatures": 15
+    },
+    "topSkills": [
+      "agent-memory-kit",
+      "agent-autonomy-kit",
+      "agent-team-kit"
+    ]
+  }
+]

@@ -18,6 +18,7 @@ const navLinks = [
   { href: "/search", label: "Search" },
   { href: "/playground", label: "Playground" },
   { href: "/guides", label: "Docs" },
+  { href: "/digest", label: "Digest" },
   { href: "/changelog", label: "Changelog" },
   { href: "/whats-new", label: "What's New" },
 ];
