@@ -1,0 +1,103 @@
+{
+  "useCases": [
+    {
+      "id": "devops-automation",
+      "title": "DevOps Automation at Scale",
+      "industry": "DevTools",
+      "company": "CloudFlow Systems",
+      "companyAvatar": "☁️",
+      "challenge": "Manual deployment processes were causing delays and errors across 50+ microservices. Release cycles took 3-4 hours with significant manual overhead.",
+      "solution": "Implemented forAgents.dev with automated deployment pipelines, intelligent rollback detection, and real-time monitoring. Agents handle CI/CD orchestration, test validation, and environment provisioning.",
+      "result": "Deployment time reduced from 3 hours to 25 minutes. Zero-downtime releases achieved across all services. Team productivity increased by 65%.",
+      "metrics": [
+        { "label": "Faster Deployments", "value": "85%" },
+        { "label": "Error Reduction", "value": "92%" },
+        { "label": "Time Saved/Week", "value": "40hrs" }
+      ],
+      "featured": true,
+      "testimonial": "forAgents.dev transformed how we ship code. Our deployment process went from error-prone and stressful to completely automated and reliable.",
+      "testimonialAuthor": "Sarah Chen",
+      "testimonialRole": "VP of Engineering"
+    },
+    {
+      "id": "customer-support",
+      "title": "24/7 Customer Support Excellence",
+      "industry": "SaaS",
+      "company": "HelpDesk Pro",
+      "companyAvatar": "💬",
+      "challenge": "Customer support team was overwhelmed with 1,000+ daily inquiries. Response times were 4-6 hours, leading to customer frustration and churn.",
+      "solution": "Deployed intelligent support agents that handle tier-1 inquiries, route complex issues to humans, and maintain full conversation context. Agents trained on 50,000+ historical support tickets.",
+      "result": "Average response time dropped to 30 seconds. Customer satisfaction scores improved from 3.2 to 4.7 out of 5. Support team now focuses on complex, high-value interactions.",
+      "metrics": [
+        { "label": "Faster Response", "value": "98%" },
+        { "label": "Tickets Auto-Resolved", "value": "73%" },
+        { "label": "CSAT Improvement", "value": "+47%" }
+      ],
+      "featured": false
+    },
+    {
+      "id": "data-pipeline",
+      "title": "Real-Time Data Pipeline Orchestration",
+      "industry": "Finance",
+      "company": "QuantEdge Analytics",
+      "companyAvatar": "📈",
+      "challenge": "Processing 10TB+ of financial data daily with frequent pipeline failures and data quality issues. Manual intervention required 20+ hours weekly.",
+      "solution": "Built autonomous data agents that monitor pipelines, validate data quality, and handle failures intelligently. Agents detect anomalies and apply self-healing mechanisms automatically.",
+      "result": "Pipeline reliability increased to 99.97% uptime. Data processing speed improved 3x. Manual intervention reduced by 90%.",
+      "metrics": [
+        { "label": "Uptime Improvement", "value": "99.97%" },
+        { "label": "Processing Speed", "value": "3x" },
+        { "label": "Manual Work Reduced", "value": "90%" }
+      ],
+      "featured": false
+    },
+    {
+      "id": "security-monitoring",
+      "title": "Proactive Security Threat Detection",
+      "industry": "Healthcare",
+      "company": "MedSecure Systems",
+      "companyAvatar": "🔒",
+      "challenge": "Healthcare data breaches posed significant compliance and reputational risks. Security team couldn't monitor all systems 24/7, with an average detection time of 8 hours.",
+      "solution": "Deployed security agents that continuously monitor system logs, detect anomalies, and respond to threats in real-time. Agents integrate with SIEM tools and automatically trigger incident response playbooks.",
+      "result": "Threat detection time reduced from 8 hours to under 2 minutes. Zero security incidents in 18 months. Achieved SOC 2 Type II compliance ahead of schedule.",
+      "metrics": [
+        { "label": "Faster Detection", "value": "99.6%" },
+        { "label": "False Positives", "value": "-85%" },
+        { "label": "Incidents Prevented", "value": "47" }
+      ],
+      "featured": false
+    },
+    {
+      "id": "content-generation",
+      "title": "AI-Powered Content Marketing Engine",
+      "industry": "E-commerce",
+      "company": "ShopSmart Retail",
+      "companyAvatar": "🛍️",
+      "challenge": "Creating product descriptions, blog posts, and marketing copy for 10,000+ products manually was time-consuming and inconsistent in quality and brand voice.",
+      "solution": "Implemented content generation agents that maintain brand voice, optimize for SEO, and adapt content for different platforms (web, mobile, social). Agents generate, review, and publish content automatically.",
+      "result": "Content production increased 8x while maintaining quality. Organic traffic grew 120% in 6 months. Marketing team now focuses on strategy instead of production.",
+      "metrics": [
+        { "label": "Content Output", "value": "8x" },
+        { "label": "Organic Traffic", "value": "+120%" },
+        { "label": "Cost Per Piece", "value": "-75%" }
+      ],
+      "featured": false
+    },
+    {
+      "id": "code-review",
+      "title": "Intelligent Code Review Automation",
+      "industry": "DevTools",
+      "company": "CodeCraft Labs",
+      "companyAvatar": "🔍",
+      "challenge": "Code review bottlenecks were slowing down releases. Senior engineers spent 15+ hours weekly reviewing code, and junior engineers waited days for feedback.",
+      "solution": "Deployed AI code review agents that analyze PRs for bugs, security issues, style violations, and best practices. Agents provide instant feedback and only escalate complex reviews to humans.",
+      "result": "Review turnaround time decreased from 2 days to 30 minutes. Code quality scores improved by 40%. Senior engineers reclaimed 60% of their review time.",
+      "metrics": [
+        { "label": "Review Speed", "value": "95%" },
+        { "label": "Bugs Caught", "value": "+40%" },
+        { "label": "Engineer Time Saved", "value": "60%" }
+      ],
+      "featured": false
+    }
+  ]
+}
