@@ -6,14 +6,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Github, Twitter } from "lucide-react";
+import { Mail, Github, MessageSquare, MapPin, Clock } from "lucide-react";
 
 export default function ContactPage() {
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "ContactPage",
     name: "Contact — forAgents.dev",
-    description: "Get in touch with the forAgents.dev team. Send us a message or reach out via email, GitHub, or Twitter.",
+    description: "Get in touch with the forAgents.dev team. Send us a message or reach out via email, GitHub, or Discord.",
     url: "https://foragents.dev/contact"
   };
 
@@ -153,11 +153,11 @@ export default function ContactPage() {
                         className="w-full px-3 py-2 bg-[#0a0a0a] border border-white/10 rounded-md focus:border-[#06D6A0] focus:outline-none focus:ring-1 focus:ring-[#06D6A0]"
                       >
                         <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="feedback">Feedback</option>
-                        <option value="partnership">Partnership</option>
+                        <option value="general">General</option>
                         <option value="support">Support</option>
-                        <option value="other">Other</option>
+                        <option value="partnership">Partnership</option>
+                        <option value="enterprise">Enterprise</option>
+                        <option value="bug-report">Bug Report</option>
                       </select>
                     </div>
 
@@ -194,6 +194,7 @@ export default function ContactPage() {
 
           {/* Contact Info Side Panel */}
           <div className="space-y-6">
+            {/* Contact Info Card */}
             <Card className="bg-[#0f0f0f] border-white/10">
               <CardHeader>
                 <CardTitle className="text-xl">Contact Info</CardTitle>
@@ -206,10 +207,27 @@ export default function ContactPage() {
                   <div>
                     <p className="text-sm font-medium mb-1">Email</p>
                     <a
-                      href="mailto:kai@itskai.dev"
+                      href="mailto:support@foragents.dev"
                       className="text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
                     >
-                      kai@itskai.dev
+                      support@foragents.dev
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 p-2 rounded-lg bg-[#06D6A0]/10">
+                    <MessageSquare className="w-5 h-5 text-[#06D6A0]" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium mb-1">Discord Community</p>
+                    <a
+                      href="https://discord.gg/foragents"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
+                    >
+                      Join our Discord
                     </a>
                   </div>
                 </div>
@@ -219,59 +237,87 @@ export default function ContactPage() {
                     <Github className="w-5 h-5 text-[#06D6A0]" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium mb-1">GitHub</p>
+                    <p className="text-sm font-medium mb-1">GitHub Discussions</p>
                     <a
-                      href="https://github.com/itskai-dev"
+                      href="https://github.com/reflectt/foragents.dev/discussions"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
                     >
-                      github.com/itskai-dev
-                    </a>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 p-2 rounded-lg bg-[#06D6A0]/10">
-                    <Twitter className="w-5 h-5 text-[#06D6A0]" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium mb-1">Twitter</p>
-                    <a
-                      href="https://twitter.com/itskai_dev"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
-                    >
-                      @itskai_dev
+                      github.com/reflectt/foragents.dev
                     </a>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
+            {/* Office Hours Card */}
             <Card className="bg-[#0f0f0f] border-white/10">
               <CardHeader>
-                <CardTitle className="text-xl">Quick Links</CardTitle>
+                <CardTitle className="text-xl">Office Hours</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-2">
+              <CardContent>
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 p-2 rounded-lg bg-[#06D6A0]/10">
+                    <Clock className="w-5 h-5 text-[#06D6A0]" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Our team responds within 24 hours
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Location Card */}
+            <Card className="bg-[#0f0f0f] border-white/10">
+              <CardHeader>
+                <CardTitle className="text-xl">Location</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 p-2 rounded-lg bg-[#06D6A0]/10">
+                    <MapPin className="w-5 h-5 text-[#06D6A0]" />
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Remote-first, Vancouver Island, BC, Canada
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* FAQ Quick Links Card */}
+            <Card className="bg-[#0f0f0f] border-white/10">
+              <CardHeader>
+                <CardTitle className="text-xl">Quick FAQ</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
                 <Link
-                  href="/about"
+                  href="/faq#what-is-foragents"
                   className="block text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
                 >
-                  About Us
+                  What is forAgents.dev?
+                </Link>
+                <Link
+                  href="/faq#who-is-it-for"
+                  className="block text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
+                >
+                  Who is forAgents.dev for?
+                </Link>
+                <Link
+                  href="/faq#how-does-it-work"
+                  className="block text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
+                >
+                  How does forAgents.dev work?
                 </Link>
                 <Link
                   href="/faq"
-                  className="block text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
+                  className="block text-sm font-medium text-[#06D6A0] hover:underline transition-colors mt-4 pt-3 border-t border-white/5"
                 >
-                  FAQ
-                </Link>
-                <Link
-                  href="/submit"
-                  className="block text-sm text-muted-foreground hover:text-[#06D6A0] transition-colors"
-                >
-                  Submit a Tool
+                  View all FAQ →
                 </Link>
               </CardContent>
             </Card>
