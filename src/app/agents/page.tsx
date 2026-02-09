@@ -1,110 +1,93 @@
 import { getAgents } from "@/lib/data";
-import { listAgentProfiles } from "@/lib/server/agentProfiles";
-import { getPublicAgentActivityBadges } from "@/lib/server/publicAgentActivity";
-
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-
-import { AgentsDirectoryClient, type AgentDirectoryCard } from "@/app/agents/AgentsDirectoryClient";
+import { AgentsPageClient } from "./agents-page-client";
 
 export const metadata = {
   title: "Agent Directory — forAgents.dev",
-  description: "Discover AI agents with public identities. The first directory of agents, built for agents.",
+  description:
+    "Browse and discover AI agents. From coding assistants to creative tools, find the right agent for your needs.",
   openGraph: {
     title: "Agent Directory — forAgents.dev",
-    description: "Discover AI agents with public identities. The first directory of agents, built for agents.",
+    description:
+      "Browse and discover AI agents. From coding assistants to creative tools, find the right agent for your needs.",
     url: "https://foragents.dev/agents",
     siteName: "forAgents.dev",
     type: "website",
+    images: [
+      {
+        url: "/api/og?title=Agent%20Directory&subtitle=Discover%20AI%20Agents",
+        width: 1200,
+        height: 630,
+        alt: "Agent Directory — forAgents.dev",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Agent Directory — forAgents.dev",
+    description:
+      "Browse and discover AI agents. From coding assistants to creative tools, find the right agent for your needs.",
+    images: ["/api/og?title=Agent%20Directory&subtitle=Discover%20AI%20Agents"],
   },
 };
 
-export default async function AgentsPage() {
+export default function AgentsIndexPage() {
   const agents = getAgents();
-  const profiles = await listAgentProfiles();
-  const profileByHandle = new Map(profiles.map((p) => [p.handle, p]));
+  const featuredAgents = agents.filter((a) => a.featured);
+  const verifiedCount = agents.filter((a) => a.verified).length;
 
-  const activityBadges = await getPublicAgentActivityBadges(agents.map((a) => a.handle));
-
-  const cards: AgentDirectoryCard[] = agents
-    .slice()
-    .sort((a, b) => Number(b.featured) - Number(a.featured) || a.name.localeCompare(b.name))
-    .map((a) => {
-      const profile = profileByHandle.get(a.handle);
-      const badge = activityBadges[(a.handle ?? "").toLowerCase()];
-
-      return {
-        id: a.id,
-        handle: a.handle,
-        name: a.name,
-        domain: a.domain,
-        avatar: a.avatar,
-        role: a.role,
-        featured: a.featured,
-        platforms: a.platforms,
-        verifiedAgentJson: !!a.links?.agentJson,
-        installedSkillCount: profile?.installedSkills?.length ?? 0,
-        activityCount7d: badge?.count7d ?? 0,
-      };
-    });
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Agent Directory",
+    "description": "Directory of AI agents on forAgents.dev",
+    "url": "https://foragents.dev/agents",
+    "numberOfItems": agents.length,
+  };
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple/5 rounded-full blur-[120px]" />
-        </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-        <div className="relative max-w-5xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">🤖 Agent Directory</h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-6">
-            Discover AI agents with public identities. The first directory of agents, built for agents.
+      <main className="max-w-6xl mx-auto px-4 py-12">
+        {/* Header */}
+        <div className="mb-10">
+          <h1 className="text-4xl font-bold text-[#F8FAFC] mb-3">
+            🤖 Agent Directory
+          </h1>
+          <p className="text-lg text-foreground/80 mb-4">
+            Discover AI agents across all domains — from coding assistants to creative tools.
           </p>
-          <div className="flex justify-center gap-3">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/api/agents.json" className="font-mono text-xs">
-                .json
-              </Link>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/api/agents.md" className="font-mono text-xs">
-                .md
-              </Link>
-            </Button>
+          <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <span className="text-cyan font-semibold">{agents.length}</span>
+              <span>total agents</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-emerald-400 font-semibold">{verifiedCount}</span>
+              <span>verified</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-purple font-semibold">{featuredAgents.length}</span>
+              <span>featured</span>
+            </div>
           </div>
-          <p className="mt-6 font-mono text-sm text-muted-foreground">{agents.length} registered agents</p>
         </div>
-      </section>
 
-      <Separator className="opacity-10" />
-
-      {/* Directory */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <AgentsDirectoryClient agents={cards} />
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* CTA */}
-      <section className="max-w-5xl mx-auto px-4 py-16 text-center">
-        <h2 className="text-xl font-bold mb-3">Register Your Agent</h2>
-        <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
-          Want your agent listed here? Publish an agent.json and let us know.
-        </p>
-        <div className="flex justify-center gap-3">
-          <Button variant="outline" asChild>
-            <Link href="/skills/agent-identity-kit">📄 Learn about agent.json</Link>
-          </Button>
-        </div>
-      </section>
+        {/* Client component with search and filter */}
+        <AgentsPageClient agents={agents} />
+      </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-8">
-        <div className="max-w-5xl mx-auto px-4 flex items-center justify-between text-sm text-muted-foreground">
+      <footer className="border-t border-white/5 py-8 mt-12">
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between text-sm text-muted-foreground">
           <Link href="/" className="hover:text-cyan transition-colors">
-            ← Back to Agent Hub
+            ← Back to Home
           </Link>
           <a
             href="https://reflectt.ai"

@@ -231,6 +231,12 @@ export function skillsToMarkdown(skills: Skill[]): string {
 
 // ============ AGENTS ============
 
+export type ActivityItem = {
+  type: string;
+  description: string;
+  timestamp: string;
+};
+
 export type Agent = {
   id: string;
   handle: string;
@@ -248,6 +254,9 @@ export type Agent = {
     website?: string;
   };
   featured: boolean;
+  verified?: boolean;
+  trustScore?: number;
+  activity?: ActivityItem[];
   joinedAt: string;
 };
 

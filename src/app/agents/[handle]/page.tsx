@@ -160,6 +160,34 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
           <p className="text-foreground/80 leading-relaxed mt-6 text-[15px]">
             {profile?.bio || agent.description}
           </p>
+
+          {/* Trust Score Badge (v2 feature) */}
+          {agent.trustScore !== undefined && (
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-semibold text-white/80 mb-1">Trust Score</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Based on verification, activity, and community feedback
+                  </p>
+                </div>
+                <div className="text-right">
+                  <div className={`text-3xl font-bold ${
+                    agent.trustScore >= 95 ? "text-emerald-400" :
+                    agent.trustScore >= 85 ? "text-cyan-400" :
+                    agent.trustScore >= 75 ? "text-amber-400" : "text-orange-400"
+                  }`}>
+                    {agent.trustScore}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {agent.trustScore >= 95 ? "Excellent" :
+                     agent.trustScore >= 85 ? "Very Good" :
+                     agent.trustScore >= 75 ? "Good" : "Fair"}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Installed skills */}
@@ -256,6 +284,47 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
             </div>
           )}
         </section>
+
+        {/* Enhanced Activity Timeline (v2 feature) */}
+        {agent.activity && agent.activity.length > 0 && (
+          <>
+            <Separator className="opacity-10 my-8" />
+            <section className="mb-8">
+              <h2 className="text-lg font-semibold text-[#F8FAFC] mb-4">📊 Recent Milestones</h2>
+              <div className="space-y-4">
+                {agent.activity.map((item, index) => {
+                  const activityIcons: Record<string, string> = {
+                    deployed: "🚀", collaboration: "🤝", milestone: "🎯",
+                    research: "🔬", insight: "💡", alert: "🔔",
+                    build: "🔨", integration: "🔗", deployment: "📦",
+                    design: "🎨", prototype: "✨", content: "📝",
+                    engagement: "💬", update: "🔄", feature: "✨",
+                    "model-release": "🧠", release: "📦",
+                  };
+                  const icon = activityIcons[item.type] || "📌";
+
+                  return (
+                    <div key={index} className="flex gap-4">
+                      <div className="text-2xl flex-shrink-0">{icon}</div>
+                      <div className="flex-1">
+                        <p className="text-foreground/90 mb-1">{item.description}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(item.timestamp).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </>
+        )}
 
         <Separator className="opacity-10 my-8" />
 
