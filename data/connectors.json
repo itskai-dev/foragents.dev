@@ -1,0 +1,480 @@
+[
+  {
+    "id": "github-connector",
+    "name": "GitHub",
+    "slug": "github",
+    "icon": "🐙",
+    "description": "OAuth-based GitHub integration for repository management, issues, PRs, and actions.",
+    "authType": "OAuth 2.0",
+    "category": "Development",
+    "complexity": "Medium",
+    "featured": true,
+    "mcpServer": "@modelcontextprotocol/server-github",
+    "setupInstructions": "GitHub OAuth allows your agent to authenticate as a user or app, accessing repositories, issues, pull requests, and workflows without exposing static tokens.",
+    "oauthScopes": [
+      "repo - Full control of private repositories",
+      "workflow - Update GitHub Action workflows",
+      "read:org - Read organization data",
+      "user:email - Access user email"
+    ],
+    "steps": [
+      "Create a GitHub OAuth App at github.com/settings/developers",
+      "Set authorization callback URL to your agent's OAuth handler",
+      "Configure client ID and client secret in your environment",
+      "Initiate OAuth flow from your agent when user connects",
+      "Exchange authorization code for access token",
+      "Store token securely and refresh when needed (GitHub tokens don't expire but can be revoked)"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"github\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-github\"],\n      \"env\": {\n        \"GITHUB_PERSONAL_ACCESS_TOKEN\": \"${GITHUB_TOKEN}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "GITHUB_CLIENT_ID",
+      "GITHUB_CLIENT_SECRET",
+      "GITHUB_TOKEN"
+    ],
+    "useCases": [
+      "Automated PR reviews and code analysis",
+      "Issue triage and labeling",
+      "Repository health monitoring",
+      "CI/CD workflow automation"
+    ],
+    "relatedSkills": ["git", "code-review", "ci-cd"],
+    "documentation": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps"
+  },
+  {
+    "id": "sentry-connector",
+    "name": "Sentry",
+    "slug": "sentry",
+    "icon": "🐛",
+    "description": "Error tracking and performance monitoring with OAuth for team access.",
+    "authType": "OAuth 2.0",
+    "category": "Monitoring",
+    "complexity": "Low",
+    "featured": true,
+    "mcpServer": "custom",
+    "setupInstructions": "Sentry OAuth enables agents to monitor errors, manage releases, and analyze performance across your applications.",
+    "oauthScopes": [
+      "event:read - Read error events",
+      "event:write - Create and update events",
+      "project:read - Access project data",
+      "org:read - Read organization info"
+    ],
+    "steps": [
+      "Create a Sentry OAuth application in organization settings",
+      "Configure redirect URI for your agent",
+      "Implement OAuth flow to obtain access token",
+      "Use Sentry REST API with Bearer token",
+      "Set up webhooks for real-time error notifications",
+      "Tokens are long-lived but should be rotated periodically"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"sentry\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/sentry-server.js\"],\n      \"env\": {\n        \"SENTRY_TOKEN\": \"${SENTRY_TOKEN}\",\n        \"SENTRY_ORG\": \"${SENTRY_ORG}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "SENTRY_CLIENT_ID",
+      "SENTRY_CLIENT_SECRET",
+      "SENTRY_TOKEN",
+      "SENTRY_ORG"
+    ],
+    "useCases": [
+      "Automated error triage and assignment",
+      "Performance regression detection",
+      "Release health monitoring",
+      "Incident response automation"
+    ],
+    "relatedSkills": ["monitoring", "debugging", "incident-response"],
+    "documentation": "https://docs.sentry.io/api/auth/"
+  },
+  {
+    "id": "linear-connector",
+    "name": "Linear",
+    "slug": "linear",
+    "icon": "📊",
+    "description": "OAuth-powered project management with GraphQL API for issues and workflows.",
+    "authType": "OAuth 2.0",
+    "category": "Project Management",
+    "complexity": "Medium",
+    "featured": true,
+    "mcpServer": "custom",
+    "setupInstructions": "Linear's OAuth flow provides scoped access to workspaces, enabling agents to manage issues, projects, and cycles programmatically.",
+    "oauthScopes": [
+      "read - Read all workspace data",
+      "write - Create and update resources",
+      "admin - Full administrative access"
+    ],
+    "steps": [
+      "Register OAuth application in Linear settings",
+      "Configure authorized redirect URIs",
+      "Initiate authorization with required scopes",
+      "Exchange code for access and refresh tokens",
+      "Use Linear GraphQL API with Bearer token",
+      "Implement token refresh (tokens expire after 10 years)"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"linear\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/linear-server.js\"],\n      \"env\": {\n        \"LINEAR_API_KEY\": \"${LINEAR_TOKEN}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "LINEAR_CLIENT_ID",
+      "LINEAR_CLIENT_SECRET",
+      "LINEAR_TOKEN"
+    ],
+    "useCases": [
+      "Automated issue creation from errors",
+      "Sprint planning and estimation",
+      "Project status reporting",
+      "Workflow automation"
+    ],
+    "relatedSkills": ["project-management", "agile", "reporting"],
+    "documentation": "https://developers.linear.app/docs/oauth/authentication"
+  },
+  {
+    "id": "slack-connector",
+    "name": "Slack",
+    "slug": "slack",
+    "icon": "💬",
+    "description": "OAuth 2.0 bot and user tokens for workspace automation and messaging.",
+    "authType": "OAuth 2.0",
+    "category": "Communication",
+    "complexity": "Medium",
+    "featured": true,
+    "mcpServer": "@modelcontextprotocol/server-slack",
+    "setupInstructions": "Slack OAuth supports both bot tokens (for app actions) and user tokens (for user-specific actions), enabling rich workspace integrations.",
+    "oauthScopes": [
+      "chat:write - Post messages as the app",
+      "channels:read - View channels",
+      "users:read - View users",
+      "files:write - Upload files",
+      "commands - Add slash commands"
+    ],
+    "steps": [
+      "Create a Slack app at api.slack.com/apps",
+      "Configure OAuth scopes (bot vs user)",
+      "Set redirect URL for OAuth callback",
+      "Install app to workspace via OAuth flow",
+      "Receive bot and/or user access tokens",
+      "Store tokens securely (they don't expire unless revoked)"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"slack\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@modelcontextprotocol/server-slack\"],\n      \"env\": {\n        \"SLACK_BOT_TOKEN\": \"${SLACK_BOT_TOKEN}\",\n        \"SLACK_TEAM_ID\": \"${SLACK_TEAM_ID}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "SLACK_CLIENT_ID",
+      "SLACK_CLIENT_SECRET",
+      "SLACK_BOT_TOKEN",
+      "SLACK_USER_TOKEN",
+      "SLACK_TEAM_ID"
+    ],
+    "useCases": [
+      "Team notifications and alerts",
+      "Interactive workflows with slash commands",
+      "Meeting summaries and action items",
+      "Status updates and standups"
+    ],
+    "relatedSkills": ["communication", "notifications", "workflows"],
+    "documentation": "https://api.slack.com/authentication/oauth-v2"
+  },
+  {
+    "id": "notion-connector",
+    "name": "Notion",
+    "slug": "notion",
+    "icon": "📝",
+    "description": "OAuth integration for workspace access, database queries, and page management.",
+    "authType": "OAuth 2.0",
+    "category": "Productivity",
+    "complexity": "Medium",
+    "featured": true,
+    "mcpServer": "custom",
+    "setupInstructions": "Notion OAuth allows agents to access user workspaces with granular permissions, enabling database management and content creation.",
+    "oauthScopes": [
+      "No granular scopes - access controlled by workspace sharing"
+    ],
+    "steps": [
+      "Create integration at notion.so/my-integrations",
+      "Configure OAuth redirect URIs",
+      "Initiate OAuth authorization flow",
+      "Exchange code for access token",
+      "User must manually share pages/databases with integration",
+      "Access token is permanent until revoked"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"notion\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/notion-server.js\"],\n      \"env\": {\n        \"NOTION_TOKEN\": \"${NOTION_TOKEN}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "NOTION_CLIENT_ID",
+      "NOTION_CLIENT_SECRET",
+      "NOTION_TOKEN"
+    ],
+    "useCases": [
+      "Knowledge base automation",
+      "Meeting notes and action items",
+      "Project documentation",
+      "Database synchronization"
+    ],
+    "relatedSkills": ["documentation", "knowledge-management", "databases"],
+    "documentation": "https://developers.notion.com/docs/authorization"
+  },
+  {
+    "id": "jira-connector",
+    "name": "Jira",
+    "slug": "jira",
+    "icon": "🎯",
+    "description": "Atlassian OAuth 2.0 for Jira Cloud access with 3-legged auth flow.",
+    "authType": "OAuth 2.0",
+    "category": "Project Management",
+    "complexity": "High",
+    "featured": false,
+    "mcpServer": "custom",
+    "setupInstructions": "Jira uses 3-legged OAuth (3LO) with refresh tokens, requiring careful token management and periodic renewal.",
+    "oauthScopes": [
+      "read:jira-work - Read project and issue data",
+      "write:jira-work - Create and update issues",
+      "read:jira-user - Access user information",
+      "manage:jira-project - Full project management"
+    ],
+    "steps": [
+      "Create OAuth 2.0 app in Atlassian Developer Console",
+      "Configure callback URL and scopes",
+      "Implement 3-legged OAuth authorization flow",
+      "Exchange authorization code for access + refresh tokens",
+      "Access tokens expire after 1 hour - implement refresh logic",
+      "Refresh tokens expire after 90 days of inactivity"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"jira\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/jira-server.js\"],\n      \"env\": {\n        \"JIRA_ACCESS_TOKEN\": \"${JIRA_TOKEN}\",\n        \"JIRA_CLOUD_ID\": \"${JIRA_CLOUD_ID}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "JIRA_CLIENT_ID",
+      "JIRA_CLIENT_SECRET",
+      "JIRA_TOKEN",
+      "JIRA_REFRESH_TOKEN",
+      "JIRA_CLOUD_ID"
+    ],
+    "useCases": [
+      "Agile sprint management",
+      "Bug tracking and triaging",
+      "Story estimation and planning",
+      "Release coordination"
+    ],
+    "relatedSkills": ["agile", "project-management", "issue-tracking"],
+    "documentation": "https://developer.atlassian.com/cloud/jira/platform/oauth-2-3lo-apps/"
+  },
+  {
+    "id": "stripe-connector",
+    "name": "Stripe",
+    "slug": "stripe",
+    "icon": "💳",
+    "description": "OAuth for Stripe Connect - manage payments on behalf of connected accounts.",
+    "authType": "OAuth 2.0",
+    "category": "Payments",
+    "complexity": "High",
+    "featured": true,
+    "mcpServer": "custom",
+    "setupInstructions": "Stripe Connect OAuth enables marketplace and platform integrations where your agent manages payments for connected sellers or service providers.",
+    "oauthScopes": [
+      "read_write - Full access to account",
+      "read_only - Read-only access"
+    ],
+    "steps": [
+      "Enable Stripe Connect in your Stripe Dashboard",
+      "Configure OAuth settings and redirect URIs",
+      "Initiate OAuth flow for account connection",
+      "Exchange authorization code for access token and account ID",
+      "Use token to make API calls on behalf of connected account",
+      "Tokens are permanent but can be revoked by account owner"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"stripe\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/stripe-server.js\"],\n      \"env\": {\n        \"STRIPE_SECRET_KEY\": \"${STRIPE_SECRET_KEY}\",\n        \"STRIPE_ACCOUNT_ID\": \"${STRIPE_ACCOUNT_ID}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "STRIPE_CLIENT_ID",
+      "STRIPE_SECRET_KEY",
+      "STRIPE_ACCOUNT_ID"
+    ],
+    "useCases": [
+      "Marketplace payment processing",
+      "Subscription management",
+      "Invoice generation and tracking",
+      "Payout automation"
+    ],
+    "relatedSkills": ["payments", "billing", "subscriptions"],
+    "documentation": "https://stripe.com/docs/connect/oauth-reference"
+  },
+  {
+    "id": "vercel-connector",
+    "name": "Vercel",
+    "slug": "vercel",
+    "icon": "▲",
+    "description": "OAuth integration for deployment management and project access.",
+    "authType": "OAuth 2.0",
+    "category": "Deployment",
+    "complexity": "Low",
+    "featured": false,
+    "mcpServer": "custom",
+    "setupInstructions": "Vercel OAuth enables agents to deploy projects, manage domains, and access analytics on behalf of users or teams.",
+    "oauthScopes": [
+      "Scopes are implicit based on user/team permissions"
+    ],
+    "steps": [
+      "Register OAuth integration in Vercel dashboard",
+      "Configure redirect URI",
+      "Initiate authorization flow",
+      "Exchange code for access token",
+      "Make API calls with Bearer token",
+      "Tokens don't expire but can be revoked"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"vercel\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/vercel-server.js\"],\n      \"env\": {\n        \"VERCEL_TOKEN\": \"${VERCEL_TOKEN}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "VERCEL_CLIENT_ID",
+      "VERCEL_CLIENT_SECRET",
+      "VERCEL_TOKEN"
+    ],
+    "useCases": [
+      "Automated deployments",
+      "Preview URL management",
+      "Domain configuration",
+      "Analytics and performance monitoring"
+    ],
+    "relatedSkills": ["deployment", "ci-cd", "hosting"],
+    "documentation": "https://vercel.com/docs/rest-api/authentication#oauth2"
+  },
+  {
+    "id": "supabase-connector",
+    "name": "Supabase",
+    "slug": "supabase",
+    "icon": "🔋",
+    "description": "OAuth authentication for Supabase management API and database access.",
+    "authType": "OAuth 2.0 / API Key",
+    "category": "Database",
+    "complexity": "Medium",
+    "featured": false,
+    "mcpServer": "custom",
+    "setupInstructions": "Supabase supports OAuth for management API access and also provides service role keys for database operations.",
+    "oauthScopes": [
+      "all - Full access to projects and organizations"
+    ],
+    "steps": [
+      "Create OAuth app in Supabase dashboard (for management API)",
+      "For database access, use project API keys (anon or service_role)",
+      "Implement OAuth flow for multi-project management",
+      "Use service role key for backend agent operations",
+      "Configure Row Level Security (RLS) policies",
+      "API keys are project-specific and don't expire"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"supabase\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/supabase-server.js\"],\n      \"env\": {\n        \"SUPABASE_URL\": \"${SUPABASE_URL}\",\n        \"SUPABASE_SERVICE_KEY\": \"${SUPABASE_SERVICE_KEY}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "SUPABASE_URL",
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_KEY",
+      "SUPABASE_ACCESS_TOKEN"
+    ],
+    "useCases": [
+      "Database operations and queries",
+      "Real-time subscriptions",
+      "Storage and file management",
+      "Edge function deployment"
+    ],
+    "relatedSkills": ["database", "backend", "real-time"],
+    "documentation": "https://supabase.com/docs/guides/api"
+  },
+  {
+    "id": "planetscale-connector",
+    "name": "PlanetScale",
+    "slug": "planetscale",
+    "icon": "🌐",
+    "description": "Service tokens for MySQL database access with branch management.",
+    "authType": "Service Token",
+    "category": "Database",
+    "complexity": "Low",
+    "featured": false,
+    "mcpServer": "custom",
+    "setupInstructions": "PlanetScale uses service tokens for API access and standard connection strings for database access.",
+    "oauthScopes": [
+      "N/A - Token-based authentication"
+    ],
+    "steps": [
+      "Create service token in PlanetScale dashboard",
+      "Configure token permissions (read, write, admin)",
+      "Use token for API operations (branches, deploys)",
+      "Use connection string for database queries",
+      "Implement connection pooling for performance",
+      "Rotate tokens periodically for security"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"planetscale\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/planetscale-server.js\"],\n      \"env\": {\n        \"PLANETSCALE_TOKEN\": \"${PLANETSCALE_TOKEN}\",\n        \"PLANETSCALE_ORG\": \"${PLANETSCALE_ORG}\",\n        \"DATABASE_URL\": \"${DATABASE_URL}\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "PLANETSCALE_TOKEN",
+      "PLANETSCALE_ORG",
+      "DATABASE_URL"
+    ],
+    "useCases": [
+      "Database branching and merging",
+      "Schema change management",
+      "Production database queries",
+      "Deploy request automation"
+    ],
+    "relatedSkills": ["database", "mysql", "schema-management"],
+    "documentation": "https://planetscale.com/docs/concepts/service-tokens"
+  },
+  {
+    "id": "datadog-connector",
+    "name": "Datadog",
+    "slug": "datadog",
+    "icon": "📈",
+    "description": "API and application keys for monitoring, metrics, and log management.",
+    "authType": "API Key",
+    "category": "Monitoring",
+    "complexity": "Low",
+    "featured": false,
+    "mcpServer": "custom",
+    "setupInstructions": "Datadog uses API keys for authentication and application keys for user-specific operations.",
+    "oauthScopes": [
+      "N/A - Key-based authentication with role permissions"
+    ],
+    "steps": [
+      "Generate API key in Datadog Organization Settings",
+      "Create application key for your agent",
+      "Configure keys in environment variables",
+      "Use Datadog API or SDK for operations",
+      "Set up monitors and alerts programmatically",
+      "Rotate keys periodically according to security policy"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"datadog\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/datadog-server.js\"],\n      \"env\": {\n        \"DD_API_KEY\": \"${DD_API_KEY}\",\n        \"DD_APP_KEY\": \"${DD_APP_KEY}\",\n        \"DD_SITE\": \"datadoghq.com\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "DD_API_KEY",
+      "DD_APP_KEY",
+      "DD_SITE"
+    ],
+    "useCases": [
+      "Metrics collection and dashboards",
+      "Log aggregation and analysis",
+      "APM and distributed tracing",
+      "Incident management and alerts"
+    ],
+    "relatedSkills": ["monitoring", "observability", "alerting"],
+    "documentation": "https://docs.datadoghq.com/api/latest/"
+  },
+  {
+    "id": "posthog-connector",
+    "name": "PostHog",
+    "slug": "posthog",
+    "icon": "📊",
+    "description": "API key authentication for product analytics and feature flags.",
+    "authType": "API Key",
+    "category": "Analytics",
+    "complexity": "Low",
+    "featured": false,
+    "mcpServer": "custom",
+    "setupInstructions": "PostHog provides personal API keys for management operations and project API keys for event tracking.",
+    "oauthScopes": [
+      "N/A - Key-based authentication"
+    ],
+    "steps": [
+      "Generate personal API key in PostHog settings",
+      "Get project API key from project settings",
+      "Configure SDK with project key for event tracking",
+      "Use personal key for API operations (insights, feature flags)",
+      "Implement event batching for performance",
+      "Keep keys secure and rotate regularly"
+    ],
+    "mcpConfig": "{\n  \"mcpServers\": {\n    \"posthog\": {\n      \"command\": \"node\",\n      \"args\": [\"./mcp-servers/posthog-server.js\"],\n      \"env\": {\n        \"POSTHOG_API_KEY\": \"${POSTHOG_API_KEY}\",\n        \"POSTHOG_PERSONAL_KEY\": \"${POSTHOG_PERSONAL_KEY}\",\n        \"POSTHOG_HOST\": \"https://app.posthog.com\"\n      }\n    }\n  }\n}",
+    "envVars": [
+      "POSTHOG_API_KEY",
+      "POSTHOG_PERSONAL_KEY",
+      "POSTHOG_HOST"
+    ],
+    "useCases": [
+      "Product usage analytics",
+      "Feature flag management",
+      "A/B testing automation",
+      "User behavior analysis"
+    ],
+    "relatedSkills": ["analytics", "feature-flags", "experimentation"],
+    "documentation": "https://posthog.com/docs/api"
+  }
+]
