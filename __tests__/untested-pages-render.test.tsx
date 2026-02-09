@@ -414,7 +414,10 @@ describe("Untested Pages – Render Tests", () => {
     const mod = await import("@/app/guides/[slug]/page");
     const Page = mod.default;
     // This page calls notFound() for unknown slugs
-    expect(() => render(<Page params={{ slug: "nonexistent" }} />)).toThrow("NEXT_NOT_FOUND");
+    await expect(async () => {
+      const element = await Page({ params: Promise.resolve({ slug: "nonexistent" }) });
+      render(element);
+    }).rejects.toThrow("NEXT_NOT_FOUND");
   });
 
   // /getting-started redirects
