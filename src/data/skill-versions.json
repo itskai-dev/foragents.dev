@@ -1,0 +1,60 @@
+[
+  {
+    "id": "agent-memory-kit",
+    "name": "Agent Memory Kit",
+    "versions": [
+      {
+        "version": "1.0.0",
+        "releaseDate": "2024-01-15",
+        "content": "# Agent Memory Kit v1.0\n\nA basic memory system for AI agents.\n\n## Features\n- Daily logs\n- Simple memory file\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-memory-kit\n```\n\n## Usage\n1. Create a memory directory\n2. Write daily logs\n3. Review occasionally"
+      },
+      {
+        "version": "1.1.0",
+        "releaseDate": "2024-03-20",
+        "content": "# Agent Memory Kit v1.1\n\nA 2-layer memory system for AI agents.\n\n## Features\n- Daily logs with timestamps\n- Simple memory file\n- Weekly review templates\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-memory-kit\ncp -r templates/memory ./memory\n```\n\n## Usage\n1. Create a memory directory\n2. Write daily logs with timestamps\n3. Use weekly review template\n4. Update memory file regularly\n\n## New in 1.1\n- Added weekly review templates\n- Improved timestamp format"
+      },
+      {
+        "version": "2.0.0",
+        "releaseDate": "2024-08-10",
+        "content": "# Agent Memory Kit v2.0\n\nA 3-layer memory system for AI agents — episodic (what happened), semantic (what I know), and procedural (how to do things).\n\n## Features\n- Daily logs with structured timestamps\n- Long-term memory (MEMORY.md)\n- Weekly review templates\n- Procedural memory for learned skills\n- Feedback loop integration\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-memory-kit skills/agent-memory-kit\ncp -r skills/agent-memory-kit/templates/memory ./memory\n```\n\n## Usage\n1. Create a memory directory structure\n2. Write daily logs with structured timestamps\n3. Use weekly review template to curate MEMORY.md\n4. Document procedures as you learn them\n5. Implement feedback loops for continuous improvement\n\n## New in 2.0\n- Added 3-layer memory architecture\n- Episodic memory (daily logs)\n- Semantic memory (MEMORY.md)\n- Procedural memory (learned skills)\n- Feedback loop templates\n- Structured timestamp format\n- Better organization"
+      }
+    ]
+  },
+  {
+    "id": "agent-autonomy-kit",
+    "name": "Agent Autonomy Kit",
+    "versions": [
+      {
+        "version": "1.0.0",
+        "releaseDate": "2024-02-01",
+        "content": "# Agent Autonomy Kit v1.0\n\nBasic autonomy patterns for AI agents.\n\n## Features\n- Simple heartbeat polling\n- Basic task queue\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-autonomy-kit\n```\n\n## Usage\nImplement HEARTBEAT_OK pattern for periodic checks."
+      },
+      {
+        "version": "1.5.0",
+        "releaseDate": "2024-06-15",
+        "content": "# Agent Autonomy Kit v1.5\n\nEnhanced autonomy patterns for AI agents.\n\n## Features\n- Advanced heartbeat polling with scheduling\n- Task queue with priorities\n- Proactive work patterns\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-autonomy-kit skills/agent-autonomy-kit\ncp skills/agent-autonomy-kit/templates/HEARTBEAT.md ./HEARTBEAT.md\n```\n\n## Usage\n1. Set up HEARTBEAT.md with your checks\n2. Implement priority task queue\n3. Define proactive work patterns\n\n## New in 1.5\n- Added task prioritization\n- Improved heartbeat scheduling\n- Proactive work templates"
+      },
+      {
+        "version": "2.0.0",
+        "releaseDate": "2024-11-30",
+        "content": "# Agent Autonomy Kit v2.0\n\nStop waiting for prompts. A proactive work system that transforms idle agents into self-directed workers.\n\n## Features\n- Advanced heartbeat polling with intelligent scheduling\n- Persistent task queue with priorities and dependencies\n- Proactive work patterns and strategies\n- Team coordination templates\n- Continuous operation mode\n- Self-assessment loops\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-autonomy-kit skills/agent-autonomy-kit\ncp skills/agent-autonomy-kit/templates/HEARTBEAT.md ./HEARTBEAT.md\ncp -r skills/agent-autonomy-kit/templates/autonomy ./autonomy\n```\n\n## Usage\n1. Set up HEARTBEAT.md with intelligent checks\n2. Implement persistent task queue with dependencies\n3. Define proactive work patterns for downtime\n4. Enable team coordination\n5. Configure continuous operation parameters\n6. Set up self-assessment loops\n\n## New in 2.0\n- Persistent task queue with dependencies\n- Team coordination system\n- Continuous operation mode\n- Self-assessment and improvement loops\n- Better scheduling algorithms\n- Idle-time work strategies\n- Multi-agent coordination"
+      }
+    ]
+  },
+  {
+    "id": "agent-team-kit",
+    "name": "Agent Team Kit",
+    "versions": [
+      {
+        "version": "1.0.0",
+        "releaseDate": "2024-04-01",
+        "content": "# Agent Team Kit v1.0\n\nBasic multi-agent coordination.\n\n## Features\n- Role definitions (Scout, Executor)\n- Simple workflow\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-team-kit\n```\n\n## Roles\n- Scout: Discover work\n- Executor: Complete tasks"
+      },
+      {
+        "version": "2.0.0",
+        "releaseDate": "2024-09-20",
+        "content": "# Agent Team Kit v2.0\n\nA self-sustaining process framework for multi-agent teams.\n\n## Features\n- Clear role definitions (Scout, Rhythm, Harmony, Executors)\n- 5-phase intake loop\n- Self-service work queues\n- Team coordination patterns\n\n## Installation\n```bash\ngit clone https://github.com/reflectt/agent-team-kit skills/agent-team-kit\ncp -r skills/agent-team-kit/templates/process ./process\n```\n\n## Roles\n- Scout: Discover and evaluate work\n- Rhythm: Prioritize and schedule\n- Harmony: Quality assurance\n- Executors: Complete tasks\n\n## Workflow\n1. Discover: Scout finds potential work\n2. Triage: Rhythm evaluates and prioritizes\n3. Ready: Prepare for execution\n4. Execute: Agents complete tasks\n5. Feedback: Harmony reviews and learns\n\n## New in 2.0\n- Added Rhythm and Harmony roles\n- 5-phase intake loop\n- Self-service work queues\n- Better coordination patterns\n- No bottleneck architecture"
+      }
+    ]
+  }
+]
