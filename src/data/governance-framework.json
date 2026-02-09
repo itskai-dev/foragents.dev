@@ -1,0 +1,176 @@
+{
+  "overview": {
+    "title": "Agent Governance Framework",
+    "description": "A practical governance model for designing, running, and auditing autonomous agents in production environments.",
+    "whyItMatters": [
+      "Autonomous agents can act at speed and scale, so failures can propagate quickly.",
+      "Governance creates clear ownership for decisions, incidents, and policy exceptions.",
+      "Structured controls improve trust with users, auditors, and regulators.",
+      "Maturity-based governance helps teams evolve from ad-hoc controls to resilient operations."
+    ]
+  },
+  "pillars": [
+    {
+      "slug": "accountability",
+      "title": "Accountability",
+      "description": "Define ownership for agent behavior, maintain auditability, and ensure people can intervene before high-impact actions complete.",
+      "keyPrinciples": [
+        "Every autonomous decision maps to an accountable owner.",
+        "High-risk decisions must have a documented approval path.",
+        "Escalation paths include named contacts and response SLAs.",
+        "Decision logs are tamper-evident and reviewable."
+      ],
+      "maturity": {
+        "basic": "Capture who triggered each task and store basic execution logs.",
+        "intermediate": "Add structured decision logs, approval gates, and regular governance reviews.",
+        "advanced": "Implement policy-as-code controls, immutable audit trails, and live oversight dashboards."
+      }
+    },
+    {
+      "slug": "transparency",
+      "title": "Transparency",
+      "description": "Make agent behavior understandable to operators, reviewers, and impacted users through clear explanations and visibility.",
+      "keyPrinciples": [
+        "Expose rationale summaries for non-trivial decisions.",
+        "Document model/tool versions used per execution.",
+        "Track confidence, uncertainty, and fallback behavior.",
+        "Communicate significant incidents and mitigation steps promptly."
+      ],
+      "maturity": {
+        "basic": "Provide basic task status and execution outcomes.",
+        "intermediate": "Show rationale summaries and confidence indicators in operator views.",
+        "advanced": "Offer end-to-end observability with explainability, lineage, and stakeholder reporting."
+      }
+    },
+    {
+      "slug": "safety",
+      "title": "Safety",
+      "description": "Reduce harmful outcomes with sandboxing, guardrails, kill-switches, and staged rollout patterns.",
+      "keyPrinciples": [
+        "Constrain runtime permissions with least privilege defaults.",
+        "Use hard caps on rate, spend, and resource usage.",
+        "Support instant pause/rollback and graceful recovery.",
+        "Test dangerous operations in isolated environments first."
+      ],
+      "maturity": {
+        "basic": "Use input/output filtering and simple execution constraints.",
+        "intermediate": "Apply environment isolation, rate caps, and operator-controlled emergency stop.",
+        "advanced": "Adopt multi-layer guardrails, continuous red-team testing, and automated containment workflows."
+      }
+    },
+    {
+      "slug": "compliance",
+      "title": "Compliance",
+      "description": "Align agent operations with legal, contractual, and industry obligations while preserving evidence for audits.",
+      "keyPrinciples": [
+        "Classify data and enforce policy-based handling rules.",
+        "Maintain retention and deletion controls for logs and artifacts.",
+        "Map controls to relevant standards and regulations.",
+        "Continuously verify and document control effectiveness."
+      ],
+      "maturity": {
+        "basic": "Document applicable requirements and retain core records.",
+        "intermediate": "Map controls to obligations and run recurring compliance checks.",
+        "advanced": "Continuously monitor compliance posture with automated evidence collection and alerts."
+      }
+    }
+  ],
+  "readinessChecklist": [
+    {
+      "id": "owners",
+      "label": "Each production agent has a named owner and escalation backup."
+    },
+    {
+      "id": "decision-logs",
+      "label": "Agent decisions are logged with rationale, risk level, and outcome."
+    },
+    {
+      "id": "approval-gates",
+      "label": "High-risk actions require explicit human approval before execution."
+    },
+    {
+      "id": "sandboxing",
+      "label": "Dangerous capabilities run in sandboxed environments with least privilege."
+    },
+    {
+      "id": "resource-caps",
+      "label": "Rate limits and resource/spend caps are enforced in runtime."
+    },
+    {
+      "id": "kill-switch",
+      "label": "Operators can trigger a kill-switch and rollback workflows quickly."
+    },
+    {
+      "id": "incident-playbook",
+      "label": "An incident response playbook exists and has been exercised recently."
+    },
+    {
+      "id": "audit-evidence",
+      "label": "Audit evidence is retained, queryable, and protected from tampering."
+    }
+  ],
+  "maturityCriteria": {
+    "basic": {
+      "range": [0, 3],
+      "label": "Basic",
+      "guidance": "Foundational controls exist, but operations are still mostly reactive."
+    },
+    "intermediate": {
+      "range": [4, 6],
+      "label": "Intermediate",
+      "guidance": "Core governance controls are active, with partial automation and regular review."
+    },
+    "advanced": {
+      "range": [7, 8],
+      "label": "Advanced",
+      "guidance": "Governance is proactive, measurable, and deeply integrated into delivery workflows."
+    }
+  },
+  "accountability": {
+    "auditTrailRequirements": [
+      "Unique execution IDs, actor IDs, and timestamps for every agent action.",
+      "Immutable records for policy checks, tool calls, and approval outcomes.",
+      "Versioned prompts, models, and tool manifests for reproducibility.",
+      "Evidence retention policy aligned with legal and contractual requirements."
+    ],
+    "decisionLoggingPatterns": [
+      "Capture structured fields: context, alternatives considered, chosen action, and confidence.",
+      "Attach policy evaluation results and rule IDs used during enforcement.",
+      "Store before/after state snapshots for high-impact mutations.",
+      "Tag logs by sensitivity tier for access control and retention."
+    ],
+    "escalationProtocols": [
+      "Define severity classes with response SLAs and ownership.",
+      "Automatically page responders when confidence drops or policy checks fail.",
+      "Freeze risky capabilities until human review is complete.",
+      "Run post-incident reviews with corrective and preventive actions."
+    ]
+  },
+  "safety": {
+    "sandboxingStrategies": [
+      "Isolate untrusted execution in ephemeral containers or VMs.",
+      "Use network egress allowlists and secret-scoped credentials.",
+      "Apply filesystem and syscall restrictions for tool runtimes.",
+      "Separate staging and production permissions to prevent lateral impact."
+    ],
+    "rateLimitingAndCaps": [
+      "Per-user, per-agent, and per-tool request limits.",
+      "Token, CPU, memory, and execution time budgets.",
+      "Spend controls for paid APIs and external actions.",
+      "Adaptive throttling under anomaly detection signals."
+    ],
+    "rollbackAndKillSwitch": [
+      "Atomic changes with idempotent compensation handlers.",
+      "Global kill-switch and scoped feature flags for containment.",
+      "Automated rollback triggers tied to error and risk thresholds.",
+      "Operator runbooks that define safe restart criteria."
+    ],
+    "incidentResponseTemplate": [
+      "Detect and classify the incident severity.",
+      "Contain impact by disabling risky pathways.",
+      "Preserve evidence and establish timeline.",
+      "Remediate root cause and validate fix in staging.",
+      "Communicate status updates and complete post-incident review."
+    ]
+  }
+}
