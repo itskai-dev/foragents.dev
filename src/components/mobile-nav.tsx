@@ -13,6 +13,7 @@ const primaryLinks = [
   { href: "/agents", label: "Agents" },
   { href: "/mcp", label: "MCP" },
   { href: "/community", label: "Community" },
+  { href: "/events", label: "Events" },
   { href: "/search", label: "Search" },
 ];
 
