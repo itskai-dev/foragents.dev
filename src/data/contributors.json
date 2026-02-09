@@ -1,0 +1,181 @@
+{
+  "stats": {
+    "totalContributors": 127,
+    "prsMerged": 342,
+    "skillsContributed": 89
+  },
+  "topContributors": [
+    {
+      "id": "1",
+      "name": "Alex Rivera",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex",
+      "contributions": 156,
+      "badges": ["Top Contributor", "Early Adopter"],
+      "githubUsername": "alexrivera"
+    },
+    {
+      "id": "2",
+      "name": "Sarah Chen",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+      "contributions": 134,
+      "badges": ["Skill Master", "Documentation Hero"],
+      "githubUsername": "sarahchen"
+    },
+    {
+      "id": "3",
+      "name": "Marcus Johnson",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus",
+      "contributions": 112,
+      "badges": ["Bug Hunter"],
+      "githubUsername": "marcusj"
+    },
+    {
+      "id": "4",
+      "name": "Elena Popov",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena",
+      "contributions": 98,
+      "badges": ["Integration Wizard"],
+      "githubUsername": "elenapopov"
+    },
+    {
+      "id": "5",
+      "name": "James Kim",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=James",
+      "contributions": 87,
+      "badges": ["Early Adopter"],
+      "githubUsername": "jameskim"
+    },
+    {
+      "id": "6",
+      "name": "Olivia Martinez",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Olivia",
+      "contributions": 76,
+      "badges": ["Documentation Hero"],
+      "githubUsername": "omartinez"
+    },
+    {
+      "id": "7",
+      "name": "David Zhang",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+      "contributions": 65,
+      "badges": ["Skill Master"],
+      "githubUsername": "davidzhang"
+    },
+    {
+      "id": "8",
+      "name": "Priya Sharma",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Priya",
+      "contributions": 58,
+      "badges": ["Bug Hunter"],
+      "githubUsername": "priyasharma"
+    },
+    {
+      "id": "9",
+      "name": "Lucas Silva",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas",
+      "contributions": 52,
+      "badges": ["Top Contributor"],
+      "githubUsername": "lucassilva"
+    },
+    {
+      "id": "10",
+      "name": "Emma Wilson",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma",
+      "contributions": 47,
+      "badges": ["Integration Wizard"],
+      "githubUsername": "emmawilson"
+    },
+    {
+      "id": "11",
+      "name": "Ahmed Hassan",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmed",
+      "contributions": 41,
+      "badges": ["Early Adopter"],
+      "githubUsername": "ahmedhassan"
+    },
+    {
+      "id": "12",
+      "name": "Sophie Anderson",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophie",
+      "contributions": 38,
+      "badges": ["Documentation Hero"],
+      "githubUsername": "sophieanderson"
+    }
+  ],
+  "goodFirstIssues": [
+    {
+      "id": 1,
+      "title": "Add TypeScript types to webhook handlers",
+      "url": "https://github.com/reflectt/foragents.dev/issues/42",
+      "labels": ["good first issue", "typescript"],
+      "difficulty": "Easy",
+      "estimatedTime": "1-2 hours"
+    },
+    {
+      "id": 2,
+      "title": "Improve accessibility on skill card components",
+      "url": "https://github.com/reflectt/foragents.dev/issues/56",
+      "labels": ["good first issue", "accessibility", "a11y"],
+      "difficulty": "Easy",
+      "estimatedTime": "2-3 hours"
+    },
+    {
+      "id": 3,
+      "title": "Add dark mode toggle animation",
+      "url": "https://github.com/reflectt/foragents.dev/issues/73",
+      "labels": ["good first issue", "enhancement", "ui"],
+      "difficulty": "Medium",
+      "estimatedTime": "3-4 hours"
+    },
+    {
+      "id": 4,
+      "title": "Create GitHub Actions workflow for automated testing",
+      "url": "https://github.com/reflectt/foragents.dev/issues/89",
+      "labels": ["good first issue", "ci/cd"],
+      "difficulty": "Medium",
+      "estimatedTime": "4-5 hours"
+    },
+    {
+      "id": 5,
+      "title": "Document API rate limiting behavior",
+      "url": "https://github.com/reflectt/foragents.dev/issues/102",
+      "labels": ["good first issue", "documentation"],
+      "difficulty": "Easy",
+      "estimatedTime": "1-2 hours"
+    }
+  ],
+  "contributionWays": [
+    {
+      "id": "skills",
+      "icon": "Code",
+      "title": "Submit Skills",
+      "description": "Share your agent skills with the community. Help others build better agents by contributing reusable capabilities.",
+      "link": "/submit"
+    },
+    {
+      "id": "bugs",
+      "icon": "Bug",
+      "title": "Report Bugs",
+      "description": "Found an issue? Report bugs to help us improve the platform. Your feedback makes forAgents.dev better for everyone.",
+      "link": "https://github.com/reflectt/foragents.dev/issues/new?template=bug_report.md"
+    },
+    {
+      "id": "docs",
+      "icon": "BookOpen",
+      "title": "Improve Docs",
+      "description": "Help make our documentation clearer and more comprehensive. Great docs empower the entire community.",
+      "link": "https://github.com/reflectt/foragents.dev/blob/main/CONTRIBUTING.md"
+    },
+    {
+      "id": "integrations",
+      "icon": "Puzzle",
+      "title": "Build Integrations",
+      "description": "Create integrations with popular tools and platforms. Extend the ecosystem and unlock new possibilities.",
+      "link": "/integrations"
+    }
+  ],
+  "codeOfConduct": {
+    "summary": "We are committed to providing a welcoming and inspiring community for all. Please be respectful, considerate, and collaborative. Harassment and abusive behavior are not tolerated.",
+    "fullDocUrl": "https://github.com/reflectt/foragents.dev/blob/main/CODE_OF_CONDUCT.md"
+  }
+}
