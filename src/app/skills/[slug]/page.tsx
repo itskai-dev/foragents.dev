@@ -213,6 +213,8 @@ export default async function SkillPage({
         <section className="mb-8" id="versions">
           <h2 className="text-lg font-semibold text-[#F8FAFC] mb-3">Version history</h2>
           <SkillVersionHistory slug={skill.slug} />
+        </section>
+
         {/* Dependencies */}
         <section className="mb-8" id="dependencies">
           <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
