@@ -12,10 +12,13 @@ type GlossaryCategory =
   | "patterns";
 
 interface GlossaryEntry {
+  id: string;
   term: string;
   definition: string;
   category: GlossaryCategory;
   relatedTerms: string[];
+  tags: string[];
+  updatedAt: string;
   slug: string;
 }
 
@@ -46,15 +49,19 @@ const EMPTY_FORM = {
   term: "",
   definition: "",
   category: "core-concepts" as GlossaryCategory,
+  relatedTerms: "",
+  tags: "",
 };
 
 export default function GlossaryPage() {
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<GlossaryCategory | "all">("all");
   const [terms, setTerms] = useState<GlossaryEntry[]>([]);
   const [total, setTotal] = useState(0);
   const [availableLetters, setAvailableLetters] = useState<string[]>([]);
+  const [availableCategories, setAvailableCategories] = useState<GlossaryCategory[]>(Object.keys(CATEGORY_LABELS) as GlossaryCategory[]);
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [refreshNonce, setRefreshNonce] = useState(0);
@@ -101,6 +108,10 @@ export default function GlossaryPage() {
           params.set("letter", selectedLetter);
         }
 
+        if (selectedCategory !== "all") {
+          params.set("category", selectedCategory);
+        }
+
         const query = params.toString();
         const response = await fetch(`/api/glossary${query ? `?${query}` : ""}`, {
           signal: controller.signal,
@@ -115,11 +126,17 @@ export default function GlossaryPage() {
         setTerms(Array.isArray(data.terms) ? data.terms : []);
         setTotal(typeof data.total === "number" ? data.total : 0);
         setAvailableLetters(Array.isArray(data.letters) ? data.letters : []);
+        setAvailableCategories(
+          Array.isArray(data.categories) && data.categories.length > 0
+            ? data.categories
+            : (Object.keys(CATEGORY_LABELS) as GlossaryCategory[])
+        );
       } catch (error) {
         if ((error as Error).name !== "AbortError") {
           setTerms([]);
           setTotal(0);
           setAvailableLetters([]);
+          setAvailableCategories(Object.keys(CATEGORY_LABELS) as GlossaryCategory[]);
           setLoadError("Couldn't load glossary data right now. Please try again.");
         }
       } finally {
@@ -132,7 +149,7 @@ export default function GlossaryPage() {
     void fetchGlossary();
 
     return () => controller.abort();
-  }, [debouncedSearch, selectedLetter, refreshNonce]);
+  }, [debouncedSearch, selectedLetter, selectedCategory, refreshNonce]);
 
   const groupedEntries = useMemo(() => {
     const groups: Record<string, GlossaryEntry[]> = {};
@@ -183,6 +200,7 @@ export default function GlossaryPage() {
     setSearchInput("");
     setDebouncedSearch("");
     setSelectedLetter(null);
+    setSelectedCategory("all");
   };
 
   const handleSuggestionSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -202,6 +220,8 @@ export default function GlossaryPage() {
           term: formData.term.trim(),
           definition: formData.definition.trim(),
           category: formData.category,
+          relatedTerms: formData.relatedTerms,
+          tags: formData.tags,
         }),
       });
 
@@ -216,8 +236,9 @@ export default function GlossaryPage() {
         throw new Error(data.error ? `${data.error}${details ? ` ${details}` : ""}` : "Submit failed.");
       }
 
-      setSubmitSuccess(data.message ?? "Suggestion submitted.");
+      setSubmitSuccess(data.message ?? "Term created.");
       setFormData(EMPTY_FORM);
+      setRefreshNonce((previous) => previous + 1);
     } catch (error) {
       setSubmitError((error as Error).message || "Couldn't submit suggestion.");
     } finally {
@@ -275,16 +296,35 @@ export default function GlossaryPage() {
               </svg>
             </div>
 
-            {(debouncedSearch || selectedLetter || isLoading || loadError) && (
+            <div className="mt-3 flex items-center gap-3">
+              <label htmlFor="glossary-category" className="text-sm text-gray-400 whitespace-nowrap">
+                Category:
+              </label>
+              <select
+                id="glossary-category"
+                value={selectedCategory}
+                onChange={(event) => setSelectedCategory(event.target.value as GlossaryCategory | "all")}
+                className="px-3 py-2 bg-black/30 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-[#06D6A0]/50"
+              >
+                <option value="all">All categories</option>
+                {availableCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {CATEGORY_LABELS[category]}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {(debouncedSearch || selectedLetter || selectedCategory !== "all" || isLoading || loadError) && (
               <div className="mt-3 flex items-center justify-between text-sm gap-4">
                 <span className={` ${loadError ? "text-rose-300" : "text-gray-400"}`}>
                   {isLoading
                     ? "Loading terms..."
                     : loadError
                     ? loadError
-                    : `${total} ${total === 1 ? "term" : "terms"} found${selectedLetter ? ` for \"${selectedLetter}\"` : ""}`}
+                    : `${total} ${total === 1 ? "term" : "terms"} found${selectedLetter ? ` for \"${selectedLetter}\"` : ""}${selectedCategory !== "all" ? ` in ${CATEGORY_LABELS[selectedCategory]}` : ""}`}
                 </span>
-                {(debouncedSearch || selectedLetter) && (
+                {(debouncedSearch || selectedLetter || selectedCategory !== "all") && (
                   <button
                     onClick={clearFilters}
                     className="text-[#06D6A0] hover:underline"
@@ -382,6 +422,20 @@ export default function GlossaryPage() {
 
                       <p className="text-gray-300 leading-relaxed mb-4">{entry.definition}</p>
 
+                      <div className="flex flex-wrap items-center gap-2 mb-4">
+                        {entry.tags.map((tag) => (
+                          <span
+                            key={`${entry.id}-tag-${tag}`}
+                            className="px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-gray-300"
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                        <span className="text-xs text-gray-500 ml-auto">
+                          Updated {new Date(entry.updatedAt).toLocaleDateString()}
+                        </span>
+                      </div>
+
                       {entry.relatedTerms.length > 0 && (
                         <div>
                           <div className="flex flex-wrap items-center gap-2">
@@ -432,9 +486,9 @@ export default function GlossaryPage() {
       <section className="max-w-5xl mx-auto px-4 pb-16">
         <div className="grid gap-6 md:grid-cols-2">
           <div className="rounded-xl border border-white/10 bg-white/5 p-6">
-            <h2 className="text-2xl font-semibold text-white mb-2">Suggest a term</h2>
+            <h2 className="text-2xl font-semibold text-white mb-2">Add a term</h2>
             <p className="text-sm text-gray-400 mb-6">
-              What's missing? Submit a glossary entry suggestion for review.
+              Create a new glossary entry in the persistent term database.
             </p>
 
             <form className="space-y-4" onSubmit={handleSuggestionSubmit}>
@@ -496,6 +550,36 @@ export default function GlossaryPage() {
                 </select>
               </div>
 
+              <div>
+                <label htmlFor="relatedTerms" className="block text-sm text-gray-300 mb-1">
+                  Related terms (comma-separated)
+                </label>
+                <input
+                  id="relatedTerms"
+                  value={formData.relatedTerms}
+                  onChange={(event) =>
+                    setFormData((previous) => ({ ...previous, relatedTerms: event.target.value }))
+                  }
+                  className="w-full px-4 py-2 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#06D6A0]/50"
+                  placeholder="Example: MCP, Tool Calling"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="tags" className="block text-sm text-gray-300 mb-1">
+                  Tags (comma-separated)
+                </label>
+                <input
+                  id="tags"
+                  value={formData.tags}
+                  onChange={(event) =>
+                    setFormData((previous) => ({ ...previous, tags: event.target.value }))
+                  }
+                  className="w-full px-4 py-2 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#06D6A0]/50"
+                  placeholder="Example: ai-agents, security"
+                />
+              </div>
+
               {submitError && (
                 <p className="text-sm text-rose-300 border border-rose-500/30 bg-rose-500/10 rounded-lg px-3 py-2">
                   {submitError}
@@ -513,7 +597,7 @@ export default function GlossaryPage() {
                 disabled={isSubmitting}
                 className="px-5 py-2.5 bg-[#06D6A0] text-black font-semibold rounded-lg hover:brightness-110 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? "Submitting..." : "Submit suggestion"}
+                {isSubmitting ? "Creating..." : "Create term"}
               </button>
             </form>
           </div>

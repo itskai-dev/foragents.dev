@@ -1,114 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "node:fs";
-import path from "node:path";
 
-type GlossaryCategory =
-  | "core-concepts"
-  | "protocols"
-  | "infrastructure"
-  | "security"
-  | "patterns";
+import {
+  isGlossaryCategory,
+  readGlossaryTerms,
+  slugifyGlossaryTerm,
+  VALID_GLOSSARY_CATEGORIES,
+  writeGlossaryTerms,
+  type GlossaryCategory,
+  type GlossaryTermRecord,
+} from "@/lib/server/glossaryStore";
 
-type GlossaryEntry = {
-  term: string;
-  definition: string;
-  category: GlossaryCategory;
-  relatedTerms: string[];
-  slug: string;
-};
-
-type GlossarySuggestion = {
-  id: string;
-  term: string;
-  definition: string;
-  category: GlossaryCategory;
-  slug: string;
-  createdAt: string;
-  status: "pending";
-};
-
-const GLOSSARY_PATH = path.join(process.cwd(), "data", "glossary.json");
-const SUGGESTIONS_PATH = path.join(process.cwd(), "data", "glossary-suggestions.json");
-
-const VALID_CATEGORIES: GlossaryCategory[] = [
-  "core-concepts",
-  "protocols",
-  "infrastructure",
-  "security",
-  "patterns",
-];
-
-function isGlossaryCategory(value: unknown): value is GlossaryCategory {
-  return typeof value === "string" && VALID_CATEGORIES.includes(value as GlossaryCategory);
-}
-
-function isGlossaryEntry(value: unknown): value is GlossaryEntry {
-  if (!value || typeof value !== "object") return false;
-
-  const item = value as Partial<GlossaryEntry>;
-
-  return (
-    typeof item.term === "string" &&
-    typeof item.definition === "string" &&
-    isGlossaryCategory(item.category) &&
-    typeof item.slug === "string" &&
-    Array.isArray(item.relatedTerms) &&
-    item.relatedTerms.every((term) => typeof term === "string")
-  );
-}
-
-function slugify(value: string): string {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-}
-
-async function readGlossaryFile(): Promise<GlossaryEntry[]> {
-  try {
-    const raw = await fs.readFile(GLOSSARY_PATH, "utf8");
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isGlossaryEntry);
-  } catch {
-    return [];
+function normalizeCsvInput(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => (typeof item === "string" ? item.trim() : ""))
+      .filter(Boolean);
   }
-}
 
-async function readSuggestionFile(): Promise<GlossarySuggestion[]> {
-  try {
-    const raw = await fs.readFile(SUGGESTIONS_PATH, "utf8");
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-
-    return parsed.filter((item) => {
-      if (!item || typeof item !== "object") return false;
-      const candidate = item as Partial<GlossarySuggestion>;
-      return (
-        typeof candidate.id === "string" &&
-        typeof candidate.term === "string" &&
-        typeof candidate.definition === "string" &&
-        isGlossaryCategory(candidate.category) &&
-        typeof candidate.slug === "string" &&
-        typeof candidate.createdAt === "string" &&
-        candidate.status === "pending"
-      );
-    });
-  } catch {
-    return [];
+  if (typeof value === "string") {
+    return value
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
   }
-}
 
-async function writeSuggestionFile(suggestions: GlossarySuggestion[]): Promise<void> {
-  await fs.writeFile(SUGGESTIONS_PATH, `${JSON.stringify(suggestions, null, 2)}\n`, "utf8");
+  return [];
 }
 
 export async function GET(request: NextRequest) {
-  const allTerms = await readGlossaryFile();
+  const allTerms = await readGlossaryTerms();
 
   const search = request.nextUrl.searchParams.get("search")?.trim().toLowerCase() ?? "";
+  const categoryParam = request.nextUrl.searchParams.get("category")?.trim() ?? "";
+  const category = isGlossaryCategory(categoryParam) ? categoryParam : "";
   const letterParam = request.nextUrl.searchParams.get("letter")?.trim().toUpperCase() ?? "";
   const letter = /^[A-Z]$/.test(letterParam) ? letterParam : "";
 
@@ -122,13 +46,24 @@ export async function GET(request: NextRequest) {
 
   const filteredTerms = allTerms
     .filter((entry) => {
-      if (search) {
-        const matchesSearch =
-          entry.term.toLowerCase().includes(search) ||
-          entry.definition.toLowerCase().includes(search) ||
-          entry.category.toLowerCase().includes(search);
+      if (category && entry.category !== category) {
+        return false;
+      }
 
-        if (!matchesSearch) return false;
+      if (search) {
+        const haystack = [
+          entry.term,
+          entry.definition,
+          entry.category,
+          ...entry.relatedTerms,
+          ...entry.tags,
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        if (!haystack.includes(search)) {
+          return false;
+        }
       }
 
       if (letter) {
@@ -144,7 +79,7 @@ export async function GET(request: NextRequest) {
       terms: filteredTerms,
       total: filteredTerms.length,
       letters,
-      categories: VALID_CATEGORIES,
+      categories: VALID_GLOSSARY_CATEGORIES,
     },
     {
       headers: {
@@ -161,6 +96,8 @@ export async function POST(request: NextRequest) {
     const term = typeof body.term === "string" ? body.term.trim() : "";
     const definition = typeof body.definition === "string" ? body.definition.trim() : "";
     const category = body.category;
+    const relatedTerms = normalizeCsvInput(body.relatedTerms);
+    const tags = normalizeCsvInput(body.tags);
 
     const errors: string[] = [];
 
@@ -171,21 +108,19 @@ export async function POST(request: NextRequest) {
     if (definition.length > 1200) errors.push("definition must be 1200 characters or less");
 
     if (!isGlossaryCategory(category)) {
-      errors.push(`category must be one of: ${VALID_CATEGORIES.join(", ")}`);
+      errors.push(`category must be one of: ${VALID_GLOSSARY_CATEGORIES.join(", ")}`);
     }
 
     if (errors.length > 0) {
       return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 });
     }
 
-    const slug = slugify(term);
+    const slug = slugifyGlossaryTerm(term);
     if (!slug) {
       return NextResponse.json({ error: "Invalid term. Could not generate slug." }, { status: 400 });
     }
 
-    const validatedCategory = category as GlossaryCategory;
-
-    const [allTerms, suggestions] = await Promise.all([readGlossaryFile(), readSuggestionFile()]);
+    const allTerms = await readGlossaryTerms();
 
     const termExists = allTerms.some(
       (entry) => entry.slug === slug || entry.term.toLowerCase() === term.toLowerCase()
@@ -195,34 +130,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "This term already exists in the glossary." }, { status: 409 });
     }
 
-    const pendingExists = suggestions.some(
-      (entry) => entry.slug === slug || entry.term.toLowerCase() === term.toLowerCase()
-    );
-
-    if (pendingExists) {
-      return NextResponse.json(
-        { error: "A suggestion for this term is already pending review." },
-        { status: 409 }
-      );
-    }
-
-    const suggestion: GlossarySuggestion = {
-      id: `glossary_suggestion_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    const now = new Date().toISOString();
+    const createdTerm: GlossaryTermRecord = {
+      id: `glossary-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
       term,
       definition,
-      category: validatedCategory,
+      category: category as GlossaryCategory,
+      relatedTerms,
+      tags,
+      updatedAt: now,
       slug,
-      createdAt: new Date().toISOString(),
-      status: "pending",
     };
 
-    await writeSuggestionFile([...suggestions, suggestion]);
+    allTerms.unshift(createdTerm);
+    await writeGlossaryTerms(allTerms);
 
     return NextResponse.json(
       {
         success: true,
-        message: "Thanks! Your term suggestion has been submitted for review.",
-        suggestion,
+        message: "Glossary term created.",
+        term: createdTerm,
       },
       { status: 201 }
     );
