@@ -1,0 +1,190 @@
+{
+  "overallComplianceScore": 86,
+  "frameworks": [
+    {
+      "id": "gdpr",
+      "name": "GDPR",
+      "status": "partial",
+      "score": 84,
+      "lastAudit": "2026-01-18",
+      "requirements": [
+        {
+          "id": "gdpr-consent-records",
+          "title": "Consent records for data processing",
+          "description": "Maintain verifiable consent logs for all personal data collection and processing events.",
+          "pass": true,
+          "category": "privacy"
+        },
+        {
+          "id": "gdpr-erasure-workflow",
+          "title": "Right-to-erasure workflow",
+          "description": "Provide a documented and tested process to delete personal data within regulatory timelines.",
+          "pass": true,
+          "category": "privacy"
+        },
+        {
+          "id": "gdpr-dpia",
+          "title": "Data Protection Impact Assessments",
+          "description": "Run and store DPIAs for high-risk automated decisions.",
+          "pass": false,
+          "category": "governance"
+        },
+        {
+          "id": "gdpr-cross-border",
+          "title": "Cross-border transfer safeguards",
+          "description": "Enforce SCCs or equivalent transfer controls for data moved outside applicable regions.",
+          "pass": true,
+          "category": "privacy"
+        }
+      ]
+    },
+    {
+      "id": "soc2",
+      "name": "SOC2",
+      "status": "compliant",
+      "score": 92,
+      "lastAudit": "2026-01-06",
+      "requirements": [
+        {
+          "id": "soc2-access-control",
+          "title": "Access control policy",
+          "description": "Role-based access controls are implemented and reviewed quarterly.",
+          "pass": true,
+          "category": "security"
+        },
+        {
+          "id": "soc2-change-management",
+          "title": "Change management evidence",
+          "description": "Track approvals and rollback plans for production changes.",
+          "pass": true,
+          "category": "governance"
+        },
+        {
+          "id": "soc2-monitoring",
+          "title": "Continuous monitoring",
+          "description": "Security and availability alerts are monitored with documented response SLAs.",
+          "pass": true,
+          "category": "security"
+        },
+        {
+          "id": "soc2-vendor-risk",
+          "title": "Vendor risk assessments",
+          "description": "Perform annual due diligence and contractual controls for critical vendors.",
+          "pass": false,
+          "category": "risk"
+        }
+      ]
+    },
+    {
+      "id": "hipaa",
+      "name": "HIPAA",
+      "status": "partial",
+      "score": 79,
+      "lastAudit": "2025-12-22",
+      "requirements": [
+        {
+          "id": "hipaa-phi-segmentation",
+          "title": "PHI environment segmentation",
+          "description": "Isolate PHI workloads and enforce strict network boundaries.",
+          "pass": true,
+          "category": "healthcare"
+        },
+        {
+          "id": "hipaa-baa",
+          "title": "Business Associate Agreements",
+          "description": "All relevant vendors have signed BAAs with current terms.",
+          "pass": false,
+          "category": "healthcare"
+        },
+        {
+          "id": "hipaa-audit-trail",
+          "title": "PHI audit trail integrity",
+          "description": "Create immutable access logs for PHI retrieval and modification.",
+          "pass": true,
+          "category": "security"
+        },
+        {
+          "id": "hipaa-incident-response",
+          "title": "Breach notification readiness",
+          "description": "Document and test incident response workflows for PHI breaches.",
+          "pass": true,
+          "category": "risk"
+        }
+      ]
+    },
+    {
+      "id": "iso27001",
+      "name": "ISO27001",
+      "status": "compliant",
+      "score": 88,
+      "lastAudit": "2026-01-28",
+      "requirements": [
+        {
+          "id": "iso27001-risk-register",
+          "title": "Risk register maintenance",
+          "description": "Maintain and review ISMS risk register with treatment plans.",
+          "pass": true,
+          "category": "risk"
+        },
+        {
+          "id": "iso27001-soa",
+          "title": "Statement of Applicability",
+          "description": "Keep SoA updated with control rationale and implementation status.",
+          "pass": true,
+          "category": "governance"
+        },
+        {
+          "id": "iso27001-training",
+          "title": "Security awareness training",
+          "description": "Conduct annual security training and track completion evidence.",
+          "pass": true,
+          "category": "security"
+        },
+        {
+          "id": "iso27001-bcp",
+          "title": "Business continuity testing",
+          "description": "Run and document continuity and disaster recovery tabletop exercises.",
+          "pass": false,
+          "category": "risk"
+        }
+      ]
+    },
+    {
+      "id": "ccpa",
+      "name": "CCPA",
+      "status": "non-compliant",
+      "score": 67,
+      "lastAudit": "2025-11-30",
+      "requirements": [
+        {
+          "id": "ccpa-notice-collection",
+          "title": "Notice at collection",
+          "description": "Provide consumers with clear notice about categories of data collected.",
+          "pass": true,
+          "category": "privacy"
+        },
+        {
+          "id": "ccpa-do-not-sell",
+          "title": "Do Not Sell/Share controls",
+          "description": "Offer and honor opt-out controls for sale or sharing of personal information.",
+          "pass": false,
+          "category": "privacy"
+        },
+        {
+          "id": "ccpa-dsar-sla",
+          "title": "Consumer request SLA",
+          "description": "Fulfill access and deletion requests within statutory response windows.",
+          "pass": false,
+          "category": "governance"
+        },
+        {
+          "id": "ccpa-data-map",
+          "title": "Data inventory and mapping",
+          "description": "Maintain current inventory of personal information use and retention.",
+          "pass": true,
+          "category": "privacy"
+        }
+      ]
+    }
+  ]
+}
