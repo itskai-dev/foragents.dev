@@ -1,0 +1,122 @@
+[
+  {
+    "id": "usecase-devops-deploy-guardian",
+    "title": "Deploy Guardian cut release incidents for a multi-service platform",
+    "description": "A DevOps team replaced manual deployment checks with AI agents that validate rollouts, run smoke tests, and auto-trigger rollback playbooks when regressions appear.",
+    "industry": "devops",
+    "agentStack": ["openclaw", "github-actions", "kubernetes", "prometheus"],
+    "results": [
+      { "label": "Deployment time", "value": "-72%" },
+      { "label": "Rollback speed", "value": "4.5x faster" },
+      { "label": "Change failure rate", "value": "-58%" }
+    ],
+    "author": "Rina Patel",
+    "likes": 34,
+    "createdAt": "2026-01-18T17:20:00.000Z"
+  },
+  {
+    "id": "usecase-support-inbox-triage",
+    "title": "Support inbox triage agent resolved repetitive tickets automatically",
+    "description": "A customer support org introduced an agent workflow to classify intent, draft replies, and escalate only account-risk cases to humans.",
+    "industry": "customer-support",
+    "agentStack": ["openclaw", "zendesk", "slack", "knowledge-base-rag"],
+    "results": [
+      { "label": "First response time", "value": "-89%" },
+      { "label": "Auto-resolved tickets", "value": "67%" },
+      { "label": "CSAT", "value": "+21 pts" }
+    ],
+    "author": "Noah Kim",
+    "likes": 41,
+    "createdAt": "2026-01-22T09:05:00.000Z"
+  },
+  {
+    "id": "usecase-data-anomaly-watch",
+    "title": "Analytics team automated anomaly investigation for daily reporting",
+    "description": "Data analysts used coordinated agents to monitor warehouse freshness, explain metric shifts, and open root-cause investigations with suggested SQL checks.",
+    "industry": "data-analysis",
+    "agentStack": ["openclaw", "bigquery", "dbt", "metabase"],
+    "results": [
+      { "label": "Investigation kickoff", "value": "from 2h to 9m" },
+      { "label": "Reporting accuracy", "value": "+13%" },
+      { "label": "Analyst hours saved/week", "value": "26h" }
+    ],
+    "author": "Eli Torres",
+    "likes": 29,
+    "createdAt": "2026-01-24T14:40:00.000Z"
+  },
+  {
+    "id": "usecase-content-campaign-studio",
+    "title": "Campaign studio agent stack scaled weekly content output",
+    "description": "A content team deployed agents for keyword planning, draft generation, and human-in-the-loop QA to publish across blog, social, and docs channels.",
+    "industry": "content-creation",
+    "agentStack": ["openclaw", "notion", "ahrefs", "cms-api"],
+    "results": [
+      { "label": "Published pieces/week", "value": "3x" },
+      { "label": "Organic sessions", "value": "+47%" },
+      { "label": "Editorial cycle time", "value": "-61%" }
+    ],
+    "author": "Maya Singh",
+    "likes": 26,
+    "createdAt": "2026-01-27T11:12:00.000Z"
+  },
+  {
+    "id": "usecase-security-soc-assistant",
+    "title": "SOC assistant agent reduced alert fatigue for security operations",
+    "description": "Security engineers implemented an agent that correlates SIEM alerts, enriches indicators, and recommends incident severity before paging on-call responders.",
+    "industry": "security",
+    "agentStack": ["openclaw", "crowdstrike", "splunk", "pagerduty"],
+    "results": [
+      { "label": "False positive triage", "value": "-64%" },
+      { "label": "MTTR", "value": "-39%" },
+      { "label": "Critical incident misses", "value": "0 in 90 days" }
+    ],
+    "author": "Omar Haddad",
+    "likes": 38,
+    "createdAt": "2026-01-30T19:30:00.000Z"
+  },
+  {
+    "id": "usecase-automation-procurement",
+    "title": "Procurement automation agents sped up vendor onboarding",
+    "description": "Operations automated intake forms, compliance checks, and approval routing so vendor onboarding no longer stalls across disconnected tools.",
+    "industry": "automation",
+    "agentStack": ["openclaw", "airtable", "doc-parser", "jira"],
+    "results": [
+      { "label": "Onboarding turnaround", "value": "-68%" },
+      { "label": "Manual handoffs", "value": "-52%" },
+      { "label": "Policy exceptions", "value": "-31%" }
+    ],
+    "author": "Lena Brooks",
+    "likes": 22,
+    "createdAt": "2026-02-01T08:55:00.000Z"
+  },
+  {
+    "id": "usecase-devops-capacity-planner",
+    "title": "Capacity planner agent optimized infra spend without outages",
+    "description": "A platform team trained agents on historical load patterns to predict scaling needs and execute safe, pre-validated resource adjustments.",
+    "industry": "devops",
+    "agentStack": ["openclaw", "terraform", "aws-cost-explorer", "grafana"],
+    "results": [
+      { "label": "Cloud spend", "value": "-24%" },
+      { "label": "Peak-hour saturation", "value": "-46%" },
+      { "label": "SLA breaches", "value": "0" }
+    ],
+    "author": "Priya Dawson",
+    "likes": 31,
+    "createdAt": "2026-02-03T16:18:00.000Z"
+  },
+  {
+    "id": "usecase-support-renewal-risk",
+    "title": "Renewal-risk detection agent prevented high-value churn",
+    "description": "Support and success teams combined ticket sentiment, account usage, and billing events to trigger proactive outreach before renewals.",
+    "industry": "customer-support",
+    "agentStack": ["openclaw", "hubspot", "stripe", "slack"],
+    "results": [
+      { "label": "At-risk accounts caught early", "value": "82%" },
+      { "label": "Net revenue retention", "value": "+9 pts" },
+      { "label": "Churn", "value": "-18%" }
+    ],
+    "author": "Kai Romero",
+    "likes": 27,
+    "createdAt": "2026-02-05T12:04:00.000Z"
+  }
+]
