@@ -41,6 +41,32 @@ function formatDate(dateKey: string): string {
   }
 }
 
+function RatingInput({ value, onChange }: { value: number; onChange: (next: number) => void }) {
+  return (
+    <div className="flex items-center gap-1" role="radiogroup" aria-label="Choose a rating from 1 to 5">
+      {Array.from({ length: 5 }).map((_, i) => {
+        const starValue = i + 1;
+        const filled = starValue <= value;
+
+        return (
+          <button
+            key={starValue}
+            type="button"
+            aria-label={`${starValue} star${starValue === 1 ? "" : "s"}`}
+            aria-checked={filled}
+            role="radio"
+            className="rounded p-1 hover:bg-white/5"
+            onClick={() => onChange(starValue)}
+          >
+            <StarIcon filled={filled} />
+          </button>
+        );
+      })}
+      <span className="ml-2 text-xs text-muted-foreground">{value}/5</span>
+    </div>
+  );
+}
+
 export function SkillReviewsSection({
   skillSlug,
   skillName,
@@ -50,12 +76,9 @@ export function SkillReviewsSection({
   skillName: string;
   initialReviews: SkillReview[];
 }) {
-  const [sort, setSort] = useState<"helpful" | "newest">("helpful");
+  const [sort, setSort] = useState<"recent" | "highest">("recent");
   const [reviews, setReviews] = useState<SkillReview[]>(initialReviews);
-  const [helpfulClicked, setHelpfulClicked] = useState<Set<string>>(() => new Set());
-  const [helpfulPending, setHelpfulPending] = useState<string | null>(null);
 
-  // Write a review
   const [formOpen, setFormOpen] = useState(false);
   const [author, setAuthor] = useState("");
   const [rating, setRating] = useState<number>(5);
@@ -63,78 +86,42 @@ export function SkillReviewsSection({
   const [body, setBody] = useState("");
   const [submitPending, setSubmitPending] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
-  // Refresh client-side so newly submitted reviews appear even on statically rendered pages.
   useEffect(() => {
     let cancelled = false;
+
     (async () => {
       try {
-        const res = await fetch(`/api/reviews?skill=${encodeURIComponent(skillSlug)}`);
+        const res = await fetch(
+          `/api/reviews?skill=${encodeURIComponent(skillSlug)}&sort=${encodeURIComponent(sort)}`,
+        );
         const data = (await res.json()) as { reviews?: SkillReview[] };
+
         if (!cancelled && res.ok && Array.isArray(data.reviews)) {
           setReviews(data.reviews);
         }
       } catch {
-        // ignore
+        // ignore fetch errors and keep SSR reviews
       }
     })();
+
     return () => {
       cancelled = true;
     };
-  }, [skillSlug]);
+  }, [skillSlug, sort]);
 
   const computed = useMemo(() => {
     const count = reviews.length;
     const avg = count === 0 ? 0 : reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0) / count;
 
-    const sorted = [...reviews].sort((a, b) => {
-      if (sort === "newest") {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      }
-      if (b.helpful !== a.helpful) return b.helpful - a.helpful;
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
-
-    return { count, avg, sorted };
-  }, [reviews, sort]);
-
-  async function markHelpful(reviewId: string) {
-    if (helpfulClicked.has(reviewId)) return;
-
-    setHelpfulPending(reviewId);
-    setHelpfulClicked((prev) => new Set(prev).add(reviewId));
-
-    // Optimistic UI
-    setReviews((prev) =>
-      prev.map((r) => (r.id === reviewId ? { ...r, helpful: (r.helpful ?? 0) + 1 } : r))
-    );
-
-    try {
-      const res = await fetch("/api/reviews", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: reviewId, helpfulDelta: 1 }),
-      });
-
-      if (!res.ok) {
-        // best-effort revert
-        setReviews((prev) =>
-          prev.map((r) => (r.id === reviewId ? { ...r, helpful: Math.max(0, (r.helpful ?? 1) - 1) } : r))
-        );
-        setHelpfulClicked((prev) => {
-          const next = new Set(prev);
-          next.delete(reviewId);
-          return next;
-        });
-      }
-    } finally {
-      setHelpfulPending(null);
-    }
-  }
+    return { count, avg };
+  }, [reviews]);
 
   async function submitReview(e: FormEvent) {
     e.preventDefault();
     setSubmitError(null);
+    setSubmitSuccess(null);
 
     const payload = {
       skillSlug,
@@ -144,8 +131,8 @@ export function SkillReviewsSection({
       body: body.trim(),
     };
 
-    if (!payload.author || !payload.title || !payload.body) {
-      setSubmitError("Please fill in author, title, and review text.");
+    if (!payload.title || !payload.body) {
+      setSubmitError("Please fill in title and review text.");
       return;
     }
 
@@ -170,6 +157,7 @@ export function SkillReviewsSection({
       setRating(5);
       setTitle("");
       setBody("");
+      setSubmitSuccess("Thanks — your review was submitted.");
     } catch {
       setSubmitError("Failed to submit review.");
     } finally {
@@ -200,10 +188,10 @@ export function SkillReviewsSection({
             id="review-sort"
             className="h-8 rounded-md border border-white/10 bg-black/30 px-2 text-sm text-foreground"
             value={sort}
-            onChange={(e) => setSort(e.target.value as "helpful" | "newest")}
+            onChange={(e) => setSort(e.target.value as "recent" | "highest")}
           >
-            <option value="helpful">Most helpful</option>
-            <option value="newest">Newest</option>
+            <option value="recent">Most recent</option>
+            <option value="highest">Highest rated</option>
           </select>
           <Button
             type="button"
@@ -221,6 +209,8 @@ export function SkillReviewsSection({
         </div>
       </div>
 
+      {submitSuccess ? <p className="mb-3 text-sm text-emerald-300">{submitSuccess}</p> : null}
+
       {computed.count === 0 ? (
         <div className="rounded-xl border border-white/10 bg-black/20 p-4">
           <p className="text-sm text-muted-foreground">
@@ -229,7 +219,7 @@ export function SkillReviewsSection({
         </div>
       ) : (
         <div className="space-y-3">
-          {computed.sorted.map((r) => (
+          {reviews.map((r) => (
             <article key={r.id} className="rounded-xl border border-white/10 bg-black/20 p-4">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -238,36 +228,14 @@ export function SkillReviewsSection({
                     <Stars rating={r.rating} />
                   </div>
                   <div className="mt-1 text-xs text-muted-foreground">
-                    <span className="text-foreground/80">{r.author}</span>
+                    <span className="text-foreground/80">{r.author || "anonymous"}</span>
                     <span className="mx-2 text-white/20">•</span>
                     <span>{formatDate(r.createdAt)}</span>
                   </div>
                 </div>
-
-                <div className="text-xs text-muted-foreground">{r.helpful} helpful</div>
               </div>
 
               <p className="mt-3 text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap">{r.body}</p>
-
-              <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="xs"
-                  className="border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
-                  disabled={helpfulClicked.has(r.id) || helpfulPending === r.id}
-                  onClick={() => markHelpful(r.id)}
-                >
-                  Was this helpful?
-                </Button>
-
-                <a
-                  href={`/api/reviews?skill=${encodeURIComponent(skillSlug)}`}
-                  className="text-xs font-mono text-cyan hover:underline"
-                >
-                  GET /api/reviews?skill={skillSlug}
-                </a>
-              </div>
             </article>
           ))}
         </div>
@@ -297,28 +265,18 @@ export function SkillReviewsSection({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <label className="text-sm">
-                <div className="text-xs text-muted-foreground mb-1">Author</div>
+                <div className="text-xs text-muted-foreground mb-1">Author name</div>
                 <input
                   value={author}
                   onChange={(e) => setAuthor(e.target.value)}
-                  placeholder="e.g. scout-agent or @kai@reflectt.ai"
+                  placeholder="e.g. scout-agent"
                   className="w-full h-9 rounded-md border border-white/10 bg-black/30 px-3 text-sm"
                 />
               </label>
 
               <label className="text-sm">
                 <div className="text-xs text-muted-foreground mb-1">Rating</div>
-                <select
-                  value={rating}
-                  onChange={(e) => setRating(Number(e.target.value))}
-                  className="w-full h-9 rounded-md border border-white/10 bg-black/30 px-3 text-sm"
-                >
-                  <option value={5}>5 — excellent</option>
-                  <option value={4}>4 — good</option>
-                  <option value={3}>3 — ok</option>
-                  <option value={2}>2 — poor</option>
-                  <option value={1}>1 — unusable</option>
-                </select>
+                <RatingInput value={rating} onChange={setRating} />
               </label>
             </div>
 
