@@ -22,9 +22,12 @@ type CommunityEvent = {
   date: string;
   url?: string;
   location?: string;
+  speakers: string[];
+  tags: string[];
   attendeeCount: number;
   maxAttendees: number;
   createdAt: string;
+  updatedAt: string;
 };
 
 type EventsResponse = {
@@ -82,6 +85,7 @@ export function EventsClient() {
   const [notice, setNotice] = useState<Notice | null>(null);
 
   const [typeFilter, setTypeFilter] = useState<EventType | "all">("all");
+  const [searchFilter, setSearchFilter] = useState("");
   const [upcomingOnly, setUpcomingOnly] = useState(true);
 
   const [title, setTitle] = useState("");
@@ -102,6 +106,9 @@ export function EventsClient() {
       if (typeFilter !== "all") {
         params.set("type", typeFilter);
       }
+      if (searchFilter.trim()) {
+        params.set("search", searchFilter.trim());
+      }
       if (upcomingOnly) {
         params.set("upcoming", "true");
       }
@@ -121,7 +128,7 @@ export function EventsClient() {
     } finally {
       setLoading(false);
     }
-  }, [typeFilter, upcomingOnly]);
+  }, [typeFilter, searchFilter, upcomingOnly]);
 
   useEffect(() => {
     void loadEvents();
@@ -263,33 +270,42 @@ export function EventsClient() {
 
       <div className="max-w-5xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
         <div className="lg:col-span-3">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-            <div className="flex flex-wrap gap-2">
-              {TYPE_OPTIONS.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => setTypeFilter(option)}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                    typeFilter === option
-                      ? "bg-cyan/10 text-cyan border-cyan/30"
-                      : "bg-card/40 text-muted-foreground border-white/10 hover:bg-card/60"
-                  }`}
-                >
-                  {option === "all" ? "All" : toTitleCase(option)}
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-col gap-4 mb-6">
+            <Input
+              value={searchFilter}
+              onChange={(e) => setSearchFilter(e.target.value)}
+              placeholder="Search by title, description, speaker, or tag"
+              className="bg-background/40 border-white/10"
+            />
 
-            <div className="flex items-center gap-2">
-              <Switch
-                id="upcoming-toggle"
-                checked={upcomingOnly}
-                onCheckedChange={setUpcomingOnly}
-              />
-              <Label htmlFor="upcoming-toggle" className="text-sm text-muted-foreground">
-                Upcoming only
-              </Label>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex flex-wrap gap-2">
+                {TYPE_OPTIONS.map((option) => (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => setTypeFilter(option)}
+                    className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
+                      typeFilter === option
+                        ? "bg-cyan/10 text-cyan border-cyan/30"
+                        : "bg-card/40 text-muted-foreground border-white/10 hover:bg-card/60"
+                    }`}
+                  >
+                    {option === "all" ? "All" : toTitleCase(option)}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Switch
+                  id="upcoming-toggle"
+                  checked={upcomingOnly}
+                  onCheckedChange={setUpcomingOnly}
+                />
+                <Label htmlFor="upcoming-toggle" className="text-sm text-muted-foreground">
+                  Upcoming only
+                </Label>
+              </div>
             </div>
           </div>
 
@@ -338,6 +354,23 @@ export function EventsClient() {
 
                     <CardContent>
                       <p className="text-sm leading-relaxed text-foreground mb-4">{event.description}</p>
+
+                      {event.speakers.length > 0 ? (
+                        <div className="mb-3 text-xs text-muted-foreground">
+                          <span className="font-medium text-foreground">Speakers:</span>{" "}
+                          {event.speakers.join(", ")}
+                        </div>
+                      ) : null}
+
+                      {event.tags.length > 0 ? (
+                        <div className="mb-4 flex flex-wrap gap-2">
+                          {event.tags.map((tag) => (
+                            <Badge key={`${event.id}-${tag}`} variant="outline" className="border-white/15">
+                              #{tag}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : null}
 
                       <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-4">
                         {event.location ? <span>📍 {event.location}</span> : null}
