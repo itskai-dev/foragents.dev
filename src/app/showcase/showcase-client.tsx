@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
@@ -13,6 +15,8 @@ type ShowcaseProject = {
   author: string;
   category: ShowcaseCategory;
   tags: string[];
+  featured: boolean;
+  updatedAt: string;
   voteCount: number;
   createdAt: string;
   voters: string[];
@@ -41,6 +45,7 @@ export function ShowcaseClient() {
   const [error, setError] = useState<string | null>(null);
 
   const [categoryFilter, setCategoryFilter] = useState<"all" | ShowcaseCategory>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState<SortOption>("newest");
 
   const [agentHandle, setAgentHandle] = useState("");
@@ -71,6 +76,7 @@ export function ShowcaseClient() {
       try {
         const params = new URLSearchParams();
         if (categoryFilter !== "all") params.set("category", categoryFilter);
+        if (searchQuery.trim()) params.set("search", searchQuery.trim());
         params.set("sort", sort);
 
         const response = await fetch(`/api/showcase?${params.toString()}`, {
@@ -95,7 +101,7 @@ export function ShowcaseClient() {
     void loadProjects();
 
     return () => controller.abort();
-  }, [categoryFilter, sort]);
+  }, [categoryFilter, searchQuery, sort]);
 
   const normalizedHandle = useMemo(() => agentHandle.trim().toLowerCase(), [agentHandle]);
 
@@ -334,6 +340,13 @@ export function ShowcaseClient() {
           <h2 className="text-2xl font-bold text-[#F8FAFC]">Projects ({total})</h2>
 
           <div className="flex flex-col md:flex-row gap-3 md:items-center">
+            <input
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Search title, tags, author"
+              className="px-4 py-2 rounded-lg bg-slate-900/40 border border-white/10 text-[#F8FAFC]"
+            />
+
             <select
               value={categoryFilter}
               onChange={(event) => setCategoryFilter(event.target.value as "all" | ShowcaseCategory)}
@@ -351,7 +364,7 @@ export function ShowcaseClient() {
               onChange={(event) => setSort(event.target.value as SortOption)}
               className="px-4 py-2 rounded-lg bg-slate-900/40 border border-white/10 text-[#F8FAFC]"
             >
-              <option value="newest">Newest</option>
+              <option value="newest">Recently Updated</option>
               <option value="popular">Most Upvoted</option>
             </select>
           </div>
@@ -374,9 +387,16 @@ export function ShowcaseClient() {
                 >
                   <div className="flex items-start justify-between gap-3 mb-2">
                     <h3 className="text-xl font-semibold text-[#F8FAFC]">{project.title}</h3>
-                    <span className="text-xs px-2 py-1 rounded-full border border-[#06D6A0]/30 text-[#06D6A0] bg-[#06D6A0]/10">
-                      {project.category}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {project.featured && (
+                        <span className="text-xs px-2 py-1 rounded-full border border-amber-300/30 text-amber-200 bg-amber-300/10">
+                          featured
+                        </span>
+                      )}
+                      <span className="text-xs px-2 py-1 rounded-full border border-[#06D6A0]/30 text-[#06D6A0] bg-[#06D6A0]/10">
+                        {project.category}
+                      </span>
+                    </div>
                   </div>
 
                   <p className="text-slate-300 mb-3">{project.description}</p>
@@ -426,7 +446,7 @@ export function ShowcaseClient() {
                   </div>
 
                   <p className="text-xs text-slate-500 mt-3">
-                    Submitted {new Date(project.createdAt).toLocaleDateString()}
+                    Updated {new Date(project.updatedAt || project.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               );

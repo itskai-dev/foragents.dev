@@ -1,45 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
 import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
-import type { ShowcaseProject } from "../route";
+import { readShowcaseProjects, writeShowcaseProjects } from "@/lib/showcase";
 
-const SHOWCASE_PATH = path.join(process.cwd(), "data", "showcase.json");
 const MAX_JSON_BYTES = 10_000;
-
-function isShowcaseProject(item: unknown): item is ShowcaseProject {
-  if (!item || typeof item !== "object") return false;
-  const project = item as Partial<ShowcaseProject>;
-
-  return (
-    typeof project.id === "string" &&
-    typeof project.title === "string" &&
-    typeof project.description === "string" &&
-    typeof project.url === "string" &&
-    typeof project.author === "string" &&
-    typeof project.category === "string" &&
-    Array.isArray(project.tags) &&
-    typeof project.voteCount === "number" &&
-    typeof project.createdAt === "string" &&
-    Array.isArray(project.voters)
-  );
-}
-
-async function readShowcaseProjects(): Promise<ShowcaseProject[]> {
-  try {
-    const raw = await fs.readFile(SHOWCASE_PATH, "utf-8");
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter(isShowcaseProject);
-  } catch {
-    return [];
-  }
-}
-
-async function writeShowcaseProjects(projects: ShowcaseProject[]): Promise<void> {
-  await fs.mkdir(path.dirname(SHOWCASE_PATH), { recursive: true });
-  await fs.writeFile(SHOWCASE_PATH, JSON.stringify(projects, null, 2));
-}
 
 type VotePayload = {
   agentHandle?: unknown;
@@ -97,10 +60,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       );
     }
 
-    const updatedProject: ShowcaseProject = {
+    const updatedProject = {
       ...project,
       voteCount: project.voteCount + 1,
       voters: [...project.voters, agentHandle],
+      updatedAt: new Date().toISOString(),
     };
 
     projects[index] = updatedProject;
