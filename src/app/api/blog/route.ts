@@ -4,16 +4,17 @@ import {
   estimateReadingTime,
   filterAndSortPosts,
   readBlogPosts,
+  slugifyTitle,
   writeBlogPosts,
   type BlogPost,
 } from "@/lib/blog";
 
 type CreateBlogRequest = {
   title?: unknown;
-  slug?: unknown;
   content?: unknown;
   author?: unknown;
   tags?: unknown;
+  excerpt?: unknown;
 };
 
 function validateCreate(body: CreateBlogRequest): string[] {
@@ -21,10 +22,6 @@ function validateCreate(body: CreateBlogRequest): string[] {
 
   if (typeof body.title !== "string" || !body.title.trim()) {
     errors.push("title is required");
-  }
-
-  if (typeof body.slug !== "string" || !body.slug.trim()) {
-    errors.push("slug is required");
   }
 
   if (typeof body.content !== "string" || !body.content.trim()) {
@@ -35,8 +32,12 @@ function validateCreate(body: CreateBlogRequest): string[] {
     errors.push("author is required");
   }
 
-  if (!Array.isArray(body.tags) || body.tags.length === 0 || !body.tags.every((t) => typeof t === "string")) {
-    errors.push("tags must be a non-empty string array");
+  if (!Array.isArray(body.tags) || !body.tags.every((t) => typeof t === "string")) {
+    errors.push("tags must be a string array");
+  }
+
+  if (body.excerpt !== undefined && typeof body.excerpt !== "string") {
+    errors.push("excerpt must be a string when provided");
   }
 
   return errors;
@@ -46,10 +47,9 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const search = searchParams.get("search") || undefined;
   const tag = searchParams.get("tag") || undefined;
-  const sort = searchParams.get("sort") || undefined;
 
   const posts = await readBlogPosts();
-  const filtered = filterAndSortPosts(posts, { search, tag, sort });
+  const filtered = filterAndSortPosts(posts, { search, tag, sort: "recent" });
 
   return NextResponse.json({ posts: filtered, total: filtered.length });
 }
@@ -64,24 +64,29 @@ export async function POST(request: NextRequest) {
     }
 
     const posts = await readBlogPosts();
-    const slug = (body.slug as string).trim();
+    const title = (body.title as string).trim();
+    const baseSlug = slugifyTitle(title) || "post";
 
-    if (posts.some((p) => p.slug === slug)) {
-      return NextResponse.json({ error: "A post with this slug already exists" }, { status: 409 });
+    let slug = baseSlug;
+    let suffix = 2;
+    while (posts.some((post) => post.slug === slug)) {
+      slug = `${baseSlug}-${suffix}`;
+      suffix += 1;
     }
 
     const content = (body.content as string).trim();
     const now = new Date().toISOString();
 
     const newPost: BlogPost = {
-      title: (body.title as string).trim(),
+      title,
       slug,
       content,
       author: (body.author as string).trim(),
       tags: (body.tags as string[]).map((t) => t.trim()).filter(Boolean),
+      excerpt: (body.excerpt as string | undefined)?.trim() || buildExcerpt(content),
+      viewCount: 0,
       publishedAt: now,
       updatedAt: now,
-      excerpt: buildExcerpt(content),
       readingTime: estimateReadingTime(content),
     };
 
