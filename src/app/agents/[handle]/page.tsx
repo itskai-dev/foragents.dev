@@ -32,24 +32,25 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   const { handle } = await params;
 
   const profile = await getAgentProfileByHandle(handle);
-  const profileForHandle = profile && profile.handle === handle ? profile : null;
-  const agent = getAgentByHandle(handle) ||
+  const seedAgent = getAgentByHandle(handle);
+  const profileForHandle = profile && (profile.handle === handle || (!profile.handle && seedAgent)) ? profile : null;
+  const agent = seedAgent ||
     (profileForHandle
       ? {
-          id: profile.id,
-          handle: profile.handle,
-          name: profile.name,
-          domain: profile.domain || "foragents.dev",
-          description: profile.description || profile.bio || "",
+          id: profileForHandle.id,
+          handle: profileForHandle.handle,
+          name: profileForHandle.name,
+          domain: profileForHandle.domain || "foragents.dev",
+          description: profileForHandle.description || profileForHandle.bio || "",
           avatar: "🤖",
-          role: `${profile.hostPlatform || "openclaw"} agent`,
-          platforms: [String(profile.hostPlatform || "openclaw")],
-          skills: profile.capabilities || profile.installedSkills || [],
-          links: profile.agentJsonUrl ? { agentJson: profile.agentJsonUrl } : {},
+          role: `${profileForHandle.hostPlatform || "openclaw"} agent`,
+          platforms: [String(profileForHandle.hostPlatform || "openclaw")],
+          skills: profileForHandle.capabilities || profileForHandle.installedSkills || [],
+          links: profileForHandle.agentJsonUrl ? { agentJson: profileForHandle.agentJsonUrl } : {},
           featured: false,
-          joinedAt: profile.createdAt,
+          joinedAt: profileForHandle.createdAt,
           verified: false,
-          trustScore: profile.trustScore,
+          trustScore: profileForHandle.trustScore,
           activity: [],
         }
       : null);
@@ -61,10 +62,10 @@ export async function generateMetadata({ params }: { params: Promise<{ handle: s
   const url = `${baseUrl}/agents/${agent.handle}`;
 
   const title = `${agent.name} (${fullHandle}) — forAgents.dev`;
-  const description = (profile?.bio || agent.description || "").slice(0, 200);
+  const description = (profileForHandle?.bio || profileForHandle?.description || agent.description || "").slice(0, 200);
 
-  const stackTitle = profile?.stackTitle || `${agent.name} — Stack`;
-  const installedSkills = profile?.installedSkills ?? profile?.capabilities ?? [];
+  const stackTitle = profileForHandle?.stackTitle || `${agent.name} — Stack`;
+  const installedSkills = profileForHandle?.installedSkills ?? profileForHandle?.capabilities ?? [];
 
   const ogImageUrl = installedSkills.length
     ? `${baseUrl}/api/stack-card?${new URLSearchParams({ title: stackTitle, skills: installedSkills.join(",") }).toString()}`
@@ -112,24 +113,25 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
   const { handle } = await params;
 
   const profile = await getAgentProfileByHandle(handle);
-  const profileForHandle = profile && profile.handle === handle ? profile : null;
-  const agent = getAgentByHandle(handle) ||
+  const seedAgent = getAgentByHandle(handle);
+  const profileForHandle = profile && (profile.handle === handle || (!profile.handle && seedAgent)) ? profile : null;
+  const agent = seedAgent ||
     (profileForHandle
       ? {
-          id: profile.id,
-          handle: profile.handle,
-          name: profile.name,
-          domain: profile.domain || "foragents.dev",
-          description: profile.description || profile.bio || "",
+          id: profileForHandle.id,
+          handle: profileForHandle.handle,
+          name: profileForHandle.name,
+          domain: profileForHandle.domain || "foragents.dev",
+          description: profileForHandle.description || profileForHandle.bio || "",
           avatar: "🤖",
-          role: `${profile.hostPlatform || "openclaw"} agent`,
-          platforms: [String(profile.hostPlatform || "openclaw")],
-          skills: profile.capabilities || profile.installedSkills || [],
-          links: profile.agentJsonUrl ? { agentJson: profile.agentJsonUrl } : {},
+          role: `${profileForHandle.hostPlatform || "openclaw"} agent`,
+          platforms: [String(profileForHandle.hostPlatform || "openclaw")],
+          skills: profileForHandle.capabilities || profileForHandle.installedSkills || [],
+          links: profileForHandle.agentJsonUrl ? { agentJson: profileForHandle.agentJsonUrl } : {},
           featured: false,
-          joinedAt: profile.createdAt,
+          joinedAt: profileForHandle.createdAt,
           verified: false,
-          trustScore: profile.trustScore,
+          trustScore: profileForHandle.trustScore,
           activity: [],
         }
       : null);
@@ -138,8 +140,8 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
 
   const formattedHandle = formatAgentHandle(agent);
 
-  const installedSkills = profile?.installedSkills ?? profile?.capabilities ?? [];
-  const stackTitle = profile?.stackTitle || `${agent.name} — Stack`;
+  const installedSkills = profileForHandle?.installedSkills ?? profileForHandle?.capabilities ?? [];
+  const stackTitle = profileForHandle?.stackTitle || `${agent.name} — Stack`;
   const stackHref = buildStackHref(stackTitle, installedSkills);
 
   const skills = installedSkills
@@ -158,7 +160,7 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
     mainEntity: {
       "@type": "Person",
       name: agent.name,
-      description: profile?.bio || agent.description,
+      description: profileForHandle?.bio || profileForHandle?.description || agent.description,
       url: `https://foragents.dev/agents/${agent.handle}`,
     },
   };
@@ -213,7 +215,7 @@ export default async function AgentProfilePage({ params }: { params: Promise<{ h
           </div>
 
           <p className="text-foreground/80 leading-relaxed mt-6 text-[15px]">
-            {profile?.bio || agent.description}
+            {profileForHandle?.bio || profileForHandle?.description || agent.description}
           </p>
 
           {/* Trust Score Badge (v2 feature) */}
