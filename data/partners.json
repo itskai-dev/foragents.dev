@@ -1,0 +1,68 @@
+[
+  {
+    "id": "openclaw",
+    "name": "OpenClaw",
+    "slug": "openclaw",
+    "icon": "🦅",
+    "description": "Open-source AI agent orchestration platform with native support for multi-agent workflows and tool routing.",
+    "tier": "Gold",
+    "integrationType": "SDK",
+    "type": "partner",
+    "website": "https://openclaw.dev"
+  },
+  {
+    "id": "supabase",
+    "name": "Supabase",
+    "slug": "supabase",
+    "icon": "⚡",
+    "description": "Open-source Firebase alternative with PostgreSQL, auth, and realtime subscriptions for agent data storage.",
+    "tier": "Gold",
+    "integrationType": "API",
+    "type": "partner",
+    "website": "https://supabase.com"
+  },
+  {
+    "id": "vercel",
+    "name": "Vercel",
+    "slug": "vercel",
+    "icon": "▲",
+    "description": "Deploy AI agents and web apps instantly with zero-config deployments and global edge infrastructure.",
+    "tier": "Silver",
+    "integrationType": "Service",
+    "type": "partner",
+    "website": "https://vercel.com"
+  },
+  {
+    "id": "anthropic",
+    "name": "Anthropic",
+    "slug": "anthropic",
+    "icon": "🧠",
+    "description": "Build safe, reliable agents with Claude and long-context reasoning.",
+    "tier": "Gold",
+    "integrationType": "API",
+    "type": "sponsor",
+    "website": "https://anthropic.com"
+  },
+  {
+    "id": "openai",
+    "name": "OpenAI",
+    "slug": "openai",
+    "icon": "🤖",
+    "description": "Power agents with state-of-the-art models, tool use, and multimodal capabilities.",
+    "tier": "Silver",
+    "integrationType": "API",
+    "type": "sponsor",
+    "website": "https://openai.com"
+  },
+  {
+    "id": "stripe",
+    "name": "Stripe",
+    "slug": "stripe",
+    "icon": "💳",
+    "description": "Handle payments, subscriptions, and usage billing for agent products.",
+    "tier": "Silver",
+    "integrationType": "API",
+    "type": "sponsor",
+    "website": "https://stripe.com"
+  }
+]
