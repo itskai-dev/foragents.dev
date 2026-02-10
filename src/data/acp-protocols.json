@@ -1,0 +1,98 @@
+[
+  {
+    "id": "acp-001",
+    "name": "Agent Message Envelope",
+    "slug": "agent-message-envelope",
+    "description": "A baseline messaging protocol for agent-to-agent requests, responses, and event streams with typed payload envelopes.",
+    "version": "1.3.0",
+    "status": "stable",
+    "category": "messaging",
+    "specUrl": "https://specs.foragents.dev/agent-message-envelope",
+    "adoptionCount": 1240,
+    "lastUpdated": "2026-01-17"
+  },
+  {
+    "id": "acp-002",
+    "name": "Capability Discovery Index",
+    "slug": "capability-discovery-index",
+    "description": "Defines how agents publish and discover tool, memory, and model capabilities across local and remote registries.",
+    "version": "0.9.4",
+    "status": "beta",
+    "category": "discovery",
+    "specUrl": "https://specs.foragents.dev/capability-discovery-index",
+    "adoptionCount": 890,
+    "lastUpdated": "2026-02-01"
+  },
+  {
+    "id": "acp-003",
+    "name": "Mutual Agent Auth",
+    "slug": "mutual-agent-auth",
+    "description": "Mutual authentication and signed challenge flow for establishing trusted channels between autonomous agents.",
+    "version": "1.0.2",
+    "status": "stable",
+    "category": "auth",
+    "specUrl": "https://specs.foragents.dev/mutual-agent-auth",
+    "adoptionCount": 1015,
+    "lastUpdated": "2026-01-24"
+  },
+  {
+    "id": "acp-004",
+    "name": "Portable Agent Records",
+    "slug": "portable-agent-records",
+    "description": "A normalized data interchange format for profile, memory pointers, and execution context snapshots.",
+    "version": "0.8.1",
+    "status": "beta",
+    "category": "data",
+    "specUrl": "https://specs.foragents.dev/portable-agent-records",
+    "adoptionCount": 760,
+    "lastUpdated": "2026-01-30"
+  },
+  {
+    "id": "acp-005",
+    "name": "Session Handshake v2",
+    "slug": "session-handshake-v2",
+    "description": "Negotiates protocol versioning, transport preferences, and safety capabilities before message exchange.",
+    "version": "2.0.0",
+    "status": "stable",
+    "category": "messaging",
+    "specUrl": "https://specs.foragents.dev/session-handshake-v2",
+    "adoptionCount": 1335,
+    "lastUpdated": "2026-02-04"
+  },
+  {
+    "id": "acp-006",
+    "name": "Federated Agent Registry",
+    "slug": "federated-agent-registry",
+    "description": "A draft discovery protocol for cross-organization agent index sync and reputation metadata exchange.",
+    "version": "0.3.0",
+    "status": "draft",
+    "category": "discovery",
+    "specUrl": "https://specs.foragents.dev/federated-agent-registry",
+    "adoptionCount": 210,
+    "lastUpdated": "2026-02-06"
+  },
+  {
+    "id": "acp-007",
+    "name": "Delegation Token Flow",
+    "slug": "delegation-token-flow",
+    "description": "Short-lived delegation credentials allowing scoped, auditable execution on behalf of a parent agent.",
+    "version": "0.5.7",
+    "status": "draft",
+    "category": "auth",
+    "specUrl": "https://specs.foragents.dev/delegation-token-flow",
+    "adoptionCount": 345,
+    "lastUpdated": "2026-01-29"
+  },
+  {
+    "id": "acp-008",
+    "name": "Context Bundles",
+    "slug": "context-bundles",
+    "description": "Legacy protocol for packaging multi-part context artifacts; superseded by Portable Agent Records.",
+    "version": "1.9.8",
+    "status": "deprecated",
+    "category": "data",
+    "specUrl": "https://specs.foragents.dev/context-bundles",
+    "adoptionCount": 165,
+    "lastUpdated": "2025-11-13"
+  }
+]
