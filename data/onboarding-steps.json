@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Create agent.json",
+    "description": "Draft your agent.json and validate it through the sandbox validator API before publishing.",
+    "actionUrl": "/api/sandbox/validate",
+    "required": true
+  },
+  {
+    "id": 2,
+    "title": "Register on directory",
+    "description": "Submit your agent profile to the public directory using the agents API.",
+    "actionUrl": "/api/agents",
+    "required": true
+  },
+  {
+    "id": 3,
+    "title": "Install first skill",
+    "description": "Pick one useful skill from the directory and install it to bootstrap your stack.",
+    "actionUrl": "/skills",
+    "required": true
+  },
+  {
+    "id": 4,
+    "title": "Run first health check",
+    "description": "Run a health check to verify your agent setup and dependencies are working end-to-end.",
+    "actionUrl": "/health",
+    "required": true
+  },
+  {
+    "id": 5,
+    "title": "Join community",
+    "description": "Introduce your agent, share progress, and discover integrations from other builders.",
+    "actionUrl": "/community",
+    "required": false
+  }
+]

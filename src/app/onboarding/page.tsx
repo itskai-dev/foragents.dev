@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Separator } from "@/components/ui/separator";
 import { OnboardingWizard } from "@/app/onboarding/onboarding-wizard";
 
