@@ -1,0 +1,86 @@
+[
+  {
+    "id": "guide-skills-001",
+    "title": "Publish a High-Impact Skill",
+    "description": "Create or improve a reusable skill so agents can solve a task faster with better guardrails.",
+    "category": "skills",
+    "difficulty": "intermediate",
+    "estimatedTime": "2-4 hours",
+    "steps": [
+      "Choose a repeatable workflow that agents struggle with.",
+      "Draft the skill contract, inputs, outputs, and failure modes.",
+      "Add practical examples and edge-case handling.",
+      "Test the skill with at least one real task before submitting."
+    ]
+  },
+  {
+    "id": "guide-docs-001",
+    "title": "Improve Core Documentation",
+    "description": "Tighten docs so new contributors can onboard quickly and avoid common mistakes.",
+    "category": "docs",
+    "difficulty": "beginner",
+    "estimatedTime": "1-2 hours",
+    "steps": [
+      "Pick one doc page with confusing or outdated instructions.",
+      "Rewrite sections for clarity and add concrete examples.",
+      "Verify commands and links still work.",
+      "Submit your changes with a brief before/after summary."
+    ]
+  },
+  {
+    "id": "guide-testing-001",
+    "title": "Add Regression Test Coverage",
+    "description": "Strengthen reliability by covering known bugs and critical user paths.",
+    "category": "testing",
+    "difficulty": "advanced",
+    "estimatedTime": "3-5 hours",
+    "steps": [
+      "Identify a flaky or high-risk area from recent issues.",
+      "Write focused tests that fail before your fix.",
+      "Implement the minimal fix and verify tests pass.",
+      "Document why this regression test matters."
+    ]
+  },
+  {
+    "id": "guide-design-001",
+    "title": "Refine UX for Contributor Flows",
+    "description": "Polish visual hierarchy and interaction details to make contribution workflows easier.",
+    "category": "design",
+    "difficulty": "intermediate",
+    "estimatedTime": "2-3 hours",
+    "steps": [
+      "Audit one contributor flow and list friction points.",
+      "Propose UI changes with accessibility in mind.",
+      "Validate spacing, contrast, and responsive behavior.",
+      "Ship the update with screenshots and rationale."
+    ]
+  },
+  {
+    "id": "guide-translations-001",
+    "title": "Translate Getting Started Content",
+    "description": "Expand access by translating key onboarding and contribution content.",
+    "category": "translations",
+    "difficulty": "beginner",
+    "estimatedTime": "1-3 hours",
+    "steps": [
+      "Select a target language and source page.",
+      "Translate text while preserving technical meaning.",
+      "Flag culture-specific terms that may need adaptation.",
+      "Submit translation notes for reviewer context."
+    ]
+  },
+  {
+    "id": "guide-community-001",
+    "title": "Support Community Triage",
+    "description": "Help route community requests, answer common questions, and keep discussions actionable.",
+    "category": "community",
+    "difficulty": "beginner",
+    "estimatedTime": "30-90 minutes",
+    "steps": [
+      "Review unanswered requests and duplicate topics.",
+      "Respond with clear next steps or resource links.",
+      "Label escalations for maintainers when required.",
+      "Summarize outcomes so others can continue the thread."
+    ]
+  }
+]

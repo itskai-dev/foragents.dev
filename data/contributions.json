@@ -1,0 +1,42 @@
+[
+  {
+    "id": "contrib-001",
+    "contributorName": "Ari Kim",
+    "type": "docs",
+    "title": "Clarified bootstrap troubleshooting section",
+    "status": "merged",
+    "submittedAt": "2026-02-05T18:30:00.000Z"
+  },
+  {
+    "id": "contrib-002",
+    "contributorName": "Mateo Singh",
+    "type": "testing",
+    "title": "Added route-level tests for API error handling",
+    "status": "approved",
+    "submittedAt": "2026-02-06T09:15:00.000Z"
+  },
+  {
+    "id": "contrib-003",
+    "contributorName": "Lina Park",
+    "type": "design",
+    "title": "Updated contribution cards for mobile readability",
+    "status": "pending",
+    "submittedAt": "2026-02-06T22:05:00.000Z"
+  },
+  {
+    "id": "contrib-004",
+    "contributorName": "Owen Patel",
+    "type": "skills",
+    "title": "Published skill template for CLI-based workflows",
+    "status": "merged",
+    "submittedAt": "2026-02-07T14:42:00.000Z"
+  },
+  {
+    "id": "contrib-005",
+    "contributorName": "Nora Alvarez",
+    "type": "community",
+    "title": "Triaged onboarding questions into common-answer pack",
+    "status": "pending",
+    "submittedAt": "2026-02-08T01:20:00.000Z"
+  }
+]
