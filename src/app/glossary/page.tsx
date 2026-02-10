@@ -1,21 +1,52 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
+type GlossaryCategory =
+  | "core-concepts"
+  | "protocols"
+  | "infrastructure"
+  | "security"
+  | "patterns";
+
 interface GlossaryEntry {
-  id: string;
   term: string;
   definition: string;
+  category: GlossaryCategory;
   relatedTerms: string[];
-  seeAlso: string[];
+  slug: string;
 }
 
 interface GlossaryResponse {
   terms: GlossaryEntry[];
   total: number;
   letters: string[];
+  categories: GlossaryCategory[];
 }
+
+const CATEGORY_LABELS: Record<GlossaryCategory, string> = {
+  "core-concepts": "Core Concepts",
+  protocols: "Protocols",
+  infrastructure: "Infrastructure",
+  security: "Security",
+  patterns: "Patterns",
+};
+
+const CATEGORY_BADGE_STYLES: Record<GlossaryCategory, string> = {
+  "core-concepts": "bg-sky-500/10 border-sky-500/30 text-sky-300",
+  protocols: "bg-violet-500/10 border-violet-500/30 text-violet-300",
+  infrastructure: "bg-amber-500/10 border-amber-500/30 text-amber-300",
+  security: "bg-rose-500/10 border-rose-500/30 text-rose-300",
+  patterns: "bg-emerald-500/10 border-emerald-500/30 text-emerald-300",
+};
+
+const EMPTY_FORM = {
+  term: "",
+  definition: "",
+  category: "core-concepts" as GlossaryCategory,
+};
 
 export default function GlossaryPage() {
   const [searchInput, setSearchInput] = useState("");
@@ -25,13 +56,20 @@ export default function GlossaryPage() {
   const [total, setTotal] = useState(0);
   const [availableLetters, setAvailableLetters] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [refreshNonce, setRefreshNonce] = useState(0);
+
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "Agent Terminology Glossary — forAgents.dev",
     description:
-      "Comprehensive glossary of AI agent terms, protocols, and concepts. From Agent to Zero-Trust, learn the language of autonomous AI development.",
+      "Comprehensive glossary of AI agent terms, protocols, and concepts. From Agent to Zero Trust, learn the language of autonomous AI development.",
     url: "https://foragents.dev/glossary",
   };
 
@@ -40,7 +78,7 @@ export default function GlossaryPage() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedSearch(searchInput.trim());
-    }, 300);
+    }, 250);
 
     return () => clearTimeout(timeout);
   }, [searchInput]);
@@ -50,6 +88,7 @@ export default function GlossaryPage() {
 
     const fetchGlossary = async () => {
       setIsLoading(true);
+      setLoadError(null);
 
       try {
         const params = new URLSearchParams();
@@ -68,10 +107,11 @@ export default function GlossaryPage() {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch glossary terms");
+          throw new Error("Failed to load glossary terms.");
         }
 
         const data = (await response.json()) as GlossaryResponse;
+
         setTerms(Array.isArray(data.terms) ? data.terms : []);
         setTotal(typeof data.total === "number" ? data.total : 0);
         setAvailableLetters(Array.isArray(data.letters) ? data.letters : []);
@@ -80,6 +120,7 @@ export default function GlossaryPage() {
           setTerms([]);
           setTotal(0);
           setAvailableLetters([]);
+          setLoadError("Couldn't load glossary data right now. Please try again.");
         }
       } finally {
         if (!controller.signal.aborted) {
@@ -91,7 +132,7 @@ export default function GlossaryPage() {
     void fetchGlossary();
 
     return () => controller.abort();
-  }, [debouncedSearch, selectedLetter]);
+  }, [debouncedSearch, selectedLetter, refreshNonce]);
 
   const groupedEntries = useMemo(() => {
     const groups: Record<string, GlossaryEntry[]> = {};
@@ -114,6 +155,7 @@ export default function GlossaryPage() {
 
     for (const entry of terms) {
       map.set(entry.term.toLowerCase(), entry);
+      map.set(entry.slug.toLowerCase(), entry);
     }
 
     return map;
@@ -143,6 +185,46 @@ export default function GlossaryPage() {
     setSelectedLetter(null);
   };
 
+  const handleSuggestionSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setSubmitError(null);
+    setSubmitSuccess(null);
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/glossary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          term: formData.term.trim(),
+          definition: formData.definition.trim(),
+          category: formData.category,
+        }),
+      });
+
+      const data = (await response.json()) as {
+        message?: string;
+        error?: string;
+        details?: string[];
+      };
+
+      if (!response.ok) {
+        const details = Array.isArray(data.details) ? data.details.join(" ") : "";
+        throw new Error(data.error ? `${data.error}${details ? ` ${details}` : ""}` : "Submit failed.");
+      }
+
+      setSubmitSuccess(data.message ?? "Suggestion submitted.");
+      setFormData(EMPTY_FORM);
+    } catch (error) {
+      setSubmitError((error as Error).message || "Couldn't submit suggestion.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <script
@@ -162,10 +244,10 @@ export default function GlossaryPage() {
               📖 Agent Terminology
             </h1>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-2">
-              Your comprehensive guide to AI agent concepts and protocols
+              Real-time glossary data, searchable by term, definition, and letter.
             </p>
             <p className="text-sm text-gray-500 max-w-xl mx-auto">
-              From Agent to Zero-Trust, master the vocabulary of autonomous AI development
+              Learn the language of autonomous systems, protocols, infrastructure, and secure patterns.
             </p>
           </div>
 
@@ -173,7 +255,7 @@ export default function GlossaryPage() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search terms or definitions..."
+                placeholder="Search terms, definitions, or categories..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 className="w-full px-5 py-3 pl-12 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#06D6A0]/50 focus:ring-1 focus:ring-[#06D6A0]/50 transition-all"
@@ -193,12 +275,14 @@ export default function GlossaryPage() {
               </svg>
             </div>
 
-            {(debouncedSearch || selectedLetter || isLoading) && (
-              <div className="mt-3 flex items-center justify-between text-sm">
-                <span className="text-gray-400">
+            {(debouncedSearch || selectedLetter || isLoading || loadError) && (
+              <div className="mt-3 flex items-center justify-between text-sm gap-4">
+                <span className={` ${loadError ? "text-rose-300" : "text-gray-400"}`}>
                   {isLoading
                     ? "Loading terms..."
-                    : `${total} ${total === 1 ? "term" : "terms"} found${selectedLetter ? ` for "${selectedLetter}"` : ""}`}
+                    : loadError
+                    ? loadError
+                    : `${total} ${total === 1 ? "term" : "terms"} found${selectedLetter ? ` for \"${selectedLetter}\"` : ""}`}
                 </span>
                 {(debouncedSearch || selectedLetter) && (
                   <button
@@ -244,18 +328,29 @@ export default function GlossaryPage() {
       </section>
 
       <section className="max-w-5xl mx-auto px-4 pb-16">
-        {!isLoading && terms.length === 0 ? (
+        {!isLoading && !loadError && terms.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-semibold text-white mb-2">No terms found</h3>
             <p className="text-gray-400 mb-6">
-              Try adjusting your search or browse all terms
+              Try adjusting your search or browse all terms.
             </p>
             <button
               onClick={clearFilters}
               className="px-6 py-2 bg-[#06D6A0] text-black font-semibold rounded-lg hover:brightness-110 transition-all"
             >
               Show all terms
+            </button>
+          </div>
+        ) : loadError ? (
+          <div className="text-center py-16 border border-rose-500/30 bg-rose-500/5 rounded-xl">
+            <h3 className="text-xl font-semibold text-rose-300 mb-2">Could not load glossary</h3>
+            <p className="text-rose-200/80 mb-6">Please retry in a moment.</p>
+            <button
+              onClick={() => setRefreshNonce((previous) => previous + 1)}
+              className="px-6 py-2 bg-rose-400 text-black font-semibold rounded-lg hover:brightness-110 transition-all"
+            >
+              Retry
             </button>
           </div>
         ) : (
@@ -271,35 +366,37 @@ export default function GlossaryPage() {
 
                 <div className="space-y-6">
                   {entries.map((entry) => (
-                    <div
-                      key={entry.id}
-                      id={entry.id}
+                    <article
+                      key={entry.slug}
+                      id={entry.slug}
                       className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-[#06D6A0]/30 transition-all scroll-mt-32"
                     >
-                      <h3 className="text-2xl font-bold text-white mb-3">
-                        {entry.term}
-                      </h3>
+                      <div className="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 className="text-2xl font-bold text-white">{entry.term}</h3>
+                        <span
+                          className={`text-xs px-2 py-1 border rounded-full ${CATEGORY_BADGE_STYLES[entry.category]}`}
+                        >
+                          {CATEGORY_LABELS[entry.category]}
+                        </span>
+                      </div>
 
-                      <p className="text-gray-300 leading-relaxed mb-4">
-                        {entry.definition}
-                      </p>
+                      <p className="text-gray-300 leading-relaxed mb-4">{entry.definition}</p>
 
                       {entry.relatedTerms.length > 0 && (
-                        <div className="mb-3">
+                        <div>
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-sm text-gray-500 font-semibold">
-                              Related:
-                            </span>
+                            <span className="text-sm text-gray-500 font-semibold">Related:</span>
                             {entry.relatedTerms.map((term, index) => {
                               const relatedEntry = findEntryByTerm(term);
+
                               return relatedEntry ? (
                                 <a
-                                  key={`${entry.id}-related-${index}`}
-                                  href={`#${relatedEntry.id}`}
-                                  className="px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-gray-400 hover:text-[#06D6A0] hover:border-[#06D6A0]/30 transition-all"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    const element = document.getElementById(relatedEntry.id);
+                                  key={`${entry.slug}-related-${index}`}
+                                  href={`#${relatedEntry.slug}`}
+                                  className="px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-gray-300 hover:text-[#06D6A0] hover:border-[#06D6A0]/30 transition-all"
+                                  onClick={(event) => {
+                                    event.preventDefault();
+                                    const element = document.getElementById(relatedEntry.slug);
                                     if (element) {
                                       element.scrollIntoView({ behavior: "smooth", block: "center" });
                                       element.classList.add("ring-2", "ring-[#06D6A0]/50");
@@ -313,7 +410,7 @@ export default function GlossaryPage() {
                                 </a>
                               ) : (
                                 <span
-                                  key={`${entry.id}-related-${index}`}
+                                  key={`${entry.slug}-related-${index}`}
                                   className="px-2 py-1 text-xs bg-white/5 border border-white/10 rounded text-gray-400"
                                 >
                                   {term}
@@ -323,47 +420,7 @@ export default function GlossaryPage() {
                           </div>
                         </div>
                       )}
-
-                      {entry.seeAlso.length > 0 && (
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-sm text-gray-500 font-semibold">
-                              See also:
-                            </span>
-                            {entry.seeAlso.map((term, index) => {
-                              const relatedEntry = findEntryByTerm(term);
-                              return relatedEntry ? (
-                                <a
-                                  key={`${entry.id}-see-${index}`}
-                                  href={`#${relatedEntry.id}`}
-                                  className="px-2 py-1 text-xs bg-[#06D6A0]/10 border border-[#06D6A0]/30 rounded text-[#06D6A0] hover:bg-[#06D6A0]/20 transition-all"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    const element = document.getElementById(relatedEntry.id);
-                                    if (element) {
-                                      element.scrollIntoView({ behavior: "smooth", block: "center" });
-                                      element.classList.add("ring-2", "ring-[#06D6A0]/50");
-                                      setTimeout(() => {
-                                        element.classList.remove("ring-2", "ring-[#06D6A0]/50");
-                                      }, 1500);
-                                    }
-                                  }}
-                                >
-                                  {term}
-                                </a>
-                              ) : (
-                                <span
-                                  key={`${entry.id}-see-${index}`}
-                                  className="px-2 py-1 text-xs bg-[#06D6A0]/10 border border-[#06D6A0]/30 rounded text-[#06D6A0]"
-                                >
-                                  {term}
-                                </span>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    </article>
                   ))}
                 </div>
               </div>
@@ -372,28 +429,110 @@ export default function GlossaryPage() {
         )}
       </section>
 
-      <section className="max-w-5xl mx-auto px-4 py-16">
-        <div className="relative overflow-hidden rounded-2xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/10 to-purple/10 p-8 text-center">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#06D6A0]/20 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple/20 rounded-full blur-[60px]" />
-
-          <div className="relative">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
-              Ready to Build?
-            </h2>
-            <p className="text-gray-400 mb-6 max-w-xl mx-auto">
-              Now that you know the terminology, explore skills and start building your own agents
+      <section className="max-w-5xl mx-auto px-4 pb-16">
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-xl border border-white/10 bg-white/5 p-6">
+            <h2 className="text-2xl font-semibold text-white mb-2">Suggest a term</h2>
+            <p className="text-sm text-gray-400 mb-6">
+              What's missing? Submit a glossary entry suggestion for review.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+
+            <form className="space-y-4" onSubmit={handleSuggestionSubmit}>
+              <div>
+                <label htmlFor="term" className="block text-sm text-gray-300 mb-1">
+                  Term
+                </label>
+                <input
+                  id="term"
+                  value={formData.term}
+                  onChange={(event) =>
+                    setFormData((previous) => ({ ...previous, term: event.target.value }))
+                  }
+                  required
+                  maxLength={100}
+                  className="w-full px-4 py-2 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#06D6A0]/50"
+                  placeholder="Example: Agent Loop"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="definition" className="block text-sm text-gray-300 mb-1">
+                  Definition
+                </label>
+                <textarea
+                  id="definition"
+                  value={formData.definition}
+                  onChange={(event) =>
+                    setFormData((previous) => ({ ...previous, definition: event.target.value }))
+                  }
+                  required
+                  maxLength={1200}
+                  rows={4}
+                  className="w-full px-4 py-2 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#06D6A0]/50"
+                  placeholder="Describe what this term means in an agent ecosystem context..."
+                />
+              </div>
+
+              <div>
+                <label htmlFor="category" className="block text-sm text-gray-300 mb-1">
+                  Category
+                </label>
+                <select
+                  id="category"
+                  value={formData.category}
+                  onChange={(event) =>
+                    setFormData((previous) => ({
+                      ...previous,
+                      category: event.target.value as GlossaryCategory,
+                    }))
+                  }
+                  className="w-full px-4 py-2 bg-black/30 border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#06D6A0]/50"
+                >
+                  {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {submitError && (
+                <p className="text-sm text-rose-300 border border-rose-500/30 bg-rose-500/10 rounded-lg px-3 py-2">
+                  {submitError}
+                </p>
+              )}
+
+              {submitSuccess && (
+                <p className="text-sm text-emerald-300 border border-emerald-500/30 bg-emerald-500/10 rounded-lg px-3 py-2">
+                  {submitSuccess}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-5 py-2.5 bg-[#06D6A0] text-black font-semibold rounded-lg hover:brightness-110 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? "Submitting..." : "Submit suggestion"}
+              </button>
+            </form>
+          </div>
+
+          <div className="rounded-xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/10 to-purple/10 p-6">
+            <h2 className="text-2xl font-semibold text-white mb-3">Ready to build?</h2>
+            <p className="text-gray-300 mb-6">
+              Turn concepts into execution with production-ready skills, tools, and protocols.
+            </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
               <Link
                 href="/skills"
-                className="px-6 py-3 bg-[#06D6A0] text-black font-semibold rounded-lg hover:brightness-110 transition-all"
+                className="px-5 py-2.5 bg-[#06D6A0] text-black font-semibold rounded-lg hover:brightness-110 transition-all"
               >
                 Browse Skills →
               </Link>
               <Link
                 href="/learn"
-                className="px-6 py-3 border border-[#06D6A0] text-[#06D6A0] font-semibold rounded-lg hover:bg-[#06D6A0]/10 transition-all"
+                className="px-5 py-2.5 border border-[#06D6A0] text-[#06D6A0] font-semibold rounded-lg hover:bg-[#06D6A0]/10 transition-all"
               >
                 Start Learning
               </Link>
