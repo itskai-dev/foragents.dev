@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
 import PlaygroundClient from "./PlaygroundClient";
 
@@ -47,5 +48,9 @@ export function generateMetadata(): Metadata {
 }
 
 export default function PlaygroundPage() {
-  return <PlaygroundClient endpoints={endpoints as ApiEndpoint[]} />;
+  return (
+    <Suspense fallback={<div className="px-4 py-16 text-center text-muted-foreground">Loading playground...</div>}>
+      <PlaygroundClient endpoints={endpoints as ApiEndpoint[]} />
+    </Suspense>
+  );
 }
