@@ -92,6 +92,15 @@ jest.mock('next/navigation', () => {
   };
 });
 
+jest.mock('next/headers', () => ({
+  headers: () =>
+    new Map([
+      ['host', 'localhost:3000'],
+      ['x-forwarded-proto', 'http'],
+    ]),
+  cookies: () => ({ get: () => undefined, getAll: () => [] }),
+}));
+
 // ---- Shared component mocks (keep render tests lightweight/deterministic) ----
 
 jest.mock('@/components/mobile-nav', () => ({
@@ -268,6 +277,27 @@ jest.mock('@/lib/data', () => {
     // Types
     Skill: {},
   };
+});
+
+beforeAll(() => {
+  global.fetch = jest.fn(async (input: RequestInfo | URL) => {
+    const url = String(input);
+
+    if (url.includes('/api/blog')) {
+      return { ok: true, json: async () => ({ posts: [], total: 0 }) } as Response;
+    }
+    if (url.includes('/api/changelog')) {
+      return { ok: true, json: async () => ({ entries: [], total: 0 }) } as Response;
+    }
+    if (url.includes('/api/status/history')) {
+      return { ok: true, json: async () => ({ history: [] }) } as Response;
+    }
+    if (url.includes('/api/status')) {
+      return { ok: true, json: async () => ({ services: [], overall: 'operational' }) } as Response;
+    }
+
+    return { ok: true, json: async () => ({}) } as Response;
+  }) as jest.Mock;
 });
 
 async function renderPageModule(importPath: string, props: Record<string, unknown> = {}) {

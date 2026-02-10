@@ -34,15 +34,17 @@ describe('/api/feed', () => {
 });
 
 describe('/api/health', () => {
-  test('returns ok + data counts', async () => {
+  test('returns health metadata', async () => {
     const res = await healthGET();
     expect(res.status).toBe(200);
 
     const body = await res.json();
     expect(body.status).toBe('ok');
-    expect(body.data).toHaveProperty('news');
-    expect(body.data).toHaveProperty('total');
-    expect(body.data.total).toBeGreaterThan(0);
+    expect(body).toHaveProperty('version');
+    expect(body).toHaveProperty('skills_count');
+    expect(body).toHaveProperty('mcp_count');
+    expect(body).toHaveProperty('uptime');
+    expect(body).toHaveProperty('timestamp');
   });
 });
 

@@ -3,7 +3,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import ChangelogPage from "../src/app/changelog/page";
-import * as changelogLib from "../src/lib/changelog";
 
 type LinkProps = {
   href: string;
@@ -20,34 +19,44 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-// Mock the changelog data
-jest.mock("../src/lib/changelog", () => ({
-  getChangelogEntries: jest.fn(),
-  type: jest.fn(),
+jest.mock("next/headers", () => ({
+  headers: jest.fn(async () =>
+    new Map([
+      ["host", "localhost:3000"],
+      ["x-forwarded-proto", "http"],
+    ])
+  ),
 }));
 
 const mockEntries = [
   {
+    id: "entry-1",
     date: "2026-02-08",
     title: "Test Feature",
     description: "A test feature description",
-    category: "feature" as const,
-    link: "/test",
-    pr: "https://github.com/test/pr/1",
+    category: "feature",
+    prNumber: 101,
+    prUrl: "https://github.com/test/pr/101",
   },
   {
+    id: "entry-2",
     date: "2026-02-07",
     title: "Test Fix",
     description: "A test fix description",
-    category: "fix" as const,
-    link: "/test-fix",
-    pr: "https://github.com/test/pr/2",
+    category: "bugfix",
+    prNumber: 102,
+    prUrl: "https://github.com/test/pr/102",
   },
 ];
 
 describe("Changelog Page", () => {
   beforeEach(() => {
-    (changelogLib.getChangelogEntries as jest.Mock).mockResolvedValue(mockEntries);
+    global.fetch = jest.fn(async () =>
+      ({
+        ok: true,
+        json: async () => ({ entries: mockEntries, total: mockEntries.length }),
+      } as Response)
+    ) as jest.Mock;
   });
 
   it("renders the changelog page", async () => {
@@ -56,35 +65,30 @@ describe("Changelog Page", () => {
     expect(container).toBeInTheDocument();
   });
 
-  it("displays the page title", async () => {
+  it("displays the page title and description", async () => {
     const jsx = await ChangelogPage();
     render(jsx);
     expect(screen.getByText("Changelog")).toBeInTheDocument();
-  });
-
-  it("displays the description", async () => {
-    const jsx = await ChangelogPage();
-    render(jsx);
     expect(screen.getByText(/Recent updates and improvements/)).toBeInTheDocument();
   });
 
-  it("displays newsletter signup section", async () => {
+  it("displays newsletter CTA and API link", async () => {
     const jsx = await ChangelogPage();
     render(jsx);
-    const subscribeButtons = screen.getAllByText("Subscribe");
-    expect(subscribeButtons.length).toBeGreaterThan(0);
-  });
 
-  it("displays the API link", async () => {
-    const jsx = await ChangelogPage();
-    render(jsx);
+    expect(screen.getAllByText("Subscribe").length).toBeGreaterThan(0);
     const apiLink = screen.getByText("/api/changelog");
-    expect(apiLink).toBeInTheDocument();
     expect(apiLink.closest("a")).toHaveAttribute("href", "/api/changelog");
   });
 
-  it("renders with no entries", async () => {
-    (changelogLib.getChangelogEntries as jest.Mock).mockResolvedValue([]);
+  it("renders even when API returns no entries", async () => {
+    global.fetch = jest.fn(async () =>
+      ({
+        ok: true,
+        json: async () => ({ entries: [], total: 0 }),
+      } as Response)
+    ) as jest.Mock;
+
     const jsx = await ChangelogPage();
     const { container } = render(jsx);
     expect(container).toBeInTheDocument();

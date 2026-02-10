@@ -160,6 +160,10 @@ jest.mock("@/components/skill-page-client", () => ({
   SkillPageClient: () => <div data-testid="skill-page-client" />,
 }));
 
+jest.mock("@/components/skill-install-cta", () => ({
+  SkillInstallCta: () => <div data-testid="skill-install-cta" />,
+}));
+
 // Mock subscribe success client (uses useSearchParams)
 jest.mock("@/app/subscribe/success/success-client", () => ({
   SubscribeSuccessClient: () => <div data-testid="subscribe-success-client" />,
@@ -305,17 +309,53 @@ jest.mock("@/lib/testimonials", () => ({
   ],
 }));
 
-// Mock fetch - return ok: false for unknown API calls (triggers notFound in pages)
+// Mock fetch with route-aware defaults for page render tests
 const originalFetch = global.fetch;
 beforeAll(() => {
-  (global as Record<string, unknown>).fetch = jest.fn(() =>
-    Promise.resolve({
+  (global as Record<string, unknown>).fetch = jest.fn((input: RequestInfo | URL) => {
+    const url = String(input);
+
+    if (url.includes('/api/blog/example-post')) {
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () =>
+          Promise.resolve({
+            slug: 'example-post',
+            title: 'Example Post',
+            excerpt: 'Example excerpt',
+            content: '# Heading\nBody copy',
+            tags: ['example'],
+            author: 'Team',
+            publishedAt: '2026-01-01T00:00:00.000Z',
+            readingTime: '3 min read',
+          }),
+      });
+    }
+
+    if (url.includes('/api/blog?sort=recent')) {
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ posts: [], total: 0 }),
+      });
+    }
+
+    if (url.includes('/api/changelog')) {
+      return Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve({ entries: [], total: 0 }),
+      });
+    }
+
+    return Promise.resolve({
       ok: false,
       status: 404,
       json: () => Promise.resolve({}),
-      text: () => Promise.resolve(""),
-    })
-  );
+      text: () => Promise.resolve(''),
+    });
+  });
 });
 afterAll(() => {
   global.fetch = originalFetch;
@@ -397,6 +437,13 @@ describe("Untested Pages – Render Tests", () => {
   test.each(syncPages)("/%s renders without crashing", async (_name, importFn) => {
     const mod = await importFn();
     const Page = mod.default;
+
+    if (Page?.constructor?.name === "AsyncFunction") {
+      const { container } = await renderServerComponent(Page as (...args: unknown[]) => unknown);
+      expect(container).toBeInTheDocument();
+      return;
+    }
+
     const { container } = render(<Page />);
     expect(container).toBeInTheDocument();
   });
@@ -418,8 +465,9 @@ describe("Untested Pages – Render Tests", () => {
 
   test("/blog/[slug] renders without crashing", async () => {
     const mod = await import("@/app/blog/[slug]/page");
-    const Page = mod.default;
-    const { container } = render(<Page params={{ slug: "test-post" }} />);
+    const { container } = await renderServerComponent(mod.default, {
+      params: Promise.resolve({ slug: "example-post" }),
+    });
     expect(container).toBeInTheDocument();
   });
 
