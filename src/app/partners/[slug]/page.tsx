@@ -4,27 +4,9 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import partnersData from "@/data/partners.json";
+import { getPartnerBySlug, getPartners, type Partner, type PartnerTier } from "@/lib/partners";
 
-type PartnerTier = "founding" | "gold" | "silver" | "community";
-
-interface Partner {
-  name: string;
-  slug: string;
-  website: string;
-  description: string;
-  logo: string;
-  tier: PartnerTier;
-  featured: boolean;
-  joinedAt: string;
-  fullDescription?: string;
-  features?: string[];
-  integrationGuide?: string;
-  docsUrl?: string;
-  contactEmail?: string;
-}
-
-const partners: Partner[] = partnersData as Partner[];
+export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -53,14 +35,13 @@ function getTierBadgeColor(tier: PartnerTier) {
 }
 
 export async function generateStaticParams() {
-  return partners.map((partner) => ({
-    slug: partner.slug,
-  }));
+  const partners = await getPartners();
+  return partners.map((partner) => ({ slug: partner.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const partner = partners.find((p) => p.slug === slug);
+  const partner = await getPartnerBySlug(slug);
 
   if (!partner) {
     return {
@@ -81,24 +62,30 @@ export async function generateMetadata({ params }: Props) {
   };
 }
 
+function getSafePartnerFields(partner: Partner) {
+  return {
+    docsUrl: partner.docsUrl ?? partner.url,
+    contactEmail: partner.contactEmail ?? "partners@foragents.dev",
+    features: partner.features ?? [
+      "Dedicated onboarding support",
+      "Partner directory listing",
+      "Cross-promotion opportunities",
+    ],
+    integrationGuide:
+      partner.integrationGuide ??
+      `# ${partner.name} integration\nVisit docs and follow the quickstart for your stack.`,
+  };
+}
+
 export default async function PartnerDetailPage({ params }: Props) {
   const { slug } = await params;
-  const partner = partners.find((p) => p.slug === slug);
+  const partner = await getPartnerBySlug(slug);
 
   if (!partner) {
     notFound();
   }
 
-  const docsUrl = partner.docsUrl ?? partner.website;
-  const contactEmail = partner.contactEmail ?? "partners@foragents.dev";
-  const features = partner.features ?? [
-    "Dedicated onboarding support",
-    "Partner directory listing",
-    "Cross-promotion opportunities",
-  ];
-  const integrationGuide =
-    partner.integrationGuide ??
-    `# ${partner.name} integration\nVisit docs and follow the quickstart for your stack.`;
+  const { docsUrl, contactEmail, features, integrationGuide } = getSafePartnerFields(partner);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -143,6 +130,9 @@ export default async function PartnerDetailPage({ params }: Props) {
                     Featured
                   </Badge>
                 )}
+                <Badge variant="outline" className="border-white/20 text-foreground/80">
+                  Updated {new Date(partner.updatedAt).toLocaleDateString()}
+                </Badge>
               </div>
               <p className="text-lg text-foreground/80 mb-4">{partner.description}</p>
               <p className="text-foreground/70">{partner.fullDescription ?? partner.description}</p>
@@ -213,14 +203,14 @@ export default async function PartnerDetailPage({ params }: Props) {
           </CardHeader>
           <CardContent className="space-y-3">
             <a
-              href={partner.website}
+              href={partner.url}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-between p-4 rounded-lg bg-card/40 border border-white/10 hover:border-[#06D6A0]/30 transition-all group"
             >
               <div>
                 <p className="font-semibold text-foreground">Partner Website</p>
-                <p className="text-sm text-muted-foreground">{partner.website}</p>
+                <p className="text-sm text-muted-foreground">{partner.url}</p>
               </div>
               <span className="text-[#06D6A0] group-hover:translate-x-1 transition-transform">→</span>
             </a>

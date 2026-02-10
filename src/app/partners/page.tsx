@@ -9,16 +9,20 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 type PartnerTier = "founding" | "gold" | "silver" | "community";
+type PartnerCategory = "runtime" | "model" | "backend" | "hosting" | "infrastructure" | "framework";
 
 type Partner = {
+  id: string;
   name: string;
-  slug: string;
-  website: string;
   description: string;
+  url: string;
   logo: string;
   tier: PartnerTier;
-  featured: boolean;
-  joinedAt: string;
+  category: PartnerCategory;
+  tags: string[];
+  updatedAt: string;
+  slug: string;
+  featured?: boolean;
 };
 
 type PartnersResponse = {
@@ -43,12 +47,22 @@ const initialForm: PartnerApplicationForm = {
 };
 
 const tierOrder: PartnerTier[] = ["founding", "gold", "silver", "community"];
+const categoryOrder: PartnerCategory[] = ["runtime", "model", "backend", "hosting", "infrastructure", "framework"];
 
 const tierLabels: Record<PartnerTier, string> = {
   founding: "Founding",
   gold: "Gold",
   silver: "Silver",
   community: "Community",
+};
+
+const categoryLabels: Record<PartnerCategory, string> = {
+  runtime: "Runtime",
+  model: "Model",
+  backend: "Backend",
+  hosting: "Hosting",
+  infrastructure: "Infrastructure",
+  framework: "Framework",
 };
 
 function getTierBadgeColor(tier: PartnerTier) {
@@ -72,6 +86,7 @@ export default function PartnersPage() {
   const [error, setError] = useState<string | null>(null);
 
   const [tierFilter, setTierFilter] = useState<PartnerTier | "all">("all");
+  const [categoryFilter, setCategoryFilter] = useState<PartnerCategory | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
   const [form, setForm] = useState<PartnerApplicationForm>(initialForm);
@@ -86,8 +101,13 @@ export default function PartnersPage() {
         setLoading(true);
 
         const params = new URLSearchParams();
+
         if (tierFilter !== "all") {
           params.set("tier", tierFilter);
+        }
+
+        if (categoryFilter !== "all") {
+          params.set("category", categoryFilter);
         }
 
         if (searchQuery.trim()) {
@@ -125,17 +145,11 @@ export default function PartnersPage() {
       cancelled = true;
       window.clearTimeout(timeoutId);
     };
-  }, [searchQuery, tierFilter]);
+  }, [categoryFilter, searchQuery, tierFilter]);
 
-  const featuredPartners = useMemo(
-    () => partners.filter((partner) => partner.featured),
-    [partners]
-  );
+  const featuredPartners = useMemo(() => partners.filter((partner) => partner.featured), [partners]);
 
-  const directoryPartners = useMemo(
-    () => partners.filter((partner) => !partner.featured),
-    [partners]
-  );
+  const directoryPartners = useMemo(() => partners.filter((partner) => !partner.featured), [partners]);
 
   async function handleApply(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -144,12 +158,18 @@ export default function PartnersPage() {
     setSubmitError(null);
 
     try {
-      const response = await fetch("/api/partners", {
+      const response = await fetch("/api/partners/apply", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          name: form.name,
+          company: form.name,
+          email: form.contactEmail,
+          type: "partner",
+          message: `Tier interest: ${form.tierInterest}\nWebsite: ${form.website}\n\n${form.description}`,
+        }),
       });
 
       const payload = (await response.json()) as {
@@ -195,14 +215,15 @@ export default function PartnersPage() {
       <Separator className="opacity-10" />
 
       <section className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-        <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+        <div className="flex flex-col gap-3">
           <Input
             type="text"
-            placeholder="Search by name or description..."
+            placeholder="Search by name, description, category, or tags..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="max-w-xl bg-card/30 border-white/10 text-foreground placeholder:text-muted-foreground"
           />
+
           <div className="flex flex-wrap gap-2">
             <button
               type="button"
@@ -230,6 +251,34 @@ export default function PartnersPage() {
               </button>
             ))}
           </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setCategoryFilter("all")}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                categoryFilter === "all"
+                  ? "bg-cyan-400 text-[#0a0a0a]"
+                  : "border border-white/10 text-foreground hover:bg-white/5"
+              }`}
+            >
+              All categories
+            </button>
+            {categoryOrder.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setCategoryFilter(category)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  categoryFilter === category
+                    ? "bg-cyan-400 text-[#0a0a0a]"
+                    : "border border-white/10 text-foreground hover:bg-white/5"
+                }`}
+              >
+                {categoryLabels[category]}
+              </button>
+            ))}
+          </div>
         </div>
 
         {loading ? (
@@ -246,7 +295,7 @@ export default function PartnersPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {featuredPartners.map((partner) => (
                     <Card
-                      key={partner.slug}
+                      key={partner.id}
                       className="relative overflow-hidden bg-card/40 border-[#06D6A0]/30 ring-1 ring-[#06D6A0]/20"
                     >
                       <CardHeader>
@@ -266,7 +315,10 @@ export default function PartnersPage() {
                             {tierLabels[partner.tier]}
                           </Badge>
                           <Badge variant="outline" className="border-white/20 text-foreground/80">
-                            Joined {new Date(partner.joinedAt).toLocaleDateString()}
+                            {categoryLabels[partner.category]}
+                          </Badge>
+                          <Badge variant="outline" className="border-white/20 text-foreground/80">
+                            Updated {new Date(partner.updatedAt).toLocaleDateString()}
                           </Badge>
                         </div>
                       </CardHeader>
@@ -277,7 +329,7 @@ export default function PartnersPage() {
                             View details →
                           </Link>
                           <a
-                            href={partner.website}
+                            href={partner.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-cyan-300 hover:underline"
@@ -298,7 +350,7 @@ export default function PartnersPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {directoryPartners.map((partner) => (
                     <Card
-                      key={partner.slug}
+                      key={partner.id}
                       className="relative overflow-hidden bg-card/30 border-white/10 hover:border-[#06D6A0]/30 transition-all"
                     >
                       <CardHeader>
@@ -315,18 +367,28 @@ export default function PartnersPage() {
                             {tierLabels[partner.tier]}
                           </Badge>
                           <Badge variant="outline" className="border-white/20 text-foreground/80">
-                            Joined {new Date(partner.joinedAt).toLocaleDateString()}
+                            {categoryLabels[partner.category]}
+                          </Badge>
+                          <Badge variant="outline" className="border-white/20 text-foreground/80">
+                            Updated {new Date(partner.updatedAt).toLocaleDateString()}
                           </Badge>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-muted-foreground">{partner.description}</p>
+                        <div className="flex flex-wrap gap-2">
+                          {partner.tags.slice(0, 3).map((tag) => (
+                            <Badge key={`${partner.id}-${tag}`} variant="outline" className="border-white/20 text-xs">
+                              #{tag}
+                            </Badge>
+                          ))}
+                        </div>
                         <div className="flex items-center gap-3 text-sm font-medium">
                           <Link href={`/partners/${partner.slug}`} className="text-[#06D6A0] hover:underline">
                             View details →
                           </Link>
                           <a
-                            href={partner.website}
+                            href={partner.url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-cyan-300 hover:underline"
