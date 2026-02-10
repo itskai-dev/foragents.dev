@@ -59,3 +59,9 @@ supabase/.temp/
 /data/viral_events.ndjson
 /.tmp-tests/
 /.tmp-jest-backups/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
