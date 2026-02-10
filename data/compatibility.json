@@ -1,0 +1,180 @@
+{
+  "updatedAt": "2026-02-10T00:00:00.000Z",
+  "clients": [
+    {
+      "id": "claude-desktop",
+      "name": "Claude Desktop",
+      "versionRange": ">=0.8"
+    },
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "versionRange": ">=0.47"
+    },
+    {
+      "id": "vscode-copilot",
+      "name": "VS Code Copilot",
+      "versionRange": ">=1.96"
+    },
+    {
+      "id": "openclaw",
+      "name": "OpenClaw",
+      "versionRange": ">=0.11"
+    },
+    {
+      "id": "windsurf",
+      "name": "Windsurf",
+      "versionRange": ">=1.0"
+    },
+    {
+      "id": "zed",
+      "name": "Zed",
+      "versionRange": ">=0.171"
+    }
+  ],
+  "servers": [
+    {
+      "slug": "filesystem",
+      "statuses": {
+        "claude-desktop": "works",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "untested",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Official @modelcontextprotocol server. Baseline file operations are stable in Claude Desktop."
+    },
+    {
+      "slug": "memory",
+      "statuses": {
+        "claude-desktop": "works",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "untested",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Official @modelcontextprotocol server. Known-good for graph memory workflows in Claude Desktop."
+    },
+    {
+      "slug": "everything",
+      "statuses": {
+        "claude-desktop": "works",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "partial",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Official @modelcontextprotocol test server; broad toolset can surface edge-case client bugs."
+    },
+    {
+      "slug": "sequential-thinking",
+      "statuses": {
+        "claude-desktop": "works",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "partial",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Official @modelcontextprotocol server. Multi-step tool calls can be token-budget sensitive in some clients."
+    },
+    {
+      "slug": "playwright",
+      "statuses": {
+        "claude-desktop": "partial",
+        "cursor": "works",
+        "vscode-copilot": "partial",
+        "openclaw": "works",
+        "windsurf": "partial",
+        "zed": "untested"
+      },
+      "notes": "Community-maintained by Microsoft. Browser sandboxing constraints vary by client runtime."
+    },
+    {
+      "slug": "brave-search",
+      "statuses": {
+        "claude-desktop": "works",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "works",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Requires Brave API key."
+    },
+    {
+      "slug": "notion",
+      "statuses": {
+        "claude-desktop": "partial",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "partial",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "OAuth/device auth UX differs by host app and can require manual token provisioning."
+    },
+    {
+      "slug": "postgres",
+      "statuses": {
+        "claude-desktop": "untested",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "partial",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Connection-string handling works in OpenClaw with local networking configured."
+    },
+    {
+      "slug": "desktop-commander",
+      "statuses": {
+        "claude-desktop": "untested",
+        "cursor": "works",
+        "vscode-copilot": "partial",
+        "openclaw": "works",
+        "windsurf": "partial",
+        "zed": "broken"
+      },
+      "notes": "PTY and shell permission models can fail in constrained desktop clients."
+    },
+    {
+      "slug": "slack",
+      "statuses": {
+        "claude-desktop": "untested",
+        "cursor": "untested",
+        "vscode-copilot": "untested",
+        "openclaw": "partial",
+        "windsurf": "untested",
+        "zed": "untested"
+      },
+      "notes": "Bot token scopes and channel permissions are the most common setup issue."
+    }
+  ],
+  "knownIssues": [
+    {
+      "id": "compat-001",
+      "title": "Zed stdio bridge can drop long-running subprocess output",
+      "severity": "medium",
+      "details": "Servers that stream large tool output (for example Desktop Commander) may appear stalled in Zed after 30-60 seconds.",
+      "affected": ["desktop-commander", "playwright"]
+    },
+    {
+      "id": "compat-002",
+      "title": "OAuth callback UX is inconsistent outside Claude Desktop",
+      "severity": "low",
+      "details": "Notion/Slack style OAuth flows sometimes require manual token copy-paste in clients without embedded callback handlers.",
+      "affected": ["notion", "slack"]
+    },
+    {
+      "id": "compat-003",
+      "title": "Tool schema edge cases with the everything server",
+      "severity": "medium",
+      "details": "Some clients reject nested schema fields used in test fixtures from @modelcontextprotocol/server-everything.",
+      "affected": ["everything"]
+    }
+  ]
+}
