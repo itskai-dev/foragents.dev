@@ -2,69 +2,77 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 
-type BookmarkItemType = "skill" | "mcp" | "guide" | "bounty";
+type BookmarkItemType = "skill" | "mcp" | "collection" | "guide" | "connector";
 
 type BookmarkRecord = {
   id: string;
-  agentHandle: string;
-  itemId: string;
+  userId: string;
   itemType: BookmarkItemType;
-  itemTitle: string;
-  itemUrl: string;
+  itemSlug: string;
+  itemName: string;
+  note?: string;
   createdAt: string;
+  tags: string[];
 };
 
 type CreateBookmarkBody = {
-  agentHandle?: unknown;
-  itemId?: unknown;
+  userId?: unknown;
   itemType?: unknown;
-  itemTitle?: unknown;
-  itemUrl?: unknown;
+  itemSlug?: unknown;
+  itemName?: unknown;
+  note?: unknown;
+  tags?: unknown;
 };
 
 const BOOKMARKS_PATH = path.join(process.cwd(), "data", "bookmarks.json");
-const VALID_TYPES: BookmarkItemType[] = ["skill", "mcp", "guide", "bounty"];
+const VALID_TYPES: BookmarkItemType[] = ["skill", "mcp", "collection", "guide", "connector"];
 
 async function readBookmarks(): Promise<BookmarkRecord[]> {
   try {
     const raw = await fs.readFile(BOOKMARKS_PATH, "utf8");
-    const parsed = JSON.parse(raw) as BookmarkRecord[];
-    return Array.isArray(parsed) ? parsed : [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? (parsed as BookmarkRecord[]) : [];
   } catch {
     return [];
   }
 }
 
 async function writeBookmarks(bookmarks: BookmarkRecord[]): Promise<void> {
-  const dir = path.dirname(BOOKMARKS_PATH);
-  await fs.mkdir(dir, { recursive: true });
+  await fs.mkdir(path.dirname(BOOKMARKS_PATH), { recursive: true });
   await fs.writeFile(BOOKMARKS_PATH, JSON.stringify(bookmarks, null, 2), "utf8");
 }
 
 export async function GET(request: NextRequest) {
   try {
-    const typeFilter = request.nextUrl.searchParams.get("type");
-    const agentHandleFilter = request.nextUrl.searchParams.get("agentHandle")?.trim().toLowerCase();
+    const typeFilter = request.nextUrl.searchParams.get("type")?.trim().toLowerCase();
+    const tagFilter = request.nextUrl.searchParams.get("tag")?.trim().toLowerCase();
+    const search = request.nextUrl.searchParams.get("search")?.trim().toLowerCase();
 
     if (typeFilter && !VALID_TYPES.includes(typeFilter as BookmarkItemType)) {
-      return NextResponse.json(
-        { error: `type must be one of: ${VALID_TYPES.join(", ")}` },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: `type must be one of: ${VALID_TYPES.join(", ")}` }, { status: 400 });
     }
 
     const bookmarks = await readBookmarks();
 
     const filtered = bookmarks.filter((bookmark) => {
       const matchesType = !typeFilter || bookmark.itemType === typeFilter;
-      const matchesAgentHandle = !agentHandleFilter || bookmark.agentHandle.toLowerCase() === agentHandleFilter;
-      return matchesType && matchesAgentHandle;
+      const matchesTag =
+        !tagFilter || bookmark.tags.some((tag) => tag.toLowerCase() === tagFilter.toLowerCase());
+      const matchesSearch =
+        !search ||
+        bookmark.itemName.toLowerCase().includes(search) ||
+        bookmark.itemSlug.toLowerCase().includes(search) ||
+        bookmark.note?.toLowerCase().includes(search) ||
+        bookmark.tags.some((tag) => tag.toLowerCase().includes(search));
+
+      return matchesType && matchesTag && matchesSearch;
     });
 
-    return NextResponse.json({
-      bookmarks: filtered,
-      total: filtered.length,
-    });
+    const tags = [...new Set(bookmarks.flatMap((bookmark) => bookmark.tags))].sort((a, b) =>
+      a.localeCompare(b)
+    );
+
+    return NextResponse.json({ bookmarks: filtered, total: filtered.length, tags });
   } catch (error) {
     console.error("Failed to load bookmarks", error);
     return NextResponse.json({ error: "Failed to load bookmarks" }, { status: 500 });
@@ -75,15 +83,21 @@ export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as CreateBookmarkBody;
 
-    const agentHandle = typeof body.agentHandle === "string" ? body.agentHandle.trim() : "";
-    const itemId = typeof body.itemId === "string" ? body.itemId.trim() : "";
-    const itemType = typeof body.itemType === "string" ? body.itemType.trim() : "";
-    const itemTitle = typeof body.itemTitle === "string" ? body.itemTitle.trim() : "";
-    const itemUrl = typeof body.itemUrl === "string" ? body.itemUrl.trim() : "";
+    const userId = typeof body.userId === "string" ? body.userId.trim() : "";
+    const itemType = typeof body.itemType === "string" ? body.itemType.trim().toLowerCase() : "";
+    const itemSlug = typeof body.itemSlug === "string" ? body.itemSlug.trim() : "";
+    const itemName = typeof body.itemName === "string" ? body.itemName.trim() : "";
+    const note = typeof body.note === "string" ? body.note.trim() : "";
+    const tags = Array.isArray(body.tags)
+      ? body.tags
+          .filter((tag): tag is string => typeof tag === "string")
+          .map((tag) => tag.trim())
+          .filter(Boolean)
+      : [];
 
-    if (!agentHandle || !itemId || !itemType || !itemTitle || !itemUrl) {
+    if (!userId || !itemType || !itemSlug || !itemName) {
       return NextResponse.json(
-        { error: "agentHandle, itemId, itemType, itemTitle, and itemUrl are required" },
+        { error: "userId, itemType, itemSlug, and itemName are required" },
         { status: 400 }
       );
     }
@@ -95,38 +109,28 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    let parsedUrl: URL;
-    try {
-      parsedUrl = new URL(itemUrl);
-    } catch {
-      return NextResponse.json({ error: "itemUrl must be a valid URL" }, { status: 400 });
-    }
-
-    if (!parsedUrl.protocol.startsWith("http")) {
-      return NextResponse.json({ error: "itemUrl must start with http:// or https://" }, { status: 400 });
-    }
-
     const bookmarks = await readBookmarks();
 
-    const existing = bookmarks.find(
+    const exists = bookmarks.some(
       (bookmark) =>
-        bookmark.agentHandle.toLowerCase() === agentHandle.toLowerCase() &&
-        bookmark.itemId === itemId &&
-        bookmark.itemType === itemType
+        bookmark.userId === userId &&
+        bookmark.itemType === itemType &&
+        bookmark.itemSlug.toLowerCase() === itemSlug.toLowerCase()
     );
 
-    if (existing) {
-      return NextResponse.json({ error: "Bookmark already exists for this agent and item" }, { status: 409 });
+    if (exists) {
+      return NextResponse.json({ error: "Bookmark already exists" }, { status: 409 });
     }
 
     const created: BookmarkRecord = {
       id: `bmk_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      agentHandle,
-      itemId,
+      userId,
       itemType: itemType as BookmarkItemType,
-      itemTitle,
-      itemUrl,
+      itemSlug,
+      itemName,
+      ...(note ? { note } : {}),
       createdAt: new Date().toISOString(),
+      tags,
     };
 
     bookmarks.unshift(created);
@@ -141,19 +145,7 @@ export async function POST(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    const idParam = request.nextUrl.searchParams.get("id")?.trim();
-
-    let bodyId: string | undefined;
-    if (!idParam) {
-      try {
-        const body = (await request.json()) as { id?: unknown };
-        bodyId = typeof body.id === "string" ? body.id.trim() : undefined;
-      } catch {
-        bodyId = undefined;
-      }
-    }
-
-    const id = idParam || bodyId;
+    const id = request.nextUrl.searchParams.get("id")?.trim();
 
     if (!id) {
       return NextResponse.json({ error: "id is required" }, { status: 400 });
