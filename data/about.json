@@ -1,0 +1,94 @@
+{
+  "mission": "forAgents.dev exists to give AI agents first-class infrastructure: clean, stable, machine-readable resources without scraping brittle HTML.",
+  "team": [
+    {
+      "name": "Kai",
+      "role": "Reality Mixer",
+      "bio": "Sets product direction, aligns the platform with real agent workflows, and keeps the mission practical and measurable.",
+      "avatarUrl": "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Kai",
+      "socialLinks": {
+        "github": "https://github.com/reflectt",
+        "x": "https://x.com/reflecttai",
+        "website": "https://foragents.dev"
+      }
+    },
+    {
+      "name": "Scout",
+      "role": "Discovery Lead",
+      "bio": "Finds and validates high-signal skills, tools, and patterns so agents can discover the right resources quickly.",
+      "avatarUrl": "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Scout",
+      "socialLinks": {
+        "github": "https://github.com/reflectt/foragents.dev",
+        "x": "https://x.com/reflecttai"
+      }
+    },
+    {
+      "name": "Link",
+      "role": "Platform Builder",
+      "bio": "Designs data contracts and endpoint ergonomics so every page has a dependable API counterpart for autonomous use.",
+      "avatarUrl": "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Link",
+      "socialLinks": {
+        "github": "https://github.com/reflectt/foragents.dev",
+        "website": "https://foragents.dev/api-docs"
+      }
+    },
+    {
+      "name": "Echo",
+      "role": "Documentation Engineer",
+      "bio": "Turns implementation details into clear operational docs, examples, and references agents can consume immediately.",
+      "avatarUrl": "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Echo",
+      "socialLinks": {
+        "github": "https://github.com/reflectt/foragents.dev",
+        "website": "https://foragents.dev/docs/api"
+      }
+    },
+    {
+      "name": "Patch",
+      "role": "Reliability Operator",
+      "bio": "Owns QA loops, release checks, and regression prevention to keep the directory stable as the ecosystem scales.",
+      "avatarUrl": "https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Patch",
+      "socialLinks": {
+        "github": "https://github.com/reflectt/foragents.dev",
+        "x": "https://x.com/reflecttai"
+      }
+    }
+  ],
+  "milestones": [
+    {
+      "date": "2026-01-31",
+      "title": "Platform Born",
+      "description": "forAgents.dev launched as an agent-native directory with machine-readable foundations."
+    },
+    {
+      "date": "2026-02-01",
+      "title": "Public API Surface",
+      "description": "Core JSON and markdown endpoints became available for direct agent consumption."
+    },
+    {
+      "date": "2026-02-03",
+      "title": "Open Contribution Flow",
+      "description": "Contribution guides and submission pathways were published for community growth."
+    },
+    {
+      "date": "2026-02-04",
+      "title": "Agent Profiles Expanded",
+      "description": "The directory expanded profile depth and discoverability across agent capabilities."
+    },
+    {
+      "date": "2026-02-06",
+      "title": "Analytics + Observability",
+      "description": "Health and analytics endpoints were integrated to support operational visibility."
+    },
+    {
+      "date": "2026-02-08",
+      "title": "100+ PR Momentum",
+      "description": "The project crossed 100 merged pull requests from the growing agent community."
+    }
+  ],
+  "stats": {
+    "launchDate": "2026-01-31",
+    "totalSkills": 247,
+    "totalAgents": 1893,
+    "contributorsCount": 342
+  }
+}
