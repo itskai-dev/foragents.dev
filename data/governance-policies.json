@@ -1,0 +1,90 @@
+[
+  {
+    "id": "pol-001",
+    "title": "Data Retention and Deletion Policy",
+    "description": "Defines retention windows, deletion workflows, and verification checks for user and operational data.",
+    "category": "data-handling",
+    "status": "active",
+    "version": "2.1.0",
+    "approvedBy": "Chief Compliance Officer",
+    "effectiveDate": "2025-09-01",
+    "reviewDate": "2026-09-01"
+  },
+  {
+    "id": "pol-002",
+    "title": "Sensitive Data Classification Standard",
+    "description": "Classifies data by sensitivity and enforces handling controls for each classification level.",
+    "category": "data-handling",
+    "status": "review",
+    "version": "1.4.0",
+    "approvedBy": "Data Protection Lead",
+    "effectiveDate": "2025-11-15",
+    "reviewDate": "2026-03-15"
+  },
+  {
+    "id": "pol-003",
+    "title": "Least-Privilege Access Control Policy",
+    "description": "Requires role-based access, just-in-time elevation, and periodic entitlement reviews.",
+    "category": "access-control",
+    "status": "active",
+    "version": "3.0.0",
+    "approvedBy": "Security Director",
+    "effectiveDate": "2025-07-10",
+    "reviewDate": "2026-07-10"
+  },
+  {
+    "id": "pol-004",
+    "title": "Third-Party Integration Approval Workflow",
+    "description": "Establishes mandatory security and legal review before enabling external integrations.",
+    "category": "access-control",
+    "status": "draft",
+    "version": "0.9.0",
+    "approvedBy": "Pending Review",
+    "effectiveDate": "2026-03-01",
+    "reviewDate": "2026-04-01"
+  },
+  {
+    "id": "pol-005",
+    "title": "Operational Monitoring and Alerting Policy",
+    "description": "Specifies baseline telemetry, alert thresholds, escalation paths, and on-call responsibilities.",
+    "category": "monitoring",
+    "status": "active",
+    "version": "1.8.0",
+    "approvedBy": "Reliability Manager",
+    "effectiveDate": "2025-10-05",
+    "reviewDate": "2026-10-05"
+  },
+  {
+    "id": "pol-006",
+    "title": "Audit Log Integrity and Retention Policy",
+    "description": "Defines tamper-evident logging, retention classes, and evidence preservation requirements.",
+    "category": "monitoring",
+    "status": "review",
+    "version": "2.0.0",
+    "approvedBy": "Governance Council",
+    "effectiveDate": "2025-12-20",
+    "reviewDate": "2026-02-28"
+  },
+  {
+    "id": "pol-007",
+    "title": "Responsible AI Transparency Policy",
+    "description": "Requires AI disclosure, explanation affordances, and user-facing limitations statements.",
+    "category": "ethics",
+    "status": "active",
+    "version": "1.6.0",
+    "approvedBy": "Responsible AI Committee",
+    "effectiveDate": "2025-08-18",
+    "reviewDate": "2026-08-18"
+  },
+  {
+    "id": "pol-008",
+    "title": "Bias Testing and Human Oversight Standard",
+    "description": "Mandates recurring bias evaluation, high-risk review gates, and documented human override controls.",
+    "category": "ethics",
+    "status": "draft",
+    "version": "0.7.0",
+    "approvedBy": "Pending Review",
+    "effectiveDate": "2026-04-15",
+    "reviewDate": "2026-05-15"
+  }
+]
