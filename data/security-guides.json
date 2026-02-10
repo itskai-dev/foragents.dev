@@ -1,0 +1,74 @@
+[
+  {
+    "id": "guide-sec-001",
+    "title": "Agent Security Baseline Checklist",
+    "content": "Establish a baseline before deploying any agent: define trust boundaries, enforce least privilege, run dependency audits, and require logging for all sensitive actions.",
+    "category": "general",
+    "severity": "high",
+    "tags": ["baseline", "hardening", "checklist"],
+    "updatedAt": "2026-02-09T10:00:00.000Z"
+  },
+  {
+    "id": "guide-sec-002",
+    "title": "Incident Response for Agent Systems",
+    "content": "Maintain an agent-focused incident playbook: isolate compromised sessions, revoke credentials, preserve forensic logs, and publish postmortems with corrective actions.",
+    "category": "general",
+    "severity": "medium",
+    "tags": ["incident-response", "operations", "forensics"],
+    "updatedAt": "2026-02-09T10:30:00.000Z"
+  },
+  {
+    "id": "guide-sec-003",
+    "title": "Prompt Injection Detection and Blocking",
+    "content": "Use layered detection with signature rules, semantic checks, and policy enforcement. Reject inputs that attempt to override system behavior or exfiltrate secrets.",
+    "category": "injection",
+    "severity": "critical",
+    "tags": ["prompt-injection", "input-validation", "policy"],
+    "updatedAt": "2026-02-09T11:00:00.000Z"
+  },
+  {
+    "id": "guide-sec-004",
+    "title": "Output Guardrails Against Data Exfiltration",
+    "content": "Apply output allowlists and redaction filters to prevent accidental leaks. Block responses that contain credentials, private keys, or high-risk internal identifiers.",
+    "category": "injection",
+    "severity": "high",
+    "tags": ["output-filtering", "redaction", "exfiltration"],
+    "updatedAt": "2026-02-09T11:20:00.000Z"
+  },
+  {
+    "id": "guide-sec-005",
+    "title": "TLS and Certificate Validation",
+    "content": "Require HTTPS everywhere, enforce modern TLS versions, verify certificates, and pin certs for critical endpoints to reduce man-in-the-middle risk.",
+    "category": "network",
+    "severity": "high",
+    "tags": ["tls", "encryption", "transport"],
+    "updatedAt": "2026-02-09T11:40:00.000Z"
+  },
+  {
+    "id": "guide-sec-006",
+    "title": "Webhook and API Abuse Protection",
+    "content": "Verify webhook signatures, enforce strict auth, and apply multi-tier rate limits. Monitor anomalies to contain brute-force and replay attempts quickly.",
+    "category": "network",
+    "severity": "medium",
+    "tags": ["webhooks", "rate-limiting", "api-security"],
+    "updatedAt": "2026-02-09T12:00:00.000Z"
+  },
+  {
+    "id": "guide-sec-007",
+    "title": "Secret Storage and Rotation",
+    "content": "Store secrets in managed vaults, never in source control. Rotate high-risk credentials frequently, and use short-lived tokens with scoped permissions.",
+    "category": "secrets",
+    "severity": "critical",
+    "tags": ["secrets", "vault", "rotation"],
+    "updatedAt": "2026-02-09T12:20:00.000Z"
+  },
+  {
+    "id": "guide-sec-008",
+    "title": "Audit Trails for Secret Access",
+    "content": "Log all secret reads and writes with actor, service, and timestamp metadata. Alert on repeated failed access and unusual request patterns.",
+    "category": "secrets",
+    "severity": "low",
+    "tags": ["audit", "monitoring", "compliance"],
+    "updatedAt": "2026-02-09T12:40:00.000Z"
+  }
+]
