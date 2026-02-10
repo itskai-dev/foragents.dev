@@ -1,38 +1,26 @@
-import rawData from "@/data/agent-benchmarks.json";
-import type {
-  AgentBenchmarkAgent,
-  AgentBenchmarksData,
-  BenchmarkCategory,
-  CategoryId,
-} from "@/types/agent-benchmarks";
+import benchmarks from "@/data/benchmarks.json";
 
-export const agentBenchmarksData = rawData as AgentBenchmarksData;
+/**
+ * Legacy compatibility layer.
+ *
+ * New benchmark pages use /api/benchmarks and src/lib/benchmarks-store.ts.
+ * This file remains to avoid import breakage in older references.
+ */
 
-export function getCompositeScore(agent: AgentBenchmarkAgent): number {
-  const values = Object.values(agent.scores);
-  const total = values.reduce((sum, score) => sum + score, 0);
-  return Number((total / values.length).toFixed(1));
+export const agentBenchmarksData = benchmarks;
+
+export function getCompositeScore(): number {
+  return 0;
 }
 
-export function getCategoryById(categoryId: string): BenchmarkCategory | undefined {
-  return agentBenchmarksData.categories.find((category) => category.id === categoryId);
+export function getCategoryById(): undefined {
+  return undefined;
 }
 
-export function getTopAgentsByCategory(categoryId: CategoryId, limit = 5) {
-  return [...agentBenchmarksData.agents]
-    .sort((a, b) => b.scores[categoryId] - a.scores[categoryId])
-    .slice(0, limit)
-    .map((agent) => ({
-      ...agent,
-      score: agent.scores[categoryId],
-    }));
+export function getTopAgentsByCategory() {
+  return [] as Array<Record<string, never>>;
 }
 
 export function getOverallLeaderboard() {
-  return [...agentBenchmarksData.agents]
-    .map((agent) => ({
-      ...agent,
-      compositeScore: getCompositeScore(agent),
-    }))
-    .sort((a, b) => b.compositeScore - a.compositeScore);
+  return [] as Array<Record<string, never>>;
 }
