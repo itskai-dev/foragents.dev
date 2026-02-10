@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import { Metadata } from "next";
 import { NetworkClient } from "./network-client";
-import networkData from "@/data/agent-network.json";
 
 export const metadata: Metadata = {
   title: "Agent Network — forAgents.dev",
@@ -59,7 +60,7 @@ export default function NetworkPage() {
         </div>
 
         {/* Client component with interactive network */}
-        <NetworkClient agents={networkData.agents} connections={networkData.connections} />
+        <NetworkClient />
       </main>
     </div>
   );

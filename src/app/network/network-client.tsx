@@ -1,550 +1,267 @@
+/* eslint-disable react/no-unescaped-entities */
+
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-interface Agent {
-  id: string;
-  handle: string;
-  name: string;
-  avatar: string;
-  category: string;
-  trustScore: number;
-  skills: string[];
-}
+type Group = "skills" | "agents" | "mcp";
 
-interface Connection {
+type NodeType = "skill" | "agent" | "mcp";
+
+type NetworkNode = {
+  id: string;
+  label: string;
+  type: NodeType;
+  group: Group;
+};
+
+type NetworkEdge = {
   source: string;
   target: string;
-  type: string;
-  strength: number;
-}
-
-interface NetworkClientProps {
-  agents: Agent[];
-  connections: Connection[];
-}
-
-// Map categories to agent types
-const categoryToType: Record<string, string> = {
-  orchestrator: "autonomous",
-  intelligence: "semi-autonomous",
-  builder: "autonomous",
-  operations: "autonomous",
-  quality: "semi-autonomous",
-  coding: "tool",
-  creative: "tool",
-  productivity: "tool",
-  general: "semi-autonomous",
-  automation: "tool",
-  framework: "tool",
+  type: "depends-on" | "agent-uses-skill" | "mcp-provides-tool";
 };
 
-// Infer protocol from category/skills
-const categoryToProtocol: Record<string, string> = {
-  orchestrator: "A2A",
-  intelligence: "REST",
-  builder: "A2A",
-  operations: "A2A",
-  quality: "A2A",
-  coding: "MCP",
-  creative: "REST",
-  productivity: "REST",
-  general: "REST",
-  automation: "REST",
-  framework: "MCP",
+type NetworkResponse = {
+  nodes: NetworkNode[];
+  edges: NetworkEdge[];
+  stats: {
+    totalNodes: number;
+    totalEdges: number;
+    clusters: number;
+  };
 };
 
-function getTrustTier(score: number): string {
-  if (score >= 90) return "verified";
-  if (score >= 80) return "community";
-  return "new";
+function edgeTypeLabel(type: NetworkEdge["type"]): string {
+  if (type === "depends-on") return "depends-on";
+  if (type === "agent-uses-skill") return "agent-uses-skill";
+  return "mcp-provides-tool";
 }
 
-function getTrustColor(score: number): string {
-  if (score >= 90) return "#10b981"; // emerald
-  if (score >= 80) return "#06b6d4"; // cyan
-  return "#a855f7"; // purple
+function groupBadgeClass(group: Group): string {
+  if (group === "skills") return "bg-purple-500/20 text-purple-200 border-purple-500/30";
+  if (group === "agents") return "bg-cyan-500/20 text-cyan-200 border-cyan-500/30";
+  return "bg-emerald-500/20 text-emerald-200 border-emerald-500/30";
 }
 
-function getConnectionStyle(type: string) {
-  switch (type) {
-    case "depends-on":
-      return { strokeDasharray: "0", color: "#f59e0b" }; // solid amber
-    case "collaborates-with":
-      return { strokeDasharray: "5,5", color: "#06b6d4" }; // dashed cyan
-    case "uses-skill-from":
-      return { strokeDasharray: "2,3", color: "#a855f7" }; // dotted purple
-    default:
-      return { strokeDasharray: "0", color: "#64748b" }; // solid slate
-  }
-}
+export function NetworkClient() {
+  const [data, setData] = useState<NetworkResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [groupFilter, setGroupFilter] = useState<Group | "all">("all");
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-export function NetworkClient({ agents, connections }: NetworkClientProps) {
-  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterType, setFilterType] = useState<string>("all");
-  const [filterTrust, setFilterTrust] = useState<string>("all");
-  const [filterProtocol, setFilterProtocol] = useState<string>("all");
-  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  useEffect(() => {
+    let active = true;
 
-  // Filter agents
-  const filteredAgents = useMemo(() => {
-    return agents.filter((agent) => {
-      // Search filter
-      if (
-        searchQuery &&
-        !agent.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-        !agent.handle.toLowerCase().includes(searchQuery.toLowerCase())
-      ) {
-        return false;
+    async function load() {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/network", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`Failed to load network (${response.status})`);
+        }
+
+        const payload = (await response.json()) as NetworkResponse;
+        if (!active) return;
+        setData(payload);
+      } catch (fetchError) {
+        if (!active) return;
+        const message =
+          fetchError instanceof Error ? fetchError.message : "Failed to load network data";
+        setError(message);
+      } finally {
+        if (active) setLoading(false);
       }
+    }
 
-      // Type filter
-      if (filterType !== "all" && categoryToType[agent.category] !== filterType) {
-        return false;
-      }
+    load();
 
-      // Trust tier filter
-      if (filterTrust !== "all" && getTrustTier(agent.trustScore) !== filterTrust) {
-        return false;
-      }
-
-      // Protocol filter
-      if (filterProtocol !== "all" && categoryToProtocol[agent.category] !== filterProtocol) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [agents, searchQuery, filterType, filterTrust, filterProtocol]);
-
-  // Filter connections based on filtered agents
-  const filteredConnections = useMemo(() => {
-    const agentIds = new Set(filteredAgents.map((a) => a.id));
-    return connections.filter(
-      (conn) => agentIds.has(conn.source) && agentIds.has(conn.target)
-    );
-  }, [filteredAgents, connections]);
-
-  // If the selected agent is filtered out, treat it as unselected.
-  const effectiveSelectedAgent = useMemo(() => {
-    if (!selectedAgent) return null;
-    return filteredAgents.some((a) => a.id === selectedAgent.id)
-      ? selectedAgent
-      : null;
-  }, [filteredAgents, selectedAgent]);
-
-  // Calculate stats
-  const stats = useMemo(() => {
-    const totalAgents = filteredAgents.length;
-    const totalConnections = filteredConnections.length;
-    const avgTrust =
-      filteredAgents.reduce((sum, a) => sum + a.trustScore, 0) / totalAgents || 0;
-
-    // Most connected agent
-    const connectionCounts = new Map<string, number>();
-    filteredConnections.forEach((conn) => {
-      connectionCounts.set(conn.source, (connectionCounts.get(conn.source) || 0) + 1);
-      connectionCounts.set(conn.target, (connectionCounts.get(conn.target) || 0) + 1);
-    });
-
-    let mostConnectedId = "";
-    let maxConnections = 0;
-    connectionCounts.forEach((count, id) => {
-      if (count > maxConnections) {
-        maxConnections = count;
-        mostConnectedId = id;
-      }
-    });
-
-    const mostConnected = agents.find((a) => a.id === mostConnectedId);
-
-    return {
-      totalAgents,
-      totalConnections,
-      avgTrust: avgTrust.toFixed(1),
-      mostConnected: mostConnected?.name || "—",
+    return () => {
+      active = false;
     };
-  }, [filteredAgents, filteredConnections, agents]);
+  }, []);
 
-  // Simple circular layout for nodes
-  const nodePositions = useMemo(() => {
-    const positions = new Map<string, { x: number; y: number }>();
-    const centerX = 400;
-    const centerY = 300;
-    const radius = 250;
+  const nodeById = useMemo(() => {
+    const map = new Map<string, NetworkNode>();
+    for (const node of data?.nodes ?? []) {
+      map.set(node.id, node);
+    }
+    return map;
+  }, [data]);
 
-    filteredAgents.forEach((agent, index) => {
-      const angle = (index / filteredAgents.length) * 2 * Math.PI;
-      positions.set(agent.id, {
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle),
-      });
+  const visibleNodes = useMemo(() => {
+    const allNodes = data?.nodes ?? [];
+    return allNodes.filter((node) => {
+      if (groupFilter !== "all" && node.group !== groupFilter) return false;
+      if (!search) return true;
+
+      return node.label.toLowerCase().includes(search.toLowerCase());
     });
+  }, [data, groupFilter, search]);
 
-    return positions;
-  }, [filteredAgents]);
+  const visibleNodeIds = useMemo(() => new Set(visibleNodes.map((node) => node.id)), [visibleNodes]);
 
-  // Get connected agents for selected agent
-  const connectedAgents = useMemo(() => {
-    if (!effectiveSelectedAgent) return [];
+  const visibleEdges = useMemo(() => {
+    const allEdges = data?.edges ?? [];
+    return allEdges.filter(
+      (edge) => visibleNodeIds.has(edge.source) && visibleNodeIds.has(edge.target)
+    );
+  }, [data, visibleNodeIds]);
 
-    const connectedIds = new Set<string>();
-    filteredConnections.forEach((conn) => {
-      if (conn.source === effectiveSelectedAgent.id) connectedIds.add(conn.target);
-      if (conn.target === effectiveSelectedAgent.id) connectedIds.add(conn.source);
-    });
+  const highlightedNodeIds = useMemo(() => {
+    const ids = new Set<string>();
+    if (!search) return ids;
 
-    return filteredAgents.filter((a) => connectedIds.has(a.id));
-  }, [effectiveSelectedAgent, filteredConnections, filteredAgents]);
+    for (const node of visibleNodes) {
+      if (node.label.toLowerCase().includes(search.toLowerCase())) {
+        ids.add(node.id);
+      }
+    }
+    return ids;
+  }, [search, visibleNodes]);
+
+  const selectedEdges = useMemo(() => {
+    if (!selectedNodeId) return [];
+
+    return visibleEdges.filter(
+      (edge) => edge.source === selectedNodeId || edge.target === selectedNodeId
+    );
+  }, [selectedNodeId, visibleEdges]);
+
+  const selectedNode = selectedNodeId ? nodeById.get(selectedNodeId) ?? null : null;
+
+  if (loading) {
+    return (
+      <Card className="bg-white/5 border-white/10">
+        <CardContent className="p-6 text-muted-foreground">Loading network graph…</CardContent>
+      </Card>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <Card className="bg-white/5 border-white/10">
+        <CardContent className="p-6 text-red-300">
+          {error ?? "Unable to load network graph."}
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Stats Banner */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="bg-white/5 border-white/10">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-cyan">{stats.totalAgents}</div>
-            <div className="text-sm text-muted-foreground">Total Agents</div>
+            <div className="text-2xl font-bold text-cyan-300">{data.stats.totalNodes}</div>
+            <div className="text-sm text-muted-foreground">Total Nodes</div>
           </CardContent>
         </Card>
         <Card className="bg-white/5 border-white/10">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-purple">{stats.totalConnections}</div>
-            <div className="text-sm text-muted-foreground">Connections</div>
+            <div className="text-2xl font-bold text-purple-300">{data.stats.totalEdges}</div>
+            <div className="text-sm text-muted-foreground">Total Edges</div>
           </CardContent>
         </Card>
         <Card className="bg-white/5 border-white/10">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-emerald-400">{stats.avgTrust}</div>
-            <div className="text-sm text-muted-foreground">Avg Trust Score</div>
-          </CardContent>
-        </Card>
-        <Card className="bg-white/5 border-white/10">
-          <CardContent className="p-4">
-            <div className="text-xl font-bold text-amber-400 truncate">
-              {stats.mostConnected}
-            </div>
-            <div className="text-sm text-muted-foreground">Most Connected</div>
+            <div className="text-2xl font-bold text-emerald-300">{data.stats.clusters}</div>
+            <div className="text-sm text-muted-foreground">Clusters</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Search and Filters */}
       <Card className="bg-white/5 border-white/10">
-        <CardContent className="p-4 space-y-4">
-          {/* Search */}
-          <div>
-            <Input
-              type="text"
-              placeholder="Search agents by name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-white/5 border-white/10 text-foreground"
-            />
-          </div>
+        <CardContent className="p-4 space-y-3">
+          <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Search nodes to highlight…"
+            className="bg-white/5 border-white/10"
+          />
 
-          {/* Filters */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div>
-              <label className="text-sm text-muted-foreground mb-1 block">Agent Type</label>
-              <select
-                value={filterType}
-                onChange={(e) => setFilterType(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm text-foreground"
+          <div className="flex flex-wrap gap-2">
+            {(["all", "skills", "agents", "mcp"] as const).map((group) => (
+              <button
+                key={group}
+                type="button"
+                onClick={() => setGroupFilter(group)}
+                className={`px-3 py-1.5 rounded-md text-sm border transition-colors ${
+                  groupFilter === group
+                    ? "bg-white/20 border-white/40 text-foreground"
+                    : "bg-white/5 border-white/10 text-muted-foreground hover:bg-white/10"
+                }`}
               >
-                <option value="all">All Types</option>
-                <option value="autonomous">Autonomous</option>
-                <option value="semi-autonomous">Semi-Autonomous</option>
-                <option value="tool">Tool</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="text-sm text-muted-foreground mb-1 block">Trust Tier</label>
-              <select
-                value={filterTrust}
-                onChange={(e) => setFilterTrust(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm text-foreground"
-              >
-                <option value="all">All Tiers</option>
-                <option value="verified">Verified (90+)</option>
-                <option value="community">Community (80-89)</option>
-                <option value="new">New (&lt;80)</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="text-sm text-muted-foreground mb-1 block">Protocol</label>
-              <select
-                value={filterProtocol}
-                onChange={(e) => setFilterProtocol(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm text-foreground"
-              >
-                <option value="all">All Protocols</option>
-                <option value="MCP">MCP</option>
-                <option value="A2A">A2A</option>
-                <option value="REST">REST</option>
-              </select>
-            </div>
+                {group === "all" ? "All" : group.charAt(0).toUpperCase() + group.slice(1)}
+              </button>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Legend */}
-      <Card className="bg-white/5 border-white/10">
-        <CardContent className="p-4">
-          <h3 className="text-sm font-semibold text-foreground mb-3">Connection Types</h3>
-          <div className="flex flex-wrap gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <svg width="40" height="2">
-                <line
-                  x1="0"
-                  y1="1"
-                  x2="40"
-                  y2="1"
-                  stroke="#f59e0b"
-                  strokeWidth="2"
-                />
-              </svg>
-              <span className="text-muted-foreground">Depends On</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg width="40" height="2">
-                <line
-                  x1="0"
-                  y1="1"
-                  x2="40"
-                  y2="1"
-                  stroke="#06b6d4"
-                  strokeWidth="2"
-                  strokeDasharray="5,5"
-                />
-              </svg>
-              <span className="text-muted-foreground">Collaborates With</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <svg width="40" height="2">
-                <line
-                  x1="0"
-                  y1="1"
-                  x2="40"
-                  y2="1"
-                  stroke="#a855f7"
-                  strokeWidth="2"
-                  strokeDasharray="2,3"
-                />
-              </svg>
-              <span className="text-muted-foreground">Uses Skill From</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card className="bg-white/5 border-white/10">
+          <CardHeader>
+            <CardTitle>Node List ({visibleNodes.length})</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 max-h-[480px] overflow-y-auto">
+            {visibleNodes.map((node) => {
+              const isSelected = node.id === selectedNodeId;
+              const isHighlighted = highlightedNodeIds.has(node.id);
 
-      {/* Network Graph and Agent Card Side-by-Side */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Network Graph */}
-        <Card className="bg-white/5 border-white/10 lg:col-span-2">
-          <CardContent className="p-4">
-            <div className="relative w-full" style={{ height: "600px" }}>
-              {filteredAgents.length === 0 ? (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  No agents match the current filters
-                </div>
-              ) : (
-                <svg
-                  width="100%"
-                  height="100%"
-                  viewBox="0 0 800 600"
-                  className="bg-black/20 rounded-lg"
+              return (
+                <button
+                  type="button"
+                  key={node.id}
+                  onClick={() => setSelectedNodeId(node.id)}
+                  className={`w-full text-left rounded-md border px-3 py-2 transition-colors ${
+                    isSelected
+                      ? "border-cyan-400 bg-cyan-500/15"
+                      : "border-white/10 bg-white/5 hover:bg-white/10"
+                  } ${isHighlighted ? "ring-1 ring-yellow-300" : ""}`}
                 >
-                  {/* Draw connections */}
-                  {filteredConnections.map((conn, idx) => {
-                    const sourcePos = nodePositions.get(conn.source);
-                    const targetPos = nodePositions.get(conn.target);
-                    if (!sourcePos || !targetPos) return null;
-
-                    const style = getConnectionStyle(conn.type);
-                    const isHighlighted =
-                      effectiveSelectedAgent &&
-                      (conn.source === effectiveSelectedAgent.id ||
-                        conn.target === effectiveSelectedAgent.id);
-
-                    return (
-                      <line
-                        key={`conn-${idx}`}
-                        x1={sourcePos.x}
-                        y1={sourcePos.y}
-                        x2={targetPos.x}
-                        y2={targetPos.y}
-                        stroke={isHighlighted ? style.color : "#64748b"}
-                        strokeWidth={isHighlighted ? 2 : 1}
-                        strokeDasharray={style.strokeDasharray}
-                        opacity={isHighlighted ? 0.9 : 0.3}
-                      />
-                    );
-                  })}
-
-                  {/* Draw nodes */}
-                  {filteredAgents.map((agent) => {
-                    const pos = nodePositions.get(agent.id);
-                    if (!pos) return null;
-
-                    const isSelected = effectiveSelectedAgent?.id === agent.id;
-                    const isConnected = connectedAgents.some((a) => a.id === agent.id);
-                    const isHovered = hoveredNode === agent.id;
-                    const isHighlighted =
-                      searchQuery &&
-                      (agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        agent.handle.toLowerCase().includes(searchQuery.toLowerCase()));
-
-                    const radius = isSelected ? 28 : isHovered ? 24 : 20;
-                    const opacity =
-                      !effectiveSelectedAgent || isSelected || isConnected ? 1 : 0.3;
-
-                    return (
-                      <g
-                        key={agent.id}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => setSelectedAgent(agent)}
-                        onMouseEnter={() => setHoveredNode(agent.id)}
-                        onMouseLeave={() => setHoveredNode(null)}
-                      >
-                        <circle
-                          cx={pos.x}
-                          cy={pos.y}
-                          r={radius}
-                          fill={getTrustColor(agent.trustScore)}
-                          opacity={opacity}
-                          stroke={isSelected || isHighlighted ? "#fff" : "none"}
-                          strokeWidth={isSelected ? 3 : 2}
-                        />
-                        <text
-                          x={pos.x}
-                          y={pos.y}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fontSize={radius > 22 ? "20" : "16"}
-                        >
-                          {agent.avatar}
-                        </text>
-                        {(isHovered || isSelected) && (
-                          <text
-                            x={pos.x}
-                            y={pos.y + radius + 14}
-                            textAnchor="middle"
-                            fontSize="11"
-                            fill="#fff"
-                            fontWeight="600"
-                          >
-                            {agent.name}
-                          </text>
-                        )}
-                      </g>
-                    );
-                  })}
-                </svg>
-              )}
-            </div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate text-foreground">{node.label}</span>
+                    <Badge className={groupBadgeClass(node.group)}>{node.group}</Badge>
+                  </div>
+                </button>
+              );
+            })}
           </CardContent>
         </Card>
 
-        {/* Agent Card */}
         <Card className="bg-white/5 border-white/10">
-          <CardContent className="p-4">
-            {effectiveSelectedAgent ? (
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="text-4xl">{effectiveSelectedAgent.avatar}</div>
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground">
-                      {effectiveSelectedAgent.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground">@{effectiveSelectedAgent.handle}</p>
-                  </div>
-                </div>
+          <CardHeader>
+            <CardTitle>
+              Edge List {selectedNode ? `(connected to ${selectedNode.label})` : `(${visibleEdges.length})`}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 max-h-[480px] overflow-y-auto">
+            {(selectedNode ? selectedEdges : visibleEdges).map((edge, index) => {
+              const source = nodeById.get(edge.source)?.label ?? edge.source;
+              const target = nodeById.get(edge.target)?.label ?? edge.target;
 
-                <div className="space-y-2">
-                  <div>
-                    <span className="text-sm text-muted-foreground">Type: </span>
-                    <Badge variant="secondary" className="ml-1">
-                      {categoryToType[effectiveSelectedAgent.category]}
-                    </Badge>
+              return (
+                <div
+                  key={`${edge.source}-${edge.target}-${edge.type}-${index}`}
+                  className="rounded-md border border-white/10 bg-white/5 px-3 py-2"
+                >
+                  <div className="text-sm text-foreground">
+                    <span className="font-medium">{source}</span>
+                    <span className="text-muted-foreground"> → </span>
+                    <span className="font-medium">{target}</span>
                   </div>
-
-                  <div>
-                    <span className="text-sm text-muted-foreground">Trust Score: </span>
-                    <span
-                      className="font-semibold"
-                      style={{ color: getTrustColor(effectiveSelectedAgent.trustScore) }}
-                    >
-                      {effectiveSelectedAgent.trustScore}
-                    </span>
-                    <Badge variant="secondary" className="ml-2">
-                      {getTrustTier(effectiveSelectedAgent.trustScore)}
-                    </Badge>
-                  </div>
-
-                  <div>
-                    <span className="text-sm text-muted-foreground">Protocol: </span>
-                    <Badge variant="secondary" className="ml-1">
-                      {categoryToProtocol[effectiveSelectedAgent.category]}
-                    </Badge>
-                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">{edgeTypeLabel(edge.type)}</div>
                 </div>
+              );
+            })}
 
-                <div>
-                  <h4 className="text-sm font-semibold text-foreground mb-2">
-                    Capabilities
-                  </h4>
-                  <div className="flex flex-wrap gap-1">
-                    {effectiveSelectedAgent.skills.map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="outline"
-                        className="text-xs border-white/20"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="text-sm font-semibold text-foreground mb-2">
-                    Connected Agents ({connectedAgents.length})
-                  </h4>
-                  <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {connectedAgents.map((agent) => (
-                      <div
-                        key={agent.id}
-                        className="flex items-center gap-2 p-2 bg-white/5 rounded cursor-pointer hover:bg-white/10 transition-colors"
-                        onClick={() => setSelectedAgent(agent)}
-                      >
-                        <span className="text-xl">{agent.avatar}</span>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-medium text-foreground truncate">
-                            {agent.name}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            Trust: {agent.trustScore}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-full text-center text-muted-foreground">
-                <div>
-                  <p className="text-lg mb-2">Click on a node</p>
-                  <p className="text-sm">to view agent details</p>
-                </div>
-              </div>
+            {(selectedNode ? selectedEdges : visibleEdges).length === 0 && (
+              <div className="text-sm text-muted-foreground">No edges for current selection/filter.</div>
             )}
           </CardContent>
         </Card>
