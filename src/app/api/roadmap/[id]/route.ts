@@ -1,42 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkRateLimit, getClientIp } from "@/lib/requestLimits";
 import { readRoadmapItems, writeRoadmapItems } from "@/lib/server/roadmapStore";
 
-const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000;
+type VoteRequest = {
+  agentHandle?: unknown;
+};
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const body = (await request.json()) as { itemId?: unknown; agentHandle?: unknown };
-    const itemId = typeof body.itemId === "string" ? body.itemId.trim() : "";
+    const { id } = await context.params;
+    const body = (await request.json()) as VoteRequest;
     const agentHandle = typeof body.agentHandle === "string" ? body.agentHandle.trim() : "";
 
-    if (!itemId || !agentHandle) {
-      return NextResponse.json(
-        { error: "itemId and agentHandle are required" },
-        { status: 400 }
-      );
-    }
-
-    const ip = getClientIp(request);
-    const limited = checkRateLimit(`roadmap-vote:${ip}:${itemId}:${agentHandle.toLowerCase()}`, {
-      windowMs: RATE_LIMIT_WINDOW_MS,
-      max: 1,
-    });
-
-    if (!limited.ok) {
-      return NextResponse.json(
-        { error: "Vote limit reached for this item. Try again later." },
-        {
-          status: 429,
-          headers: {
-            "Retry-After": String(limited.retryAfterSec),
-          },
-        }
-      );
+    if (!agentHandle) {
+      return NextResponse.json({ error: "agentHandle is required" }, { status: 400 });
     }
 
     const items = await readRoadmapItems();
-    const itemIndex = items.findIndex((item) => item.id === itemId);
+    const itemIndex = items.findIndex((item) => item.id === id);
 
     if (itemIndex === -1) {
       return NextResponse.json({ error: "Roadmap item not found" }, { status: 404 });
@@ -64,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ item: updatedItem });
   } catch (error) {
-    console.error("Failed to vote on roadmap item", error);
+    console.error("Failed to submit roadmap vote", error);
     return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
   }
 }

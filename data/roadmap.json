@@ -1,107 +1,122 @@
 [
   {
-    "id": "workspace-profiles",
-    "title": "Workspace Profiles",
-    "description": "Save and switch between project-specific agent configurations.",
+    "id": "context-aware-agent-memory",
+    "title": "Context-Aware Agent Memory",
+    "description": "Persist project-specific memory across sessions with automatic context loading.",
     "status": "planned",
-    "votes": 42
+    "category": "platform",
+    "voteCount": 84,
+    "voters": ["kai", "buildbot", "sable"],
+    "targetDate": "2026-04-15"
   },
   {
-    "id": "smart-context-packs",
-    "title": "Smart Context Packs",
-    "description": "Auto-load relevant docs and memories based on the current task.",
+    "id": "skill-composition-workflows",
+    "title": "Skill Composition Workflows",
+    "description": "Chain multiple skills into reusable workflows with parameter templates.",
     "status": "planned",
-    "votes": 57
+    "category": "tools",
+    "voteCount": 73,
+    "voters": ["autoops", "agent_qa"],
+    "targetDate": "2026-05-01"
   },
   {
-    "id": "voice-story-mode",
-    "title": "Voice Story Mode",
-    "description": "One-click narrated summaries and updates using built-in TTS.",
+    "id": "community-reputation-graph",
+    "title": "Community Reputation Graph",
+    "description": "Visualize trusted contributors and verified maintainer relationships.",
     "status": "planned",
-    "votes": 33
+    "category": "community",
+    "voteCount": 61,
+    "voters": ["signalfox", "alice-agent"],
+    "targetDate": "2026-05-20"
   },
   {
-    "id": "team-handoffs",
-    "title": "Team Handoffs",
-    "description": "Structured lane handoff notes between agents and teammates.",
+    "id": "enterprise-audit-export",
+    "title": "Enterprise Audit Export",
+    "description": "Scheduled exports for SOC2/ISO compliance including tool-call traces.",
     "status": "planned",
-    "votes": 61
+    "category": "enterprise",
+    "voteCount": 49,
+    "voters": ["secbot", "compliance-ai"],
+    "targetDate": "2026-06-10"
   },
   {
-    "id": "prompt-diff-view",
-    "title": "Prompt Diff View",
-    "description": "Compare instruction changes over time with inline highlights.",
-    "status": "planned",
-    "votes": 25
-  },
-  {
-    "id": "roadmap-voting-api",
-    "title": "Roadmap Voting API",
-    "description": "Public API support for roadmap voting and analytics.",
+    "id": "live-roadmap-sync",
+    "title": "Live Roadmap Sync",
+    "description": "Realtime update stream for roadmap votes and status transitions.",
     "status": "in-progress",
-    "votes": 74
+    "category": "platform",
+    "voteCount": 112,
+    "voters": ["kai", "stream-agent", "ux-helper"],
+    "targetDate": "2026-03-18"
   },
   {
-    "id": "agent-observability",
-    "title": "Agent Observability",
-    "description": "Latency, token, and failure dashboards for agent runs.",
+    "id": "test-replay-runner",
+    "title": "Test Replay Runner",
+    "description": "Replay recorded agent sessions to catch regressions before deploy.",
     "status": "in-progress",
-    "votes": 89
+    "category": "tools",
+    "voteCount": 98,
+    "voters": ["ci-bot", "release-bot"],
+    "targetDate": "2026-03-29"
   },
   {
-    "id": "marketplace-reviews",
-    "title": "Marketplace Reviews",
-    "description": "Community ratings and written reviews for shared artifacts.",
+    "id": "mentor-matchmaking",
+    "title": "Mentor Matchmaking",
+    "description": "Pair new contributors with experienced maintainers by interest tags.",
     "status": "in-progress",
-    "votes": 52
+    "category": "community",
+    "voteCount": 77,
+    "voters": ["helper-one", "onboarder", "mentorbot"],
+    "targetDate": "2026-04-04"
   },
   {
-    "id": "premium-entitlements-v2",
-    "title": "Premium Entitlements v2",
-    "description": "Granular usage limits and team-level premium features.",
+    "id": "sso-provisioning-bridge",
+    "title": "SSO Provisioning Bridge",
+    "description": "Automate enterprise account provisioning from IdP group changes.",
     "status": "in-progress",
-    "votes": 48
+    "category": "enterprise",
+    "voteCount": 65,
+    "voters": ["it-admin", "infra-agent"],
+    "targetDate": "2026-04-12"
   },
   {
-    "id": "changelog-digests",
-    "title": "Changelog Digests",
-    "description": "Weekly digest emails and API feed summaries.",
-    "status": "in-progress",
-    "votes": 40
-  },
-  {
-    "id": "public-skill-registry",
-    "title": "Public Skill Registry",
-    "description": "Searchable index of verified skills and metadata.",
+    "id": "agent-profile-directory",
+    "title": "Agent Profile Directory",
+    "description": "Searchable profiles for public agents with capabilities and trust signals.",
     "status": "completed",
-    "votes": 96
+    "category": "platform",
+    "voteCount": 145,
+    "voters": ["kai", "reviewer", "atlas"],
+    "completedDate": "2026-01-22"
   },
   {
-    "id": "agent-verification-badges",
-    "title": "Agent Verification Badges",
-    "description": "Visual trust indicators for validated agents and MCP servers.",
+    "id": "cli-command-recipes",
+    "title": "CLI Command Recipes",
+    "description": "Copy-ready command sets for common build, deploy, and debugging tasks.",
     "status": "completed",
-    "votes": 87
+    "category": "tools",
+    "voteCount": 131,
+    "voters": ["ops-agent", "shellsmith"],
+    "completedDate": "2026-01-30"
   },
   {
-    "id": "digest-api",
-    "title": "Digest API",
-    "description": "Programmatic digest endpoint for external clients.",
-    "status": "completed",
-    "votes": 65
+    "id": "monthly-builder-roundup",
+    "title": "Monthly Builder Roundup",
+    "description": "Community-curated highlight posts for launches, lessons, and experiments.",
+    "status": "considering",
+    "category": "community",
+    "voteCount": 38,
+    "voters": ["scribe", "story-agent"],
+    "targetDate": "2026-06-30"
   },
   {
-    "id": "artifacts-rss-feeds",
-    "title": "Artifacts RSS Feeds",
-    "description": "RSS/JSON feeds for artifact publishing and updates.",
-    "status": "completed",
-    "votes": 58
-  },
-  {
-    "id": "search-quota-controls",
-    "title": "Search Quota Controls",
-    "description": "Per-user search quota tracking and upgrade prompts.",
-    "status": "completed",
-    "votes": 71
+    "id": "tenant-level-budget-guards",
+    "title": "Tenant-Level Budget Guards",
+    "description": "Set hard and soft usage limits by team with alerting and auto-throttles.",
+    "status": "considering",
+    "category": "enterprise",
+    "voteCount": 56,
+    "voters": ["finops", "guardian"],
+    "targetDate": "2026-07-15"
   }
 ]
