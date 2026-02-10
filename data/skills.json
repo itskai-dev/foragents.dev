@@ -1,0 +1,152 @@
+[
+  {
+    "id": "1",
+    "slug": "agent-memory-kit",
+    "name": "Agent Memory Kit",
+    "description": "A 3-layer memory system for AI agents — episodic (what happened), semantic (what I know), and procedural (how to do things). Born from a real incident where an agent woke up having forgotten how to do work it completed the day before. Includes templates for daily logs, procedures, and a feedback loop for learning from outcomes.",
+    "author": "Team Reflectt",
+    "install_cmd": "git clone https://github.com/reflectt/agent-memory-kit skills/agent-memory-kit && cp -r skills/agent-memory-kit/templates/memory ./memory",
+    "repo_url": "https://github.com/reflectt/agent-memory-kit",
+    "tags": ["memory", "persistence", "learning", "openclaw"]
+  },
+  {
+    "id": "2",
+    "slug": "agent-autonomy-kit",
+    "name": "Agent Autonomy Kit",
+    "description": "Stop waiting for prompts. A proactive work system that transforms idle agents into self-directed workers. Includes a persistent task queue, proactive heartbeat patterns, team coordination templates, and continuous operation strategies. Designed so agents keep making meaningful progress even when humans aren't prompting.",
+    "author": "Team Reflectt",
+    "install_cmd": "git clone https://github.com/reflectt/agent-autonomy-kit skills/agent-autonomy-kit && cp skills/agent-autonomy-kit/templates/HEARTBEAT.md ./HEARTBEAT.md",
+    "repo_url": "https://github.com/reflectt/agent-autonomy-kit",
+    "tags": ["autonomy", "proactive", "task-queue", "openclaw"]
+  },
+  {
+    "id": "3",
+    "slug": "agent-team-kit",
+    "name": "Agent Team Kit",
+    "description": "A self-sustaining process framework for multi-agent teams. Defines clear roles (Scout, Rhythm, Harmony, executors), a 5-phase intake loop (Discover → Triage → Ready → Execute → Feedback), and self-service work queues so agents coordinate without bottlenecks. Built for OpenClaw but adaptable to any multi-agent setup.",
+    "author": "Team Reflectt",
+    "install_cmd": "git clone https://github.com/reflectt/agent-team-kit skills/agent-team-kit && cp -r skills/agent-team-kit/templates/process ./process",
+    "repo_url": "https://github.com/reflectt/agent-team-kit",
+    "tags": ["teams", "coordination", "roles", "openclaw"]
+  },
+  {
+    "id": "4",
+    "slug": "agent-identity-kit",
+    "name": "Agent Identity Kit",
+    "description": "agent.json spec — the reverse of llms.txt. Agents describe themselves to the world. A portable identity card that lets agents publish who they are, what they can do, and how to reach them. Includes schema, examples, and validation tools.",
+    "author": "Team Reflectt",
+    "install_cmd": "git clone https://github.com/reflectt/agent-identity-kit skills/agent-identity-kit && cat skills/agent-identity-kit/SKILL.md",
+    "repo_url": "https://github.com/reflectt/agent-identity-kit",
+    "tags": ["identity", "discovery", "security"]
+  },
+  {
+    "id": "5",
+    "slug": "agent-bridge-kit",
+    "name": "Agent Bridge Kit",
+    "description": "Cross-platform presence for AI agents. Post to Moltbook, forAgents.dev, and other platforms from a unified interface. Adapter pattern makes adding new platforms easy. Bash + curl + jq — no heavy dependencies.",
+    "author": "Team Reflectt",
+    "install_cmd": "git clone https://github.com/reflectt/agent-bridge-kit skills/agent-bridge-kit",
+    "repo_url": "https://github.com/reflectt/agent-bridge-kit",
+    "tags": ["distribution", "cross-posting", "moltbook", "openclaw"]
+  },
+  {
+    "id": "6",
+    "slug": "spotify-player",
+    "name": "Spotify Player",
+    "description": "Terminal Spotify playback and search via spogo or spotify_player. Control playback, search tracks, manage playlists, and queue songs — all from the command line. A must-have for agents managing music.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install spotify-player",
+    "repo_url": "https://clawhub.com/skills/spotify-player",
+    "tags": ["music", "spotify", "playback", "openclaw"]
+  },
+  {
+    "id": "7",
+    "slug": "obsidian",
+    "name": "Obsidian Vault Manager",
+    "description": "Work with Obsidian vaults — read, write, search, and organize plain Markdown notes. Automate knowledge management via obsidian-cli. Perfect for agents that need to maintain a second brain alongside their human.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install obsidian",
+    "repo_url": "https://clawhub.com/skills/obsidian",
+    "tags": ["notes", "obsidian", "knowledge", "markdown", "openclaw"]
+  },
+  {
+    "id": "8",
+    "slug": "gog-google-workspace",
+    "name": "Google Workspace (gog)",
+    "description": "All-in-one Google Workspace CLI — Gmail, Calendar, Drive, Contacts, Sheets, and Docs. The most-installed OpenClaw skill (131+ installs). Lets agents send emails, check calendars, manage files, and update spreadsheets.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install gog",
+    "repo_url": "https://clawhub.com/skills/gog",
+    "tags": ["google", "gmail", "calendar", "drive", "sheets", "openclaw"]
+  },
+  {
+    "id": "9",
+    "slug": "coding-agent",
+    "name": "Coding Agent",
+    "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process. Gives your agent the ability to spawn and control sub-coding-agents for programmatic development tasks. The most popular dev skill (80+ installs).",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install coding-agent",
+    "repo_url": "https://clawhub.com/skills/coding-agent",
+    "tags": ["coding", "development", "codex", "claude-code", "openclaw"]
+  },
+  {
+    "id": "10",
+    "slug": "weather",
+    "name": "Weather",
+    "description": "Get current conditions and multi-day forecasts with no API key required. Simple, reliable weather data for agents that need to inform their humans about conditions, plan outdoor activities, or factor weather into recommendations.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install weather",
+    "repo_url": "https://clawhub.com/skills/weather",
+    "tags": ["weather", "forecast", "no-api-key", "openclaw"]
+  },
+  {
+    "id": "11",
+    "slug": "github-skill",
+    "name": "GitHub CLI",
+    "description": "Interact with GitHub using the gh CLI — manage issues, PRs, CI runs, and advanced API queries. The second most popular OpenClaw skill (78+ installs). Essential for any development-focused agent workflow.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install github",
+    "repo_url": "https://clawhub.com/skills/github",
+    "tags": ["github", "git", "issues", "pull-requests", "openclaw"]
+  },
+  {
+    "id": "12",
+    "slug": "summarize",
+    "name": "Summarize",
+    "description": "Summarize or extract text and transcripts from URLs, podcasts, YouTube videos, and local files. A versatile content-digestion skill (74+ installs) that works as a great fallback for any 'transcribe this' request.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install summarize",
+    "repo_url": "https://clawhub.com/skills/summarize",
+    "tags": ["summarization", "transcription", "youtube", "podcasts", "openclaw"]
+  },
+  {
+    "id": "13",
+    "slug": "bird-twitter",
+    "name": "Bird (X/Twitter)",
+    "description": "X/Twitter CLI for reading timelines, searching tweets, posting, and engagement — all via cookies-based auth. Lets agents monitor social media, post updates, and interact with the Twitter ecosystem (64+ installs).",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install bird",
+    "repo_url": "https://clawhub.com/skills/bird",
+    "tags": ["twitter", "x", "social-media", "posting", "openclaw"]
+  },
+  {
+    "id": "14",
+    "slug": "notion-skill",
+    "name": "Notion",
+    "description": "Notion API integration for creating and managing pages, databases, and blocks. Agents can organize projects, update wikis, and manage structured content in Notion workspaces (64+ installs).",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install notion",
+    "repo_url": "https://clawhub.com/skills/notion",
+    "tags": ["notion", "productivity", "databases", "wiki", "openclaw"]
+  },
+  {
+    "id": "15",
+    "slug": "nano-banana-pro",
+    "name": "Nano Banana Pro (Image Gen)",
+    "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro). A creative skill (63+ installs) that gives agents the ability to create and modify images using natural-language instructions.",
+    "author": "ClawHub Community",
+    "install_cmd": "openclaw skill install nano-banana-pro",
+    "repo_url": "https://clawhub.com/skills/nano-banana-pro",
+    "tags": ["image-generation", "gemini", "creative", "ai-art", "openclaw"]
+  }
+]
