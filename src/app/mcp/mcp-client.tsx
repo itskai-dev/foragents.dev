@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/copy-button";
 import { RunInReflecttButton } from "@/components/RunInReflecttButton";
+import Link from "next/link";
 
 const categoryStyles: Record<McpServerCategory, { bg: string; text: string; border: string }> = {
   "file-system": { bg: "bg-[#F59E0B]/10", text: "text-[#F59E0B]", border: "border-[#F59E0B]/20" },
@@ -184,7 +185,9 @@ export function McpHubClient({ servers }: { servers: McpServer[] }) {
                       ) : null}
                     </div>
                     <CardTitle className="text-lg group-hover:text-cyan transition-colors">
-                      {server.name}
+                      <Link href={`/mcp/${server.slug}`} className="hover:underline">
+                        {server.name}
+                      </Link>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -205,12 +208,19 @@ export function McpHubClient({ servers }: { servers: McpServer[] }) {
                       />
                     </div>
 
-                    <RunInReflecttButton
-                      skillSlug={server.slug}
-                      name={server.name}
-                      size="xs"
-                      className="mb-3"
-                    />
+                    <div className="mb-3 flex items-center gap-2 flex-wrap">
+                      <RunInReflecttButton
+                        skillSlug={server.slug}
+                        name={server.name}
+                        size="xs"
+                      />
+                      <Link
+                        href={`/mcp/${server.slug}`}
+                        className="text-xs font-mono text-cyan hover:underline"
+                      >
+                        Details →
+                      </Link>
+                    </div>
 
                     <div className="flex flex-wrap gap-1">
                       {compat.map((tag) => (
@@ -268,7 +278,9 @@ export function McpHubClient({ servers }: { servers: McpServer[] }) {
                     ) : null}
                   </div>
                   <CardTitle className="text-lg group-hover:text-cyan transition-colors">
-                    {server.name}
+                    <Link href={`/mcp/${server.slug}`} className="hover:underline">
+                      {server.name}
+                    </Link>
                   </CardTitle>
                 </CardHeader>
 
@@ -290,12 +302,19 @@ export function McpHubClient({ servers }: { servers: McpServer[] }) {
                     />
                   </div>
 
-                  <RunInReflecttButton
-                    skillSlug={server.slug}
-                    name={server.name}
-                    size="xs"
-                    className="mb-3"
-                  />
+                  <div className="mb-3 flex items-center gap-2 flex-wrap">
+                    <RunInReflecttButton
+                      skillSlug={server.slug}
+                      name={server.name}
+                      size="xs"
+                    />
+                    <Link
+                      href={`/mcp/${server.slug}`}
+                      className="text-xs font-mono text-cyan hover:underline"
+                    >
+                      Details →
+                    </Link>
+                  </div>
 
                   <div className="flex flex-wrap gap-1">
                     {compat.map((tag) => (
