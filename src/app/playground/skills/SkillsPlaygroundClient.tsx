@@ -547,6 +547,7 @@ export default function SkillsPlaygroundClient({
   const [outputTab, setOutputTab] = useState<string>("terminal");
 
   const [history, setHistory] = useState<ExecutionHistoryItem[]>(() => initialHistory);
+  const [availableTemplates, setAvailableTemplates] = useState<PlaygroundTemplate[]>(templates);
 
   const [copiedResult, setCopiedResult] = useState(false);
   const [copiedShareLink, setCopiedShareLink] = useState(false);
@@ -586,6 +587,39 @@ export default function SkillsPlaygroundClient({
   }, [terminalLines]);
 
   // Initial config + history are loaded via getInitialConfig/getInitialHistory in useState initializers.
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadPersistentData() {
+      try {
+        const response = await fetch("/api/playground/skills", { cache: "no-store" });
+        if (!response.ok) return;
+
+        const payload = (await response.json()) as {
+          templates?: PlaygroundTemplate[];
+          runs?: ExecutionHistoryItem[];
+        };
+
+        if (!mounted) return;
+
+        if (Array.isArray(payload.templates) && payload.templates.length > 0) {
+          setAvailableTemplates(payload.templates);
+        }
+
+        if (Array.isArray(payload.runs)) {
+          setHistory(payload.runs.slice(0, 50));
+        }
+      } catch {
+        // ignore network failures and fall back to local state
+      }
+    }
+
+    loadPersistentData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Persist config.
   useEffect(() => {
@@ -606,7 +640,7 @@ export default function SkillsPlaygroundClient({
   }, [history]);
 
   const applyTemplate = (templateId: string) => {
-    const template = templates.find((t) => t.id === templateId);
+    const template = availableTemplates.find((t) => t.id === templateId);
     if (!template) return;
 
     if (skills.some((s) => s.slug === template.skillSlug)) setSelectedSkillSlug(template.skillSlug);
@@ -623,6 +657,20 @@ export default function SkillsPlaygroundClient({
     activeRunTokenRef.current += 1;
     setIsRunning(false);
     setTerminalLines((prev) => [...prev, `${nowStamp()} WARN  runner  cancelled by user`]);
+  };
+
+  const persistRun = async (run: ExecutionHistoryItem) => {
+    try {
+      await fetch("/api/playground/skills", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ run }),
+      });
+    } catch {
+      // ignore
+    }
   };
 
   const runSimulation = async () => {
@@ -655,9 +703,17 @@ export default function SkillsPlaygroundClient({
     for (const step of script) {
       // Cancelled or superseded.
       if (activeRunTokenRef.current !== runToken) {
+        const cancelledAt = new Date().toISOString();
+        const cancelledRun: ExecutionHistoryItem = {
+          ...runningItem,
+          status: "cancelled",
+          finishedAtIso: cancelledAt,
+        };
+
         setHistory((prev) =>
-          prev.map((h) => (h.id === historyId ? { ...h, status: "cancelled", finishedAtIso: new Date().toISOString() } : h))
+          prev.map((h) => (h.id === historyId ? cancelledRun : h))
         );
+        void persistRun(cancelledRun);
         return;
       }
 
@@ -673,9 +729,16 @@ export default function SkillsPlaygroundClient({
     const rendered = JSON.stringify(mockResult, null, 2);
 
     if (activeRunTokenRef.current !== runToken) {
+      const cancelledRun: ExecutionHistoryItem = {
+        ...runningItem,
+        status: "cancelled",
+        finishedAtIso,
+      };
+
       setHistory((prev) =>
-        prev.map((h) => (h.id === historyId ? { ...h, status: "cancelled", finishedAtIso } : h))
+        prev.map((h) => (h.id === historyId ? cancelledRun : h))
       );
+      void persistRun(cancelledRun);
       return;
     }
 
@@ -686,19 +749,18 @@ export default function SkillsPlaygroundClient({
     setOutputTab("result");
     setIsRunning(false);
 
+    const completedRun: ExecutionHistoryItem = {
+      ...runningItem,
+      status: "success",
+      finishedAtIso,
+      terminal: finalLines.join("\n"),
+      result: rendered,
+    };
+
     setHistory((prev) =>
-      prev.map((h) =>
-        h.id === historyId
-          ? {
-              ...h,
-              status: "success",
-              finishedAtIso,
-              terminal: finalLines.join("\n"),
-              result: rendered,
-            }
-          : h
-      )
+      prev.map((h) => (h.id === historyId ? completedRun : h))
     );
+    void persistRun(completedRun);
   };
 
   const copyResult = async () => {
@@ -736,10 +798,16 @@ export default function SkillsPlaygroundClient({
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const clearHistory = () => {
+  const clearHistory = async () => {
     setHistory([]);
     try {
       localStorage.removeItem(HISTORY_STORAGE_KEY);
+    } catch {
+      // ignore
+    }
+
+    try {
+      await fetch("/api/playground/skills", { method: "DELETE" });
     } catch {
       // ignore
     }
@@ -797,7 +865,7 @@ export default function SkillsPlaygroundClient({
               </CardHeader>
               <CardContent>
                 <div className="grid sm:grid-cols-2 gap-2">
-                  {templates.slice(0, 6).map((t) => (
+                  {availableTemplates.slice(0, 6).map((t) => (
                     <button
                       key={t.id}
                       onClick={() => applyTemplate(t.id)}

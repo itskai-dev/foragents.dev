@@ -1,6 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -29,11 +30,6 @@ import {
   Clock,
 } from "lucide-react";
 
-// Import data
-import skillsData from "@/data/skills.json";
-import sandboxRunsData from "@/data/sandbox-runs.json";
-
-// Types
 interface Skill {
   id: string;
   slug: string;
@@ -74,7 +70,13 @@ const models = [
 ];
 
 export default function SandboxPage() {
-  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+  const [skills, setSkills] = useState<Skill[]>([]);
+  const [selectedSkillId, setSelectedSkillId] = useState<string>("");
+  const selectedSkill = useMemo(
+    () => skills.find((skill) => skill.id === selectedSkillId) ?? null,
+    [skills, selectedSkillId]
+  );
+
   const [config, setConfig] = useState<Config>({
     model: "claude-sonnet-4-5",
     temperature: 0.7,
@@ -83,14 +85,44 @@ export default function SandboxPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [currentOutput, setCurrentOutput] = useState("");
   const [executionHistory, setExecutionHistory] = useState<SandboxRun[]>([]);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
-  // Load execution history on mount
   useEffect(() => {
-    setExecutionHistory(sandboxRunsData.slice(0, 5) as SandboxRun[]);
+    let mounted = true;
+
+    async function loadData() {
+      try {
+        const response = await fetch("/api/playground/sandbox", { cache: "no-store" });
+        if (!response.ok) throw new Error(`Failed to load sandbox data (${response.status})`);
+
+        const payload = (await response.json()) as {
+          skills?: Skill[];
+          runs?: SandboxRun[];
+        };
+
+        if (!mounted) return;
+
+        const nextSkills = Array.isArray(payload.skills) ? payload.skills : [];
+        const nextRuns = Array.isArray(payload.runs) ? payload.runs : [];
+
+        setSkills(nextSkills);
+        setExecutionHistory(nextRuns.slice(0, 5));
+        setSelectedSkillId((current) => current || nextSkills[0]?.id || "");
+        setLoadError(null);
+      } catch (error) {
+        if (!mounted) return;
+        const message = error instanceof Error ? error.message : "Failed to load sandbox data";
+        setLoadError(message);
+      }
+    }
+
+    loadData();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  // Auto-scroll output
   useEffect(() => {
     if (outputRef.current) {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
@@ -103,44 +135,45 @@ export default function SandboxPage() {
     setIsRunning(true);
     setCurrentOutput("");
 
-    // Simulate streaming output
-    const mockOutput = generateMockOutput(selectedSkill);
-    const lines = mockOutput.split("\n");
+    try {
+      const response = await fetch("/api/playground/sandbox", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          skillId: selectedSkill.id,
+          model: config.model,
+          temperature: config.temperature,
+          timeout: config.timeout,
+        }),
+      });
 
-    for (let i = 0; i < lines.length; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 100));
-      setCurrentOutput((prev) => prev + lines[i] + "\n");
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => ({}))) as { error?: string };
+        throw new Error(payload.error || `Failed to run sandbox skill (${response.status})`);
+      }
+
+      const payload = (await response.json()) as { run?: SandboxRun };
+      const run = payload.run;
+
+      if (!run) {
+        throw new Error("Sandbox API returned an empty run");
+      }
+
+      const lines = run.output.split("\n");
+      for (let i = 0; i < lines.length; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 100 + Math.random() * 100));
+        setCurrentOutput((prev) => `${prev}${lines[i]}\n`);
+      }
+
+      setExecutionHistory((prev) => [run, ...prev.filter((item) => item.id !== run.id)].slice(0, 5));
+      setLoadError(null);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to execute run";
+      setCurrentOutput(`❌ ${message}\n`);
+      setLoadError(message);
+    } finally {
+      setIsRunning(false);
     }
-
-    // Add to history
-    const newRun: SandboxRun = {
-      id: `run-${Date.now()}`,
-      skillId: selectedSkill.id,
-      skillName: selectedSkill.name,
-      timestamp: new Date().toISOString(),
-      status: Math.random() > 0.1 ? "success" : "error",
-      model: config.model,
-      temperature: config.temperature,
-      timeout: config.timeout,
-      output: mockOutput,
-    };
-
-    setExecutionHistory((prev) => [newRun, ...prev.slice(0, 4)]);
-    setIsRunning(false);
-  };
-
-  const generateMockOutput = (skill: Skill): string => {
-    const outputs: Record<string, string> = {
-      "1": `Initializing ${skill.name}...\n\nSetting up memory layers:\n✓ Episodic memory (daily logs)\n✓ Semantic memory (knowledge base)\n✓ Procedural memory (how-to guides)\n\nCreating directory structure...\n✓ memory/\n✓ memory/daily/\n✓ memory/procedures/\n\nCopying templates...\n✓ MEMORY.md\n✓ memory/${new Date().toISOString().split('T')[0]}.md\n\n✅ Memory system initialized successfully!\n\nAgent can now:\n- Store daily experiences\n- Build long-term knowledge\n- Learn procedures from outcomes`,
-      "8": `Connecting to Google Workspace...\n\n📧 Gmail API: Authenticating...\n✓ Connected (scope: gmail.readonly)\n✓ Unread messages: ${Math.floor(Math.random() * 50)}\n\n📅 Calendar API: Authenticating...\n✓ Connected (scope: calendar.readonly)\n✓ Today's events: ${Math.floor(Math.random() * 8)}\n\n📁 Drive API: Authenticating...\n✓ Connected (scope: drive.file)\n✓ Storage used: ${(Math.random() * 10).toFixed(1)} GB / 15 GB\n\n✅ All Google Workspace services operational!\n\nSkill is ready to:\n- Read and send emails\n- Manage calendar events\n- Access and organize files`,
-      "9": `Launching coding agent subprocess...\n\n🔧 Environment check:\n✓ Node.js v25.5.0\n✓ TypeScript 5.6.3\n✓ Git 2.47.1\n\n🤖 Spawning coding agent:\n✓ Agent model: ${config.model}\n✓ Temperature: ${config.temperature}\n✓ Max timeout: ${config.timeout}s\n\n📝 Agent capabilities:\n- Code generation\n- Bug fixing\n- Refactoring\n- Test writing\n\n✅ Coding agent ready!\n\nType your coding task to begin...`,
-      "10": `Fetching weather data...\n\n🌍 Location: Auto-detected (San Francisco, CA)\n\n⛅ Current Conditions:\n   Temperature: ${Math.floor(Math.random() * 30 + 50)}°F\n   Conditions: ${["Sunny", "Partly Cloudy", "Cloudy", "Light Rain"][Math.floor(Math.random() * 4)]}\n   Humidity: ${Math.floor(Math.random() * 40 + 40)}%\n   Wind: ${Math.floor(Math.random() * 15 + 5)} mph\n\n📅 5-Day Forecast:\n   Mon: ⛅ 62°F / 52°F\n   Tue: 🌧️  59°F / 50°F\n   Wed: ☁️  61°F / 51°F\n   Thu: ☀️  65°F / 53°F\n   Fri: ☀️  67°F / 54°F\n\n✅ Weather data retrieved successfully!`,
-    };
-
-    return (
-      outputs[skill.id] ||
-      `Executing ${skill.name}...\n\n✓ Skill loaded\n✓ Dependencies verified\n✓ Configuration applied\n\nRunning skill with:\n- Model: ${config.model}\n- Temperature: ${config.temperature}\n- Timeout: ${config.timeout}s\n\n${skill.description}\n\n✅ Skill execution completed successfully!\n\nInstall command:\n${skill.install_cmd}`
-    );
   };
 
   const formatTimestamp = (timestamp: string) => {
@@ -155,8 +188,6 @@ export default function SandboxPage() {
     return `${Math.floor(diffMins / 1440)}d ago`;
   };
 
-  const skills = skillsData as Skill[];
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
       <div className="mb-8">
@@ -166,8 +197,13 @@ export default function SandboxPage() {
         </p>
       </div>
 
+      {loadError ? (
+        <div className="mb-6 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">
+          {loadError}
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Panel - Skill Selector */}
         <div className="lg:col-span-3">
           <Card>
             <CardHeader>
@@ -178,8 +214,7 @@ export default function SandboxPage() {
               <Select
                 value={selectedSkill?.id}
                 onValueChange={(id) => {
-                  const skill = skills.find((s) => s.id === id);
-                  setSelectedSkill(skill || null);
+                  setSelectedSkillId(id);
                   setCurrentOutput("");
                 }}
               >
@@ -234,7 +269,6 @@ export default function SandboxPage() {
           </Card>
         </div>
 
-        {/* Center Panel - Terminal Output */}
         <div className="lg:col-span-6">
           <Card className="h-full flex flex-col">
             <CardHeader>
@@ -269,7 +303,6 @@ export default function SandboxPage() {
           </Card>
         </div>
 
-        {/* Right Panel - Configuration */}
         <div className="lg:col-span-3">
           <Card>
             <CardHeader>
@@ -337,7 +370,7 @@ export default function SandboxPage() {
                   onChange={(e) =>
                     setConfig({
                       ...config,
-                      timeout: parseInt(e.target.value),
+                      timeout: parseInt(e.target.value, 10),
                     })
                   }
                   className="w-full"
@@ -362,7 +395,6 @@ export default function SandboxPage() {
         </div>
       </div>
 
-      {/* Execution History */}
       <div className="mt-6">
         <Card>
           <CardHeader>

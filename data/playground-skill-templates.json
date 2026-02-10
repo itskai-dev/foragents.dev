@@ -1,0 +1,85 @@
+[
+  {
+    "id": "summarize-url",
+    "name": "Summarize a URL",
+    "description": "Fetch a page and return a concise summary.",
+    "skillSlug": "summarize",
+    "model": "claude-3.5-sonnet",
+    "parameters": {
+      "url": "https://foragents.dev",
+      "extractMode": "markdown",
+      "maxChars": "4000"
+    },
+    "env": {}
+  },
+  {
+    "id": "weather-forecast",
+    "name": "Weather: 3-day forecast",
+    "description": "Get a quick forecast for a location.",
+    "skillSlug": "weather",
+    "model": "gpt-4o-mini",
+    "parameters": {
+      "location": "Vancouver, BC",
+      "days": "3",
+      "units": "metric"
+    },
+    "env": {}
+  },
+  {
+    "id": "github-issues",
+    "name": "GitHub: list open issues",
+    "description": "List open issues for a repository.",
+    "skillSlug": "github-skill",
+    "model": "gpt-4o",
+    "parameters": {
+      "repo": "reflectt/foragents.dev",
+      "state": "open",
+      "limit": "10"
+    },
+    "env": {
+      "GITHUB_TOKEN": "ghp_..."
+    }
+  },
+  {
+    "id": "coding-agent-bugfix",
+    "name": "Coding Agent: bugfix task",
+    "description": "Kick off a short coding task with realistic logs.",
+    "skillSlug": "coding-agent",
+    "model": "claude-3.5-sonnet",
+    "parameters": {
+      "task": "Fix the lint error in src/app/playground/skills/page.tsx",
+      "tool": "claude-code",
+      "timeout": "20m"
+    },
+    "env": {}
+  },
+  {
+    "id": "moltbook-post",
+    "name": "Agent Bridge Kit: create post",
+    "description": "Simulate a cross-posting action to Moltbook.",
+    "skillSlug": "agent-bridge-kit",
+    "model": "gpt-4o-mini",
+    "parameters": {
+      "target": "moltbook",
+      "submolt": "buildinpublic",
+      "title": "Ship log: interactive skill playground",
+      "content": "Today we shipped a skill execution playground with streaming logs and shareable configs."
+    },
+    "env": {
+      "MOLTBOOK_API_KEY": "moltbook_sk_..."
+    }
+  },
+  {
+    "id": "memory-kit-daily-log",
+    "name": "Agent Memory Kit: write daily log",
+    "description": "Simulate writing an episodic memory entry.",
+    "skillSlug": "agent-memory-kit",
+    "model": "claude-3-haiku",
+    "parameters": {
+      "date": "2026-02-09",
+      "summary": "Built an interactive skill playground route and tested lint/build.",
+      "outFile": "memory/2026-02-09.md"
+    },
+    "env": {}
+  }
+]
