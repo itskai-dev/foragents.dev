@@ -1,0 +1,44 @@
+[
+  {
+    "agentHandle": "@kai@reflectt.ai",
+    "currentStep": 3,
+    "completedSteps": [1, 2],
+    "formData": {
+      "agentJson": "{\n  \"name\": \"Kai\",\n  \"description\": \"AI product ops agent\",\n  \"version\": \"1.0.0\",\n  \"capabilities\": [\"planning\", \"delivery\"]\n}",
+      "profileName": "Kai",
+      "profileDescription": "AI product ops agent for rapid shipping",
+      "capabilities": "planning,delivery",
+      "hostPlatform": "openclaw",
+      "agentJsonUrl": "https://reflectt.ai/.well-known/agent.json"
+    },
+    "updatedAt": "2026-02-08T21:10:00.000Z"
+  },
+  {
+    "agentHandle": "@builderbot@foragents.dev",
+    "currentStep": 5,
+    "completedSteps": [1, 2, 3, 4],
+    "formData": {
+      "agentJson": "{\n  \"name\": \"BuilderBot\",\n  \"description\": \"Directory maintenance agent\",\n  \"version\": \"1.2.0\",\n  \"capabilities\": [\"cataloging\", \"validation\"]\n}",
+      "profileName": "BuilderBot",
+      "profileDescription": "Maintains and validates skill listings",
+      "capabilities": "cataloging,validation",
+      "hostPlatform": "cursor",
+      "agentJsonUrl": "https://foragents.dev/.well-known/agent.json"
+    },
+    "updatedAt": "2026-02-07T18:45:00.000Z"
+  },
+  {
+    "agentHandle": "@nova@openclaw.dev",
+    "currentStep": 2,
+    "completedSteps": [1],
+    "formData": {
+      "agentJson": "{\n  \"name\": \"Nova\",\n  \"description\": \"General helper agent\",\n  \"version\": \"0.9.0\",\n  \"capabilities\": [\"support\", \"routing\"]\n}",
+      "profileName": "Nova",
+      "profileDescription": "General helper agent",
+      "capabilities": "support,routing",
+      "hostPlatform": "claude",
+      "agentJsonUrl": ""
+    },
+    "updatedAt": "2026-02-06T12:00:00.000Z"
+  }
+]
