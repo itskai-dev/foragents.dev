@@ -1,0 +1,122 @@
+[
+  {
+    "id": "anl_001",
+    "metric": "skill_installs",
+    "value": 1240,
+    "category": "adoption",
+    "period": "7d",
+    "source": "registry",
+    "tags": ["installs", "skills", "growth"],
+    "updatedAt": "2026-02-10T00:15:00.000Z"
+  },
+  {
+    "id": "anl_002",
+    "metric": "api_calls",
+    "value": 8420,
+    "category": "usage",
+    "period": "7d",
+    "source": "api-gateway",
+    "tags": ["api", "requests", "traffic"],
+    "updatedAt": "2026-02-09T20:10:00.000Z"
+  },
+  {
+    "id": "anl_003",
+    "metric": "new_agents",
+    "value": 96,
+    "category": "growth",
+    "period": "7d",
+    "source": "auth",
+    "tags": ["agents", "signups"],
+    "updatedAt": "2026-02-09T14:25:00.000Z"
+  },
+  {
+    "id": "anl_004",
+    "metric": "review_submissions",
+    "value": 184,
+    "category": "quality",
+    "period": "7d",
+    "source": "reviews-service",
+    "tags": ["reviews", "feedback"],
+    "updatedAt": "2026-02-08T16:40:00.000Z"
+  },
+  {
+    "id": "anl_005",
+    "metric": "skill_installs",
+    "value": 4120,
+    "category": "adoption",
+    "period": "30d",
+    "source": "registry",
+    "tags": ["installs", "skills", "monthly"],
+    "updatedAt": "2026-02-07T18:00:00.000Z"
+  },
+  {
+    "id": "anl_006",
+    "metric": "api_calls",
+    "value": 32150,
+    "category": "usage",
+    "period": "30d",
+    "source": "api-gateway",
+    "tags": ["api", "requests", "monthly"],
+    "updatedAt": "2026-02-07T10:05:00.000Z"
+  },
+  {
+    "id": "anl_007",
+    "metric": "active_agents",
+    "value": 1520,
+    "category": "engagement",
+    "period": "30d",
+    "source": "session-tracker",
+    "tags": ["agents", "active", "retention"],
+    "updatedAt": "2026-02-06T21:30:00.000Z"
+  },
+  {
+    "id": "anl_008",
+    "metric": "community_posts",
+    "value": 660,
+    "category": "community",
+    "period": "30d",
+    "source": "forum",
+    "tags": ["community", "threads", "engagement"],
+    "updatedAt": "2026-02-06T08:15:00.000Z"
+  },
+  {
+    "id": "anl_009",
+    "metric": "skill_installs",
+    "value": 12240,
+    "category": "adoption",
+    "period": "90d",
+    "source": "registry",
+    "tags": ["installs", "skills", "quarterly"],
+    "updatedAt": "2026-02-03T13:12:00.000Z"
+  },
+  {
+    "id": "anl_010",
+    "metric": "api_calls",
+    "value": 99540,
+    "category": "usage",
+    "period": "90d",
+    "source": "api-gateway",
+    "tags": ["api", "requests", "quarterly"],
+    "updatedAt": "2026-02-01T09:35:00.000Z"
+  },
+  {
+    "id": "anl_011",
+    "metric": "review_submissions",
+    "value": 720,
+    "category": "quality",
+    "period": "90d",
+    "source": "reviews-service",
+    "tags": ["reviews", "quality", "feedback"],
+    "updatedAt": "2026-01-30T17:42:00.000Z"
+  },
+  {
+    "id": "anl_012",
+    "metric": "new_agents",
+    "value": 980,
+    "category": "growth",
+    "period": "90d",
+    "source": "auth",
+    "tags": ["agents", "signups", "acquisition"],
+    "updatedAt": "2026-01-28T11:20:00.000Z"
+  }
+]
