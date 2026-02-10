@@ -295,6 +295,38 @@ beforeAll(() => {
     if (url.includes('/api/status')) {
       return { ok: true, json: async () => ({ services: [], overall: 'operational' }) } as Response;
     }
+    if (url.includes('/api/governance')) {
+      return {
+        ok: true,
+        json: async () => ({
+          overview: {
+            title: 'Agent Governance Framework',
+            description: 'Best-practice governance for autonomous agents.',
+            whyItMatters: ['Accountability', 'Transparency', 'Safety'],
+          },
+          pillars: [],
+          readinessChecklist: [],
+          maturityCriteria: [],
+        }),
+      } as Response;
+    }
+    if (url.includes('/api/roadmap/')) {
+      return {
+        ok: true,
+        json: async () => ({
+          item: {
+            id: 'real-time-agent-monitoring',
+            title: 'Real-time Agent Monitoring',
+            description: 'Monitor agent activity in real-time.',
+            status: 'planned',
+            quarter: 'Q2 2026',
+            category: 'platform',
+            votes: 42,
+            updatedAt: '2026-02-01',
+          },
+        }),
+      } as Response;
+    }
 
     return { ok: true, json: async () => ({}) } as Response;
   }) as jest.Mock;
@@ -328,7 +360,8 @@ const MISSING_PAGES: Array<{ name: string; importPath: string }> = [
   { name: 'Badges', importPath: '@/app/badges/page' },
   { name: 'Blog', importPath: '@/app/blog/page' },
   { name: 'Bookmarks', importPath: '@/app/bookmarks/page' },
-  { name: 'Brand', importPath: '@/app/brand/page' },
+  // Brand page is now a redirect to /brand-kit; tested separately below
+  // { name: 'Brand', importPath: '@/app/brand/page' },
   { name: 'Changelog', importPath: '@/app/changelog/page' },
   { name: 'Collections index', importPath: '@/app/collections/page' },
   { name: 'Compare', importPath: '@/app/compare/page' },
@@ -382,6 +415,13 @@ const MISSING_PAGES: Array<{ name: string; importPath: string }> = [
 describe('Render tests for previously-untested pages (Issue #151)', () => {
   test.each(MISSING_PAGES)('$name renders without crashing', async ({ importPath }) => {
     await renderPageModule(importPath);
+  });
+
+  test('Brand redirects to /brand-kit', async () => {
+    const mod: Record<string, unknown> = await import('@/app/brand/page');
+    const Page = mod.default;
+    expect(Page).toBeTruthy();
+    expect(() => render(React.createElement(Page))).toThrow();
   });
 
   test('Getting Started legacy path redirects', async () => {

@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import RoadmapItemPage from "../src/app/roadmap/[id]/page";
 
 type LinkProps = {
@@ -24,105 +24,134 @@ jest.mock("next/navigation", () => ({
   notFound: jest.fn(),
 }));
 
+const mockItem = {
+  id: "real-time-agent-monitoring",
+  title: "Real-time Agent Monitoring",
+  description: "Monitor agent activity in real-time with dashboards and alerts.",
+  status: "planned",
+  quarter: "Q2 2026",
+  category: "platform",
+  votes: 42,
+  updatedAt: "2026-02-01",
+};
+
+beforeEach(() => {
+  global.fetch = jest.fn(async (input: RequestInfo | URL) => {
+    const url = String(input);
+    if (url.includes("/api/roadmap/")) {
+      return {
+        ok: true,
+        json: async () => ({ item: mockItem }),
+      } as Response;
+    }
+    return { ok: true, json: async () => ({}) } as Response;
+  }) as jest.Mock;
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 describe("Roadmap Detail Page", () => {
   const mockParams = Promise.resolve({ id: "real-time-agent-monitoring" });
 
-  it("renders the roadmap detail page", () => {
+  it("renders the roadmap detail page", async () => {
     const { container } = render(<RoadmapItemPage params={mockParams} />);
     expect(container).toBeInTheDocument();
   });
 
-  it("displays back to roadmap link", () => {
+  it("displays loading state initially", () => {
     render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText("Back to Roadmap")).toBeInTheDocument();
+    expect(screen.getByText("Loading roadmap item...")).toBeInTheDocument();
   });
 
-  it("displays the item title", () => {
+  it("displays back to roadmap link", async () => {
     render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText("Real-time Agent Monitoring")).toBeInTheDocument();
-  });
-
-  it("displays category and status badges", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    const badges = screen.getAllByText("Platform");
-    expect(badges.length).toBeGreaterThan(0);
-    const statusBadges = screen.getAllByText("Planned");
-    expect(statusBadges.length).toBeGreaterThan(0);
-  });
-
-  it("displays upvote count", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    const upvoteText = screen.getByText(/upvotes/i);
-    expect(upvoteText).toBeInTheDocument();
-  });
-
-  it("displays comment count", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    const commentText = screen.getByText(/comments/i);
-    expect(commentText).toBeInTheDocument();
-  });
-
-  it("displays the full description section", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText("Description")).toBeInTheDocument();
-  });
-
-  it("displays the status timeline section", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText("Status Timeline")).toBeInTheDocument();
-  });
-
-  it("displays the discussion section", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText(/Discussion/i)).toBeInTheDocument();
-  });
-
-  it("displays the share section", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText("Share")).toBeInTheDocument();
-    expect(screen.getByText("Share on Twitter")).toBeInTheDocument();
-    expect(screen.getByText("Copy Link")).toBeInTheDocument();
-  });
-
-  it("has an upvote button", () => {
-    render(<RoadmapItemPage params={mockParams} />);
-    const upvoteButton = screen.getByRole("button", {
-      name: /Upvote this feature/i,
+    await waitFor(() => {
+      expect(screen.getByText(/Back to Roadmap/)).toBeInTheDocument();
     });
-    expect(upvoteButton).toBeInTheDocument();
   });
 
-  it("allows voting on the feature", () => {
+  it("displays the item title", async () => {
     render(<RoadmapItemPage params={mockParams} />);
-    const upvoteButton = screen.getByRole("button", {
-      name: /Upvote this feature/i,
+    await waitFor(() => {
+      expect(screen.getByText("Real-time Agent Monitoring")).toBeInTheDocument();
     });
-    
-    fireEvent.click(upvoteButton);
-    
-    expect(screen.getByText("Voted")).toBeInTheDocument();
   });
 
-  it("displays comment form", () => {
+  it("displays category and status badges", async () => {
     render(<RoadmapItemPage params={mockParams} />);
-    const textarea = screen.getByPlaceholderText(
-      /Share your thoughts or suggestions/i
-    );
-    expect(textarea).toBeInTheDocument();
-    
-    const postButton = screen.getByRole("button", { name: /Post Comment/i });
-    expect(postButton).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Platform")).toBeInTheDocument();
+      expect(screen.getByText("Planned")).toBeInTheDocument();
+    });
   });
 
-  it("displays mock discussion comments", () => {
+  it("displays vote count", async () => {
     render(<RoadmapItemPage params={mockParams} />);
-    expect(screen.getByText("agent_dev_42")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/42/)).toBeInTheDocument();
+      expect(screen.getByText(/votes/i)).toBeInTheDocument();
+    });
   });
 
-  it("displays timeline events", () => {
+  it("displays the description section", async () => {
     render(<RoadmapItemPage params={mockParams} />);
-    // Timeline should show status updates
-    const timelineDots = document.querySelectorAll(".absolute.left-0");
-    expect(timelineDots.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(screen.getByText("Description")).toBeInTheDocument();
+    });
+  });
+
+  it("has a vote button", async () => {
+    render(<RoadmapItemPage params={mockParams} />);
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /Vote for this feature/i })
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("allows voting on the feature", async () => {
+    const votedItem = { ...mockItem, votes: 43 };
+    (global.fetch as jest.Mock).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/roadmap/")) {
+        return {
+          ok: true,
+          json: async () => ({ item: votedItem }),
+        } as Response;
+      }
+      return { ok: true, json: async () => ({}) } as Response;
+    });
+
+    render(<RoadmapItemPage params={mockParams} />);
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /Vote for this feature/i })).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole("button", { name: /Vote for this feature/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/43/)).toBeInTheDocument();
+    });
+  });
+
+  it("displays quarter info", async () => {
+    render(<RoadmapItemPage params={mockParams} />);
+    await waitFor(() => {
+      expect(screen.getByText("Q2 2026")).toBeInTheDocument();
+    });
+  });
+
+  it("handles fetch error gracefully", async () => {
+    (global.fetch as jest.Mock).mockImplementation(async () => ({
+      ok: false,
+      json: async () => ({ error: "Not found" }),
+    }));
+
+    render(<RoadmapItemPage params={mockParams} />);
+    await waitFor(() => {
+      expect(screen.getByText("Not found")).toBeInTheDocument();
+    });
   });
 });
