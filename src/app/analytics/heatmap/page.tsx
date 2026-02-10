@@ -1,5 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import {
   Card,
   CardContent,
@@ -7,505 +9,292 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import activityData from "@/data/activity-heatmap.json";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+type Period = "30d" | "60d" | "90d";
+type Metric = "installs" | "reviews" | "apiCalls" | "total";
+
+type HeatmapEntry = {
+  date: string;
+  installs: number;
+  reviews: number;
+  apiCalls: number;
+  totalActivity: number;
+  value: number;
+};
+
+type HeatmapResponse = {
+  period: Period;
+  metric: Metric;
+  generatedAt: string;
+  summary: {
+    days: number;
+    total: number;
+    average: number;
+    min: number;
+    max: number;
+    activeDays: number;
+    peakDate: string | null;
+    peakValue: number;
+  };
+  entries: HeatmapEntry[];
+};
+
+const PERIOD_OPTIONS: { value: Period; label: string }[] = [
+  { value: "30d", label: "Last 30 days" },
+  { value: "60d", label: "Last 60 days" },
+  { value: "90d", label: "Last 90 days" },
+];
+
+const METRIC_OPTIONS: { value: Metric; label: string }[] = [
+  { value: "total", label: "Total Activity" },
+  { value: "installs", label: "Installs" },
+  { value: "reviews", label: "Reviews" },
+  { value: "apiCalls", label: "API Calls" },
+];
+
+function chunk<T>(arr: T[], size: number): T[][] {
+  const result: T[][] = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+}
+
+function getLevel(value: number, max: number): number {
+  if (!value || max <= 0) return 0;
+  const ratio = value / max;
+  if (ratio <= 0.25) return 1;
+  if (ratio <= 0.5) return 2;
+  if (ratio <= 0.75) return 3;
+  return 4;
+}
+
+function levelClass(level: number): string {
+  switch (level) {
+    case 1:
+      return "bg-cyan/25";
+    case 2:
+      return "bg-cyan/45";
+    case 3:
+      return "bg-cyan/70";
+    case 4:
+      return "bg-cyan";
+    default:
+      return "bg-white/5";
+  }
+}
 
 export default function ActivityHeatmapPage() {
-  // Generate 52-week grid starting from today and going back
-  const generateHeatmapData = () => {
-    const weeks: { date: string; count: number; level: number }[][] = [];
-    const today = new Date("2025-02-10"); // Using the latest date from our data
-    
-    // Start from Sunday of the week containing the oldest date
-    const startDate = new Date(today);
-    startDate.setDate(startDate.getDate() - 364); // Go back 52 weeks
-    
-    // Find the previous Sunday
-    const dayOfWeek = startDate.getDay();
-    startDate.setDate(startDate.getDate() - dayOfWeek);
-    
-    // Create a map of dates to activity
-    const activityMap = new Map(
-      activityData.dailyActivity.map((d) => [d.date, d])
-    );
-    
-    // Generate 52 weeks of data
-    for (let week = 0; week < 52; week++) {
-      const weekData: { date: string; count: number; level: number }[] = [];
-      for (let day = 0; day < 7; day++) {
-        const currentDate = new Date(startDate);
-        currentDate.setDate(startDate.getDate() + week * 7 + day);
-        
-        const dateStr = currentDate.toISOString().split("T")[0];
-        const activity = activityMap.get(dateStr) || {
-          date: dateStr,
-          count: 0,
-          level: 0,
-        };
-        
-        weekData.push(activity);
+  const [period, setPeriod] = useState<Period>("90d");
+  const [metric, setMetric] = useState<Metric>("total");
+  const [data, setData] = useState<HeatmapResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadData() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(
+          `/api/analytics/heatmap?period=${period}&metric=${metric}`,
+          { cache: "no-store", signal: controller.signal }
+        );
+
+        if (!res.ok) {
+          throw new Error(`Failed to load heatmap (${res.status})`);
+        }
+
+        const json = (await res.json()) as HeatmapResponse;
+        setData(json);
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          setError("Couldn't load activity heatmap data.");
+        }
+      } finally {
+        setLoading(false);
       }
-      weeks.push(weekData);
     }
-    
-    return weeks;
-  };
 
-  const heatmapWeeks = generateHeatmapData();
-  const maxHourlyCount = Math.max(...activityData.hourlyActivity.map((h) => h.count));
-  const maxSkillCount = Math.max(...activityData.topSkills.map((s) => s.count));
+    loadData();
+    return () => controller.abort();
+  }, [period, metric]);
 
-  // Get color class based on activity level
-  const getLevelColor = (level: number) => {
-    switch (level) {
-      case 0:
-        return "bg-white/5";
-      case 1:
-        return "bg-cyan/20";
-      case 2:
-        return "bg-cyan/40";
-      case 3:
-        return "bg-cyan/60";
-      case 4:
-        return "bg-cyan";
-      default:
-        return "bg-white/5";
+  const heatmapWeeks = useMemo(() => {
+    if (!data?.entries.length) return [] as { date: string; entry: HeatmapEntry | null }[][];
+
+    const entryMap = new Map(data.entries.map((entry) => [entry.date, entry]));
+    const firstDate = new Date(`${data.entries[0].date}T00:00:00.000Z`);
+    const lastDate = new Date(`${data.entries[data.entries.length - 1].date}T00:00:00.000Z`);
+
+    const gridStart = new Date(firstDate);
+    gridStart.setUTCDate(gridStart.getUTCDate() - gridStart.getUTCDay());
+
+    const gridEnd = new Date(lastDate);
+    gridEnd.setUTCDate(gridEnd.getUTCDate() + (6 - gridEnd.getUTCDay()));
+
+    const cells: { date: string; entry: HeatmapEntry | null }[] = [];
+
+    for (let d = new Date(gridStart); d <= gridEnd; d.setUTCDate(d.getUTCDate() + 1)) {
+      const date = d.toISOString().slice(0, 10);
+      cells.push({
+        date,
+        entry: entryMap.get(date) ?? null,
+      });
     }
-  };
+
+    return chunk(cells, 7);
+  }, [data]);
 
   return (
     <div className="min-h-screen">
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-cyan/5 rounded-full blur-[160px]" />
-          <div className="absolute top-1/3 left-1/3 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple/3 rounded-full blur-[120px]" />
-        </div>
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <h1 className="text-4xl md:text-5xl font-bold mb-3">📅 Activity Heatmap</h1>
+        <p className="text-muted-foreground text-lg">
+          Calendar-style view of real activity metrics over time.
+        </p>
+      </section>
 
-        <div className="relative max-w-5xl mx-auto px-4 py-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            📅 Agent Activity Heatmap
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Visual insights into when agents are most active and productive
-          </p>
+      <section className="max-w-6xl mx-auto px-4 pb-4">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <Select value={period} onValueChange={(value) => setPeriod(value as Period)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select period" />
+            </SelectTrigger>
+            <SelectContent>
+              {PERIOD_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select value={metric} onValueChange={(value) => setMetric(value as Metric)}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select metric" />
+            </SelectTrigger>
+            <SelectContent>
+              {METRIC_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </section>
 
-      {/* Summary Stats Cards */}
-      <section className="max-w-5xl mx-auto px-4 py-8">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <section className="max-w-6xl mx-auto px-4 pb-6">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-cyan">
-                {activityData.summary.totalOperations.toLocaleString()}
+            <CardHeader className="pb-2">
+              <CardDescription>Total</CardDescription>
+              <CardTitle className="text-3xl text-cyan">
+                {data?.summary.total.toLocaleString() ?? "—"}
               </CardTitle>
-              <CardDescription>Total Operations</CardDescription>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Past 365 days</p>
-            </CardContent>
           </Card>
-
           <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-purple">
-                {activityData.summary.avgPerDay}
-              </CardTitle>
-              <CardDescription>Average Per Day</CardDescription>
+            <CardHeader className="pb-2">
+              <CardDescription>Daily Average</CardDescription>
+              <CardTitle className="text-3xl text-purple">{data?.summary.average ?? "—"}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Daily operations</p>
-            </CardContent>
           </Card>
-
           <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-green">
-                {activityData.streaks.current} days
-              </CardTitle>
-              <CardDescription>Current Streak</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Longest: {activityData.streaks.longest} days
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="text-3xl font-bold text-yellow">
-                {activityData.streaks.totalActiveDays}
-              </CardTitle>
+            <CardHeader className="pb-2">
               <CardDescription>Active Days</CardDescription>
+              <CardTitle className="text-3xl text-green">{data?.summary.activeDays ?? "—"}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">Out of 365 days</p>
-            </CardContent>
+          </Card>
+          <Card className="bg-card/50 border-white/5">
+            <CardHeader className="pb-2">
+              <CardDescription>Peak Day</CardDescription>
+              <CardTitle className="text-xl text-yellow">
+                {data?.summary.peakDate ?? "—"}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">{data?.summary.peakValue ?? 0} events</p>
+            </CardHeader>
           </Card>
         </div>
       </section>
 
-      <Separator className="opacity-10" />
-
-      {/* Contribution Heatmap */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold">📊 52-Week Activity Grid</h2>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>Less</span>
-            <div className="flex gap-1">
-              <div className="w-3 h-3 rounded-sm bg-white/5" title="No activity" />
-              <div className="w-3 h-3 rounded-sm bg-cyan/20" title="Low activity" />
-              <div className="w-3 h-3 rounded-sm bg-cyan/40" title="Medium activity" />
-              <div className="w-3 h-3 rounded-sm bg-cyan/60" title="High activity" />
-              <div className="w-3 h-3 rounded-sm bg-cyan" title="Very high activity" />
-            </div>
-            <span>More</span>
-          </div>
-        </div>
-
+      <section className="max-w-6xl mx-auto px-4 pb-12">
         <Card className="bg-card/50 border-white/5">
-          <CardContent className="p-6">
-            <div className="overflow-x-auto">
-              <div className="inline-flex gap-1">
-                {/* Day labels */}
-                <div className="flex flex-col justify-around text-xs text-muted-foreground pr-2">
-                  <span className="h-3">Sun</span>
-                  <span className="h-3"></span>
-                  <span className="h-3">Tue</span>
-                  <span className="h-3"></span>
-                  <span className="h-3">Thu</span>
-                  <span className="h-3"></span>
-                  <span className="h-3">Sat</span>
-                </div>
+          <CardHeader>
+            <CardTitle>GitHub-style Contribution Grid</CardTitle>
+            <CardDescription>
+              Hover a day to see installs, reviews, API calls, and total activity.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loading && <p className="text-sm text-muted-foreground">Loading heatmap…</p>}
+            {error && <p className="text-sm text-red-400">{error}</p>}
 
-                {/* Heatmap grid */}
-                <div className="flex gap-1">
-                  {heatmapWeeks.map((week, weekIndex) => (
-                    <div key={weekIndex} className="flex flex-col gap-1">
-                      {week.map((day, dayIndex) => (
-                        <div
-                          key={dayIndex}
-                          className={`w-3 h-3 rounded-sm ${getLevelColor(
-                            day.level
-                          )} hover:ring-2 hover:ring-cyan/50 transition-all cursor-pointer`}
-                          title={`${day.date}: ${day.count} operations`}
-                        />
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 text-sm text-muted-foreground">
-              <p>
-                Peak day:{" "}
-                <span className="text-cyan font-semibold">
-                  {activityData.summary.peakDay}
-                </span>{" "}
-                with{" "}
-                <span className="text-cyan font-semibold">
-                  {activityData.summary.peakDayCount}
-                </span>{" "}
-                operations
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Hourly Activity Chart */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">⏰ Hourly Activity Pattern</h2>
-        <Card className="bg-card/50 border-white/5">
-          <CardContent className="p-6">
-            <div className="space-y-2">
-              {activityData.hourlyActivity.map((hourData) => {
-                const percentage = (hourData.count / maxHourlyCount) * 100;
-                const isPeak = hourData.count > maxHourlyCount * 0.8;
-                
-                return (
-                  <div key={hourData.hour} className="flex items-center gap-4">
-                    <span className="text-xs text-muted-foreground w-12 text-right font-mono">
-                      {hourData.hour.toString().padStart(2, "0")}:00
-                    </span>
-                    <div className="flex-1 relative">
-                      <div className="h-6 bg-white/5 rounded-lg overflow-hidden">
-                        <div
-                          className={`h-full rounded-lg transition-all duration-500 flex items-center justify-end pr-3 ${
-                            isPeak
-                              ? "bg-gradient-to-r from-cyan to-purple"
-                              : "bg-gradient-to-r from-cyan/60 to-cyan/80"
-                          }`}
-                          style={{ width: `${percentage}%` }}
-                        >
-                          {percentage > 20 && (
-                            <span className="text-xs font-semibold text-white">
-                              {hourData.count}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+            {!loading && !error && data && (
+              <div className="overflow-x-auto">
+                <div className="inline-flex gap-2">
+                  <div className="grid grid-rows-7 gap-1 pt-4 pr-1 text-[11px] text-muted-foreground">
+                    <span className="h-3">Sun</span>
+                    <span className="h-3" />
+                    <span className="h-3">Tue</span>
+                    <span className="h-3" />
+                    <span className="h-3">Thu</span>
+                    <span className="h-3" />
+                    <span className="h-3">Sat</span>
                   </div>
-                );
-              })}
-            </div>
 
-            <div className="mt-6 p-4 bg-white/5 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                <span className="text-cyan font-semibold">Peak hours:</span>{" "}
-                10:00-15:00 (agents most active during working hours)
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
+                  <div className="flex gap-1">
+                    {heatmapWeeks.map((week, weekIndex) => (
+                      <div key={`week-${weekIndex}`} className="grid grid-rows-7 gap-1">
+                        {week.map((cell) => {
+                          const value = cell.entry?.value ?? 0;
+                          const level = getLevel(value, data.summary.max);
 
-      <Separator className="opacity-10" />
+                          return (
+                            <div key={cell.date} className="group relative">
+                              <div
+                                className={`h-3 w-3 rounded-sm transition-all hover:ring-2 hover:ring-cyan/60 ${levelClass(level)} ${cell.entry ? "cursor-pointer" : "opacity-40"}`}
+                              />
 
-      {/* Day of Week & Top Skills */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="grid gap-6 lg:grid-cols-2">
-          {/* Day of Week Breakdown */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6">📆 Day of Week Activity</h2>
-            <Card className="bg-card/50 border-white/5">
-              <CardContent className="p-6">
-                {/* Horizontal bar visualization */}
-                <div className="mb-6">
-                  <p className="text-sm text-muted-foreground text-center mb-3">
-                    Weekly distribution
-                  </p>
-                  <div className="flex h-8 rounded-lg overflow-hidden">
-                    {activityData.dayOfWeekActivity.map((day, dayIndex) => {
-                      const colors = [
-                        "from-cyan to-cyan/80",
-                        "from-purple to-purple/80",
-                        "from-green to-green/80",
-                        "from-yellow to-yellow/80",
-                        "from-pink to-pink/80",
-                        "from-orange to-orange/80",
-                        "from-blue to-blue/80",
-                      ];
-                      
-                      return (
-                        <div
-                          key={day.day}
-                          className={`bg-gradient-to-r ${colors[dayIndex]} flex items-center justify-center text-xs font-semibold text-white transition-all hover:opacity-80`}
-                          style={{ width: `${day.percentage}%` }}
-                          title={`${day.day}: ${day.percentage}%`}
-                        >
-                          {day.percentage > 8 && `${day.percentage}%`}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Day list */}
-                <div className="space-y-3">
-                  {activityData.dayOfWeekActivity.map((day, index) => {
-                    const isWeekend = day.day === "Saturday" || day.day === "Sunday";
-                    
-                    return (
-                      <div
-                        key={day.day}
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl">
-                            {isWeekend ? "🏖️" : "💼"}
-                          </span>
-                          <div>
-                            <p className="font-semibold text-foreground">
-                              {day.day}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {day.count.toLocaleString()} operations
-                            </p>
-                          </div>
-                        </div>
-                        <Badge
-                          variant="outline"
-                          className={`${
-                            day.percentage > 15
-                              ? "bg-cyan/20 text-cyan border-cyan/30"
-                              : "bg-white/5 text-white/80 border-white/10"
-                          }`}
-                        >
-                          {day.percentage}%
-                        </Badge>
-                      </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Top Active Skills */}
-          <div>
-            <h2 className="text-2xl font-bold mb-6">🛠️ Most Used Skills</h2>
-            <Card className="bg-card/50 border-white/5">
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  {activityData.topSkills.map((skill, index) => {
-                    const percentage = (skill.count / maxSkillCount) * 100;
-                    
-                    return (
-                      <div key={skill.name} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <Badge
-                              variant="outline"
-                              className={`${
-                                index === 0
-                                  ? "bg-yellow/20 text-yellow border-yellow/30"
-                                  : index === 1
-                                  ? "bg-white/20 text-white border-white/30"
-                                  : index === 2
-                                  ? "bg-orange/20 text-orange border-orange/30"
-                                  : "bg-white/5 text-white/80 border-white/10"
-                              } w-7 h-7 flex items-center justify-center p-0 text-xs`}
-                            >
-                              {index + 1}
-                            </Badge>
-                            <div>
-                              <p className="font-semibold text-foreground font-mono text-sm">
-                                {skill.name}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {skill.percentage}% of total
-                              </p>
+                              {cell.entry && (
+                                <div className="pointer-events-none absolute left-1/2 top-5 z-20 hidden min-w-[180px] -translate-x-1/2 rounded-md border border-white/10 bg-black/90 p-2 text-xs text-white shadow-xl group-hover:block">
+                                  <p className="font-semibold mb-1">{cell.entry.date}</p>
+                                  <p>Installs: {cell.entry.installs}</p>
+                                  <p>Reviews: {cell.entry.reviews}</p>
+                                  <p>API Calls: {cell.entry.apiCalls}</p>
+                                  <p>Total: {cell.entry.totalActivity}</p>
+                                </div>
+                              )}
                             </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-foreground">
-                              {skill.count.toLocaleString()}
-                            </p>
-                            <p className="text-xs text-muted-foreground">uses</p>
-                          </div>
-                        </div>
-                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-cyan to-purple rounded-full transition-all duration-500"
-                            style={{ width: `${percentage}%` }}
-                          />
-                        </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
-      <Separator className="opacity-10" />
-
-      {/* Activity Streaks */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-2xl font-bold mb-6">🔥 Activity Streaks</h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-2xl">🔥</span>
-                <span className="text-3xl font-bold text-cyan">
-                  {activityData.streaks.current}
-                </span>
-              </CardTitle>
-              <CardDescription>Current Streak</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Consecutive days with activity
-              </p>
-              <div className="mt-3 h-1 bg-white/5 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-cyan to-purple rounded-full"
-                  style={{
-                    width: `${
-                      (activityData.streaks.current /
-                        activityData.streaks.longest) *
-                      100
-                    }%`,
-                  }}
-                />
+                <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span>Less</span>
+                  <div className="h-3 w-3 rounded-sm bg-white/5" />
+                  <div className="h-3 w-3 rounded-sm bg-cyan/25" />
+                  <div className="h-3 w-3 rounded-sm bg-cyan/45" />
+                  <div className="h-3 w-3 rounded-sm bg-cyan/70" />
+                  <div className="h-3 w-3 rounded-sm bg-cyan" />
+                  <span>More</span>
+                </div>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-2xl">🏆</span>
-                <span className="text-3xl font-bold text-yellow">
-                  {activityData.streaks.longest}
-                </span>
-              </CardTitle>
-              <CardDescription>Longest Streak</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Personal best record
-              </p>
-              <div className="mt-3 flex items-center gap-2">
-                <Badge variant="outline" className="bg-yellow/20 text-yellow border-yellow/30">
-                  All-time high
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/50 border-white/5">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <span className="text-2xl">📅</span>
-                <span className="text-3xl font-bold text-green">
-                  {activityData.streaks.totalActiveDays}
-                </span>
-              </CardTitle>
-              <CardDescription>Total Active Days</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                {((activityData.streaks.totalActiveDays / 365) * 100).toFixed(1)}% of the year
-              </p>
-              <div className="mt-3 h-1 bg-white/5 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-green to-cyan rounded-full"
-                  style={{
-                    width: `${(activityData.streaks.totalActiveDays / 365) * 100}%`,
-                  }}
-                />
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Footer Note */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <Card className="bg-card/50 border-white/5">
-          <CardContent className="p-8 text-center">
-            <p className="text-sm text-muted-foreground">
-              Activity data reflects all agent operations including skill
-              executions, file operations, and API calls over the past 365 days.
-            </p>
-            <p className="text-xs text-muted-foreground mt-2">
-              Last updated: {new Date().toLocaleString()}
-            </p>
+            )}
           </CardContent>
         </Card>
       </section>

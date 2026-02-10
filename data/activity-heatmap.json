@@ -1,0 +1,634 @@
+{
+  "entries": [
+    {
+      "date": "2025-11-12",
+      "installs": 19,
+      "reviews": 13,
+      "apiCalls": 365,
+      "totalActivity": 397
+    },
+    {
+      "date": "2025-11-13",
+      "installs": 19,
+      "reviews": 14,
+      "apiCalls": 379,
+      "totalActivity": 412
+    },
+    {
+      "date": "2025-11-14",
+      "installs": 20,
+      "reviews": 14,
+      "apiCalls": 393,
+      "totalActivity": 427
+    },
+    {
+      "date": "2025-11-15",
+      "installs": 12,
+      "reviews": 9,
+      "apiCalls": 266,
+      "totalActivity": 287
+    },
+    {
+      "date": "2025-11-16",
+      "installs": 13,
+      "reviews": 9,
+      "apiCalls": 277,
+      "totalActivity": 299
+    },
+    {
+      "date": "2025-11-17",
+      "installs": 21,
+      "reviews": 16,
+      "apiCalls": 426,
+      "totalActivity": 463
+    },
+    {
+      "date": "2025-11-18",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 513,
+      "totalActivity": 551
+    },
+    {
+      "date": "2025-11-19",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 437,
+      "totalActivity": 475
+    },
+    {
+      "date": "2025-11-20",
+      "installs": 28,
+      "reviews": 16,
+      "apiCalls": 440,
+      "totalActivity": 484
+    },
+    {
+      "date": "2025-11-21",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 440,
+      "totalActivity": 478
+    },
+    {
+      "date": "2025-11-22",
+      "installs": 14,
+      "reviews": 15,
+      "apiCalls": 297,
+      "totalActivity": 326
+    },
+    {
+      "date": "2025-11-23",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 292,
+      "totalActivity": 316
+    },
+    {
+      "date": "2025-11-24",
+      "installs": 21,
+      "reviews": 15,
+      "apiCalls": 424,
+      "totalActivity": 460
+    },
+    {
+      "date": "2025-11-25",
+      "installs": 21,
+      "reviews": 15,
+      "apiCalls": 495,
+      "totalActivity": 531
+    },
+    {
+      "date": "2025-11-26",
+      "installs": 20,
+      "reviews": 15,
+      "apiCalls": 404,
+      "totalActivity": 439
+    },
+    {
+      "date": "2025-11-27",
+      "installs": 20,
+      "reviews": 14,
+      "apiCalls": 391,
+      "totalActivity": 425
+    },
+    {
+      "date": "2025-11-28",
+      "installs": 14,
+      "reviews": 14,
+      "apiCalls": 377,
+      "totalActivity": 405
+    },
+    {
+      "date": "2025-11-29",
+      "installs": 17,
+      "reviews": 7,
+      "apiCalls": 223,
+      "totalActivity": 247
+    },
+    {
+      "date": "2025-11-30",
+      "installs": 10,
+      "reviews": 3,
+      "apiCalls": 208,
+      "totalActivity": 221
+    },
+    {
+      "date": "2025-12-01",
+      "installs": 17,
+      "reviews": 12,
+      "apiCalls": 333,
+      "totalActivity": 362
+    },
+    {
+      "date": "2025-12-02",
+      "installs": 17,
+      "reviews": 12,
+      "apiCalls": 398,
+      "totalActivity": 427
+    },
+    {
+      "date": "2025-12-03",
+      "installs": 16,
+      "reviews": 16,
+      "apiCalls": 305,
+      "totalActivity": 337
+    },
+    {
+      "date": "2025-12-04",
+      "installs": 15,
+      "reviews": 11,
+      "apiCalls": 233,
+      "totalActivity": 259
+    },
+    {
+      "date": "2025-12-05",
+      "installs": 15,
+      "reviews": 11,
+      "apiCalls": 282,
+      "totalActivity": 308
+    },
+    {
+      "date": "2025-12-06",
+      "installs": 7,
+      "reviews": 4,
+      "apiCalls": 133,
+      "totalActivity": 144
+    },
+    {
+      "date": "2025-12-07",
+      "installs": 6,
+      "reviews": 4,
+      "apiCalls": 126,
+      "totalActivity": 136
+    },
+    {
+      "date": "2025-12-08",
+      "installs": 20,
+      "reviews": 10,
+      "apiCalls": 262,
+      "totalActivity": 292
+    },
+    {
+      "date": "2025-12-09",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 340,
+      "totalActivity": 364
+    },
+    {
+      "date": "2025-12-10",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 261,
+      "totalActivity": 285
+    },
+    {
+      "date": "2025-12-11",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 264,
+      "totalActivity": 288
+    },
+    {
+      "date": "2025-12-12",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 269,
+      "totalActivity": 293
+    },
+    {
+      "date": "2025-12-13",
+      "installs": 7,
+      "reviews": 5,
+      "apiCalls": 137,
+      "totalActivity": 149
+    },
+    {
+      "date": "2025-12-14",
+      "installs": 7,
+      "reviews": 10,
+      "apiCalls": 147,
+      "totalActivity": 164
+    },
+    {
+      "date": "2025-12-15",
+      "installs": 11,
+      "reviews": 11,
+      "apiCalls": 298,
+      "totalActivity": 320
+    },
+    {
+      "date": "2025-12-16",
+      "installs": 16,
+      "reviews": 12,
+      "apiCalls": 391,
+      "totalActivity": 419
+    },
+    {
+      "date": "2025-12-17",
+      "installs": 23,
+      "reviews": 12,
+      "apiCalls": 325,
+      "totalActivity": 360
+    },
+    {
+      "date": "2025-12-18",
+      "installs": 18,
+      "reviews": 13,
+      "apiCalls": 340,
+      "totalActivity": 371
+    },
+    {
+      "date": "2025-12-19",
+      "installs": 18,
+      "reviews": 9,
+      "apiCalls": 355,
+      "totalActivity": 382
+    },
+    {
+      "date": "2025-12-20",
+      "installs": 11,
+      "reviews": 8,
+      "apiCalls": 229,
+      "totalActivity": 248
+    },
+    {
+      "date": "2025-12-21",
+      "installs": 11,
+      "reviews": 8,
+      "apiCalls": 244,
+      "totalActivity": 263
+    },
+    {
+      "date": "2025-12-22",
+      "installs": 20,
+      "reviews": 15,
+      "apiCalls": 397,
+      "totalActivity": 432
+    },
+    {
+      "date": "2025-12-23",
+      "installs": 21,
+      "reviews": 15,
+      "apiCalls": 489,
+      "totalActivity": 525
+    },
+    {
+      "date": "2025-12-24",
+      "installs": 21,
+      "reviews": 15,
+      "apiCalls": 420,
+      "totalActivity": 456
+    },
+    {
+      "date": "2025-12-25",
+      "installs": 21,
+      "reviews": 21,
+      "apiCalls": 428,
+      "totalActivity": 470
+    },
+    {
+      "date": "2025-12-26",
+      "installs": 28,
+      "reviews": 16,
+      "apiCalls": 434,
+      "totalActivity": 478
+    },
+    {
+      "date": "2025-12-27",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 238,
+      "totalActivity": 262
+    },
+    {
+      "date": "2025-12-28",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 300,
+      "totalActivity": 324
+    },
+    {
+      "date": "2025-12-29",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 439,
+      "totalActivity": 477
+    },
+    {
+      "date": "2025-12-30",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 516,
+      "totalActivity": 554
+    },
+    {
+      "date": "2025-12-31",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 430,
+      "totalActivity": 468
+    },
+    {
+      "date": "2026-01-01",
+      "installs": 16,
+      "reviews": 15,
+      "apiCalls": 422,
+      "totalActivity": 453
+    },
+    {
+      "date": "2026-01-02",
+      "installs": 21,
+      "reviews": 15,
+      "apiCalls": 412,
+      "totalActivity": 448
+    },
+    {
+      "date": "2026-01-03",
+      "installs": 12,
+      "reviews": 9,
+      "apiCalls": 260,
+      "totalActivity": 281
+    },
+    {
+      "date": "2026-01-04",
+      "installs": 18,
+      "reviews": 8,
+      "apiCalls": 247,
+      "totalActivity": 273
+    },
+    {
+      "date": "2026-01-05",
+      "installs": 19,
+      "reviews": 19,
+      "apiCalls": 373,
+      "totalActivity": 411
+    },
+    {
+      "date": "2026-01-06",
+      "installs": 18,
+      "reviews": 13,
+      "apiCalls": 438,
+      "totalActivity": 469
+    },
+    {
+      "date": "2026-01-07",
+      "installs": 18,
+      "reviews": 9,
+      "apiCalls": 343,
+      "totalActivity": 370
+    },
+    {
+      "date": "2026-01-08",
+      "installs": 17,
+      "reviews": 12,
+      "apiCalls": 328,
+      "totalActivity": 357
+    },
+    {
+      "date": "2026-01-09",
+      "installs": 16,
+      "reviews": 12,
+      "apiCalls": 314,
+      "totalActivity": 342
+    },
+    {
+      "date": "2026-01-10",
+      "installs": 8,
+      "reviews": 5,
+      "apiCalls": 161,
+      "totalActivity": 174
+    },
+    {
+      "date": "2026-01-11",
+      "installs": 7,
+      "reviews": 5,
+      "apiCalls": 149,
+      "totalActivity": 161
+    },
+    {
+      "date": "2026-01-12",
+      "installs": 15,
+      "reviews": 11,
+      "apiCalls": 279,
+      "totalActivity": 305
+    },
+    {
+      "date": "2026-01-13",
+      "installs": 20,
+      "reviews": 10,
+      "apiCalls": 351,
+      "totalActivity": 381
+    },
+    {
+      "date": "2026-01-14",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 265,
+      "totalActivity": 289
+    },
+    {
+      "date": "2026-01-15",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 261,
+      "totalActivity": 285
+    },
+    {
+      "date": "2026-01-16",
+      "installs": 14,
+      "reviews": 15,
+      "apiCalls": 260,
+      "totalActivity": 289
+    },
+    {
+      "date": "2026-01-17",
+      "installs": 6,
+      "reviews": 4,
+      "apiCalls": 121,
+      "totalActivity": 131
+    },
+    {
+      "date": "2026-01-18",
+      "installs": 1,
+      "reviews": 4,
+      "apiCalls": 125,
+      "totalActivity": 130
+    },
+    {
+      "date": "2026-01-19",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 211,
+      "totalActivity": 235
+    },
+    {
+      "date": "2026-01-20",
+      "installs": 15,
+      "reviews": 11,
+      "apiCalls": 360,
+      "totalActivity": 386
+    },
+    {
+      "date": "2026-01-21",
+      "installs": 15,
+      "reviews": 11,
+      "apiCalls": 290,
+      "totalActivity": 316
+    },
+    {
+      "date": "2026-01-22",
+      "installs": 22,
+      "reviews": 11,
+      "apiCalls": 302,
+      "totalActivity": 335
+    },
+    {
+      "date": "2026-01-23",
+      "installs": 16,
+      "reviews": 12,
+      "apiCalls": 315,
+      "totalActivity": 343
+    },
+    {
+      "date": "2026-01-24",
+      "installs": 9,
+      "reviews": 6,
+      "apiCalls": 189,
+      "totalActivity": 204
+    },
+    {
+      "date": "2026-01-25",
+      "installs": 10,
+      "reviews": 7,
+      "apiCalls": 204,
+      "totalActivity": 221
+    },
+    {
+      "date": "2026-01-26",
+      "installs": 18,
+      "reviews": 9,
+      "apiCalls": 359,
+      "totalActivity": 386
+    },
+    {
+      "date": "2026-01-27",
+      "installs": 19,
+      "reviews": 19,
+      "apiCalls": 454,
+      "totalActivity": 492
+    },
+    {
+      "date": "2026-01-28",
+      "installs": 20,
+      "reviews": 14,
+      "apiCalls": 388,
+      "totalActivity": 422
+    },
+    {
+      "date": "2026-01-29",
+      "installs": 20,
+      "reviews": 15,
+      "apiCalls": 401,
+      "totalActivity": 436
+    },
+    {
+      "date": "2026-01-30",
+      "installs": 21,
+      "reviews": 15,
+      "apiCalls": 412,
+      "totalActivity": 448
+    },
+    {
+      "date": "2026-01-31",
+      "installs": 19,
+      "reviews": 9,
+      "apiCalls": 282,
+      "totalActivity": 310
+    },
+    {
+      "date": "2026-02-01",
+      "installs": 14,
+      "reviews": 10,
+      "apiCalls": 290,
+      "totalActivity": 314
+    },
+    {
+      "date": "2026-02-02",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 436,
+      "totalActivity": 474
+    },
+    {
+      "date": "2026-02-03",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 519,
+      "totalActivity": 557
+    },
+    {
+      "date": "2026-02-04",
+      "installs": 17,
+      "reviews": 16,
+      "apiCalls": 440,
+      "totalActivity": 473
+    },
+    {
+      "date": "2026-02-05",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 438,
+      "totalActivity": 476
+    },
+    {
+      "date": "2026-02-06",
+      "installs": 22,
+      "reviews": 16,
+      "apiCalls": 434,
+      "totalActivity": 472
+    },
+    {
+      "date": "2026-02-07",
+      "installs": 13,
+      "reviews": 15,
+      "apiCalls": 288,
+      "totalActivity": 316
+    },
+    {
+      "date": "2026-02-08",
+      "installs": 13,
+      "reviews": 9,
+      "apiCalls": 279,
+      "totalActivity": 301
+    },
+    {
+      "date": "2026-02-09",
+      "installs": 27,
+      "reviews": 15,
+      "apiCalls": 409,
+      "totalActivity": 451
+    }
+  ]
+}
