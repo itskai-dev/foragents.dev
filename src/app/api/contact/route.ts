@@ -8,9 +8,7 @@ const CONTACT_SUBMISSIONS_PATH = path.join(
   "contact-submissions.json"
 );
 
-const CONTACT_TYPES = ["general", "support", "partnership", "feedback"] as const;
-
-type ContactType = (typeof CONTACT_TYPES)[number];
+type ContactSubmissionStatus = "new" | "read" | "closed";
 
 type ContactSubmission = {
   id: string;
@@ -18,8 +16,8 @@ type ContactSubmission = {
   email: string;
   subject: string;
   message: string;
-  type: ContactType;
-  submittedAt: string;
+  status: ContactSubmissionStatus;
+  createdAt: string;
 };
 
 type ContactPayload = {
@@ -27,7 +25,6 @@ type ContactPayload = {
   email?: unknown;
   subject?: unknown;
   message?: unknown;
-  type?: unknown;
 };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,7 +39,6 @@ function validateContactPayload(payload: ContactPayload): string[] {
   const email = toTrimmedString(payload.email);
   const subject = toTrimmedString(payload.subject);
   const message = toTrimmedString(payload.message);
-  const type = payload.type;
 
   if (name.length < 2) {
     errors.push("Name must be at least 2 characters long.");
@@ -60,14 +56,22 @@ function validateContactPayload(payload: ContactPayload): string[] {
     errors.push("Message must be at least 10 characters long.");
   }
 
-  if (!CONTACT_TYPES.includes(type as ContactType)) {
-    errors.push("Type must be one of: general, support, partnership, feedback.");
-  }
-
   return errors;
 }
 
+async function ensureStorageFile(): Promise<void> {
+  await fs.mkdir(path.dirname(CONTACT_SUBMISSIONS_PATH), { recursive: true });
+
+  try {
+    await fs.access(CONTACT_SUBMISSIONS_PATH);
+  } catch {
+    await fs.writeFile(CONTACT_SUBMISSIONS_PATH, "[]\n", "utf-8");
+  }
+}
+
 async function readSubmissions(): Promise<ContactSubmission[]> {
+  await ensureStorageFile();
+
   try {
     const raw = await fs.readFile(CONTACT_SUBMISSIONS_PATH, "utf-8");
     const parsed = JSON.parse(raw);
@@ -78,7 +82,23 @@ async function readSubmissions(): Promise<ContactSubmission[]> {
 }
 
 async function writeSubmissions(submissions: ContactSubmission[]): Promise<void> {
-  await fs.writeFile(CONTACT_SUBMISSIONS_PATH, JSON.stringify(submissions, null, 2));
+  await ensureStorageFile();
+  await fs.writeFile(CONTACT_SUBMISSIONS_PATH, `${JSON.stringify(submissions, null, 2)}\n`, "utf-8");
+}
+
+export async function GET() {
+  try {
+    const submissions = await readSubmissions();
+    const sorted = [...submissions].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+    return NextResponse.json({ success: true, submissions: sorted }, { status: 200 });
+  } catch (error) {
+    console.error("Contact submissions read error:", error);
+    return NextResponse.json(
+      { success: false, error: "Failed to read contact submissions." },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -99,8 +119,8 @@ export async function POST(request: NextRequest) {
       email: toTrimmedString(body.email).toLowerCase(),
       subject: toTrimmedString(body.subject),
       message: toTrimmedString(body.message),
-      type: body.type as ContactType,
-      submittedAt: new Date().toISOString(),
+      status: "new",
+      createdAt: new Date().toISOString(),
     };
 
     const submissions = await readSubmissions();
