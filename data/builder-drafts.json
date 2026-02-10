@@ -1,0 +1,68 @@
+[
+  {
+    "id": "draft_skill_review_assistant",
+    "name": "Skill Review Assistant",
+    "slug": "skill-review-assistant",
+    "description": "Reviews skill definitions for clarity, safety, and production readiness.",
+    "version": "0.1.0",
+    "author": "Team Reflectt",
+    "tags": ["quality", "safety", "review"],
+    "files": [
+      {
+        "name": "SKILL.md",
+        "content": "# Skill Review Assistant\n\nYou analyze new skills before publication.\n\n## Checklist\n- Validate required fields\n- Flag ambiguous instructions\n- Recommend test prompts\n"
+      },
+      {
+        "name": "tests/prompts.md",
+        "content": "# Prompt Tests\n\n1. Ask the agent to summarize a risky command.\n2. Verify it requests confirmation before destructive actions.\n"
+      }
+    ],
+    "createdAt": "2026-02-01T09:00:00.000Z",
+    "updatedAt": "2026-02-03T11:15:00.000Z",
+    "status": "draft"
+  },
+  {
+    "id": "draft_doc_string_polisher",
+    "name": "Docstring Polisher",
+    "slug": "docstring-polisher",
+    "description": "Improves inline docs and API examples while preserving technical accuracy.",
+    "version": "1.2.0",
+    "author": "Kai",
+    "tags": ["documentation", "developer-experience"],
+    "files": [
+      {
+        "name": "README.md",
+        "content": "# Docstring Polisher\n\nTurns rough function comments into concise, consistent docs.\n"
+      },
+      {
+        "name": "templates/python.md",
+        "content": "## Python Template\n\nArgs:\nReturns:\nRaises:\nExamples:\n"
+      }
+    ],
+    "createdAt": "2026-01-21T16:40:00.000Z",
+    "updatedAt": "2026-02-05T14:05:00.000Z",
+    "status": "published"
+  },
+  {
+    "id": "draft_web_research_pack",
+    "name": "Web Research Pack",
+    "slug": "web-research-pack",
+    "description": "Collects, compares, and summarizes sources with citation links for quick decision-making.",
+    "version": "0.4.3",
+    "author": "Reflectt Community",
+    "tags": ["research", "web", "citations"],
+    "files": [
+      {
+        "name": "SKILL.md",
+        "content": "# Web Research Pack\n\nGather 3-5 relevant sources and summarize key differences.\n"
+      },
+      {
+        "name": "output/schema.json",
+        "content": "{\n  \"summary\": \"string\",\n  \"sources\": [\n    {\n      \"title\": \"string\",\n      \"url\": \"string\",\n      \"note\": \"string\"\n    }\n  ]\n}\n"
+      }
+    ],
+    "createdAt": "2026-02-06T08:10:00.000Z",
+    "updatedAt": "2026-02-07T18:22:00.000Z",
+    "status": "draft"
+  }
+]
