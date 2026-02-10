@@ -1,147 +1,103 @@
 #!/usr/bin/env tsx
-/**
- * Generate changelog from recent GitHub PRs
- * Fetches the last 30 merged PRs and auto-categorizes them
- */
 
-import { writeFileSync } from "fs";
-import { join } from "path";
+import { execSync } from "node:child_process";
+import { writeFileSync } from "node:fs";
+import { join } from "node:path";
 
-const REPO_OWNER = "reflectt";
-const REPO_NAME = "foragents.dev";
-const MAX_PRS = 30;
+const REPO = "reflectt/foragents.dev";
+const LIMIT = 50;
 
-type GitHubPR = {
+type GhPr = {
   number: number;
   title: string;
-  merged_at: string;
-  html_url: string;
-  user: {
-    login: string;
-  };
+  mergedAt: string;
+  labels: Array<{ name?: string }>;
+  author: { login?: string | null } | null;
 };
 
-type ChangelogCategory = "feature" | "fix" | "docs" | "refactor" | "test";
+type ChangelogCategory = "feature" | "bugfix" | "docs";
 
-type GeneratedChangelogEntry = {
-  date: string; // YYYY-MM-DD
+type ChangelogEntry = {
+  id: string;
   title: string;
+  category: ChangelogCategory;
+  date: string;
   prNumber: number;
   prUrl: string;
-  category: ChangelogCategory;
-  author: string;
+  description: string;
 };
 
-/**
- * Detect category from PR title prefix
- */
-function detectCategory(title: string): ChangelogCategory {
-  const lower = title.toLowerCase();
-  
-  if (lower.startsWith("feat:") || lower.startsWith("feature:")) return "feature";
-  if (lower.startsWith("fix:")) return "fix";
-  if (lower.startsWith("docs:") || lower.startsWith("doc:")) return "docs";
-  if (lower.startsWith("refactor:")) return "refactor";
-  if (lower.startsWith("test:") || lower.startsWith("tests:")) return "test";
-  
-  // Fallback heuristics
-  if (lower.includes("add") || lower.includes("new")) return "feature";
-  if (lower.includes("fix") || lower.includes("bug")) return "fix";
-  if (lower.includes("doc")) return "docs";
-  if (lower.includes("refactor")) return "refactor";
-  if (lower.includes("test")) return "test";
-  
-  return "feature"; // default
+function categoryFromTitle(title: string): ChangelogCategory {
+  const lower = title.toLowerCase().trim();
+
+  if (lower.startsWith("feat:")) return "feature";
+  if (lower.startsWith("fix:")) return "bugfix";
+  if (lower.startsWith("docs:")) return "docs";
+
+  return "feature";
 }
 
-/**
- * Clean up PR title by removing conventional commit prefix
- */
 function cleanTitle(title: string): string {
-  return title
-    .replace(/^(feat|feature|fix|docs?|refactor|tests?):\s*/i, "")
-    .trim();
+  return title.replace(/^(feat|fix|docs):\s*/i, "").trim();
 }
 
-/**
- * Format date as YYYY-MM-DD
- */
-function formatDate(isoDate: string): string {
-  return isoDate.split("T")[0];
+function toDate(iso: string): string {
+  return iso.split("T")[0] || iso;
 }
 
-async function fetchRecentPRs(): Promise<GitHubPR[]> {
-  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/pulls?state=closed&sort=updated&direction=desc&per_page=${MAX_PRS * 2}`;
-  
-  console.log(`Fetching PRs from: ${url}`);
-  
-  const response = await fetch(url, {
-    headers: {
-      Accept: "application/vnd.github+json",
-      // No auth needed for public repos
-    },
-  });
-  
-  if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
+function buildDescription(pr: GhPr): string {
+  const author = pr.author?.login ? `@${pr.author.login}` : "the team";
+  return `Merged PR #${pr.number} by ${author}.`;
+}
+
+function fetchMergedPrs(): GhPr[] {
+  const command = [
+    "gh pr list",
+    `--repo ${REPO}`,
+    "--state merged",
+    `--limit ${LIMIT}`,
+    "--json number,title,mergedAt,labels,author",
+  ].join(" ");
+
+  const output = execSync(command, { encoding: "utf8" });
+  const prs = JSON.parse(output) as unknown;
+
+  if (!Array.isArray(prs)) {
+    throw new Error("Unexpected GH output: expected an array of PRs");
   }
-  
-  const prs = (await response.json()) as GitHubPR[];
-  
-  // Filter to only merged PRs
-  const mergedPRs = prs
-    .filter((pr) => pr.merged_at !== null)
-    .slice(0, MAX_PRS);
-  
-  return mergedPRs;
+
+  return prs as GhPr[];
 }
 
-async function main() {
-  console.log("🔍 Fetching recent merged PRs from GitHub...");
-  
-  const prs = await fetchRecentPRs();
-  
-  console.log(`✅ Found ${prs.length} merged PRs`);
-  
-  const entries: GeneratedChangelogEntry[] = prs.map((pr) => ({
-    date: formatDate(pr.merged_at),
-    title: cleanTitle(pr.title),
-    prNumber: pr.number,
-    prUrl: pr.html_url,
-    category: detectCategory(pr.title),
-    author: pr.user.login,
-  }));
-  
-  // Sort by date descending
-  entries.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  
-  // Write to data file
-  const outputPath = join(process.cwd(), "src", "data", "changelog-generated.json");
-  writeFileSync(outputPath, JSON.stringify(entries, null, 2));
-  
-  console.log(`\n📝 Generated ${entries.length} changelog entries`);
-  console.log(`📁 Written to: ${outputPath}`);
-  
-  // Show category breakdown
-  const categoryCounts = entries.reduce(
-    (acc, e) => {
-      acc[e.category] = (acc[e.category] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>
-  );
-  
-  console.log("\n📊 Category breakdown:");
-  Object.entries(categoryCounts)
-    .sort(([, a], [, b]) => b - a)
-    .forEach(([cat, count]) => {
-      console.log(`   ${cat}: ${count}`);
+function main() {
+  console.log(`Fetching merged PRs from ${REPO}...`);
+
+  const prs = fetchMergedPrs();
+
+  const entries: ChangelogEntry[] = prs
+    .filter((pr) => Boolean(pr.mergedAt))
+    .map((pr) => ({
+      id: `pr-${pr.number}`,
+      title: cleanTitle(pr.title),
+      category: categoryFromTitle(pr.title),
+      date: toDate(pr.mergedAt),
+      prNumber: pr.number,
+      prUrl: `https://github.com/${REPO}/pull/${pr.number}`,
+      description: buildDescription(pr),
+    }))
+    .sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     });
-  
-  console.log("\n✨ Done!");
+
+  const outputPath = join(process.cwd(), "data", "changelog.json");
+  writeFileSync(outputPath, `${JSON.stringify(entries, null, 2)}\n`, "utf8");
+
+  console.log(`Generated ${entries.length} changelog entries -> ${outputPath}`);
 }
 
-main().catch((error) => {
-  console.error("❌ Error generating changelog:", error);
+try {
+  main();
+} catch (error) {
+  console.error("Failed to generate changelog:", error);
   process.exit(1);
-});
+}

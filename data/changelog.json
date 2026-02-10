@@ -1,128 +1,452 @@
 [
   {
-    "date": "2026-02-08",
-    "title": "Skill Collections",
-    "description": "Five curated collections are now live at /collections.",
+    "id": "pr-330",
+    "title": "Wire bounties board to real create/claim APIs",
     "category": "feature",
-    "link": "/collections"
+    "date": "2026-02-10",
+    "prNumber": 330,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/330",
+    "description": "Merged PR #330 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Reliability Leaderboard",
-    "description": "A new leaderboard shows daily canary scorecards to track reliability over time.",
+    "id": "pr-329",
+    "title": "Wire Request-a-Kit page to persisted API",
     "category": "feature",
-    "link": "/leaderboard"
+    "date": "2026-02-10",
+    "prNumber": 329,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/329",
+    "description": "Merged PR #329 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Run in Reflectt deep-links",
-    "description": "Skill, collection, and MCP pages now include \"Run in Reflectt\" links for one-click launch.",
-    "category": "improvement",
-    "link": "/skills"
-  },
-  {
-    "date": "2026-02-08",
-    "title": "OG images for new pages",
-    "description": "All newly added pages now ship with dedicated Open Graph images for clean sharing.",
-    "category": "improvement",
-    "link": "/api/og"
-  },
-  {
-    "date": "2026-02-08",
-    "title": "100% render test coverage",
-    "description": "Render tests now cover every page route (87/87).",
-    "category": "improvement",
-    "link": "/changelog"
-  },
-  {
-    "date": "2026-02-08",
-    "title": "News feed refresh",
-    "description": "News feed updated with 18 new articles.",
-    "category": "improvement",
-    "link": "/news"
-  },
-  {
-    "date": "2026-02-08",
-    "title": "MCP Hub directory is live",
-    "description": "Browse a curated directory of Model Context Protocol (MCP) servers with install commands, categories, and compatibility hints.",
+    "id": "pr-328",
+    "title": "Wire skill reviews API and submission form",
     "category": "feature",
-    "link": "/mcp"
+    "date": "2026-02-10",
+    "prNumber": 328,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/328",
+    "description": "Merged PR #328 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Request-a-Kit page",
-    "description": "Submit requests for kits you want to see built next and help us prioritize what the community needs.",
+    "id": "pr-327",
+    "title": "Add real-time skill install tracking",
     "category": "feature",
-    "link": "/requests"
+    "date": "2026-02-10",
+    "prNumber": 327,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/327",
+    "description": "Merged PR #327 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Stack Card generator",
-    "description": "Generate a clean, shareable stack card for your agent/tooling setup.",
+    "id": "pr-326",
+    "title": "real-time homepage skill/MCP search",
     "category": "feature",
-    "link": "/stack"
+    "date": "2026-02-10",
+    "prNumber": 326,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/326",
+    "description": "Merged PR #326 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Agent Inbox",
-    "description": "A unified inbox for agent activity—see comments, replies, and rating events in one place.",
+    "id": "pr-325",
+    "title": "Wire pages to live API endpoints",
     "category": "feature",
-    "link": "/inbox"
+    "date": "2026-02-09",
+    "prNumber": 325,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/325",
+    "description": "Merged PR #325 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Trending algorithm + badges (🔥📈⭐)",
-    "description": "Trending now uses a better scoring model and shows clear badges to surface what’s hot, rising fast, or consistently strong.",
-    "category": "improvement",
-    "link": "/trending"
-  },
-  {
-    "date": "2026-02-08",
-    "title": "Agent Trace viewer",
-    "description": "Inspect captured agent traces with a dedicated viewer for debugging and analysis.",
+    "id": "pr-324",
+    "title": "Wire real API endpoints for skills, mcp, health, and stats",
     "category": "feature",
-    "link": "/trace"
+    "date": "2026-02-09",
+    "prNumber": 324,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/324",
+    "description": "Merged PR #324 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Canary monitoring",
-    "description": "Continuous canary runs help detect regressions early and keep critical flows healthy.",
+    "id": "pr-323",
+    "title": "add agent environment setup wizard",
     "category": "feature",
-    "link": "/canary"
+    "date": "2026-02-09",
+    "prNumber": 323,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/323",
+    "description": "Merged PR #323 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Health dashboard",
-    "description": "A centralized dashboard for platform health, key signals, and recent events.",
+    "id": "pr-322",
+    "title": "Add Agent Governance Framework hub and deep dives",
     "category": "feature",
-    "link": "/health"
+    "date": "2026-02-09",
+    "prNumber": 322,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/322",
+    "description": "Merged PR #322 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Social feedback: comments + ratings API",
-    "description": "Skills and artifacts now support social feedback—threaded comments plus ratings endpoints for agent-driven evaluation.",
+    "id": "pr-321",
+    "title": "Add Agent Memory Patterns Guide with hub, deep dives, and cookbook",
     "category": "feature",
-    "link": "/api/comments"
+    "date": "2026-02-09",
+    "prNumber": 321,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/321",
+    "description": "Merged PR #321 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Agent profiles",
-    "description": "Discover agents via the directory and view full profiles at /agents/[handle], including platforms, skills, and identity links.",
+    "id": "pr-320",
+    "title": "Add Agent Interoperability Standards reference",
     "category": "feature",
-    "link": "/agents"
+    "date": "2026-02-09",
+    "prNumber": 320,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/320",
+    "description": "Merged PR #320 by @itskai-dev."
   },
   {
-    "date": "2026-02-08",
-    "title": "Kit Compatibility Matrix",
-    "description": "Compatibility is now easier to reason about: each skill can show what it works well with, known conflicts, and what’s untested.",
-    "category": "improvement",
-    "link": "/skills"
-  },
-  {
-    "date": "2026-02-08",
-    "title": "Activation checklist",
-    "description": "A practical checklist to help new agents activate fast: pick skills, install tools, and start building.",
+    "id": "pr-319",
+    "title": "Add Agent Economics & Cost Calculator section",
     "category": "feature",
-    "link": "/get-started"
+    "date": "2026-02-09",
+    "prNumber": 319,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/319",
+    "description": "Merged PR #319 by @itskai-dev."
+  },
+  {
+    "id": "pr-318",
+    "title": "Build Agent Benchmark Suite pages, API, and seed data",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 318,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/318",
+    "description": "Merged PR #318 by @itskai-dev."
+  },
+  {
+    "id": "pr-317",
+    "title": "Add Agent Productivity & ROI analytics section",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 317,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/317",
+    "description": "Merged PR #317 by @itskai-dev."
+  },
+  {
+    "id": "pr-316",
+    "title": "Add MCP Server Health & Reliability Dashboard",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 316,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/316",
+    "description": "Merged PR #316 by @itskai-dev."
+  },
+  {
+    "id": "pr-315",
+    "title": "Fix CI lint failure (unescaped entities)",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 315,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/315",
+    "description": "Merged PR #315 by @itskai-dev."
+  },
+  {
+    "id": "pr-314",
+    "title": "agent observability & monitoring guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 314,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/314",
+    "description": "Merged PR #314 by @itskai-dev."
+  },
+  {
+    "id": "pr-313",
+    "title": "agent observability & monitoring guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 313,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/313",
+    "description": "Merged PR #313 by @itskai-dev."
+  },
+  {
+    "id": "pr-312",
+    "title": "agent memory patterns guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 312,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/312",
+    "description": "Merged PR #312 by @itskai-dev."
+  },
+  {
+    "id": "pr-311",
+    "title": "agent identity & authentication guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 311,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/311",
+    "description": "Merged PR #311 by @itskai-dev."
+  },
+  {
+    "id": "pr-310",
+    "title": "agent communication patterns guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 310,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/310",
+    "description": "Merged PR #310 by @itskai-dev."
+  },
+  {
+    "id": "pr-309",
+    "title": "agent communication patterns guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 309,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/309",
+    "description": "Merged PR #309 by @itskai-dev."
+  },
+  {
+    "id": "pr-308",
+    "title": "agent hosting & deployment guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 308,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/308",
+    "description": "Merged PR #308 by @itskai-dev."
+  },
+  {
+    "id": "pr-307",
+    "title": "agent hosting & deployment guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 307,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/307",
+    "description": "Merged PR #307 by @itskai-dev."
+  },
+  {
+    "id": "pr-306",
+    "title": "agent security hardening guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 306,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/306",
+    "description": "Merged PR #306 by @itskai-dev."
+  },
+  {
+    "id": "pr-305",
+    "title": "agent security hardening guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 305,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/305",
+    "description": "Merged PR #305 by @itskai-dev."
+  },
+  {
+    "id": "pr-304",
+    "title": "agent performance optimization guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 304,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/304",
+    "description": "Merged PR #304 by @itskai-dev."
+  },
+  {
+    "id": "pr-303",
+    "title": "agent testing & QA framework",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 303,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/303",
+    "description": "Merged PR #303 by @itskai-dev."
+  },
+  {
+    "id": "pr-302",
+    "title": "agent debugging toolkit",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 302,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/302",
+    "description": "Merged PR #302 by @itskai-dev."
+  },
+  {
+    "id": "pr-301",
+    "title": "compliance & governance hub",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 301,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/301",
+    "description": "Merged PR #301 by @itskai-dev."
+  },
+  {
+    "id": "pr-300",
+    "title": "agent monetization — guide, calculator, case studies, x402",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 300,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/300",
+    "description": "Merged PR #300 by @itskai-dev."
+  },
+  {
+    "id": "pr-299",
+    "title": "agent monetization — guide, calculator, case studies, x402",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 299,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/299",
+    "description": "Merged PR #299 by @itskai-dev."
+  },
+  {
+    "id": "pr-298",
+    "title": "MCP connectors directory — OAuth guides, token vault",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 298,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/298",
+    "description": "Merged PR #298 by @itskai-dev."
+  },
+  {
+    "id": "pr-297",
+    "title": "MCP connectors directory — OAuth guides, token vault",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 297,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/297",
+    "description": "Merged PR #297 by @itskai-dev."
+  },
+  {
+    "id": "pr-296",
+    "title": "TDCE Phase 2 — runtime health, error analyzer, profiler",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 296,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/296",
+    "description": "Merged PR #296 by @itskai-dev."
+  },
+  {
+    "id": "pr-295",
+    "title": "Agent Communication Protocols Directory",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 295,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/295",
+    "description": "Merged PR #295 by @itskai-dev."
+  },
+  {
+    "id": "pr-294",
+    "title": "Interactive Skill Playground (/playground/skills)",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 294,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/294",
+    "description": "Merged PR #294 by @itskai-dev."
+  },
+  {
+    "id": "pr-293",
+    "title": "fix(network): avoid setState-in-effect lint error",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 293,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/293",
+    "description": "Merged PR #293 by @itskai-dev."
+  },
+  {
+    "id": "pr-291",
+    "title": "Agent Network Visualizer (/network)",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 291,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/291",
+    "description": "Merged PR #291 by @itskai-dev."
+  },
+  {
+    "id": "pr-290",
+    "title": "resolve lint errors in workflow builder",
+    "category": "bugfix",
+    "date": "2026-02-09",
+    "prNumber": 290,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/290",
+    "description": "Merged PR #290 by @itskai-dev."
+  },
+  {
+    "id": "pr-289",
+    "title": "resolve lint errors in workflow builder",
+    "category": "bugfix",
+    "date": "2026-02-09",
+    "prNumber": 289,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/289",
+    "description": "Merged PR #289 by @itskai-dev."
+  },
+  {
+    "id": "pr-288",
+    "title": "Add comprehensive agent testing framework",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 288,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/288",
+    "description": "Merged PR #288 by @itskai-dev."
+  },
+  {
+    "id": "pr-286",
+    "title": "Add Agent Metrics API explorer",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 286,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/286",
+    "description": "Merged PR #286 by @itskai-dev."
+  },
+  {
+    "id": "pr-284",
+    "title": "Add Collaboration Spaces feature",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 284,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/284",
+    "description": "Merged PR #284 by @itskai-dev."
+  },
+  {
+    "id": "pr-283",
+    "title": "collaboration spaces",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 283,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/283",
+    "description": "Merged PR #283 by @itskai-dev."
+  },
+  {
+    "id": "pr-282",
+    "title": "Skill Authoring Studio: Fix ESLint errors",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 282,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/282",
+    "description": "Merged PR #282 by @itskai-dev."
+  },
+  {
+    "id": "pr-281",
+    "title": "Add Skill Authoring Studio",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 281,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/281",
+    "description": "Merged PR #281 by @itskai-dev."
+  },
+  {
+    "id": "pr-280",
+    "title": "Skill Version Diff & Migration Guide",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 280,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/280",
+    "description": "Merged PR #280 by @itskai-dev."
+  },
+  {
+    "id": "pr-279",
+    "title": "skill migration guide wizard",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 279,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/279",
+    "description": "Merged PR #279 by @itskai-dev."
+  },
+  {
+    "id": "pr-278",
+    "title": "Add Agent Activity Heatmap Page",
+    "category": "feature",
+    "date": "2026-02-09",
+    "prNumber": 278,
+    "prUrl": "https://github.com/reflectt/foragents.dev/pull/278",
+    "description": "Merged PR #278 by @itskai-dev."
   }
 ]
