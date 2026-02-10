@@ -6,45 +6,89 @@ import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } fro
 const SHOWCASE_PATH = path.join(process.cwd(), "data", "showcase.json");
 const MAX_JSON_BYTES = 24_000;
 
-type ShowcaseProject = {
+export type ShowcaseCategory =
+  | "tools"
+  | "integrations"
+  | "automations"
+  | "experiments"
+  | "production";
+
+const CATEGORIES: ShowcaseCategory[] = [
+  "tools",
+  "integrations",
+  "automations",
+  "experiments",
+  "production",
+];
+
+export type ShowcaseProject = {
   id: string;
   title: string;
   description: string;
   url: string;
   author: string;
+  category: ShowcaseCategory;
   tags: string[];
-  screenshot?: string;
-  featured: boolean;
+  voteCount: number;
   createdAt: string;
+  voters: string[];
 };
-
-async function readShowcaseProjects(): Promise<ShowcaseProject[]> {
-  try {
-    const raw = await fs.readFile(SHOWCASE_PATH, "utf-8");
-    const parsed = JSON.parse(raw) as unknown;
-    if (!Array.isArray(parsed)) return [];
-    return parsed.filter((item): item is ShowcaseProject => {
-      return !!item && typeof item === "object" && typeof (item as ShowcaseProject).id === "string";
-    });
-  } catch {
-    return [];
-  }
-}
-
-async function writeShowcaseProjects(projects: ShowcaseProject[]): Promise<void> {
-  const dir = path.dirname(SHOWCASE_PATH);
-  await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(SHOWCASE_PATH, JSON.stringify(projects, null, 2));
-}
 
 type ShowcaseSubmission = {
   title?: unknown;
   description?: unknown;
   url?: unknown;
   author?: unknown;
+  category?: unknown;
   tags?: unknown;
-  screenshot?: unknown;
 };
+
+function isShowcaseProject(item: unknown): item is ShowcaseProject {
+  if (!item || typeof item !== "object") return false;
+  const project = item as Partial<ShowcaseProject>;
+
+  return (
+    typeof project.id === "string" &&
+    typeof project.title === "string" &&
+    typeof project.description === "string" &&
+    typeof project.url === "string" &&
+    typeof project.author === "string" &&
+    typeof project.category === "string" &&
+    CATEGORIES.includes(project.category as ShowcaseCategory) &&
+    Array.isArray(project.tags) &&
+    typeof project.voteCount === "number" &&
+    typeof project.createdAt === "string" &&
+    Array.isArray(project.voters)
+  );
+}
+
+async function readShowcaseProjects(): Promise<ShowcaseProject[]> {
+  try {
+    const raw = await fs.readFile(SHOWCASE_PATH, "utf-8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(isShowcaseProject);
+  } catch {
+    return [];
+  }
+}
+
+async function writeShowcaseProjects(projects: ShowcaseProject[]): Promise<void> {
+  await fs.mkdir(path.dirname(SHOWCASE_PATH), { recursive: true });
+  await fs.writeFile(SHOWCASE_PATH, JSON.stringify(projects, null, 2));
+}
+
+function normalizeTags(tags: unknown): string[] {
+  if (!Array.isArray(tags)) return [];
+  return Array.from(
+    new Set(
+      tags
+        .filter((tag): tag is string => typeof tag === "string")
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean)
+    )
+  );
+}
 
 function validateSubmission(body: ShowcaseSubmission): string[] {
   const errors: string[] = [];
@@ -74,32 +118,13 @@ function validateSubmission(body: ShowcaseSubmission): string[] {
     }
   }
 
-  if (!Array.isArray(body.tags)) {
-    errors.push("tags must be an array of strings");
-  } else {
-    const normalizedTags = body.tags
-      .filter((tag): tag is string => typeof tag === "string")
-      .map((tag) => tag.trim().toLowerCase())
-      .filter(Boolean);
-
-    if (normalizedTags.length === 0) {
-      errors.push("tags must contain at least one tag");
-    }
+  if (typeof body.category !== "string" || !CATEGORIES.includes(body.category as ShowcaseCategory)) {
+    errors.push(`category must be one of: ${CATEGORIES.join(", ")}`);
   }
 
-  if (body.screenshot !== undefined && body.screenshot !== null) {
-    if (typeof body.screenshot !== "string" || body.screenshot.trim().length === 0) {
-      errors.push("screenshot must be a non-empty string when provided");
-    } else {
-      try {
-        const parsed = new URL(body.screenshot.trim());
-        if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-          errors.push("screenshot must use http or https");
-        }
-      } catch {
-        errors.push("screenshot must be a valid URL");
-      }
-    }
+  const tags = normalizeTags(body.tags);
+  if (tags.length === 0) {
+    errors.push("tags must contain at least one tag");
   }
 
   return errors;
@@ -107,60 +132,32 @@ function validateSubmission(body: ShowcaseSubmission): string[] {
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const search = (searchParams.get("search") || "").trim().toLowerCase();
-  const tag = (searchParams.get("tag") || "").trim().toLowerCase();
-  const sort = searchParams.get("sort") === "recent" ? "recent" : "featured";
+  const category = (searchParams.get("category") || "all").trim().toLowerCase();
+  const sort = searchParams.get("sort") === "popular" ? "popular" : "newest";
 
   const allProjects = await readShowcaseProjects();
 
-  let projects = allProjects.filter((project) => {
-    if (search) {
-      const haystack = [
-        project.title,
-        project.description,
-        project.author,
-        project.url,
-        ...project.tags,
-      ]
-        .join(" ")
-        .toLowerCase();
+  const filtered =
+    category === "all"
+      ? allProjects
+      : allProjects.filter((project) => project.category === category);
 
-      if (!haystack.includes(search)) {
-        return false;
-      }
+  const projects = [...filtered].sort((a, b) => {
+    if (sort === "popular") {
+      const voteDiff = b.voteCount - a.voteCount;
+      if (voteDiff !== 0) return voteDiff;
     }
 
-    if (tag && !project.tags.map((t) => t.toLowerCase()).includes(tag)) {
-      return false;
-    }
-
-    return true;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 
-  projects = projects.sort((a, b) => {
-    const timeDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-
-    if (sort === "recent") {
-      return timeDiff;
-    }
-
-    if (a.featured === b.featured) {
-      return timeDiff;
-    }
-
-    return a.featured ? -1 : 1;
-  });
-
-  return NextResponse.json({
-    projects,
-    total: projects.length,
-  });
+  return NextResponse.json({ projects, total: projects.length });
 }
 
 export async function POST(request: NextRequest) {
   try {
     const ip = getClientIp(request);
-    const rl = checkRateLimit(`showcase:post:${ip}`, { windowMs: 60_000, max: 10 });
+    const rl = checkRateLimit(`showcase:submit:${ip}`, { windowMs: 60_000, max: 10 });
     if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
 
     const body = await readJsonWithLimit<ShowcaseSubmission & Record<string, unknown>>(
@@ -175,20 +172,17 @@ export async function POST(request: NextRequest) {
 
     const projects = await readShowcaseProjects();
 
-    const tags = (body.tags as string[])
-      .map((tag) => tag.trim().toLowerCase())
-      .filter(Boolean);
-
     const project: ShowcaseProject = {
       id: `showcase_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
       title: (body.title as string).trim(),
       description: (body.description as string).trim(),
       url: (body.url as string).trim(),
       author: (body.author as string).trim(),
-      tags: Array.from(new Set(tags)),
-      ...(body.screenshot ? { screenshot: (body.screenshot as string).trim() } : {}),
-      featured: false,
+      category: body.category as ShowcaseCategory,
+      tags: normalizeTags(body.tags),
+      voteCount: 0,
       createdAt: new Date().toISOString(),
+      voters: [],
     };
 
     projects.push(project);

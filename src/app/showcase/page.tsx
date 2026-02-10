@@ -1,14 +1,16 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import { Metadata } from "next";
 import { ShowcaseClient } from "./showcase-client";
 
 export const metadata: Metadata = {
   title: "Agent Showcase & Community Projects — forAgents.dev",
   description:
-    "Explore community-submitted AI agent projects, filter by tags, and submit your own showcase entry.",
+    "Explore community-submitted AI agent projects, filter by category, upvote favorites, and submit your own showcase entry.",
   openGraph: {
     title: "Agent Showcase & Community Projects — forAgents.dev",
     description:
-      "Explore community-submitted AI agent projects, filter by tags, and submit your own showcase entry.",
+      "Explore community-submitted AI agent projects, filter by category, upvote favorites, and submit your own showcase entry.",
     url: "https://foragents.dev/showcase",
     siteName: "forAgents.dev",
     type: "website",
@@ -25,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Agent Showcase & Community Projects — forAgents.dev",
     description:
-      "Explore community-submitted AI agent projects, filter by tags, and submit your own showcase entry.",
+      "Explore community-submitted AI agent projects, filter by category, upvote favorites, and submit your own showcase entry.",
     images: ["/api/og?title=Agent%20Showcase&subtitle=Community%20Projects"],
   },
 };
@@ -37,8 +39,8 @@ export default function ShowcasePage() {
         <div className="text-center mb-10">
           <h1 className="text-5xl font-bold text-[#F8FAFC] mb-4">🚀 Community Showcase</h1>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Discover what other builders are shipping, then submit your own project to inspire the
-            next wave of agent developers.
+            Discover what builders are shipping, vote on what should trend, then submit your own
+            project for the next wave of agent developers.
           </p>
         </div>
 
