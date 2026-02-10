@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
@@ -15,45 +16,58 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 
-type BookmarkItemType = "skill" | "mcp" | "guide" | "bounty";
+type BookmarkItemType = "skill" | "mcp" | "collection" | "guide" | "connector";
 
 type Bookmark = {
   id: string;
-  agentHandle: string;
-  itemId: string;
+  userId: string;
   itemType: BookmarkItemType;
-  itemTitle: string;
-  itemUrl: string;
+  itemSlug: string;
+  itemName: string;
+  note?: string;
   createdAt: string;
+  tags: string[];
 };
 
 type AddBookmarkForm = {
-  agentHandle: string;
-  itemId: string;
+  userId: string;
   itemType: BookmarkItemType;
-  itemTitle: string;
-  itemUrl: string;
+  itemSlug: string;
+  itemName: string;
+  note: string;
+  tags: string;
 };
 
 const ITEM_TYPES: Array<{ value: BookmarkItemType; label: string }> = [
   { value: "skill", label: "Skill" },
   { value: "mcp", label: "MCP" },
+  { value: "collection", label: "Collection" },
   { value: "guide", label: "Guide" },
-  { value: "bounty", label: "Bounty" },
+  { value: "connector", label: "Connector" },
 ];
 
 const badgeClassByType: Record<BookmarkItemType, string> = {
   skill: "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30",
   mcp: "bg-[#7C3AED]/10 text-[#A78BFA] border-[#7C3AED]/30",
+  collection: "bg-[#E879F9]/10 text-[#F5D0FE] border-[#E879F9]/30",
   guide: "bg-[#0EA5E9]/10 text-[#67E8F9] border-[#0EA5E9]/30",
-  bounty: "bg-[#F59E0B]/10 text-[#FCD34D] border-[#F59E0B]/30",
+  connector: "bg-[#F59E0B]/10 text-[#FCD34D] border-[#F59E0B]/30",
+};
+
+const routeSegmentByType: Record<BookmarkItemType, string> = {
+  skill: "skills",
+  mcp: "mcp",
+  collection: "collections",
+  guide: "guides",
+  connector: "connectors",
 };
 
 export default function BookmarksPage() {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [availableTags, setAvailableTags] = useState<string[]>([]);
   const [typeFilter, setTypeFilter] = useState<"all" | BookmarkItemType>("all");
-  const [agentHandleInput, setAgentHandleInput] = useState("");
-  const [agentHandleFilter, setAgentHandleFilter] = useState("");
+  const [tagFilter, setTagFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [removingId, setRemovingId] = useState<string | null>(null);
@@ -61,11 +75,12 @@ export default function BookmarksPage() {
   const [formError, setFormError] = useState<string | null>(null);
 
   const [form, setForm] = useState<AddBookmarkForm>({
-    agentHandle: "@kai@reflectt.ai",
-    itemId: "",
+    userId: "user_demo",
     itemType: "skill",
-    itemTitle: "",
-    itemUrl: "",
+    itemSlug: "",
+    itemName: "",
+    note: "",
+    tags: "",
   });
 
   const loadBookmarks = useCallback(async () => {
@@ -75,7 +90,8 @@ export default function BookmarksPage() {
     try {
       const query = new URLSearchParams();
       if (typeFilter !== "all") query.set("type", typeFilter);
-      if (agentHandleFilter.trim()) query.set("agentHandle", agentHandleFilter.trim());
+      if (tagFilter !== "all") query.set("tag", tagFilter);
+      if (search.trim()) query.set("search", search.trim());
 
       const response = await fetch(`/api/bookmarks${query.toString() ? `?${query.toString()}` : ""}`, {
         cache: "no-store",
@@ -86,29 +102,42 @@ export default function BookmarksPage() {
         throw new Error(data.error || "Failed to load bookmarks");
       }
 
-      const data = (await response.json()) as { bookmarks?: Bookmark[] };
-      const rows = Array.isArray(data.bookmarks) ? data.bookmarks : [];
-      setBookmarks(rows);
+      const data = (await response.json()) as { bookmarks?: Bookmark[]; tags?: string[] };
+      setBookmarks(Array.isArray(data.bookmarks) ? data.bookmarks : []);
+      setAvailableTags(Array.isArray(data.tags) ? data.tags : []);
     } catch (error) {
       console.error("Failed to load bookmarks", error);
       setErrorMessage(error instanceof Error ? error.message : "Failed to load bookmarks");
       setBookmarks([]);
+      setAvailableTags([]);
     } finally {
       setIsLoading(false);
     }
-  }, [typeFilter, agentHandleFilter]);
+  }, [search, tagFilter, typeFilter]);
 
   useEffect(() => {
     loadBookmarks();
   }, [loadBookmarks]);
 
-  const sortedBookmarks = useMemo(
-    () =>
-      [...bookmarks].sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      ),
-    [bookmarks]
-  );
+  const groupedBookmarks = useMemo(() => {
+    const groups: Record<BookmarkItemType, Bookmark[]> = {
+      skill: [],
+      mcp: [],
+      collection: [],
+      guide: [],
+      connector: [],
+    };
+
+    for (const bookmark of bookmarks) {
+      groups[bookmark.itemType].push(bookmark);
+    }
+
+    for (const type of Object.keys(groups) as BookmarkItemType[]) {
+      groups[type].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    }
+
+    return groups;
+  }, [bookmarks]);
 
   async function removeBookmark(id: string) {
     setRemovingId(id);
@@ -139,10 +168,22 @@ export default function BookmarksPage() {
     setFormError(null);
 
     try {
+      const tags = form.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean);
+
       const response = await fetch("/api/bookmarks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          userId: form.userId,
+          itemType: form.itemType,
+          itemSlug: form.itemSlug,
+          itemName: form.itemName,
+          note: form.note,
+          tags,
+        }),
       });
 
       if (!response.ok) {
@@ -152,9 +193,10 @@ export default function BookmarksPage() {
 
       setForm((current) => ({
         ...current,
-        itemId: "",
-        itemTitle: "",
-        itemUrl: "",
+        itemSlug: "",
+        itemName: "",
+        note: "",
+        tags: "",
       }));
 
       await loadBookmarks();
@@ -179,7 +221,7 @@ export default function BookmarksPage() {
             🔖 Saved Bookmarks
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Persistent bookmarks for skills, MCP servers, guides, and bounties.
+            Persistent favorites for skills, MCPs, collections, guides, and connectors.
           </p>
         </div>
       </section>
@@ -190,10 +232,10 @@ export default function BookmarksPage() {
         <Card className="bg-card/40 border-white/10">
           <CardHeader>
             <CardTitle className="text-xl">Filters</CardTitle>
-            <CardDescription>Filter by item type and agent handle.</CardDescription>
+            <CardDescription>Filter by type, tag chips, and search.</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-[220px_1fr_auto] items-end">
+          <CardContent className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-[220px_1fr] items-end">
               <div className="space-y-2">
                 <Label htmlFor="typeFilter">Type</Label>
                 <select
@@ -212,35 +254,39 @@ export default function BookmarksPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="agentHandle">Agent Handle</Label>
+                <Label htmlFor="search">Search</Label>
                 <Input
-                  id="agentHandle"
-                  placeholder="@kai@reflectt.ai"
-                  value={agentHandleInput}
-                  onChange={(event) => setAgentHandleInput(event.target.value)}
+                  id="search"
+                  placeholder="Search by name, slug, note, or tag"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
                   className="bg-black/30 border-white/15"
                 />
               </div>
+            </div>
 
-              <div className="flex gap-2">
+            <div className="space-y-2">
+              <Label>Tag Filters</Label>
+              <div className="flex flex-wrap gap-2">
                 <Button
                   type="button"
-                  onClick={() => setAgentHandleFilter(agentHandleInput.trim())}
-                  className="bg-[#06D6A0] text-black hover:brightness-110"
+                  variant={tagFilter === "all" ? "default" : "outline"}
+                  className={tagFilter === "all" ? "bg-[#06D6A0] text-black hover:brightness-110" : ""}
+                  onClick={() => setTagFilter("all")}
                 >
-                  Apply
+                  All tags
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setTypeFilter("all");
-                    setAgentHandleInput("");
-                    setAgentHandleFilter("");
-                  }}
-                >
-                  Reset
-                </Button>
+                {availableTags.map((tag) => (
+                  <Button
+                    key={tag}
+                    type="button"
+                    variant={tagFilter === tag ? "default" : "outline"}
+                    className={tagFilter === tag ? "bg-[#06D6A0] text-black hover:brightness-110" : ""}
+                    onClick={() => setTagFilter(tag)}
+                  >
+                    #{tag}
+                  </Button>
+                ))}
               </div>
             </div>
           </CardContent>
@@ -249,17 +295,17 @@ export default function BookmarksPage() {
         <Card className="bg-card/40 border-white/10">
           <CardHeader>
             <CardTitle className="text-xl">Add Bookmark</CardTitle>
-            <CardDescription>Add directly from this page (or wire this from item pages later).</CardDescription>
+            <CardDescription>Save a new favorite with tags and an optional note.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={addBookmark} className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="newAgentHandle">Agent Handle</Label>
+                <Label htmlFor="newUserId">User ID</Label>
                 <Input
-                  id="newAgentHandle"
-                  value={form.agentHandle}
-                  onChange={(event) => setForm((current) => ({ ...current, agentHandle: event.target.value }))}
-                  placeholder="@kai@reflectt.ai"
+                  id="newUserId"
+                  value={form.userId}
+                  onChange={(event) => setForm((current) => ({ ...current, userId: event.target.value }))}
+                  placeholder="user_demo"
                   required
                 />
               </div>
@@ -283,36 +329,44 @@ export default function BookmarksPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="newItemId">Item ID</Label>
+                <Label htmlFor="newItemSlug">Item Slug</Label>
                 <Input
-                  id="newItemId"
-                  value={form.itemId}
-                  onChange={(event) => setForm((current) => ({ ...current, itemId: event.target.value }))}
+                  id="newItemSlug"
+                  value={form.itemSlug}
+                  onChange={(event) => setForm((current) => ({ ...current, itemSlug: event.target.value }))}
                   placeholder="filesystem-memory"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="newItemTitle">Item Title</Label>
+                <Label htmlFor="newItemName">Item Name</Label>
                 <Input
-                  id="newItemTitle"
-                  value={form.itemTitle}
-                  onChange={(event) => setForm((current) => ({ ...current, itemTitle: event.target.value }))}
+                  id="newItemName"
+                  value={form.itemName}
+                  onChange={(event) => setForm((current) => ({ ...current, itemName: event.target.value }))}
                   placeholder="Filesystem Memory Skill"
                   required
                 />
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="newItemUrl">Item URL</Label>
+                <Label htmlFor="newTags">Tags (comma-separated)</Label>
                 <Input
-                  id="newItemUrl"
-                  type="url"
-                  value={form.itemUrl}
-                  onChange={(event) => setForm((current) => ({ ...current, itemUrl: event.target.value }))}
-                  placeholder="https://foragents.dev/skills/filesystem-memory"
-                  required
+                  id="newTags"
+                  value={form.tags}
+                  onChange={(event) => setForm((current) => ({ ...current, tags: event.target.value }))}
+                  placeholder="memory, core"
+                />
+              </div>
+
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="newNote">Add Note (optional)</Label>
+                <Input
+                  id="newNote"
+                  value={form.note}
+                  onChange={(event) => setForm((current) => ({ ...current, note: event.target.value }))}
+                  placeholder="Why this favorite is useful"
                 />
               </div>
 
@@ -324,7 +378,7 @@ export default function BookmarksPage() {
                   disabled={isSubmitting}
                   className="bg-[#06D6A0] text-black hover:brightness-110"
                 >
-                  {isSubmitting ? "Adding..." : "Add Bookmark"}
+                  {isSubmitting ? "Adding..." : "Save Bookmark"}
                 </Button>
               </div>
             </form>
@@ -334,7 +388,7 @@ export default function BookmarksPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Bookmarked Items</h2>
-            <p className="text-sm text-muted-foreground">{sortedBookmarks.length} total</p>
+            <p className="text-sm text-muted-foreground">{bookmarks.length} total</p>
           </div>
 
           {isLoading ? (
@@ -350,70 +404,81 @@ export default function BookmarksPage() {
                 </Button>
               </CardContent>
             </Card>
-          ) : sortedBookmarks.length === 0 ? (
+          ) : bookmarks.length === 0 ? (
             <Card className="bg-card/30 border-white/10">
               <CardContent className="py-14 text-center space-y-4">
                 <div className="text-5xl">🗂️</div>
                 <h3 className="text-xl font-semibold">No bookmarks found</h3>
-                <p className="text-muted-foreground">
-                  Try a different filter, or add your first bookmark above.
-                </p>
-                <div className="flex flex-wrap justify-center gap-2 text-sm text-muted-foreground">
-                  <span>Suggestions:</span>
-                  <Link href="/skills" className="text-[#06D6A0] hover:underline">
-                    Browse Skills
-                  </Link>
-                  <span>•</span>
-                  <Link href="/mcp" className="text-[#06D6A0] hover:underline">
-                    Explore MCP Servers
-                  </Link>
-                  <span>•</span>
-                  <Link href="/guides" className="text-[#06D6A0] hover:underline">
-                    Read Guides
-                  </Link>
-                </div>
+                <p className="text-muted-foreground">Try a different filter, or add your first bookmark above.</p>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid gap-4 md:grid-cols-2">
-              {sortedBookmarks.map((bookmark) => (
-                <Card key={bookmark.id} className="bg-card/40 border-white/10">
-                  <CardHeader className="space-y-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <CardTitle className="text-lg leading-tight">{bookmark.itemTitle}</CardTitle>
-                        <CardDescription className="mt-1">Saved by {bookmark.agentHandle}</CardDescription>
-                      </div>
-                      <Badge className={badgeClassByType[bookmark.itemType]}>{bookmark.itemType}</Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="text-xs text-muted-foreground">
-                      <div>ID: {bookmark.itemId}</div>
-                      <div>Saved: {new Date(bookmark.createdAt).toLocaleString()}</div>
+            <div className="space-y-8">
+              {ITEM_TYPES.map((type) => {
+                const items = groupedBookmarks[type.value];
+                if (!items.length) return null;
+
+                return (
+                  <div key={type.value} className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-xl font-semibold">{type.label}</h3>
+                      <Badge className={badgeClassByType[type.value]}>{items.length}</Badge>
                     </div>
 
-                    <div className="flex flex-wrap gap-2">
-                      <Link
-                        href={bookmark.itemUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center justify-center h-9 px-4 rounded-md bg-[#06D6A0] text-black text-sm font-medium hover:brightness-110"
-                      >
-                        Open Item
-                      </Link>
-                      <Button
-                        variant="outline"
-                        onClick={() => removeBookmark(bookmark.id)}
-                        disabled={removingId === bookmark.id}
-                        className="border-red-500/30 text-red-300 hover:bg-red-500/10"
-                      >
-                        {removingId === bookmark.id ? "Removing..." : "Remove"}
-                      </Button>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      {items.map((bookmark) => (
+                        <Card key={bookmark.id} className="bg-card/40 border-white/10">
+                          <CardHeader className="space-y-3">
+                            <div className="flex items-start justify-between gap-3">
+                              <div>
+                                <CardTitle className="text-lg leading-tight">{bookmark.itemName}</CardTitle>
+                                <CardDescription className="mt-1">/{bookmark.itemSlug}</CardDescription>
+                              </div>
+                              <Badge className={badgeClassByType[bookmark.itemType]}>{bookmark.itemType}</Badge>
+                            </div>
+                          </CardHeader>
+                          <CardContent className="space-y-3">
+                            {bookmark.note ? (
+                              <p className="text-sm text-muted-foreground">📝 {bookmark.note}</p>
+                            ) : (
+                              <p className="text-sm text-muted-foreground italic">No note added.</p>
+                            )}
+
+                            <div className="flex flex-wrap gap-2">
+                              {bookmark.tags.map((tag) => (
+                                <Badge key={tag} variant="secondary" className="text-xs">
+                                  #{tag}
+                                </Badge>
+                              ))}
+                            </div>
+
+                            <div className="text-xs text-muted-foreground">
+                              Saved: {new Date(bookmark.createdAt).toLocaleString()}
+                            </div>
+
+                            <div className="flex flex-wrap gap-2">
+                              <Link
+                                href={`/${routeSegmentByType[bookmark.itemType]}/${bookmark.itemSlug}`}
+                                className="inline-flex items-center justify-center h-9 px-4 rounded-md bg-[#06D6A0] text-black text-sm font-medium hover:brightness-110"
+                              >
+                                Open Item
+                              </Link>
+                              <Button
+                                variant="outline"
+                                onClick={() => removeBookmark(bookmark.id)}
+                                disabled={removingId === bookmark.id}
+                                className="border-red-500/30 text-red-300 hover:bg-red-500/10"
+                              >
+                                {removingId === bookmark.id ? "Removing..." : "Remove"}
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>

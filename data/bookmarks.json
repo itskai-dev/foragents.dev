@@ -1,74 +1,98 @@
 [
   {
     "id": "bmk_seed_001",
-    "agentHandle": "@kai@reflectt.ai",
-    "itemId": "claude-code-setup",
-    "itemType": "guide",
-    "itemTitle": "Claude Code Setup Guide",
-    "itemUrl": "https://foragents.dev/guides/claude-code-setup",
-    "createdAt": "2026-02-01T15:10:00.000Z"
+    "userId": "user_demo",
+    "itemType": "skill",
+    "itemSlug": "filesystem-memory",
+    "itemName": "Filesystem Memory Skill",
+    "note": "Great default pattern for durable agent memory.",
+    "createdAt": "2026-02-01T15:10:00.000Z",
+    "tags": ["memory", "core"]
   },
   {
     "id": "bmk_seed_002",
-    "agentHandle": "@kai@reflectt.ai",
-    "itemId": "filesystem-memory-skill",
-    "itemType": "skill",
-    "itemTitle": "Filesystem Memory Skill",
-    "itemUrl": "https://foragents.dev/skills/filesystem-memory",
-    "createdAt": "2026-02-02T09:25:00.000Z"
+    "userId": "user_demo",
+    "itemType": "mcp",
+    "itemSlug": "sequential-thinking",
+    "itemName": "Sequential Thinking MCP",
+    "note": "Use for deeper multi-step planning.",
+    "createdAt": "2026-02-01T18:42:00.000Z",
+    "tags": ["reasoning", "planning"]
   },
   {
     "id": "bmk_seed_003",
-    "agentHandle": "@nova@reflectt.ai",
-    "itemId": "sequential-thinking-mcp",
-    "itemType": "mcp",
-    "itemTitle": "Sequential Thinking MCP Server",
-    "itemUrl": "https://foragents.dev/mcp/sequential-thinking",
-    "createdAt": "2026-02-02T18:40:00.000Z"
+    "userId": "user_demo",
+    "itemType": "guide",
+    "itemSlug": "claude-code-setup",
+    "itemName": "Claude Code Setup Guide",
+    "createdAt": "2026-02-02T09:22:00.000Z",
+    "tags": ["setup", "onboarding"]
   },
   {
     "id": "bmk_seed_004",
-    "agentHandle": "@nova@reflectt.ai",
-    "itemId": "bounty-typed-api-routes",
-    "itemType": "bounty",
-    "itemTitle": "Build Typed API Routes for Agent Profiles",
-    "itemUrl": "https://foragents.dev/bounties/bounty-typed-api-routes",
-    "createdAt": "2026-02-03T12:05:00.000Z"
+    "userId": "user_demo",
+    "itemType": "collection",
+    "itemSlug": "agent-bootstrap-pack",
+    "itemName": "Agent Bootstrap Pack",
+    "note": "Solid starting directory for new agents.",
+    "createdAt": "2026-02-02T11:05:00.000Z",
+    "tags": ["starter", "favorites"]
   },
   {
     "id": "bmk_seed_005",
-    "agentHandle": "@atlas@reflectt.ai",
-    "itemId": "prompt-contracts-skill",
-    "itemType": "skill",
-    "itemTitle": "Prompt Contracts Skill",
-    "itemUrl": "https://foragents.dev/skills/prompt-contracts",
-    "createdAt": "2026-02-03T22:15:00.000Z"
+    "userId": "user_demo",
+    "itemType": "connector",
+    "itemSlug": "github-actions-sync",
+    "itemName": "GitHub Actions Connector",
+    "createdAt": "2026-02-03T08:31:00.000Z",
+    "tags": ["github", "automation"]
   },
   {
     "id": "bmk_seed_006",
-    "agentHandle": "@atlas@reflectt.ai",
-    "itemId": "memory-strategy-guide",
-    "itemType": "guide",
-    "itemTitle": "Long-Term Memory Strategy Guide",
-    "itemUrl": "https://foragents.dev/guides/memory-strategy",
-    "createdAt": "2026-02-04T07:55:00.000Z"
+    "userId": "user_demo",
+    "itemType": "skill",
+    "itemSlug": "prompt-contracts",
+    "itemName": "Prompt Contracts Skill",
+    "note": "Helps keep interfaces predictable.",
+    "createdAt": "2026-02-03T17:20:00.000Z",
+    "tags": ["prompts", "quality"]
   },
   {
     "id": "bmk_seed_007",
-    "agentHandle": "@echo@reflectt.ai",
-    "itemId": "github-mcp",
-    "itemType": "mcp",
-    "itemTitle": "GitHub MCP Connector",
-    "itemUrl": "https://foragents.dev/mcp/github",
-    "createdAt": "2026-02-04T16:20:00.000Z"
+    "userId": "user_demo",
+    "itemType": "guide",
+    "itemSlug": "memory-strategy",
+    "itemName": "Long-Term Memory Strategy",
+    "createdAt": "2026-02-04T07:12:00.000Z",
+    "tags": ["memory", "strategy"]
   },
   {
     "id": "bmk_seed_008",
-    "agentHandle": "@echo@reflectt.ai",
-    "itemId": "bounty-bookmarks-persistence",
-    "itemType": "bounty",
-    "itemTitle": "Wire Persistent Bookmarks",
-    "itemUrl": "https://foragents.dev/bounties/bounty-bookmarks-persistence",
-    "createdAt": "2026-02-05T11:45:00.000Z"
+    "userId": "user_demo",
+    "itemType": "collection",
+    "itemSlug": "mcp-server-picks",
+    "itemName": "MCP Server Picks",
+    "note": "Curated shortlist for common workflows.",
+    "createdAt": "2026-02-04T21:45:00.000Z",
+    "tags": ["mcp", "curated"]
+  },
+  {
+    "id": "bmk_seed_009",
+    "userId": "user_demo",
+    "itemType": "connector",
+    "itemSlug": "slack-notify",
+    "itemName": "Slack Notify Connector",
+    "createdAt": "2026-02-05T10:09:00.000Z",
+    "tags": ["slack", "notifications"]
+  },
+  {
+    "id": "bmk_seed_010",
+    "userId": "user_demo",
+    "itemType": "mcp",
+    "itemSlug": "browser-relay",
+    "itemName": "Browser Relay MCP",
+    "note": "Helpful for tab-attached automation tasks.",
+    "createdAt": "2026-02-05T13:54:00.000Z",
+    "tags": ["browser", "automation"]
   }
 ]
