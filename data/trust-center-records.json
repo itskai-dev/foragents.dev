@@ -1,0 +1,83 @@
+[
+  {
+    "id": "trust_001",
+    "title": "Annual SOC 2 Type II audit completed",
+    "description": "Independent auditors validated security controls across access, monitoring, incident response, and vendor management.",
+    "category": "compliance",
+    "status": "active",
+    "evidence": "Audit letter dated 2026-01-20 with zero critical findings.",
+    "updatedAt": "2026-01-20T18:00:00.000Z"
+  },
+  {
+    "id": "trust_002",
+    "title": "Data encryption coverage verified",
+    "description": "Production data is encrypted in transit with TLS 1.3 and at rest using managed encryption keys.",
+    "category": "security",
+    "status": "active",
+    "evidence": "Quarterly encryption controls review completed by security engineering.",
+    "updatedAt": "2026-01-28T09:45:00.000Z"
+  },
+  {
+    "id": "trust_003",
+    "title": "Access control hardening rollout",
+    "description": "Admin console access now requires short-lived credentials and step-up verification for high-risk actions.",
+    "category": "security",
+    "status": "monitoring",
+    "evidence": "Rollout report and SIEM event baseline published for January release.",
+    "updatedAt": "2026-01-31T14:22:00.000Z"
+  },
+  {
+    "id": "trust_004",
+    "title": "Data retention policy refresh",
+    "description": "Retention windows were aligned to product surfaces with automated cleanup jobs and stricter deletion timelines.",
+    "category": "privacy",
+    "status": "active",
+    "evidence": "Privacy policy revision v3.4 and retention matrix approved by legal.",
+    "updatedAt": "2026-02-02T11:10:00.000Z"
+  },
+  {
+    "id": "trust_005",
+    "title": "Public incident timeline transparency",
+    "description": "Incident history now includes severity, response windows, and remediation notes in public-facing status updates.",
+    "category": "transparency",
+    "status": "active",
+    "evidence": "Status publication standard adopted by operations and support teams.",
+    "updatedAt": "2026-02-03T16:05:00.000Z"
+  },
+  {
+    "id": "trust_006",
+    "title": "DPA and subprocessor disclosures expanded",
+    "description": "Subprocessor inventory now includes data scope, region, and purpose with monthly review checkpoints.",
+    "category": "privacy",
+    "status": "monitoring",
+    "evidence": "Updated DPA annex posted with regional hosting and processor metadata.",
+    "updatedAt": "2026-02-04T08:30:00.000Z"
+  },
+  {
+    "id": "trust_007",
+    "title": "ISO 27001 readiness program",
+    "description": "Control owners are closing remaining gaps tied to risk treatment and evidence collection workflows.",
+    "category": "compliance",
+    "status": "planned",
+    "evidence": "Program board tracks 12 remaining control tasks for Q2 certification window.",
+    "updatedAt": "2026-02-05T12:40:00.000Z"
+  },
+  {
+    "id": "trust_008",
+    "title": "Quarterly trust report publication",
+    "description": "A recurring report summarizes uptime, incident patterns, audit progress, and security roadmap milestones.",
+    "category": "transparency",
+    "status": "active",
+    "evidence": "Q1 trust report draft approved for external publication cycle.",
+    "updatedAt": "2026-02-06T19:15:00.000Z"
+  },
+  {
+    "id": "trust_009",
+    "title": "Third-party penetration test scheduling",
+    "description": "External red-team validation is scheduled to verify API, auth, and tenant boundary controls.",
+    "category": "security",
+    "status": "planned",
+    "evidence": "Statement of work signed with accredited assessor for March engagement.",
+    "updatedAt": "2026-02-07T15:50:00.000Z"
+  }
+]
