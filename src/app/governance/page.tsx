@@ -2,35 +2,9 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
 import GovernanceReadiness from "./GovernanceReadiness";
-import governanceFramework from "@/data/governance-framework.json";
-
-type Pillar = {
-  slug: string;
-  title: string;
-  description: string;
-  keyPrinciples: string[];
-  maturity: {
-    basic: string;
-    intermediate: string;
-    advanced: string;
-  };
-};
-
-type FrameworkData = {
-  overview: {
-    title: string;
-    description: string;
-    whyItMatters: string[];
-  };
-  pillars: Pillar[];
-  readinessChecklist: Array<{ id: string; label: string }>;
-  maturityCriteria: {
-    basic: { range: [number, number]; label: string; guidance: string };
-    intermediate: { range: [number, number]; label: string; guidance: string };
-    advanced: { range: [number, number]; label: string; guidance: string };
-  };
-};
+import type { GovernanceFrameworkData } from "@/lib/governanceFramework";
 
 export const metadata: Metadata = {
   title: "Agent Governance Framework — forAgents.dev",
@@ -38,16 +12,50 @@ export const metadata: Metadata = {
     "Best-practice governance framework for autonomous agents covering accountability, transparency, safety, and compliance.",
 };
 
-export default function GovernancePage() {
-  const data = governanceFramework as unknown as FrameworkData;
+export const dynamic = "force-dynamic";
+
+type GovernanceHubResponse = Pick<
+  GovernanceFrameworkData,
+  "overview" | "pillars" | "readinessChecklist" | "maturityCriteria"
+>;
+
+async function getGovernanceHubData(): Promise<GovernanceHubResponse | null> {
+  const headerStore = await headers();
+  const host = headerStore.get("x-forwarded-host") ?? headerStore.get("host") ?? "localhost:3000";
+  const proto = headerStore.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
+
+  const response = await fetch(`${proto}://${host}/api/governance`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return (await response.json()) as GovernanceHubResponse;
+}
+
+export default async function GovernancePage() {
+  const data = await getGovernanceHubData();
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a]">
+        <section className="mx-auto max-w-5xl px-4 py-16">
+          <h1 className="text-4xl font-bold tracking-tight text-[#F8FAFC] md:text-5xl">
+            Agent Governance Framework
+          </h1>
+          <p className="mt-4 text-foreground/80">Governance framework data is temporarily unavailable.</p>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <section className="mx-auto max-w-5xl px-4 py-16">
         <p className="text-sm text-[#06D6A0]">Governance Framework Hub</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#F8FAFC] md:text-5xl">
-          Agent Governance Framework
-        </h1>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-[#F8FAFC] md:text-5xl">{data.overview.title}</h1>
         <p className="mt-4 max-w-3xl text-foreground/80">
           {data.overview.description} Governance isn't optional once agents can act independently.
         </p>

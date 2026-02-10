@@ -2,21 +2,18 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
-import governanceFramework from "@/data/governance-framework.json";
+import { headers } from "next/headers";
+import type { GovernanceFrameworkData } from "@/lib/governanceFramework";
 
-type AccountabilityData = {
-  accountability: {
-    auditTrailRequirements: string[];
-    decisionLoggingPatterns: string[];
-    escalationProtocols: string[];
-  };
-};
+type AccountabilityData = Pick<GovernanceFrameworkData, "accountability">;
 
 export const metadata: Metadata = {
   title: "Accountability for Agent Operations — forAgents.dev",
   description:
     "Audit trails, decision logging, escalation protocols, and human-in-the-loop gates for accountable autonomous agents.",
 };
+
+export const dynamic = "force-dynamic";
 
 const loggingExample = `type DecisionLog = {
   decisionId: string;
@@ -66,8 +63,40 @@ const hitlGateExample = `export async function runWithHumanGate(input: TaskInput
   return executeTask(input);
 }`;
 
-export default function GovernanceAccountabilityPage() {
-  const data = governanceFramework as AccountabilityData;
+async function getAccountabilityData(): Promise<AccountabilityData | null> {
+  const headerStore = await headers();
+  const host = headerStore.get("x-forwarded-host") ?? headerStore.get("host") ?? "localhost:3000";
+  const proto = headerStore.get("x-forwarded-proto") ?? (host.includes("localhost") ? "http" : "https");
+
+  const response = await fetch(`${proto}://${host}/api/governance/accountability`, {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    return null;
+  }
+
+  return (await response.json()) as AccountabilityData;
+}
+
+export default async function GovernanceAccountabilityPage() {
+  const data = await getAccountabilityData();
+
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a]">
+        <section className="mx-auto max-w-5xl px-4 py-16">
+          <Link href="/governance" className="text-sm text-[#06D6A0] hover:underline">
+            ← Back to governance hub
+          </Link>
+          <h1 className="mt-4 text-4xl font-bold tracking-tight text-[#F8FAFC] md:text-5xl">
+            Accountability Deep Dive
+          </h1>
+          <p className="mt-4 text-foreground/80">Accountability data is temporarily unavailable.</p>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
