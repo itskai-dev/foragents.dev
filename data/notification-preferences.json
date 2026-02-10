@@ -1,0 +1,50 @@
+{
+  "channels": ["email", "discord", "webhook", "in-app"],
+  "categories": {
+    "security-alerts": {
+      "frequency": "instant",
+      "channels": {
+        "email": true,
+        "discord": true,
+        "webhook": true,
+        "in-app": true
+      }
+    },
+    "new-skills": {
+      "frequency": "daily",
+      "channels": {
+        "email": true,
+        "discord": true,
+        "webhook": false,
+        "in-app": true
+      }
+    },
+    "bounty-updates": {
+      "frequency": "instant",
+      "channels": {
+        "email": true,
+        "discord": true,
+        "webhook": true,
+        "in-app": true
+      }
+    },
+    "community": {
+      "frequency": "weekly",
+      "channels": {
+        "email": false,
+        "discord": true,
+        "webhook": false,
+        "in-app": true
+      }
+    },
+    "system": {
+      "frequency": "daily",
+      "channels": {
+        "email": true,
+        "discord": false,
+        "webhook": false,
+        "in-app": true
+      }
+    }
+  }
+}

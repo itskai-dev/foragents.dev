@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import {
   Card,
   CardContent,
@@ -9,8 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getNews, getSkills, getMcpServers, getLlmsTxtEntries, getAgents, getFeaturedAgents, formatAgentHandle, getAcpAgents, getRecentSubmissions, getCreators, type McpServer } from "@/lib/data";
-import { getTrendingSkillsWithBadges } from "@/lib/server/trendingSkills";
-import { SkillTrendingBadge } from "@/components/skill-trending-badge";
 import { getSupabase } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,6 +23,9 @@ import { NewsletterSignup } from "@/components/newsletter-signup";
 import { InstallCount } from "@/components/InstallCount";
 import { SkillVersionBadge } from "@/components/skill-version-badge";
 import { TestimonialCarousel } from "@/components/TestimonialCarousel";
+import { HomeStatsBar } from "@/components/home-stats-bar";
+import { HomeSkillDiscoverySearch } from "@/components/home-skill-discovery-search";
+import { HomeTrendingSection } from "@/components/home-trending-section";
 
 export const revalidate = 300;
 
@@ -54,8 +57,6 @@ export const metadata = {
     images: ["/api/og"],
   },
 };
-
-// Trending scores are computed server-side (installs/views/recency/engagement)
 
 function getMcpRepoUrl(server: McpServer): string {
   const s = server as unknown as Record<string, unknown>;
@@ -95,7 +96,6 @@ export default async function Home() {
   const recentSubmissions = await getRecentSubmissions(5);
   const creators = getCreators();
   const topCreators = creators.slice(0, 6);
-  const trendingSkills = (await getTrendingSkillsWithBadges(skills)).slice(0, 6);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -180,32 +180,16 @@ export default async function Home() {
           </div>
 
           {/* Stats bar - Enhanced */}
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto">
-            <div className="text-center p-3 rounded-lg bg-card/30 border border-white/5">
-              <div className="text-2xl font-bold text-cyan">{news.length}+</div>
-              <div className="text-xs text-muted-foreground mt-1">Articles</div>
-            </div>
-            <div className="text-center p-3 rounded-lg bg-card/30 border border-white/5">
-              <div className="text-2xl font-bold text-cyan">{agents.length}</div>
-              <div className="text-xs text-muted-foreground mt-1">Agents</div>
-            </div>
-            <div className="text-center p-3 rounded-lg bg-card/30 border border-white/5">
-              <div className="text-2xl font-bold text-cyan">{skills.length}</div>
-              <div className="text-xs text-muted-foreground mt-1">Skills</div>
-            </div>
-            <div className="text-center p-3 rounded-lg bg-card/30 border border-white/5">
-              <div className="text-2xl font-bold text-purple">{mcpServers.length}</div>
-              <div className="text-xs text-muted-foreground mt-1">MCP Servers</div>
-            </div>
-            <div className="text-center p-3 rounded-lg bg-card/30 border border-white/5">
-              <div className="text-2xl font-bold text-purple">{acpAgents.length}</div>
-              <div className="text-xs text-muted-foreground mt-1">ACP Agents</div>
-            </div>
-            <div className="text-center p-3 rounded-lg bg-card/30 border border-white/5">
-              <div className="text-2xl font-bold text-purple">{llmsTxtEntries.length}</div>
-              <div className="text-xs text-muted-foreground mt-1">llms.txt Sites</div>
-            </div>
-          </div>
+          <HomeStatsBar
+            initial={{
+              articles: news.length,
+              agents: agents.length,
+              skills: skills.length,
+              mcpServers: mcpServers.length,
+              acpAgents: acpAgents.length,
+              llmsTxtSites: llmsTxtEntries.length,
+            }}
+          />
 
           {/* Add to your agent */}
           <div className="mt-10 text-left">
@@ -289,28 +273,7 @@ export default async function Home() {
 
       {/* Search Bar Section */}
       <section className="max-w-5xl mx-auto px-4 py-8">
-        <Link href="/search" className="block" aria-label="Go to search page">
-          <div className="relative overflow-hidden rounded-xl border border-white/10 bg-card/30 p-6 hover:border-cyan/30 transition-all group">
-            <div className="flex items-center gap-4">
-              <div className="text-2xl" aria-hidden="true">🔍</div>
-              <div className="flex-1">
-                <input 
-                  type="text" 
-                  placeholder="Search skills, agents, MCP servers..."
-                  readOnly
-                  tabIndex={-1}
-                  aria-hidden="true"
-                  className="w-full bg-transparent text-foreground placeholder:text-muted-foreground outline-none cursor-pointer"
-                />
-              </div>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <kbd className="px-2 py-1 rounded bg-white/5 border border-white/10 font-mono">Ctrl</kbd>
-                <span>+</span>
-                <kbd className="px-2 py-1 rounded bg-white/5 border border-white/10 font-mono">K</kbd>
-              </div>
-            </div>
-          </div>
-        </Link>
+        <HomeSkillDiscoverySearch />
       </section>
 
       {/* Featured Section */}
@@ -377,106 +340,7 @@ export default async function Home() {
       <Separator className="opacity-10" />
 
       {/* Trending This Week */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl font-bold">🔥 Trending This Week</h2>
-            <p className="text-muted-foreground text-sm mt-1">
-              Hot skills agents are using right now
-            </p>
-          </div>
-          <Link href="/trending" className="text-sm text-cyan hover:underline">
-            View all trending →
-          </Link>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-3">
-          {trendingSkills.map((skill, index) => (
-            <Link key={skill.id} href={`/skills/${skill.slug}`}>
-              <Card className="bg-card/50 border-white/5 hover:border-orange-500/20 transition-all group h-full relative">
-                {/* Trending badge for top 3 */}
-                {index < 3 && (
-                  <div className="absolute top-3 right-3">
-                    <Badge 
-                      variant="outline" 
-                      className={`text-xs font-bold ${
-                        index === 0 
-                          ? 'bg-yellow-500/20 text-yellow-300 border-yellow-400/30' 
-                          : index === 1
-                          ? 'bg-gray-400/20 text-gray-300 border-gray-400/30'
-                          : 'bg-orange-500/20 text-orange-300 border-orange-400/30'
-                      }`}
-                    >
-                      #{index + 1}
-                    </Badge>
-                  </div>
-                )}
-                
-                <CardHeader>
-                  <CardTitle className="text-lg group-hover:text-orange-500 transition-colors flex items-center gap-2 pr-12">
-                    <span className="truncate flex-1">{skill.name}</span>
-                    {skill.author === "Team Reflectt" && (
-                      <Image
-                        src="/badges/verified-skill.svg"
-                        alt="Verified Skill"
-                        title="Verified: Team Reflectt skill"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 inline-block"
-                      />
-                    )}
-                    <SkillVersionBadge slug={skill.slug} />
-                  </CardTitle>
-
-                  {skill.trendingBadge && (
-                    <div className="mt-2 flex items-center gap-2">
-                      <SkillTrendingBadge badge={skill.trendingBadge} />
-                    </div>
-                  )}
-
-                  <CardDescription className="text-xs flex items-center gap-2">
-                    <span>by {skill.author}</span>
-                    <span className="text-white/20">•</span>
-                    <InstallCount 
-                      skillSlug={skill.slug} 
-                      className="text-xs text-cyan"
-                    />
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                    {skill.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1">
-                      {skill.tags.slice(0, 2).map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="outline"
-                          className="text-xs bg-white/5 text-white/60 border-white/10"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                      {skill.tags.length > 2 && (
-                        <Badge
-                          variant="outline"
-                          className="text-xs bg-white/5 text-white/60 border-white/10"
-                        >
-                          +{skill.tags.length - 2}
-                        </Badge>
-                      )}
-                    </div>
-                    <span className="text-xs text-orange-500 group-hover:underline">
-                      View →
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <HomeTrendingSection />
 
       <Separator className="opacity-10" />
 

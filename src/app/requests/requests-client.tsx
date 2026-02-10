@@ -10,10 +10,9 @@ import { Separator } from "@/components/ui/separator";
 
 type RequestRow = {
   id: string;
-  kitName: string;
+  title: string;
   description: string;
-  useCase: string;
-  requesterAgentId: string | null;
+  category: string;
   createdAt: string;
   votes: number;
 };
@@ -22,6 +21,18 @@ type ListResponse = {
   requests: RequestRow[];
   total: number;
 };
+
+type SortOption = "votes" | "recent";
+
+const CATEGORY_OPTIONS = [
+  "integrations",
+  "security",
+  "observability",
+  "testing",
+  "automation",
+  "productivity",
+  "general",
+];
 
 function formatDate(iso: string) {
   try {
@@ -46,22 +57,37 @@ export function RequestsClient() {
 
   const [requests, setRequests] = useState<RequestRow[]>([]);
 
-  const [kitName, setKitName] = useState("");
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [useCase, setUseCase] = useState("");
-  const [requesterAgentId, setRequesterAgentId] = useState("");
+  const [category, setCategory] = useState(CATEGORY_OPTIONS[0]);
+
+  const [sortBy, setSortBy] = useState<SortOption>("votes");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   const totalVotes = useMemo(
     () => requests.reduce((sum, r) => sum + (typeof r.votes === "number" ? r.votes : 0), 0),
     [requests]
   );
 
+  const availableCategories = useMemo(() => {
+    const fromRequests = requests.map((r) => r.category).filter(Boolean);
+    const merged = new Set(["all", ...CATEGORY_OPTIONS, ...fromRequests]);
+    return Array.from(merged);
+  }, [requests]);
+
   const load = useCallback(async () => {
     setError(null);
     setLoading(true);
 
     try {
-      const res = await fetch("/api/requests", { cache: "no-store" });
+      const params = new URLSearchParams();
+      params.set("sort", sortBy);
+      if (categoryFilter !== "all") {
+        params.set("category", categoryFilter);
+      }
+
+      const query = params.toString();
+      const res = await fetch(`/api/requests${query ? `?${query}` : ""}`, { cache: "no-store" });
       if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(body.error || `Failed to load requests (${res.status})`);
@@ -74,7 +100,7 @@ export function RequestsClient() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [sortBy, categoryFilter]);
 
   useEffect(() => {
     void load();
@@ -92,10 +118,9 @@ export function RequestsClient() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          kitName,
+          title,
           description,
-          useCase,
-          requesterAgentId,
+          category,
         }),
       });
 
@@ -110,10 +135,9 @@ export function RequestsClient() {
       }
 
       setNotice({ type: "success", message: "Request submitted — thanks!" });
-      setKitName("");
+      setTitle("");
       setDescription("");
-      setUseCase("");
-      setRequesterAgentId("");
+      setCategory(CATEGORY_OPTIONS[0]);
 
       await load();
     } catch (e) {
@@ -145,10 +169,12 @@ export function RequestsClient() {
       setRequests((prev) =>
         prev
           .map((r) => (r.id === id ? { ...r, votes: nextVotes ?? r.votes + 1 } : r))
-          .sort(
-            (a, b) =>
-              (b.votes ?? 0) - (a.votes ?? 0) || b.createdAt.localeCompare(a.createdAt)
-          )
+          .sort((a, b) => {
+            if (sortBy === "recent") {
+              return b.createdAt.localeCompare(a.createdAt);
+            }
+            return (b.votes ?? 0) - (a.votes ?? 0) || b.createdAt.localeCompare(a.createdAt);
+          })
       );
 
       setNotice({ type: "info", message: "Upvoted" });
@@ -183,10 +209,10 @@ export function RequestsClient() {
             <CardContent>
               <form onSubmit={submitRequest} className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Kit name</label>
+                  <label className="text-sm font-medium">Title</label>
                   <Input
-                    value={kitName}
-                    onChange={(e) => setKitName(e.target.value)}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g., Slack Actions Kit"
                     className="bg-background/40 border-white/10"
                     required
@@ -199,30 +225,25 @@ export function RequestsClient() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="What should this kit do?"
-                    className="min-h-[90px] bg-background/40 border-white/10"
+                    className="min-h-[120px] bg-background/40 border-white/10"
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Use case</label>
-                  <Textarea
-                    value={useCase}
-                    onChange={(e) => setUseCase(e.target.value)}
-                    placeholder="How would you use it in a real agent workflow?"
-                    className="min-h-[90px] bg-background/40 border-white/10"
+                  <label className="text-sm font-medium">Category</label>
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full rounded-md border border-white/10 bg-background/40 px-3 py-2 text-sm"
                     required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Requester agent ID (optional)</label>
-                  <Input
-                    value={requesterAgentId}
-                    onChange={(e) => setRequesterAgentId(e.target.value)}
-                    placeholder="e.g., @kai@reflectt.ai"
-                    className="bg-background/40 border-white/10 font-mono text-sm"
-                  />
+                  >
+                    {CATEGORY_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <Button
@@ -264,12 +285,38 @@ export function RequestsClient() {
 
         {/* Queue */}
         <div className="lg:col-span-3">
-          <div className="flex items-end justify-between gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-bold">Community requests</h2>
-              <p className="text-sm text-muted-foreground">Sorted by upvotes</p>
+              <p className="text-sm text-muted-foreground">
+                Sorted by {sortBy === "votes" ? "upvotes" : "newest"}
+              </p>
             </div>
-            <div className="text-sm text-muted-foreground font-mono">{requests.length} items</div>
+
+            <div className="flex items-center gap-2">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                className="rounded-md border border-white/10 bg-background/40 px-2.5 py-1.5 text-xs"
+              >
+                <option value="votes">Most voted</option>
+                <option value="recent">Most recent</option>
+              </select>
+
+              <select
+                value={categoryFilter}
+                onChange={(e) => setCategoryFilter(e.target.value)}
+                className="rounded-md border border-white/10 bg-background/40 px-2.5 py-1.5 text-xs"
+              >
+                {availableCategories.map((option) => (
+                  <option key={option} value={option}>
+                    {option === "all" ? "All categories" : option}
+                  </option>
+                ))}
+              </select>
+
+              <div className="text-sm text-muted-foreground font-mono">{requests.length} items</div>
+            </div>
           </div>
 
           <Separator className="opacity-10 mb-6" />
@@ -290,20 +337,14 @@ export function RequestsClient() {
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <CardTitle className="text-lg text-white/90 truncate">{r.kitName}</CardTitle>
+                        <CardTitle className="text-lg text-white/90 truncate">{r.title}</CardTitle>
                         <div className="mt-1 flex flex-wrap items-center gap-2">
                           <Badge variant="outline" className="bg-white/5 text-white/70 border-white/10">
                             {formatDate(r.createdAt)}
                           </Badge>
-                          {r.requesterAgentId && (
-                            <Badge
-                              variant="outline"
-                              className="bg-purple/10 text-purple border-purple/30 font-mono"
-                              title={r.requesterAgentId}
-                            >
-                              {r.requesterAgentId}
-                            </Badge>
-                          )}
+                          <Badge variant="outline" className="bg-purple/10 text-purple border-purple/30">
+                            {r.category}
+                          </Badge>
                         </div>
                       </div>
 
@@ -327,14 +368,10 @@ export function RequestsClient() {
                     </div>
                   </CardHeader>
 
-                  <CardContent className="space-y-4">
+                  <CardContent>
                     <div>
                       <div className="text-xs uppercase tracking-wide text-white/50 mb-1">Description</div>
                       <div className="text-sm text-muted-foreground whitespace-pre-wrap">{r.description}</div>
-                    </div>
-                    <div>
-                      <div className="text-xs uppercase tracking-wide text-white/50 mb-1">Use case</div>
-                      <div className="text-sm text-muted-foreground whitespace-pre-wrap">{r.useCase}</div>
                     </div>
                   </CardContent>
                 </Card>

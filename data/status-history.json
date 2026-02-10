@@ -1,0 +1,39 @@
+{
+  "history": [
+    {
+      "date": "2026-02-03",
+      "uptime": 99.98,
+      "incidents": 0
+    },
+    {
+      "date": "2026-02-04",
+      "uptime": 99.92,
+      "incidents": 1
+    },
+    {
+      "date": "2026-02-05",
+      "uptime": 99.87,
+      "incidents": 1
+    },
+    {
+      "date": "2026-02-06",
+      "uptime": 100,
+      "incidents": 0
+    },
+    {
+      "date": "2026-02-07",
+      "uptime": 99.99,
+      "incidents": 0
+    },
+    {
+      "date": "2026-02-08",
+      "uptime": 99.95,
+      "incidents": 1
+    },
+    {
+      "date": "2026-02-09",
+      "uptime": 100,
+      "incidents": 0
+    }
+  ]
+}

@@ -1,0 +1,247 @@
+[
+  {
+    "term": "ACP",
+    "definition": "Agent Communication Protocol, a structured approach for message exchange between autonomous systems with predictable schemas and transport semantics.",
+    "category": "protocols",
+    "relatedTerms": ["MCP", "Interoperability", "Tool Calling"],
+    "slug": "acp"
+  },
+  {
+    "term": "Agent",
+    "definition": "An autonomous software entity that can interpret goals, reason over context, and take actions using tools and workflows.",
+    "category": "core-concepts",
+    "relatedTerms": ["Autonomy", "Orchestration", "Tool Calling"],
+    "slug": "agent"
+  },
+  {
+    "term": "Agent Card",
+    "definition": "A machine-readable profile describing an agent's capabilities, interfaces, constraints, and metadata for discovery and trust.",
+    "category": "protocols",
+    "relatedTerms": ["Discovery", "Registry", "Identity"],
+    "slug": "agent-card"
+  },
+  {
+    "term": "Autonomy",
+    "definition": "The degree to which an agent can decide and execute actions without requiring constant human confirmation.",
+    "category": "core-concepts",
+    "relatedTerms": ["Agent", "Guardrails", "Human-in-the-Loop"],
+    "slug": "autonomy"
+  },
+  {
+    "term": "Chain of Thought",
+    "definition": "An internal reasoning process an LLM may use to arrive at an answer; typically kept private while exposing concise rationale.",
+    "category": "patterns",
+    "relatedTerms": ["Prompt Engineering", "Reflection", "Task Decomposition"],
+    "slug": "chain-of-thought"
+  },
+  {
+    "term": "Context Window",
+    "definition": "The maximum amount of input and generated tokens an LLM can process in a single interaction cycle.",
+    "category": "infrastructure",
+    "relatedTerms": ["Token Budget", "Memory", "RAG"],
+    "slug": "context-window"
+  },
+  {
+    "term": "Discovery",
+    "definition": "The mechanism by which agents find tools, services, and other agents through metadata, registries, or protocol introspection.",
+    "category": "protocols",
+    "relatedTerms": ["Registry", "Agent Card", "Interoperability"],
+    "slug": "discovery"
+  },
+  {
+    "term": "Embedding",
+    "definition": "A dense vector representation of text or data used for semantic search, retrieval, clustering, and similarity scoring.",
+    "category": "infrastructure",
+    "relatedTerms": ["RAG", "Vector Database", "Memory"],
+    "slug": "embedding"
+  },
+  {
+    "term": "Evaluation Harness",
+    "definition": "A repeatable test system for scoring agent behavior against predefined tasks, metrics, and expected outcomes.",
+    "category": "patterns",
+    "relatedTerms": ["Observability", "Regression Testing", "Task Decomposition"],
+    "slug": "evaluation-harness"
+  },
+  {
+    "term": "Function Calling",
+    "definition": "A model capability for emitting structured arguments that map to executable tools, APIs, or internal functions.",
+    "category": "protocols",
+    "relatedTerms": ["Tool Calling", "Schema Validation", "MCP"],
+    "slug": "function-calling"
+  },
+  {
+    "term": "Gateway",
+    "definition": "A routing and policy layer that brokers traffic between agents, users, and external systems with auth and rate limits.",
+    "category": "infrastructure",
+    "relatedTerms": ["Identity", "Zero Trust", "Interoperability"],
+    "slug": "gateway"
+  },
+  {
+    "term": "Guardrails",
+    "definition": "Safety, policy, and quality controls that constrain or validate model and agent actions before execution.",
+    "category": "security",
+    "relatedTerms": ["Prompt Injection", "Policy Enforcement", "Human-in-the-Loop"],
+    "slug": "guardrails"
+  },
+  {
+    "term": "Human-in-the-Loop",
+    "definition": "An operating pattern where critical or high-risk actions require explicit human approval before completion.",
+    "category": "patterns",
+    "relatedTerms": ["Autonomy", "Guardrails", "Policy Enforcement"],
+    "slug": "human-in-the-loop"
+  },
+  {
+    "term": "Identity",
+    "definition": "A verifiable representation of an agent, user, or system principal used for authentication, authorization, and auditing.",
+    "category": "security",
+    "relatedTerms": ["Zero Trust", "Policy Enforcement", "Gateway"],
+    "slug": "identity"
+  },
+  {
+    "term": "Interoperability",
+    "definition": "The ability of heterogeneous agent stacks and tools to work together through shared protocols and data contracts.",
+    "category": "protocols",
+    "relatedTerms": ["ACP", "MCP", "Discovery"],
+    "slug": "interoperability"
+  },
+  {
+    "term": "Least Privilege",
+    "definition": "A security principle where each agent or tool is granted only the minimum permissions needed to perform tasks.",
+    "category": "security",
+    "relatedTerms": ["Zero Trust", "Policy Enforcement", "Identity"],
+    "slug": "least-privilege"
+  },
+  {
+    "term": "MCP",
+    "definition": "Model Context Protocol, a standard interface for connecting models and agents to external data sources and tools.",
+    "category": "protocols",
+    "relatedTerms": ["ACP", "Function Calling", "Tool Calling"],
+    "slug": "mcp"
+  },
+  {
+    "term": "Memory",
+    "definition": "Persisted or transient state that allows an agent to retain context, preferences, and prior outcomes across interactions.",
+    "category": "core-concepts",
+    "relatedTerms": ["RAG", "Context Window", "Vector Database"],
+    "slug": "memory"
+  },
+  {
+    "term": "Observability",
+    "definition": "Instrumentation for tracing, logging, and measuring agent behavior to diagnose quality, latency, and reliability issues.",
+    "category": "infrastructure",
+    "relatedTerms": ["Evaluation Harness", "Policy Enforcement", "Regression Testing"],
+    "slug": "observability"
+  },
+  {
+    "term": "Orchestration",
+    "definition": "The coordination of multiple agents, tools, and workflow steps to achieve complex goals with dependency control.",
+    "category": "patterns",
+    "relatedTerms": ["Task Decomposition", "Workflow", "Multi-Agent System"],
+    "slug": "orchestration"
+  },
+  {
+    "term": "Policy Enforcement",
+    "definition": "Runtime application of organizational rules governing data access, action permissions, compliance, and approvals.",
+    "category": "security",
+    "relatedTerms": ["Guardrails", "Least Privilege", "Identity"],
+    "slug": "policy-enforcement"
+  },
+  {
+    "term": "Prompt Engineering",
+    "definition": "Designing prompts, constraints, and examples to shape model outputs for reliability, relevance, and tool correctness.",
+    "category": "patterns",
+    "relatedTerms": ["Chain of Thought", "Reflection", "Tool Calling"],
+    "slug": "prompt-engineering"
+  },
+  {
+    "term": "Prompt Injection",
+    "definition": "A security attack where malicious instructions are inserted into model inputs to override intended behavior or exfiltrate data.",
+    "category": "security",
+    "relatedTerms": ["Guardrails", "Zero Trust", "Sandboxing"],
+    "slug": "prompt-injection"
+  },
+  {
+    "term": "RAG",
+    "definition": "Retrieval-Augmented Generation, a pattern that combines model inference with external retrieval to improve factual grounding.",
+    "category": "patterns",
+    "relatedTerms": ["Embedding", "Vector Database", "Memory"],
+    "slug": "rag"
+  },
+  {
+    "term": "Reflection",
+    "definition": "An iterative reasoning pattern where an agent critiques and improves its own outputs before finalizing an action.",
+    "category": "patterns",
+    "relatedTerms": ["Prompt Engineering", "Task Decomposition", "Evaluation Harness"],
+    "slug": "reflection"
+  },
+  {
+    "term": "Regression Testing",
+    "definition": "Re-running known scenarios to ensure model updates, prompt changes, or infrastructure modifications do not degrade behavior.",
+    "category": "patterns",
+    "relatedTerms": ["Evaluation Harness", "Observability", "Workflow"],
+    "slug": "regression-testing"
+  },
+  {
+    "term": "Registry",
+    "definition": "A canonical directory for publishing and discovering agent capabilities, schemas, endpoints, and trust metadata.",
+    "category": "infrastructure",
+    "relatedTerms": ["Discovery", "Agent Card", "Interoperability"],
+    "slug": "registry"
+  },
+  {
+    "term": "Sandboxing",
+    "definition": "Executing code or tools in isolated environments to limit blast radius, protect secrets, and contain unsafe behavior.",
+    "category": "security",
+    "relatedTerms": ["Zero Trust", "Prompt Injection", "Policy Enforcement"],
+    "slug": "sandboxing"
+  },
+  {
+    "term": "Schema Validation",
+    "definition": "Checking structured inputs and outputs against a strict schema to prevent malformed tool invocations and runtime faults.",
+    "category": "protocols",
+    "relatedTerms": ["Function Calling", "Tool Calling", "Policy Enforcement"],
+    "slug": "schema-validation"
+  },
+  {
+    "term": "Task Decomposition",
+    "definition": "Breaking complex objectives into smaller ordered subtasks that can be solved by one or more agents.",
+    "category": "patterns",
+    "relatedTerms": ["Orchestration", "Workflow", "Reflection"],
+    "slug": "task-decomposition"
+  },
+  {
+    "term": "Token Budget",
+    "definition": "The planned allocation of input and output tokens used to control cost, latency, and model context usage.",
+    "category": "infrastructure",
+    "relatedTerms": ["Context Window", "RAG", "Observability"],
+    "slug": "token-budget"
+  },
+  {
+    "term": "Tool Calling",
+    "definition": "The execution pattern where an agent selects and invokes external tools based on intent, context, and schema constraints.",
+    "category": "core-concepts",
+    "relatedTerms": ["Function Calling", "MCP", "Schema Validation"],
+    "slug": "tool-calling"
+  },
+  {
+    "term": "Vector Database",
+    "definition": "A storage engine optimized for high-dimensional similarity search, commonly used to power semantic retrieval for agents.",
+    "category": "infrastructure",
+    "relatedTerms": ["Embedding", "RAG", "Memory"],
+    "slug": "vector-database"
+  },
+  {
+    "term": "Workflow",
+    "definition": "A defined sequence of states and operations that coordinates decisions, tool use, retries, and outputs toward a goal.",
+    "category": "core-concepts",
+    "relatedTerms": ["Orchestration", "Task Decomposition", "Regression Testing"],
+    "slug": "workflow"
+  },
+  {
+    "term": "Zero Trust",
+    "definition": "A security model that continuously verifies identity and context rather than assuming trust based on network location.",
+    "category": "security",
+    "relatedTerms": ["Identity", "Least Privilege", "Sandboxing"],
+    "slug": "zero-trust"
+  }
+]

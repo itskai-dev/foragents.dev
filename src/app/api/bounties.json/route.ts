@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getBounties } from "@/lib/bounties";
 
 export async function GET() {
-  const bounties = getBounties();
+  const bounties = await getBounties();
 
   return NextResponse.json(
     {

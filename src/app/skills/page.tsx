@@ -1,6 +1,9 @@
+/* eslint-disable react/no-unescaped-entities */
+
 import Link from "next/link";
 
 import { getSkills } from "@/lib/data";
+import { getTrendingSkillsWithBadges } from "@/lib/server/trendingSkills";
 import { VerifiedSkillBadge } from "@/components/verified-badge";
 import { SkillVersionBadge } from "@/components/skill-version-badge";
 import { getAllBadges, getBadgesForSkills } from "@/lib/badges";
@@ -37,15 +40,35 @@ export default async function SkillsPage({
 }) {
   const skills = getSkills();
   const badgeFilter = typeof searchParams?.badge === "string" ? searchParams.badge : "";
+  const searchQuery = typeof searchParams?.search === "string" ? searchParams.search.trim().toLowerCase() : "";
+  const categoryFilter = typeof searchParams?.category === "string" ? searchParams.category.trim().toLowerCase() : "";
+  const sortFilter = typeof searchParams?.sort === "string" ? searchParams.sort.trim().toLowerCase() : "";
 
   const badgeDefs = getAllBadges();
   const badgeById = new Map(badgeDefs.map((b) => [b.id, b] as const));
 
   const badgeMap = await getBadgesForSkills(skills);
 
-  const filteredSkills = badgeFilter
+  let filteredSkills = badgeFilter
     ? skills.filter((s) => (badgeMap[s.slug] ?? []).some((b) => b.id === badgeFilter))
     : skills;
+
+  if (categoryFilter) {
+    filteredSkills = filteredSkills.filter((skill) =>
+      skill.tags.some((tag) => tag.toLowerCase() === categoryFilter)
+    );
+  }
+
+  if (searchQuery) {
+    filteredSkills = filteredSkills.filter((skill) => {
+      const haystack = `${skill.name} ${skill.description}`.toLowerCase();
+      return haystack.includes(searchQuery);
+    });
+  }
+
+  if (sortFilter === "trending") {
+    filteredSkills = await getTrendingSkillsWithBadges(filteredSkills);
+  }
 
   const activeBadge = badgeFilter ? badgeById.get(badgeFilter) : null;
 
@@ -62,14 +85,17 @@ export default async function SkillsPage({
             🧰 Skills Directory
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Browse {filteredSkills.length} skills for AI agents{activeBadge ? (
+            Browse {filteredSkills.length} skills for AI agents
+            {activeBadge ? (
               <> — filtered by <span className="text-foreground">{activeBadge.emoji} {activeBadge.name}</span></>
-            ) : (
-              <>.</>
-            )}
+            ) : null}
+            {searchQuery ? (
+              <> matching <span className="text-foreground">"{searchQuery}"</span></>
+            ) : null}
+            .
           </p>
 
-          {activeBadge ? (
+          {activeBadge || searchQuery || categoryFilter || sortFilter ? (
             <div className="mt-4">
               <Button variant="outline" size="sm" asChild>
                 <Link href="/skills">Clear filter</Link>

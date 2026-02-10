@@ -1,6 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
-import { getDiscussions } from "@/lib/discussions";
 import { CommunityClient } from "./community-client";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -36,11 +36,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function CommunityPage() {
-  const discussions = getDiscussions();
-
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
@@ -59,7 +56,7 @@ export default function CommunityPage() {
 
       <Separator className="opacity-10" />
 
-      <CommunityClient initialDiscussions={discussions} />
+      <CommunityClient />
     </div>
   );
 }

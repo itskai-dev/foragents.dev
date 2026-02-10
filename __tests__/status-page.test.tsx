@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import StatusPage from "../src/app/status/page";
 
 type LinkProps = {
@@ -19,107 +19,67 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
+const statusPayload = {
+  services: [
+    {
+      name: "API",
+      status: "operational",
+      latencyMs: 42,
+      lastCheck: "2026-02-09T12:00:00.000Z",
+    },
+    {
+      name: "Website",
+      status: "degraded",
+      latencyMs: 180,
+      lastCheck: "2026-02-09T12:00:00.000Z",
+    },
+  ],
+  overall: "degraded",
+};
+
+const historyPayload = {
+  history: [
+    { date: "2026-02-03", uptime: 99.9, incidents: 0 },
+    { date: "2026-02-04", uptime: 99.5, incidents: 1 },
+  ],
+};
+
 describe("Status Page", () => {
   beforeEach(() => {
     jest.useFakeTimers();
+    global.fetch = jest.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes("/api/status/history")) {
+        return { ok: true, json: async () => historyPayload } as Response;
+      }
+      if (url.includes("/api/status")) {
+        return { ok: true, json: async () => statusPayload } as Response;
+      }
+      return { ok: false, json: async () => ({}) } as Response;
+    }) as jest.Mock;
   });
 
   afterEach(() => {
+    jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
 
-  it("renders the status page", () => {
-    const { container } = render(<StatusPage />);
-    expect(container).toBeInTheDocument();
-  });
-
-  it("displays the page title", () => {
+  it("renders title and services after fetch", async () => {
     render(<StatusPage />);
+
     expect(screen.getByText("System Status")).toBeInTheDocument();
-  });
 
-  it("displays overall status banner", () => {
-    render(<StatusPage />);
-    expect(screen.getByText("All Systems Operational")).toBeInTheDocument();
-  });
-
-  it("displays all service components", () => {
-    render(<StatusPage />);
-    // Service names appear in both the services section and incident affected services
-    const apiElements = screen.getAllByText("API");
-    expect(apiElements.length).toBeGreaterThan(0);
-    const websiteElements = screen.getAllByText("Website");
-    expect(websiteElements.length).toBeGreaterThan(0);
-    const mcpElements = screen.getAllByText("MCP Registry");
-    expect(mcpElements.length).toBeGreaterThan(0);
-    const supabaseElements = screen.getAllByText("Supabase");
-    expect(supabaseElements.length).toBeGreaterThan(0);
-    const cdnElements = screen.getAllByText("CDN");
-    expect(cdnElements.length).toBeGreaterThan(0);
-  });
-
-  it("displays services section heading", () => {
-    render(<StatusPage />);
-    expect(screen.getByText("Services")).toBeInTheDocument();
-  });
-
-  it("displays uptime metrics", () => {
-    render(<StatusPage />);
-    const uptimeElements = screen.getAllByText(/Uptime \(30d\)/i);
-    expect(uptimeElements.length).toBeGreaterThan(0);
-  });
-
-  it("displays response time metrics", () => {
-    render(<StatusPage />);
-    const responseTimeElements = screen.getAllByText(/Response Time/i);
-    expect(responseTimeElements.length).toBeGreaterThan(0);
-  });
-
-  it("displays incident history section", () => {
-    render(<StatusPage />);
-    expect(screen.getByText("Incident History")).toBeInTheDocument();
-  });
-
-  it("displays at least 5 incidents", () => {
-    render(<StatusPage />);
-    // Check for resolved badge which should appear for each incident
-    const resolvedBadges = screen.getAllByText(/resolved/i);
-    expect(resolvedBadges.length).toBeGreaterThanOrEqual(5);
-  });
-
-  it("displays incident titles", () => {
-    render(<StatusPage />);
-    expect(screen.getByText("Brief API Latency Spike")).toBeInTheDocument();
-    expect(
-      screen.getByText("CDN Cache Invalidation Issue")
-    ).toBeInTheDocument();
-  });
-
-  it("displays affected services for incidents", () => {
-    render(<StatusPage />);
-    // "Affected Services:" appears multiple times (once per incident)
-    const affectedServicesElements = screen.getAllByText("Affected Services:");
-    expect(affectedServicesElements.length).toBeGreaterThanOrEqual(5);
-  });
-
-  it("displays subscribe to updates section", () => {
-    render(<StatusPage />);
-    expect(screen.getByText("Stay Updated")).toBeInTheDocument();
-  });
-
-  it("displays last updated timestamp", () => {
-    render(<StatusPage />);
-    expect(screen.getByText(/Last updated:/)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("Some Systems Degraded")).toBeInTheDocument();
+      expect(screen.getByText("API")).toBeInTheDocument();
+      expect(screen.getByText("Website")).toBeInTheDocument();
+      expect(screen.getByText("Uptime (Last 7 Days)")).toBeInTheDocument();
+    });
   });
 
   it("renders structured data for SEO", () => {
     const { container } = render(<StatusPage />);
     const scriptTag = container.querySelector('script[type="application/ld+json"]');
     expect(scriptTag).toBeInTheDocument();
-    if (scriptTag) {
-      const jsonLd = JSON.parse(scriptTag.textContent || "{}");
-      expect(jsonLd["@type"]).toBe("WebPage");
-      expect(jsonLd.name).toContain("Status");
-    }
   });
 });

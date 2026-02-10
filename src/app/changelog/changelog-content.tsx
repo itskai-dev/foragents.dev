@@ -17,21 +17,15 @@ function formatDate(dateStr: string): string {
 
 function labelCategory(category: ChangelogCategory): string {
   if (category === "feature") return "Feature";
-  if (category === "improvement") return "Improvement";
-  if (category === "fix") return "Fix";
+  if (category === "bugfix") return "Bugfix";
   if (category === "docs") return "Docs";
-  if (category === "refactor") return "Refactor";
-  if (category === "test") return "Test";
   return "Feature";
 }
 
 const categoryColors: Record<ChangelogCategory, string> = {
   feature: "bg-cyan/10 text-cyan border-cyan/30",
-  improvement: "bg-purple/10 text-purple border-purple/30",
-  fix: "bg-green/10 text-green border-green/30",
+  bugfix: "bg-green/10 text-green border-green/30",
   docs: "bg-blue/10 text-blue border-blue/30",
-  refactor: "bg-orange/10 text-orange border-orange/30",
-  test: "bg-yellow/10 text-yellow border-yellow/30",
 };
 
 type DateGroup = { date: string; entries: ChangelogEntry[] };
@@ -70,7 +64,7 @@ export function ChangelogContent({ entries }: ChangelogContentProps) {
     });
 
     const features = recentEntries.filter((e) => e.category === "feature").length;
-    const fixes = recentEntries.filter((e) => e.category === "fix").length;
+    const fixes = recentEntries.filter((e) => e.category === "bugfix").length;
 
     return {
       total: recentEntries.length,
@@ -90,10 +84,8 @@ export function ChangelogContent({ entries }: ChangelogContentProps) {
   const filters: { id: FilterCategory; label: string }[] = [
     { id: "all", label: "All" },
     { id: "feature", label: "Features" },
-    { id: "fix", label: "Fixes" },
+    { id: "bugfix", label: "Bugfixes" },
     { id: "docs", label: "Docs" },
-    { id: "refactor", label: "Refactors" },
-    { id: "test", label: "Tests" },
   ];
 
   return (
@@ -162,9 +154,9 @@ export function ChangelogContent({ entries }: ChangelogContentProps) {
                 </div>
 
                 <div className="space-y-4">
-                  {group.entries.map((entry, idx) => (
+                  {group.entries.map((entry) => (
                     <Card
-                      key={`${entry.date}-${idx}-${entry.title}`}
+                      key={entry.id}
                       className="bg-card/50 border-white/5 hover:border-cyan/20 transition-all"
                     >
                       <CardContent className="p-6">
@@ -185,23 +177,14 @@ export function ChangelogContent({ entries }: ChangelogContentProps) {
                         </p>
 
                         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                          {entry.pr ? (
-                            <Link
-                              href={entry.pr}
-                              className="inline-flex items-center text-sm text-cyan hover:underline font-medium"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              View PR →
-                            </Link>
-                          ) : (
-                            <Link
-                              href={entry.link}
-                              className="inline-flex items-center text-sm text-cyan hover:underline font-medium"
-                            >
-                              View →
-                            </Link>
-                          )}
+                          <Link
+                            href={entry.prUrl}
+                            className="inline-flex items-center text-sm text-cyan hover:underline font-medium"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            View PR #{entry.prNumber} →
+                          </Link>
                         </div>
                       </CardContent>
                     </Card>

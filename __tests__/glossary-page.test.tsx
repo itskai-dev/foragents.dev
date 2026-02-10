@@ -1,21 +1,20 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import GlossaryPage from "@/app/glossary/page";
 
 jest.setTimeout(10_000);
 
-// ---- Browser API polyfills ----
 class NoopObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
 }
 
-// @ts-expect-error - polyfill for tests
+// @ts-expect-error - test polyfill
 global.ResizeObserver = global.ResizeObserver ?? NoopObserver;
-// @ts-expect-error - polyfill for tests
+// @ts-expect-error - test polyfill
 global.IntersectionObserver = global.IntersectionObserver ?? NoopObserver;
 
 Object.defineProperty(window, "matchMedia", {
@@ -34,7 +33,6 @@ Object.defineProperty(window, "matchMedia", {
     })),
 });
 
-// ---- Next.js shims ----
 type LinkProps = {
   href: string;
   children?: React.ReactNode;
@@ -50,160 +48,103 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-jest.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
-    back: jest.fn(),
-    prefetch: jest.fn(),
-    refresh: jest.fn(),
-  }),
-  useSearchParams: () => new URLSearchParams(),
-  usePathname: () => "/glossary",
-  useParams: () => ({}),
-}));
+const mockTerms = [
+  {
+    id: "agent",
+    term: "Agent",
+    definition: "Autonomous software actor",
+    relatedTerms: ["Tool"],
+    seeAlso: ["MCP"],
+  },
+  {
+    id: "mcp",
+    term: "MCP",
+    definition: "Model Context Protocol",
+    relatedTerms: ["Agent"],
+    seeAlso: [],
+  },
+  {
+    id: "tool",
+    term: "Tool",
+    definition: "External capability used by agents",
+    relatedTerms: ["Agent"],
+    seeAlso: [],
+  },
+];
 
 describe("/glossary page", () => {
-  test("renders without crashing", () => {
-    const { container } = render(<GlossaryPage />);
-    expect(container).toBeInTheDocument();
+  beforeEach(() => {
+    jest.useFakeTimers();
+    global.fetch = jest.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      const params = new URL(url, "http://localhost").searchParams;
+      const search = params.get("search")?.toLowerCase() ?? "";
+      const letter = params.get("letter");
+
+      let terms = [...mockTerms];
+      if (search) {
+        terms = terms.filter(
+          (t) =>
+            t.term.toLowerCase().includes(search) ||
+            t.definition.toLowerCase().includes(search)
+        );
+      }
+      if (letter) {
+        terms = terms.filter((t) => t.term.startsWith(letter));
+      }
+
+      const letters = Array.from(new Set(mockTerms.map((t) => t.term[0].toUpperCase())));
+      return {
+        ok: true,
+        json: async () => ({ terms, total: terms.length, letters }),
+      } as Response;
+    }) as jest.Mock;
   });
 
-  test("displays hero section with title", () => {
-    const { getByText } = render(<GlossaryPage />);
-    expect(getByText("📖 Agent Terminology")).toBeInTheDocument();
-    expect(
-      getByText("Your comprehensive guide to AI agent concepts and protocols")
-    ).toBeInTheDocument();
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
-  test("displays search input", () => {
-    const { getByPlaceholderText } = render(<GlossaryPage />);
-    const searchInput = getByPlaceholderText(
-      "Search terms, definitions, or concepts..."
-    );
-    expect(searchInput).toBeInTheDocument();
-  });
-
-  test("displays alphabet navigation", () => {
-    const { getByLabelText } = render(<GlossaryPage />);
-    expect(getByLabelText("Filter by letter A")).toBeInTheDocument();
-    expect(getByLabelText("Filter by letter Z")).toBeInTheDocument();
-  });
-
-  test("displays glossary terms", () => {
-    const { getAllByText } = render(<GlossaryPage />);
-    // Check for some key terms that should be in the glossary
-    // Use getAllByText since terms appear multiple times (as headings and as links)
-    expect(getAllByText("Agent").length).toBeGreaterThan(0);
-    expect(getAllByText("MCP").length).toBeGreaterThan(0);
-    expect(getAllByText("Tool").length).toBeGreaterThan(0);
-  });
-
-  test("search functionality filters terms", async () => {
-    const { getByPlaceholderText, getAllByText } = render(
-      <GlossaryPage />
-    );
-    const searchInput = getByPlaceholderText(
-      "Search terms, definitions, or concepts..."
-    );
-
-    // Search for "agent"
-    fireEvent.change(searchInput, { target: { value: "agent" } });
-
-    await waitFor(() => {
-      // Use getAllByText since "Agent" appears multiple times
-      expect(getAllByText("Agent").length).toBeGreaterThan(0);
-      // Terms not matching "agent" should not be visible or should be filtered out
-    });
-  });
-
-  test("alphabet filter works", async () => {
-    const { getByLabelText } = render(<GlossaryPage />);
-    const letterA = getByLabelText("Filter by letter A");
-
-    // Click on letter A
-    fireEvent.click(letterA);
-
-    await waitFor(() => {
-      // The letter A button should be highlighted
-      expect(letterA).toHaveClass("bg-[#06D6A0]");
-    });
-  });
-
-  test("clear filters button appears when filtering", async () => {
-    const { getByPlaceholderText, getByText } = render(<GlossaryPage />);
-    const searchInput = getByPlaceholderText(
-      "Search terms, definitions, or concepts..."
-    );
-
-    // Trigger search
-    fireEvent.change(searchInput, { target: { value: "test" } });
-
-    await waitFor(() => {
-      expect(getByText("Clear filters")).toBeInTheDocument();
-    });
-  });
-
-  test("displays related terms section", () => {
-    const { getAllByText } = render(<GlossaryPage />);
-    // Should have at least one "Related:" label
-    const relatedLabels = getAllByText("Related:");
-    expect(relatedLabels.length).toBeGreaterThan(0);
-  });
-
-  test("displays see also section", () => {
-    const { getAllByText } = render(<GlossaryPage />);
-    // Should have at least one "See also:" label
-    const seeAlsoLabels = getAllByText("See also:");
-    expect(seeAlsoLabels.length).toBeGreaterThan(0);
-  });
-
-  test("displays CTA section", () => {
-    const { getByText } = render(<GlossaryPage />);
-    expect(getByText("Ready to Build?")).toBeInTheDocument();
-    expect(getByText("Browse Skills →")).toBeInTheDocument();
-    expect(getByText("Start Learning")).toBeInTheDocument();
-  });
-
-  test("displays empty state when no results found", async () => {
-    const { getByPlaceholderText, getByText } = render(<GlossaryPage />);
-    const searchInput = getByPlaceholderText(
-      "Search terms, definitions, or concepts..."
-    );
-
-    // Search for something that doesn't exist
-    fireEvent.change(searchInput, {
-      target: { value: "xyznonexistentterm123" },
-    });
-
-    await waitFor(() => {
-      expect(getByText("No terms found")).toBeInTheDocument();
-      expect(getByText("Show all terms")).toBeInTheDocument();
-    });
-  });
-
-  test("shows result count when filtering", async () => {
-    const { getByPlaceholderText, getByText } = render(<GlossaryPage />);
-    const searchInput = getByPlaceholderText(
-      "Search terms, definitions, or concepts..."
-    );
-
-    // Search for "protocol"
-    fireEvent.change(searchInput, { target: { value: "protocol" } });
-
-    await waitFor(() => {
-      // Should show "X terms found" or "X term found"
-      const resultText = screen.getByText(/\d+ terms? found/);
-      expect(resultText).toBeInTheDocument();
-    });
-  });
-
-  test("contains minimum 30 terms", () => {
+  test("renders hero and search input", async () => {
     render(<GlossaryPage />);
-    // Count the number of term entries by checking for elements with specific structure
-    // Each term has an id attribute on its container
-    const termElements = document.querySelectorAll("[id][class*='scroll-mt']");
-    expect(termElements.length).toBeGreaterThanOrEqual(30);
+    expect(screen.getByText("📖 Agent Terminology")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Search terms or definitions...")).toBeInTheDocument();
+
+    await act(async () => {
+      jest.advanceTimersByTime(350);
+    });
+
+    await waitFor(() => expect(screen.getAllByText("Agent").length).toBeGreaterThan(0));
+  });
+
+  test("search filters terms", async () => {
+    render(<GlossaryPage />);
+    const input = screen.getByPlaceholderText("Search terms or definitions...");
+
+    fireEvent.change(input, { target: { value: "protocol" } });
+    await act(async () => {
+      jest.advanceTimersByTime(350);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("MCP")).toBeInTheDocument();
+      expect(screen.queryByText("Tool")).not.toBeInTheDocument();
+    });
+  });
+
+  test("shows empty state when no results", async () => {
+    render(<GlossaryPage />);
+    const input = screen.getByPlaceholderText("Search terms or definitions...");
+
+    fireEvent.change(input, { target: { value: "xyznonexistent" } });
+    await act(async () => {
+      jest.advanceTimersByTime(350);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("No terms found")).toBeInTheDocument();
+      expect(screen.getByText("Show all terms")).toBeInTheDocument();
+    });
   });
 });

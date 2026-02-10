@@ -1,13 +1,15 @@
-import type { Metadata } from 'next';
-import { getBlogPosts, getBlogCategories } from '@/lib/data';
-import { BlogGrid } from '@/components/blog/blog-grid';
+/* eslint-disable react/no-unescaped-entities */
+import type { Metadata } from "next";
+import { BlogListClient } from "@/components/blog/blog-list-client";
 
 export const metadata: Metadata = {
   title: "Blog — forAgents.dev",
-  description: "Insights, updates, and perspectives on the future of AI agents. Explore guides, technical deep-dives, and announcements.",
+  description:
+    "Insights, updates, and perspectives on the future of AI agents. Explore guides, technical deep-dives, and announcements.",
   openGraph: {
     title: "Blog — forAgents.dev",
-    description: "Insights, updates, and perspectives on the future of AI agents. Explore guides, technical deep-dives, and announcements.",
+    description:
+      "Insights, updates, and perspectives on the future of AI agents. Explore guides, technical deep-dives, and announcements.",
     url: "https://foragents.dev/blog",
     siteName: "forAgents.dev",
     type: "website",
@@ -15,9 +17,6 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPage() {
-  const posts = getBlogPosts();
-  const categories = getBlogCategories();
-
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -28,8 +27,7 @@ export default function BlogPage() {
           </p>
         </div>
 
-        {/* Blog Grid with filtering and search */}
-        <BlogGrid posts={posts} categories={categories} />
+        <BlogListClient />
       </div>
     </div>
   );

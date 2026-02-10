@@ -1,0 +1,66 @@
+[
+  {
+    "id": "minimal",
+    "name": "Minimal",
+    "description": "Required fields only",
+    "config": {
+      "name": "Minimal Agent",
+      "description": "A minimal valid agent.json configuration.",
+      "version": "1.0.0",
+      "capabilities": ["chat"]
+    }
+  },
+  {
+    "id": "standard",
+    "name": "Standard",
+    "description": "Required fields + identity + endpoints",
+    "config": {
+      "name": "Standard Agent",
+      "description": "A practical configuration with identity metadata and network endpoints.",
+      "version": "1.1.0",
+      "capabilities": ["chat", "search", "tools"],
+      "identity": {
+        "handle": "@standard-agent",
+        "owner": "Team Reflectt",
+        "website": "https://foragents.dev"
+      },
+      "endpoints": {
+        "chat": "https://api.example.com/chat",
+        "status": "https://api.example.com/status"
+      }
+    }
+  },
+  {
+    "id": "full",
+    "name": "Full",
+    "description": "All major fields populated",
+    "config": {
+      "name": "Full Featured Agent",
+      "description": "A complete agent.json with identity, endpoints, protocols, and trust details.",
+      "version": "2.0.0",
+      "capabilities": ["chat", "search", "planning", "automation"],
+      "identity": {
+        "handle": "@full-agent",
+        "owner": "Team Reflectt",
+        "did": "did:web:foragents.dev:agents:full-agent",
+        "contact": "agents@foragents.dev"
+      },
+      "endpoints": {
+        "chat": "https://api.example.com/chat",
+        "tasks": "https://api.example.com/tasks",
+        "health": "https://api.example.com/health"
+      },
+      "protocols": {
+        "acp": "1.0",
+        "mcp": true,
+        "a2a": true,
+        "http": true
+      },
+      "trust": {
+        "level": "verified",
+        "verifiedBy": ["foragents.dev"],
+        "lastAudit": "2026-02-09T00:00:00Z"
+      }
+    }
+  }
+]

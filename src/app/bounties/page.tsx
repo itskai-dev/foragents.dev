@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 import { Separator } from "@/components/ui/separator";
 import { getBounties } from "@/lib/bounties";
@@ -35,8 +36,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function BountiesPage() {
-  const bounties = getBounties();
+export const dynamic = "force-dynamic";
+
+export default async function BountiesPage() {
+  const bounties = await getBounties();
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">

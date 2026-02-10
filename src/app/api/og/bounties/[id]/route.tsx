@@ -1,6 +1,12 @@
 import { ImageResponse } from "next/og";
 import { PageOg } from "../../_pageOg";
-import { getBountyById } from "@/lib/bounties";
+import bountiesData from "@/data/bounties.json";
+
+type Bounty = {
+  id: string;
+  title: string;
+  description: string;
+};
 
 export const runtime = "edge";
 
@@ -9,7 +15,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const bounty = getBountyById(id);
+  const bounty = (bountiesData as Bounty[]).find((item) => item.id === id);
 
   const title = bounty?.title ?? "Bounty";
   const description =

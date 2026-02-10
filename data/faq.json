@@ -1,0 +1,131 @@
+{
+  "faqs": [
+    {
+      "id": "faq-getting-started-1",
+      "question": "What is forAgents.dev?",
+      "answer": "forAgents.dev is an agent-first directory that helps teams discover, evaluate, and integrate skills, MCP servers, templates, and workflows.",
+      "category": "getting-started",
+      "helpful": 34
+    },
+    {
+      "id": "faq-getting-started-2",
+      "question": "How do I install my first skill?",
+      "answer": "Open a skill page, follow the install steps, and copy the provided command or config. Most listings include setup notes and compatibility details.",
+      "category": "getting-started",
+      "helpful": 27
+    },
+    {
+      "id": "faq-getting-started-3",
+      "question": "Do I need an account to browse and search?",
+      "answer": "No. You can browse and search publicly. An account is only needed for submissions, bookmarks, and premium features.",
+      "category": "getting-started",
+      "helpful": 19
+    },
+    {
+      "id": "faq-billing-1",
+      "question": "Is forAgents.dev free to use?",
+      "answer": "Core discovery features are free. Some advanced capabilities and premium workflows are part of paid plans.",
+      "category": "billing",
+      "helpful": 31
+    },
+    {
+      "id": "faq-billing-2",
+      "question": "Can I cancel my subscription anytime?",
+      "answer": "Yes. Subscriptions can be canceled from billing settings and remain active until the end of the current cycle.",
+      "category": "billing",
+      "helpful": 16
+    },
+    {
+      "id": "faq-billing-3",
+      "question": "Do listed tools have separate pricing?",
+      "answer": "Often yes. Listings may point to external tools with their own pricing, limits, and licensing terms.",
+      "category": "billing",
+      "helpful": 22
+    },
+    {
+      "id": "faq-technical-1",
+      "question": "Which runtimes are commonly supported?",
+      "answer": "Most integrations provide Node.js and Python options, while protocol-based tools can work across runtimes when standards are followed.",
+      "category": "technical",
+      "helpful": 25
+    },
+    {
+      "id": "faq-technical-2",
+      "question": "How do I debug failed integrations?",
+      "answer": "Start with logs, validate required environment variables, run minimal test prompts, and verify network access and authentication.",
+      "category": "technical",
+      "helpful": 29
+    },
+    {
+      "id": "faq-technical-3",
+      "question": "Can I self-host tools discovered here?",
+      "answer": "Many listings include self-hosted options. Check each detail page for deployment requirements and maintenance expectations.",
+      "category": "technical",
+      "helpful": 14
+    },
+    {
+      "id": "faq-integrations-1",
+      "question": "Does forAgents.dev support MCP servers?",
+      "answer": "Yes. MCP is first-class, with listings for servers, transport details, and setup guidance.",
+      "category": "integrations",
+      "helpful": 33
+    },
+    {
+      "id": "faq-integrations-2",
+      "question": "Can I integrate with custom internal APIs?",
+      "answer": "Yes. You can use templates, wrappers, or adapter patterns to connect internal APIs and expose them as reusable agent capabilities.",
+      "category": "integrations",
+      "helpful": 18
+    },
+    {
+      "id": "faq-integrations-3",
+      "question": "How do I submit a new integration listing?",
+      "answer": "Use the submission flow and include clear docs, install steps, and usage examples so agents can adopt your integration with confidence.",
+      "category": "integrations",
+      "helpful": 21
+    },
+    {
+      "id": "faq-security-1",
+      "question": "How should I manage API keys safely?",
+      "answer": "Use environment variables or a secret manager, never hardcode keys, and rotate credentials regularly with least-privilege scopes.",
+      "category": "security",
+      "helpful": 40
+    },
+    {
+      "id": "faq-security-2",
+      "question": "Does forAgents.dev store my production agent data?",
+      "answer": "The directory itself is focused on discovery and metadata. Operational data handling depends on each integrated tool and your deployment architecture.",
+      "category": "security",
+      "helpful": 24
+    },
+    {
+      "id": "faq-security-3",
+      "question": "Where do I report a security issue?",
+      "answer": "Please contact security@foragents.dev with details and reproduction steps. Avoid sharing vulnerabilities publicly before coordinated disclosure.",
+      "category": "security",
+      "helpful": 17
+    },
+    {
+      "id": "faq-general-1",
+      "question": "Who is forAgents.dev for?",
+      "answer": "Builders, teams, and organizations creating AI agents who want reliable tools, patterns, and operational guidance.",
+      "category": "general",
+      "helpful": 23
+    },
+    {
+      "id": "faq-general-2",
+      "question": "How often is the directory updated?",
+      "answer": "Continuously. New listings, revisions, and documentation improvements are added as submissions are reviewed.",
+      "category": "general",
+      "helpful": 15
+    },
+    {
+      "id": "faq-general-3",
+      "question": "Where can I get help if I am stuck?",
+      "answer": "Use the community space for peer help, check docs for implementation examples, or contact support for account and billing issues.",
+      "category": "general",
+      "helpful": 20
+    }
+  ],
+  "submissions": []
+}

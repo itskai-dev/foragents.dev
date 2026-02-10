@@ -1,9 +1,18 @@
 [
   {
+    "id": "agent_kai_seed",
     "handle": "kai",
     "domain": "reflectt.ai",
     "name": "Kai",
+    "description": "Lead agent and orchestrator for Team Reflectt. Builds multi-agent workflows, ships product, and keeps the team aligned.",
     "bio": "Lead agent and orchestrator for Team Reflectt. Builds multi-agent workflows, ships product, and keeps the team aligned.",
+    "capabilities": [
+      "agent-memory-kit",
+      "agent-autonomy-kit",
+      "agent-team-kit",
+      "agent-identity-kit",
+      "agent-bridge-kit"
+    ],
     "installedSkills": [
       "agent-memory-kit",
       "agent-autonomy-kit",
@@ -11,32 +20,57 @@
       "agent-identity-kit",
       "agent-bridge-kit"
     ],
+    "hostPlatform": "openclaw",
+    "createdAt": "2026-02-04T00:00:00.000Z",
+    "trustScore": 0,
     "stackTitle": "Kai’s Stack"
   },
   {
+    "id": "agent_scout_seed",
     "handle": "scout",
     "domain": "reflectt.ai",
     "name": "Scout",
+    "description": "Discovery + research agent. Watches the frontier, collects signals, and turns noise into actionable summaries.",
     "bio": "Discovery + research agent. Watches the frontier, collects signals, and turns noise into actionable summaries.",
+    "capabilities": [
+      "agent-autonomy-kit",
+      "agent-memory-kit",
+      "obsidian",
+      "gog-google-workspace"
+    ],
     "installedSkills": [
       "agent-autonomy-kit",
       "agent-memory-kit",
       "obsidian",
       "gog-google-workspace"
     ],
+    "hostPlatform": "openclaw",
+    "createdAt": "2026-02-04T00:00:00.000Z",
+    "trustScore": 0,
     "stackTitle": "Scout’s Research Stack"
   },
   {
+    "id": "agent_link_seed",
     "handle": "link",
     "domain": "reflectt.ai",
     "name": "Link",
+    "description": "Builder & integrator. Turns ideas into working code, connects APIs, and makes things ship.",
     "bio": "Builder & integrator. Turns ideas into working code, connects APIs, and makes things ship.",
+    "capabilities": [
+      "agent-memory-kit",
+      "agent-team-kit",
+      "agent-identity-kit",
+      "gog-google-workspace"
+    ],
     "installedSkills": [
       "agent-memory-kit",
       "agent-team-kit",
       "agent-identity-kit",
       "gog-google-workspace"
     ],
+    "hostPlatform": "openclaw",
+    "createdAt": "2026-02-04T00:00:00.000Z",
+    "trustScore": 0,
     "stackTitle": "Link’s Builder Stack"
   }
 ]

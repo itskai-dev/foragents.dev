@@ -1,82 +1,183 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import partnersData from "@/data/partners.json";
+import { Separator } from "@/components/ui/separator";
 
-type PartnerTier = "Gold" | "Silver" | "Bronze" | "Community";
-type IntegrationType = "API" | "SDK" | "Plugin" | "Service";
+type PartnerTier = "founding" | "gold" | "silver" | "community";
 
-interface Partner {
-  id: string;
+type Partner = {
   name: string;
   slug: string;
-  icon: string;
+  website: string;
   description: string;
+  logo: string;
   tier: PartnerTier;
-  integrationType: IntegrationType;
+  featured: boolean;
+  joinedAt: string;
+};
+
+type PartnersResponse = {
+  partners: Partner[];
+  total: number;
+};
+
+type PartnerApplicationForm = {
+  name: string;
+  website: string;
+  description: string;
+  tierInterest: PartnerTier;
+  contactEmail: string;
+};
+
+const initialForm: PartnerApplicationForm = {
+  name: "",
+  website: "",
+  description: "",
+  tierInterest: "community",
+  contactEmail: "",
+};
+
+const tierOrder: PartnerTier[] = ["founding", "gold", "silver", "community"];
+
+const tierLabels: Record<PartnerTier, string> = {
+  founding: "Founding",
+  gold: "Gold",
+  silver: "Silver",
+  community: "Community",
+};
+
+function getTierBadgeColor(tier: PartnerTier) {
+  switch (tier) {
+    case "founding":
+      return "bg-purple-500/20 text-purple-300 border-purple-400/40";
+    case "gold":
+      return "bg-yellow-500/20 text-yellow-300 border-yellow-400/40";
+    case "silver":
+      return "bg-slate-500/20 text-slate-200 border-slate-400/40";
+    case "community":
+      return "bg-cyan-500/20 text-cyan-300 border-cyan-400/40";
+    default:
+      return "bg-white/10 text-foreground border-white/20";
+  }
 }
 
-const partners: Partner[] = partnersData as Partner[];
-
 export default function PartnersPage() {
-  const [tierFilter, setTierFilter] = useState<PartnerTier | "All">("All");
-  const [typeFilter, setTypeFilter] = useState<IntegrationType | "All">("All");
+  const [partners, setPartners] = useState<Partner[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const [tierFilter, setTierFilter] = useState<PartnerTier | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredPartners = partners.filter((partner) => {
-    const matchesTier = tierFilter === "All" || partner.tier === tierFilter;
-    const matchesType = typeFilter === "All" || partner.integrationType === typeFilter;
-    const matchesSearch =
-      searchQuery === "" ||
-      partner.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      partner.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return matchesTier && matchesType && matchesSearch;
-  });
+  const [form, setForm] = useState<PartnerApplicationForm>(initialForm);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const getTierBadgeColor = (tier: PartnerTier) => {
-    switch (tier) {
-      case "Gold":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "Silver":
-        return "bg-gray-400/20 text-gray-300 border-gray-400/30";
-      case "Bronze":
-        return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-      case "Community":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  useEffect(() => {
+    let cancelled = false;
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        setLoading(true);
+
+        const params = new URLSearchParams();
+        if (tierFilter !== "all") {
+          params.set("tier", tierFilter);
+        }
+
+        if (searchQuery.trim()) {
+          params.set("search", searchQuery.trim());
+        }
+
+        const query = params.toString();
+        const response = await fetch(`/api/partners${query ? `?${query}` : ""}`, {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("Could not load partners");
+        }
+
+        const data = (await response.json()) as PartnersResponse;
+
+        if (!cancelled) {
+          setPartners(Array.isArray(data.partners) ? data.partners : []);
+          setError(null);
+        }
+      } catch {
+        if (!cancelled) {
+          setError("Unable to load partners right now.");
+          setPartners([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }, 250);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [searchQuery, tierFilter]);
+
+  const featuredPartners = useMemo(
+    () => partners.filter((partner) => partner.featured),
+    [partners]
+  );
+
+  const directoryPartners = useMemo(
+    () => partners.filter((partner) => !partner.featured),
+    [partners]
+  );
+
+  async function handleApply(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSubmitting(true);
+    setSubmitMessage(null);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/partners", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const payload = (await response.json()) as {
+        message?: string;
+        error?: string;
+        details?: string[];
+      };
+
+      if (!response.ok) {
+        const details = payload.details?.join(" ");
+        setSubmitError(payload.error ?? details ?? "Could not submit application.");
+        return;
+      }
+
+      setSubmitMessage(payload.message ?? "Application received.");
+      setForm(initialForm);
+    } catch {
+      setSubmitError("Could not submit application. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
-  };
+  }
 
-  const getTypeBadgeColor = (type: IntegrationType) => {
-    switch (type) {
-      case "API":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "SDK":
-        return "bg-purple-500/20 text-purple-400 border-purple-500/30";
-      case "Plugin":
-        return "bg-pink-500/20 text-pink-400 border-pink-500/30";
-      case "Service":
-        return "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    }
-  };
-
-  const tiers: PartnerTier[] = ["Gold", "Silver", "Bronze", "Community"];
-  const types: IntegrationType[] = ["API", "SDK", "Plugin", "Service"];
+  const hasResults = partners.length > 0;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden min-h-[400px] flex items-center">
-        {/* Subtle aurora background */}
+      <section className="relative overflow-hidden min-h-[320px] flex items-center">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
           <div className="absolute top-1/3 left-1/3 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-purple/3 rounded-full blur-[120px]" />
@@ -84,250 +185,239 @@ export default function PartnersPage() {
 
         <div className="relative max-w-4xl mx-auto px-4 py-20 text-center">
           <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
-            Partners & Integrations
+            Partner Directory
           </h1>
-          <p className="text-xl text-foreground/80 mb-2">
-            Build powerful AI agents with best-in-class tools and services
-          </p>
-          <p className="text-sm text-muted-foreground">
-            {partners.length} verified partners
-          </p>
+          <p className="text-xl text-foreground/80 mb-2">Browse ecosystem partners and apply to join.</p>
+          <p className="text-sm text-muted-foreground">{loading ? "Loading…" : `${partners.length} matching partners`}</p>
         </div>
       </section>
 
       <Separator className="opacity-10" />
 
-      {/* Search and Filter Section */}
-      <section className="max-w-6xl mx-auto px-4 py-8">
-        {/* Search Bar */}
-        <div className="mb-6">
+      <section className="max-w-6xl mx-auto px-4 py-8 space-y-6">
+        <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
           <Input
             type="text"
-            placeholder="Search partners by name or description..."
+            placeholder="Search by name or description..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-md mx-auto bg-card/30 border-white/10 text-foreground placeholder:text-muted-foreground"
+            className="max-w-xl bg-card/30 border-white/10 text-foreground placeholder:text-muted-foreground"
           />
-        </div>
-
-        {/* Filters */}
-        <div className="space-y-4">
-          {/* Tier Filter */}
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Filter by Tier</h3>
-            <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => setTierFilter("all")}
+              className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                tierFilter === "all"
+                  ? "bg-[#06D6A0] text-[#0a0a0a]"
+                  : "border border-white/10 text-foreground hover:bg-white/5"
+              }`}
+            >
+              All tiers
+            </button>
+            {tierOrder.map((tier) => (
               <button
-                onClick={() => setTierFilter("All")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  tierFilter === "All"
+                key={tier}
+                type="button"
+                onClick={() => setTierFilter(tier)}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                  tierFilter === tier
                     ? "bg-[#06D6A0] text-[#0a0a0a]"
                     : "border border-white/10 text-foreground hover:bg-white/5"
                 }`}
               >
-                All
+                {tierLabels[tier]}
               </button>
-              {tiers.map((tier) => (
-                <button
-                  key={tier}
-                  onClick={() => setTierFilter(tier)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    tierFilter === tier
-                      ? "bg-[#06D6A0] text-[#0a0a0a]"
-                      : "border border-white/10 text-foreground hover:bg-white/5"
-                  }`}
-                >
-                  {tier}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Type Filter */}
-          <div>
-            <h3 className="text-sm font-medium text-muted-foreground mb-2">Filter by Integration Type</h3>
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => setTypeFilter("All")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  typeFilter === "All"
-                    ? "bg-[#06D6A0] text-[#0a0a0a]"
-                    : "border border-white/10 text-foreground hover:bg-white/5"
-                }`}
-              >
-                All
-              </button>
-              {types.map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setTypeFilter(type)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    typeFilter === type
-                      ? "bg-[#06D6A0] text-[#0a0a0a]"
-                      : "border border-white/10 text-foreground hover:bg-white/5"
-                  }`}
-                >
-                  {type}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Partners Grid */}
-      <section className="max-w-6xl mx-auto px-4 py-8 pb-16">
-        {filteredPartners.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPartners.map((partner) => (
-              <Link
-                key={partner.id}
-                href={`/partners/${partner.slug}`}
-                className="block"
-              >
-                <Card
-                  className="relative overflow-hidden bg-card/30 border-white/10 hover:border-[#06D6A0]/30 transition-all group h-full"
-                >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#06D6A0]/5 rounded-full blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                  
-                  <CardHeader>
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div className="flex items-center gap-3">
-                        <span className="text-4xl">{partner.icon}</span>
-                        <CardTitle className="text-xl">{partner.name}</CardTitle>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge
-                        variant="outline"
-                        className={getTierBadgeColor(partner.tier)}
-                      >
-                        {partner.tier}
-                      </Badge>
-                      <Badge
-                        variant="outline"
-                        className={getTypeBadgeColor(partner.integrationType)}
-                      >
-                        {partner.integrationType}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {partner.description}
-                    </p>
-                    <span className="inline-flex items-center gap-2 text-sm font-medium text-[#06D6A0] group-hover:underline">
-                      View details →
-                    </span>
-                  </CardContent>
-                </Card>
-              </Link>
             ))}
           </div>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-12 text-muted-foreground">Loading partners…</div>
+        ) : error ? (
+          <div className="text-center py-12 text-red-400">{error}</div>
+        ) : !hasResults ? (
+          <div className="text-center py-12 text-muted-foreground">No partners found for this filter.</div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              No partners found matching your filters.
-            </p>
-          </div>
+          <>
+            {featuredPartners.length > 0 && (
+              <div className="space-y-3">
+                <h2 className="text-xl font-semibold text-foreground">Featured Partners</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {featuredPartners.map((partner) => (
+                    <Card
+                      key={partner.slug}
+                      className="relative overflow-hidden bg-card/40 border-[#06D6A0]/30 ring-1 ring-[#06D6A0]/20"
+                    >
+                      <CardHeader>
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <div
+                              className="h-12 w-12 rounded-md border border-white/10 bg-cover bg-center"
+                              style={{ backgroundImage: `url('${partner.logo}')` }}
+                              aria-label={`${partner.name} logo`}
+                            />
+                            <CardTitle className="text-lg">{partner.name}</CardTitle>
+                          </div>
+                          <Badge className="bg-[#06D6A0]/20 text-[#8af5d8] border-[#06D6A0]/30">Featured</Badge>
+                        </div>
+                        <div className="flex items-center flex-wrap gap-2 pt-3">
+                          <Badge variant="outline" className={getTierBadgeColor(partner.tier)}>
+                            {tierLabels[partner.tier]}
+                          </Badge>
+                          <Badge variant="outline" className="border-white/20 text-foreground/80">
+                            Joined {new Date(partner.joinedAt).toLocaleDateString()}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-sm text-muted-foreground">{partner.description}</p>
+                        <div className="flex items-center gap-3 text-sm font-medium">
+                          <Link href={`/partners/${partner.slug}`} className="text-[#06D6A0] hover:underline">
+                            View details →
+                          </Link>
+                          <a
+                            href={partner.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-300 hover:underline"
+                          >
+                            Website ↗
+                          </a>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {directoryPartners.length > 0 && (
+              <div className="space-y-3">
+                <h2 className="text-xl font-semibold text-foreground">All Partners</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {directoryPartners.map((partner) => (
+                    <Card
+                      key={partner.slug}
+                      className="relative overflow-hidden bg-card/30 border-white/10 hover:border-[#06D6A0]/30 transition-all"
+                    >
+                      <CardHeader>
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="h-11 w-11 rounded-md border border-white/10 bg-cover bg-center"
+                            style={{ backgroundImage: `url('${partner.logo}')` }}
+                            aria-label={`${partner.name} logo`}
+                          />
+                          <CardTitle className="text-lg">{partner.name}</CardTitle>
+                        </div>
+                        <div className="flex items-center flex-wrap gap-2 pt-3">
+                          <Badge variant="outline" className={getTierBadgeColor(partner.tier)}>
+                            {tierLabels[partner.tier]}
+                          </Badge>
+                          <Badge variant="outline" className="border-white/20 text-foreground/80">
+                            Joined {new Date(partner.joinedAt).toLocaleDateString()}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-sm text-muted-foreground">{partner.description}</p>
+                        <div className="flex items-center gap-3 text-sm font-medium">
+                          <Link href={`/partners/${partner.slug}`} className="text-[#06D6A0] hover:underline">
+                            View details →
+                          </Link>
+                          <a
+                            href={partner.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-cyan-300 hover:underline"
+                          >
+                            Website ↗
+                          </a>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </section>
 
       <Separator className="opacity-10" />
 
-      {/* CTA Section - Become a Partner */}
-      <section className="max-w-4xl mx-auto px-4 py-16">
-        <div className="relative overflow-hidden rounded-2xl border border-[#06D6A0]/20 bg-gradient-to-br from-[#06D6A0]/5 via-card/80 to-purple/5">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#06D6A0]/10 rounded-full blur-[80px]" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple/10 rounded-full blur-[60px]" />
+      <section id="apply" className="max-w-3xl mx-auto px-4 py-16">
+        <Card className="bg-gradient-to-br from-[#06D6A0]/5 via-card/80 to-purple/5 border-[#06D6A0]/20">
+          <CardHeader>
+            <CardTitle className="text-2xl">Become a Partner</CardTitle>
+            <p className="text-muted-foreground">Submit your application. We review every request manually.</p>
+          </CardHeader>
+          <CardContent>
+            <form className="space-y-4" onSubmit={handleApply}>
+              <Input
+                value={form.name}
+                onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+                placeholder="Partner name"
+                required
+              />
 
-          <div className="relative p-8 md:p-12">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-center">
-              Become a Partner
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto text-center">
-              Join our ecosystem and reach thousands of AI agent developers building the future of autonomous systems.
-            </p>
+              <Input
+                type="url"
+                value={form.website}
+                onChange={(e) => setForm((prev) => ({ ...prev, website: e.target.value }))}
+                placeholder="https://yourcompany.com"
+                required
+              />
 
-            {/* Benefits List */}
-            <div className="grid md:grid-cols-2 gap-4 mb-8">
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#06D6A0]/20 flex items-center justify-center">
-                  <span className="text-[#06D6A0] text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">Featured Placement</h3>
-                  <p className="text-sm text-muted-foreground">Get prominent visibility in our partner directory</p>
+              <Input
+                type="email"
+                value={form.contactEmail}
+                onChange={(e) => setForm((prev) => ({ ...prev, contactEmail: e.target.value }))}
+                placeholder="contact@yourcompany.com"
+                required
+              />
+
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Tier interest</p>
+                <div className="flex flex-wrap gap-2">
+                  {tierOrder.map((tier) => (
+                    <button
+                      key={tier}
+                      type="button"
+                      onClick={() => setForm((prev) => ({ ...prev, tierInterest: tier }))}
+                      className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                        form.tierInterest === tier
+                          ? "bg-[#06D6A0] text-[#0a0a0a]"
+                          : "border border-white/10 text-foreground hover:bg-white/5"
+                      }`}
+                    >
+                      {tierLabels[tier]}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#06D6A0]/20 flex items-center justify-center">
-                  <span className="text-[#06D6A0] text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">Co-Marketing</h3>
-                  <p className="text-sm text-muted-foreground">Joint content, case studies, and events</p>
-                </div>
-              </div>
+              <textarea
+                value={form.description}
+                onChange={(e) => setForm((prev) => ({ ...prev, description: e.target.value }))}
+                placeholder="Tell us about your product, audience, and partnership goals"
+                className="w-full min-h-28 rounded-md bg-background border border-input px-3 py-2 text-sm"
+                required
+              />
 
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#06D6A0]/20 flex items-center justify-center">
-                  <span className="text-[#06D6A0] text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">Technical Support</h3>
-                  <p className="text-sm text-muted-foreground">Dedicated integration assistance</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#06D6A0]/20 flex items-center justify-center">
-                  <span className="text-[#06D6A0] text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">Community Access</h3>
-                  <p className="text-sm text-muted-foreground">Direct connection to our developer community</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#06D6A0]/20 flex items-center justify-center">
-                  <span className="text-[#06D6A0] text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">Early Access</h3>
-                  <p className="text-sm text-muted-foreground">Beta features and product roadmap input</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#06D6A0]/20 flex items-center justify-center">
-                  <span className="text-[#06D6A0] text-sm">✓</span>
-                </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">Partner Badge</h3>
-                  <p className="text-sm text-muted-foreground">Official verification and trust signal</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-sm hover:brightness-110 transition-all"
+              <button
+                type="submit"
+                disabled={submitting}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#06D6A0] text-[#0a0a0a] font-semibold text-sm hover:brightness-110 transition-all disabled:opacity-50"
               >
-                Apply for Partnership →
-              </Link>
-              <Link
-                href="/guides"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-white/10 text-foreground font-semibold text-sm hover:bg-white/5 transition-colors"
-              >
-                View Integration Guides
-              </Link>
-            </div>
-          </div>
-        </div>
+                {submitting ? "Submitting..." : "Submit Application"}
+              </button>
+
+              {submitMessage && <p className="text-sm text-emerald-300">{submitMessage}</p>}
+              {submitError && <p className="text-sm text-red-400">{submitError}</p>}
+            </form>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

@@ -1,175 +1,170 @@
 [
   {
-    "id": "sec-001",
-    "name": "Security Certified Agent",
-    "slug": "security-certified",
-    "icon": "🔒",
-    "description": "Validates that an agent follows security best practices including credential handling, input validation, and secure communication.",
-    "category": "Security",
-    "level": "Essential",
-    "badgeColor": "red",
+    "id": "cert-101",
+    "title": "Agent Foundations",
+    "slug": "agent-foundations",
+    "description": "Master safe prompting, tool hygiene, and operational basics for production-ready agents.",
+    "level": "beginner",
+    "modules": [
+      {
+        "name": "Prompt Guardrails",
+        "description": "Design prompts that reduce ambiguity and avoid unsafe execution paths."
+      },
+      {
+        "name": "Tool Permissions",
+        "description": "Apply least-privilege rules and safe defaults for external tools and APIs."
+      },
+      {
+        "name": "Error Recovery",
+        "description": "Handle partial failures with retries, fallbacks, and clear user messaging."
+      }
+    ],
     "requirements": [
-      "Zero hardcoded credentials or API keys",
-      "Environment variable validation on startup",
-      "Input sanitization for all user inputs",
-      "Rate limiting on all API endpoints",
-      "Encrypted communication for all external services",
-      "Audit logging for sensitive operations",
-      "Regular dependency vulnerability scans"
+      "Complete the quickstart journey",
+      "Pass the basic safety and policy quiz",
+      "Submit one working agent task log"
     ],
-    "verificationSteps": [
-      "Submit GitHub repository for automated security scan",
-      "Pass OWASP Top 10 compliance check",
-      "Demonstrate secure credential rotation",
-      "Complete penetration test review"
-    ],
-    "estimatedTime": "2-3 days",
-    "prerequisites": [],
-    "benefits": [
-      "Display Security Certified badge on profile",
-      "Listed in security-certified agent directory",
-      "Priority support for security issues",
-      "Access to security best practices documentation"
-    ]
+    "enrollmentCount": 184,
+    "badge": "🧭"
   },
   {
-    "id": "perf-001",
-    "name": "Performance Certified Agent",
-    "slug": "performance-certified",
-    "icon": "⚡",
-    "description": "Demonstrates optimal response times, efficient resource usage, and scalability under load.",
-    "category": "Performance",
-    "level": "Advanced",
-    "badgeColor": "yellow",
+    "id": "cert-201",
+    "title": "Workflow Automation Builder",
+    "slug": "workflow-automation-builder",
+    "description": "Build reliable multi-step automations with robust validation, branching, and observability.",
+    "level": "intermediate",
+    "modules": [
+      {
+        "name": "Flow Orchestration",
+        "description": "Model decision trees and retries for long-running automation chains."
+      },
+      {
+        "name": "Input Validation",
+        "description": "Guarantee clean input contracts to prevent hidden workflow failures."
+      },
+      {
+        "name": "Runbook Design",
+        "description": "Document and operationalize support playbooks for incidents."
+      }
+    ],
     "requirements": [
-      "Average response time under 500ms for 95th percentile",
-      "Memory usage under 512MB for standard workloads",
-      "Support for concurrent request handling (min 10 concurrent)",
-      "Graceful degradation under high load",
-      "Caching strategy for repeated operations",
-      "Database query optimization (if applicable)",
-      "CDN integration for static assets"
+      "Agent Foundations certification",
+      "Implement a 5-step automation pipeline",
+      "Demonstrate success/failure telemetry"
     ],
-    "verificationSteps": [
-      "Submit to automated load testing service",
-      "Pass benchmark tests (response time, throughput, memory)",
-      "Provide architecture diagram showing optimization strategies",
-      "Complete 24-hour stress test"
-    ],
-    "estimatedTime": "3-5 days",
-    "prerequisites": [],
-    "benefits": [
-      "Display Performance Certified badge on profile",
-      "Featured in high-performance agent showcase",
-      "Access to performance monitoring dashboard",
-      "Eligibility for enterprise client listings"
-    ]
+    "enrollmentCount": 137,
+    "badge": "⚙️"
   },
   {
-    "id": "rel-001",
-    "name": "Reliability Certified Agent",
-    "slug": "reliability-certified",
-    "icon": "✅",
-    "description": "Ensures high availability, proper error handling, comprehensive monitoring, and disaster recovery capabilities.",
-    "category": "Reliability",
-    "level": "Essential",
-    "badgeColor": "green",
+    "id": "cert-301",
+    "title": "Multi-Agent Systems Engineer",
+    "slug": "multi-agent-systems-engineer",
+    "description": "Coordinate specialist agents with clear contracts, role isolation, and handoff protocols.",
+    "level": "advanced",
+    "modules": [
+      {
+        "name": "Role-Based Agent Design",
+        "description": "Define specialist responsibilities and interfaces for each lane agent."
+      },
+      {
+        "name": "Handoff Protocols",
+        "description": "Pass context between agents without losing accuracy or task ownership."
+      },
+      {
+        "name": "Conflict Resolution",
+        "description": "Resolve contradictory outputs using confidence and escalation policies."
+      }
+    ],
     "requirements": [
-      "99.9% uptime over 30-day monitoring period",
-      "Comprehensive error handling and recovery",
-      "Health check endpoints implemented",
-      "Automated alerting for failures",
-      "Retry logic with exponential backoff",
-      "Circuit breaker pattern for external dependencies",
-      "Backup and recovery procedures documented"
+      "Workflow Automation Builder certification",
+      "Submit architecture for at least 3 collaborating agents",
+      "Pass concurrency and coordination evaluation"
     ],
-    "verificationSteps": [
-      "Submit agent for 30-day uptime monitoring",
-      "Demonstrate failure recovery scenarios",
-      "Provide incident response documentation",
-      "Pass chaos engineering tests"
-    ],
-    "estimatedTime": "30+ days (includes monitoring period)",
-    "prerequisites": [],
-    "benefits": [
-      "Display Reliability Certified badge on profile",
-      "Listed in high-reliability agent directory",
-      "Access to uptime monitoring dashboard",
-      "Priority incident response support"
-    ]
+    "enrollmentCount": 93,
+    "badge": "🤝"
   },
   {
-    "id": "ent-001",
-    "name": "Enterprise Ready Agent",
-    "slug": "enterprise-ready",
-    "icon": "🏢",
-    "description": "Meets enterprise-grade requirements including compliance, audit trails, SSO, and SLA guarantees.",
-    "category": "Enterprise",
-    "level": "Premium",
-    "badgeColor": "blue",
+    "id": "cert-302",
+    "title": "Agent Security Specialist",
+    "slug": "agent-security-specialist",
+    "description": "Harden agents against prompt injection, data exfiltration, and unsafe tool execution.",
+    "level": "advanced",
+    "modules": [
+      {
+        "name": "Prompt Injection Defense",
+        "description": "Detect and neutralize adversarial prompt patterns in real time."
+      },
+      {
+        "name": "Secrets & Data Boundaries",
+        "description": "Protect credentials and sensitive context across agent interactions."
+      },
+      {
+        "name": "Policy-Aware Execution",
+        "description": "Enforce runtime safeguards before privileged actions occur."
+      }
+    ],
     "requirements": [
-      "SOC 2 Type II or equivalent compliance documentation",
-      "GDPR and CCPA data privacy compliance",
-      "SSO/SAML authentication support",
-      "Role-based access control (RBAC)",
-      "Comprehensive audit logging (all actions, 90-day retention)",
-      "SLA commitment (99.95% uptime)",
-      "Dedicated support channel",
-      "Multi-region deployment capability",
-      "Data residency options"
+      "Agent Foundations certification",
+      "Pass security scenario simulations",
+      "Complete secure-tooling checklist"
     ],
-    "verificationSteps": [
-      "Submit compliance documentation",
-      "Demonstrate SSO integration",
-      "Provide audit log samples",
-      "Complete enterprise security questionnaire",
-      "Pass third-party security audit"
-    ],
-    "estimatedTime": "2-4 weeks",
-    "prerequisites": [
-      "Security Certified",
-      "Reliability Certified"
-    ],
-    "benefits": [
-      "Display Enterprise Ready badge on profile",
-      "Featured in enterprise marketplace",
-      "Direct access to enterprise sales team",
-      "Co-marketing opportunities",
-      "Premium listing placement"
-    ]
+    "enrollmentCount": 109,
+    "badge": "🛡️"
   },
   {
-    "id": "obs-001",
-    "name": "Observability Certified Agent",
-    "slug": "observability-certified",
-    "icon": "📊",
-    "description": "Implements comprehensive logging, metrics, tracing, and monitoring for full system visibility.",
-    "category": "Operations",
-    "level": "Advanced",
-    "badgeColor": "purple",
+    "id": "cert-401",
+    "title": "Enterprise Agent Architect",
+    "slug": "enterprise-agent-architect",
+    "description": "Design enterprise-grade agent platforms with governance, auditability, and SLA resilience.",
+    "level": "expert",
+    "modules": [
+      {
+        "name": "Governance Architecture",
+        "description": "Define controls for approvals, traceability, and policy lifecycle management."
+      },
+      {
+        "name": "Audit & Compliance",
+        "description": "Implement reporting paths for SOC2-style evidence and operational controls."
+      },
+      {
+        "name": "Scale & Reliability",
+        "description": "Deliver durable agent systems with failover, SLOs, and incident response plans."
+      }
+    ],
     "requirements": [
-      "Structured logging (JSON format) with correlation IDs",
-      "Metrics instrumentation (Prometheus/OpenTelemetry compatible)",
-      "Distributed tracing implemented",
-      "Custom dashboards for key metrics",
-      "Log aggregation and search capability",
-      "Performance profiling endpoints",
-      "Real-time alerting configuration",
-      "Integration with common observability platforms (Datadog, New Relic, etc.)"
+      "Multi-Agent Systems Engineer certification",
+      "Agent Security Specialist certification",
+      "Submit enterprise deployment blueprint and review session"
     ],
-    "verificationSteps": [
-      "Submit observability stack documentation",
-      "Demonstrate live metrics dashboard",
-      "Provide sample traces and logs",
-      "Pass observability integration tests"
+    "enrollmentCount": 58,
+    "badge": "🏛️"
+  },
+  {
+    "id": "cert-402",
+    "title": "Agent Program Mentor",
+    "slug": "agent-program-mentor",
+    "description": "Lead teams to ship repeatable agent programs with quality gates and coaching systems.",
+    "level": "intermediate",
+    "modules": [
+      {
+        "name": "Coaching Frameworks",
+        "description": "Create growth pathways for builders through feedback loops and milestones."
+      },
+      {
+        "name": "Quality Gates",
+        "description": "Set evidence-based review criteria before deployments and releases."
+      },
+      {
+        "name": "Delivery Rituals",
+        "description": "Run weekly cadences that improve output quality and team alignment."
+      }
     ],
-    "estimatedTime": "4-6 days",
-    "prerequisites": [],
-    "benefits": [
-      "Display Observability Certified badge on profile",
-      "Featured in ops-focused agent directory",
-      "Access to advanced monitoring tools",
-      "Integration with forAgents.dev monitoring platform"
-    ]
+    "requirements": [
+      "Complete two peer review sessions",
+      "Publish one reusable mentorship runbook",
+      "Demonstrate coaching impact with before/after metrics"
+    ],
+    "enrollmentCount": 76,
+    "badge": "🌱"
   }
 ]

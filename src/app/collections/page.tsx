@@ -1,10 +1,19 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { getSkillCollections } from "@/lib/skillCollections";
 import { MyCollectionsClient } from "@/app/collections/my-collections-client";
+
+type CollectionSummary = {
+  slug: string;
+  name: string;
+  description: string;
+  skills: string[];
+  skillCount: number;
+  totalInstalls: number;
+};
 
 export const metadata: Metadata = {
   title: "Collections — forAgents.dev",
@@ -34,6 +43,23 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 
+async function fetchCollections(): Promise<CollectionSummary[]> {
+  const hdrs = await headers();
+  const host = hdrs.get("x-forwarded-host") || hdrs.get("host");
+  const protocol = hdrs.get("x-forwarded-proto") || "https";
+  const fallbackBase = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const base = host ? `${protocol}://${host}` : fallbackBase;
+
+  const res = await fetch(`${base}/api/collections`, {
+    next: { revalidate: 300 },
+  });
+
+  if (!res.ok) return [];
+
+  const data = (await res.json()) as { collections?: CollectionSummary[] };
+  return Array.isArray(data.collections) ? data.collections : [];
+}
+
 export default async function CollectionsIndexPage(props: {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
@@ -42,7 +68,7 @@ export default async function CollectionsIndexPage(props: {
     typeof sp.skill === "string" ? sp.skill : Array.isArray(sp.skill) ? sp.skill[0] : "";
   const skillFilter = (skillParam || "").trim();
 
-  const collections = await getSkillCollections();
+  const collections = await fetchCollections();
   const shown = skillFilter ? collections.filter((c) => c.skills.includes(skillFilter)) : collections;
 
   return (

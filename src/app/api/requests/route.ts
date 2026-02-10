@@ -8,7 +8,7 @@ import {
 import {
   makeRequestId,
   readKitRequestsFile,
-  sortRequestsByVotes,
+  sortRequests,
   writeKitRequestsFile,
   getVotesForRequest,
   KitRequest,
@@ -22,31 +22,27 @@ function validateNewRequest(body: Record<string, unknown>): {
 } | { ok: false; errors: string[] } {
   const errors: string[] = [];
 
-  const kitName = typeof body.kitName === "string" ? body.kitName.trim() : "";
+  const title = typeof body.title === "string" ? body.title.trim() : "";
   const description = typeof body.description === "string" ? body.description.trim() : "";
-  const useCase = typeof body.useCase === "string" ? body.useCase.trim() : "";
-  const requesterAgentIdRaw = typeof body.requesterAgentId === "string" ? body.requesterAgentId.trim() : "";
+  const category = typeof body.category === "string" ? body.category.trim().toLowerCase() : "";
 
-  if (!kitName) errors.push("kitName is required");
-  if (kitName.length > 120) errors.push("kitName must be under 120 characters");
+  if (!title) errors.push("title is required");
+  if (title.length > 120) errors.push("title must be under 120 characters");
 
   if (!description) errors.push("description is required");
-  if (description.length > 2000) errors.push("description must be under 2,000 characters");
+  if (description.length > 2_000) errors.push("description must be under 2,000 characters");
 
-  if (!useCase) errors.push("useCase is required");
-  if (useCase.length > 2000) errors.push("useCase must be under 2,000 characters");
-
-  if (requesterAgentIdRaw.length > 200) errors.push("requesterAgentId must be under 200 characters");
+  if (!category) errors.push("category is required");
+  if (category.length > 80) errors.push("category must be under 80 characters");
 
   if (errors.length > 0) return { ok: false, errors };
 
   return {
     ok: true,
     value: {
-      kitName,
+      title,
       description,
-      useCase,
-      requesterAgentId: requesterAgentIdRaw ? requesterAgentIdRaw : null,
+      category,
     },
   };
 }
@@ -58,7 +54,16 @@ export async function GET(request: NextRequest) {
 
   const file = await readKitRequestsFile();
   const withVotes = file.requests.map((r) => ({ ...r, votes: getVotesForRequest(r.id, file) }));
-  const sorted = sortRequestsByVotes(withVotes);
+
+  const sortParam = request.nextUrl.searchParams.get("sort");
+  const sort = sortParam === "recent" ? "recent" : "votes";
+
+  const categoryFilter = request.nextUrl.searchParams.get("category")?.trim().toLowerCase();
+  const filtered = categoryFilter
+    ? withVotes.filter((r) => r.category.toLowerCase() === categoryFilter)
+    : withVotes;
+
+  const sorted = sortRequests(filtered, sort);
 
   return NextResponse.json(
     {
@@ -94,26 +99,29 @@ export async function POST(request: NextRequest) {
     const id = makeRequestId();
     const createdAt = new Date().toISOString();
 
-    const newRequest: KitRequest = {
+    const newRequest: KitRequest & { votes: number } = {
       id,
       createdAt,
       ...validation.value,
+      votes: 0,
+    };
+
+    const requestWithoutVotes: KitRequest = {
+      id: newRequest.id,
+      title: newRequest.title,
+      description: newRequest.description,
+      category: newRequest.category,
+      createdAt: newRequest.createdAt,
     };
 
     const next = {
-      requests: [...file.requests, newRequest],
+      requests: [...file.requests, requestWithoutVotes],
       votes: { ...file.votes, [id]: 0 },
     };
 
     await writeKitRequestsFile(next);
 
-    return NextResponse.json(
-      {
-        success: true,
-        request: { ...newRequest, votes: 0 },
-      },
-      { status: 201 }
-    );
+    return NextResponse.json(newRequest, { status: 201 });
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;

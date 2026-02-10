@@ -1,0 +1,69 @@
+[
+  {
+    "id": "wf-oncall-triage",
+    "name": "On-call Alert Triage",
+    "description": "Ingest alerts, score severity, and assign to the correct owner.",
+    "enabled": true,
+    "createdAt": "2026-02-01T08:00:00.000Z",
+    "updatedAt": "2026-02-01T08:00:00.000Z",
+    "steps": [
+      { "id": "step-1", "name": "Collect incoming alerts", "description": "Read PagerDuty and Slack alert feeds" },
+      { "id": "step-2", "name": "Classify severity", "description": "Apply severity rules and confidence score" },
+      { "id": "step-3", "name": "Route to service owner", "description": "Assign incident to the owning squad" },
+      { "id": "step-4", "name": "Post timeline update", "description": "Publish initial status update in incident channel" }
+    ]
+  },
+  {
+    "id": "wf-content-ops",
+    "name": "Content Ops Publishing",
+    "description": "Turn approved drafts into scheduled posts across channels.",
+    "enabled": true,
+    "createdAt": "2026-02-02T09:30:00.000Z",
+    "updatedAt": "2026-02-02T09:30:00.000Z",
+    "steps": [
+      { "id": "step-1", "name": "Pull approved drafts", "description": "Fetch approved content from Notion" },
+      { "id": "step-2", "name": "Generate social snippets", "description": "Create channel-specific excerpts" },
+      { "id": "step-3", "name": "Schedule posts", "description": "Queue publication in social scheduler" }
+    ]
+  },
+  {
+    "id": "wf-release-checklist",
+    "name": "Release Checklist Automation",
+    "description": "Automate pre-release quality checks and release notes generation.",
+    "enabled": false,
+    "createdAt": "2026-02-03T12:15:00.000Z",
+    "updatedAt": "2026-02-03T12:15:00.000Z",
+    "steps": [
+      { "id": "step-1", "name": "Run CI test suite", "description": "Execute unit and integration tests" },
+      { "id": "step-2", "name": "Summarize changes", "description": "Aggregate merged PR highlights" },
+      { "id": "step-3", "name": "Draft release notes", "description": "Generate release notes markdown" },
+      { "id": "step-4", "name": "Create release ticket", "description": "Open release ticket with checklist" },
+      { "id": "step-5", "name": "Notify launch channel", "description": "Share release candidate status" }
+    ]
+  },
+  {
+    "id": "wf-customer-escalation",
+    "name": "Customer Escalation Flow",
+    "description": "Detect high-risk tickets and escalate them to response leads.",
+    "enabled": true,
+    "createdAt": "2026-02-04T14:00:00.000Z",
+    "updatedAt": "2026-02-04T14:00:00.000Z",
+    "steps": [
+      { "id": "step-1", "name": "Watch support inbox", "description": "Poll incoming support tickets" },
+      { "id": "step-2", "name": "Identify risk signals", "description": "Flag churn and outage keywords" },
+      { "id": "step-3", "name": "Escalate to response lead", "description": "Assign lead and start SLA timer" }
+    ]
+  },
+  {
+    "id": "wf-data-quality",
+    "name": "Data Quality Guardrail",
+    "description": "Validate critical datasets before they are used for reporting.",
+    "enabled": false,
+    "createdAt": "2026-02-05T10:45:00.000Z",
+    "updatedAt": "2026-02-05T10:45:00.000Z",
+    "steps": [
+      { "id": "step-1", "name": "Load daily extract", "description": "Read warehouse export" },
+      { "id": "step-2", "name": "Run schema checks", "description": "Ensure required fields and types" }
+    ]
+  }
+]

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { Separator } from "@/components/ui/separator";
 import { NewsletterSignup } from "@/components/newsletter-signup";
-import { getChangelogEntries } from "@/lib/changelog";
 import { ChangelogContent } from "./changelog-content";
+import { type ChangelogApiResponse, type ChangelogEntry } from "@/lib/changelog";
 
 export function generateMetadata(): Metadata {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "https://foragents.dev";
@@ -39,8 +40,28 @@ export function generateMetadata(): Metadata {
   };
 }
 
+async function fetchChangelogEntries(): Promise<ChangelogEntry[]> {
+  const hdrs = await headers();
+  const host = hdrs.get("x-forwarded-host") || hdrs.get("host");
+  const protocol = hdrs.get("x-forwarded-proto") || "https";
+
+  const fallbackBase = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const base = host ? `${protocol}://${host}` : fallbackBase;
+
+  const response = await fetch(`${base}/api/changelog?limit=100&offset=0`, {
+    next: { revalidate: 300 },
+  });
+
+  if (!response.ok) {
+    return [];
+  }
+
+  const data = (await response.json()) as ChangelogApiResponse;
+  return Array.isArray(data.entries) ? data.entries : [];
+}
+
 export default async function ChangelogPage() {
-  const entries = await getChangelogEntries();
+  const entries = await fetchChangelogEntries();
 
   return (
     <div className="min-h-screen">

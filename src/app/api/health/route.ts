@@ -1,25 +1,38 @@
-import { NextResponse } from 'next/server';
-import { getNews, getSkills, getMcpServers, getAgents, getAcpAgents, getLlmsTxtEntries } from '@/lib/data';
+import { NextResponse } from "next/server";
+import { getSkills, getMcpServers } from "@/lib/data";
+
+function formatUptime(totalSeconds: number): string {
+  const seconds = Math.max(0, Math.floor(totalSeconds));
+
+  const days = Math.floor(seconds / 86_400);
+  const hours = Math.floor((seconds % 86_400) / 3_600);
+  const minutes = Math.floor((seconds % 3_600) / 60);
+  const secs = seconds % 60;
+
+  const parts: string[] = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0 || days > 0) parts.push(`${hours}h`);
+  if (minutes > 0 || hours > 0 || days > 0) parts.push(`${minutes}m`);
+  parts.push(`${secs}s`);
+
+  return parts.join(" ");
+}
 
 export async function GET() {
-  const news = getNews();
   const skills = getSkills();
-  const mcp = getMcpServers();
-  const agents = getAgents();
-  const acp = getAcpAgents();
-  const llmstxt = getLlmsTxtEntries();
+  const mcpServers = getMcpServers();
 
-  return NextResponse.json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    data: {
-      news: news.length,
-      skills: skills.length,
-      mcp: mcp.length,
-      agents: agents.length,
-      acp: acp.length,
-      llmstxt: llmstxt.length,
-      total: news.length + skills.length + mcp.length + agents.length + acp.length + llmstxt.length,
+  return NextResponse.json(
+    {
+      status: "ok",
+      version: "1.0.0",
+      skills_count: skills.length,
+      mcp_count: mcpServers.length,
+      uptime: formatUptime(process.uptime()),
+      timestamp: new Date().toISOString(),
     },
-  });
+    {
+      headers: { "Cache-Control": "no-store" },
+    }
+  );
 }

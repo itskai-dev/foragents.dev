@@ -1,34 +1,122 @@
 [
   {
-    "id": "list-skills",
-    "name": "List Skills",
+    "id": "health",
+    "name": "Health",
     "method": "GET",
-    "path": "/api/skills.json",
-    "description": "Get all available skills",
+    "path": "/api/health",
+    "description": "Basic API health and counts",
     "params": []
   },
   {
-    "id": "trending-skills",
+    "id": "stats",
+    "name": "Stats",
+    "method": "GET",
+    "path": "/api/stats",
+    "description": "Top-level stats for skills, MCP servers, categories, and reviews",
+    "params": []
+  },
+  {
+    "id": "list-skills",
+    "name": "List Skills",
+    "method": "GET",
+    "path": "/api/skills",
+    "description": "Get skills with optional filters and pagination",
+    "params": [
+      {
+        "name": "category",
+        "type": "string",
+        "required": false,
+        "placeholder": "memory"
+      },
+      {
+        "name": "search",
+        "type": "string",
+        "required": false,
+        "placeholder": "notion"
+      },
+      {
+        "name": "sort",
+        "type": "string",
+        "required": false,
+        "placeholder": "trending"
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "required": false,
+        "placeholder": "20"
+      },
+      {
+        "name": "offset",
+        "type": "number",
+        "required": false,
+        "placeholder": "0"
+      }
+    ]
+  },
+  {
+    "id": "list-mcp",
+    "name": "List MCP Servers",
+    "method": "GET",
+    "path": "/api/mcp",
+    "description": "Get MCP servers with optional category/search filters",
+    "params": [
+      {
+        "name": "category",
+        "type": "string",
+        "required": false,
+        "placeholder": "search"
+      },
+      {
+        "name": "search",
+        "type": "string",
+        "required": false,
+        "placeholder": "slack"
+      }
+    ]
+  },
+  {
+    "id": "trending",
     "name": "Trending Skills",
     "method": "GET",
-    "path": "/api/trending/skills",
-    "description": "Get trending scores and badges for skills",
-    "params": []
+    "path": "/api/trending",
+    "description": "Get skills ranked by trending score",
+    "params": [
+      {
+        "name": "category",
+        "type": "string",
+        "required": false,
+        "placeholder": "memory"
+      },
+      {
+        "name": "limit",
+        "type": "number",
+        "required": false,
+        "placeholder": "25"
+      }
+    ]
   },
   {
     "id": "list-collections",
     "name": "List Collections",
     "method": "GET",
     "path": "/api/collections",
-    "description": "Get curated skill-bundle collections (no auth)",
-    "params": []
+    "description": "Get curated collections, optionally filtered by search",
+    "params": [
+      {
+        "name": "search",
+        "type": "string",
+        "required": false,
+        "placeholder": "automation"
+      }
+    ]
   },
   {
     "id": "news-feed",
     "name": "News Feed",
     "method": "GET",
-    "path": "/api/feed.json",
-    "description": "Get the latest news items (optionally filter by tag)",
+    "path": "/api/feed",
+    "description": "Get latest news items with optional tag filter",
     "params": [
       {
         "name": "tag",
@@ -39,62 +127,23 @@
     ]
   },
   {
-    "id": "canary-results",
-    "name": "Canary Results",
+    "id": "changelog",
+    "name": "Changelog",
     "method": "GET",
-    "path": "/api/canary/results",
-    "description": "Fetch recent canary run results",
+    "path": "/api/changelog",
+    "description": "Get changelog entries with pagination",
     "params": [
       {
         "name": "limit",
         "type": "number",
         "required": false,
-        "placeholder": "50"
+        "placeholder": "20"
       },
       {
-        "name": "status",
-        "type": "string",
+        "name": "offset",
+        "type": "number",
         "required": false,
-        "placeholder": "pass"
-      }
-    ]
-  },
-  {
-    "id": "health",
-    "name": "Health",
-    "method": "GET",
-    "path": "/api/health",
-    "description": "Basic API health and counts",
-    "params": []
-  },
-  {
-    "id": "list-bounties",
-    "name": "List Bounties",
-    "method": "GET",
-    "path": "/api/bounties.json",
-    "description": "Get all Fund-a-Kit bounties",
-    "params": []
-  },
-  {
-    "id": "list-macros",
-    "name": "List Macro Tools",
-    "method": "GET",
-    "path": "/api/macros.json",
-    "description": "Get all macro tools",
-    "params": []
-  },
-  {
-    "id": "list-mcp",
-    "name": "List MCP Servers",
-    "method": "GET",
-    "path": "/api/mcp.json",
-    "description": "Get MCP servers (optionally filter by category)",
-    "params": [
-      {
-        "name": "category",
-        "type": "string",
-        "required": false,
-        "placeholder": "search"
+        "placeholder": "0"
       }
     ]
   },
@@ -103,7 +152,101 @@
     "name": "Kit Requests",
     "method": "GET",
     "path": "/api/requests",
-    "description": "List requested kits (sorted by votes)",
+    "description": "List requested kits sorted by votes or recency",
+    "params": [
+      {
+        "name": "sort",
+        "type": "string",
+        "required": false,
+        "placeholder": "votes"
+      },
+      {
+        "name": "category",
+        "type": "string",
+        "required": false,
+        "placeholder": "automation"
+      }
+    ]
+  },
+  {
+    "id": "create-request",
+    "name": "Create Kit Request",
+    "method": "POST",
+    "path": "/api/requests",
+    "description": "Submit a new kit request",
+    "params": [
+      {
+        "name": "title",
+        "type": "string",
+        "required": true,
+        "placeholder": "Notion Assistant Kit",
+        "in": "body"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": true,
+        "placeholder": "Create pages, update databases, and summarize content",
+        "in": "body"
+      },
+      {
+        "name": "category",
+        "type": "string",
+        "required": true,
+        "placeholder": "productivity",
+        "in": "body"
+      }
+    ]
+  },
+  {
+    "id": "upvote-request",
+    "name": "Upvote Kit Request",
+    "method": "POST",
+    "path": "/api/requests/{id}/vote",
+    "description": "Increment votes for a request",
+    "params": [
+      {
+        "name": "id",
+        "type": "string",
+        "required": true,
+        "placeholder": "req_1739059030123_ab12cd",
+        "in": "path"
+      }
+    ]
+  },
+  {
+    "id": "list-bounties",
+    "name": "List Bounties",
+    "method": "GET",
+    "path": "/api/bounties",
+    "description": "Get bounties with optional status/tag filters",
+    "params": [
+      {
+        "name": "status",
+        "type": "string",
+        "required": false,
+        "placeholder": "open"
+      },
+      {
+        "name": "tag",
+        "type": "string",
+        "required": false,
+        "placeholder": "automation"
+      },
+      {
+        "name": "sort",
+        "type": "string",
+        "required": false,
+        "placeholder": "recent"
+      }
+    ]
+  },
+  {
+    "id": "list-macros",
+    "name": "List Macro Tools",
+    "method": "GET",
+    "path": "/api/macros.json",
+    "description": "Get all macro tools",
     "params": []
   }
 ]

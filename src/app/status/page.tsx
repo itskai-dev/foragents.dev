@@ -1,26 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from "@/components/ui/card";
 
-type ServiceStatus = "operational" | "degraded" | "outage";
+type ServiceStatus = "operational" | "degraded" | "down";
 
 interface Service {
   name: string;
   status: ServiceStatus;
-  uptime: number;
-  responseTime: number;
+  latencyMs: number;
+  lastCheck: string;
 }
 
-interface Incident {
-  id: string;
+interface StatusResponse {
+  services: Service[];
+  overall: ServiceStatus;
+}
+
+interface HistoryEntry {
   date: string;
-  title: string;
-  description: string;
-  status: "resolved" | "investigating" | "monitoring";
-  affectedServices: string[];
+  uptime: number;
+  incidents: number;
+}
+
+interface HistoryResponse {
+  history: HistoryEntry[];
 }
 
 const statusConfig = {
@@ -34,130 +39,77 @@ const statusConfig = {
     text: "Degraded",
     badgeVariant: "secondary" as const,
   },
-  outage: {
+  down: {
     color: "bg-red-500",
-    text: "Outage",
+    text: "Down",
     badgeVariant: "destructive" as const,
   },
 };
 
-// Mock data - in production this would come from an API
-const initialServices: Service[] = [
-  {
-    name: "API",
-    status: "operational",
-    uptime: 99.98,
-    responseTime: 145,
-  },
-  {
-    name: "Website",
-    status: "operational",
-    uptime: 99.99,
-    responseTime: 87,
-  },
-  {
-    name: "MCP Registry",
-    status: "operational",
-    uptime: 99.95,
-    responseTime: 213,
-  },
-  {
-    name: "Supabase",
-    status: "operational",
-    uptime: 99.97,
-    responseTime: 92,
-  },
-  {
-    name: "CDN",
-    status: "operational",
-    uptime: 100.0,
-    responseTime: 34,
-  },
-];
-
-const incidents: Incident[] = [
-  {
-    id: "inc-005",
-    date: "2026-02-05",
-    title: "Brief API Latency Spike",
-    description:
-      "Users experienced elevated API response times for approximately 8 minutes. Root cause identified as database connection pool exhaustion. Connection limits have been increased.",
-    status: "resolved",
-    affectedServices: ["API"],
-  },
-  {
-    id: "inc-004",
-    date: "2026-01-28",
-    title: "CDN Cache Invalidation Issue",
-    description:
-      "CDN cache invalidation failed for approximately 15 minutes, causing some users to see stale content. Issue was resolved by manually purging cache and redeploying edge configuration.",
-    status: "resolved",
-    affectedServices: ["CDN", "Website"],
-  },
-  {
-    id: "inc-003",
-    date: "2026-01-22",
-    title: "MCP Registry Search Degradation",
-    description:
-      "Search functionality in the MCP Registry experienced degraded performance due to an index optimization job running during peak hours. Job has been rescheduled to off-peak times.",
-    status: "resolved",
-    affectedServices: ["MCP Registry"],
-  },
-  {
-    id: "inc-002",
-    date: "2026-01-15",
-    title: "Supabase Connection Timeout",
-    description:
-      "Database connection timeouts affected user authentication for approximately 12 minutes. Supabase team resolved the issue on their end. Implementing additional retry logic.",
-    status: "resolved",
-    affectedServices: ["Supabase", "API"],
-  },
-  {
-    id: "inc-001",
-    date: "2026-01-09",
-    title: "Scheduled Maintenance",
-    description:
-      "Planned maintenance window for infrastructure upgrades. All services were briefly unavailable for approximately 30 minutes. Upgrades included security patches and performance improvements.",
-    status: "resolved",
-    affectedServices: ["API", "Website", "MCP Registry", "Supabase", "CDN"],
-  },
-];
-
 export default function StatusPage() {
-  const [services] = useState<Service[]>(initialServices);
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [services, setServices] = useState<Service[]>([]);
+  const [overallStatus, setOverallStatus] = useState<ServiceStatus>("operational");
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const webPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
     name: "Status — forAgents.dev",
-    description:
-      "Real-time status and uptime information for forAgents.dev services including API, Website, MCP Registry, Supabase, and CDN.",
+    description: "Real-time status and uptime information for forAgents.dev services.",
     url: "https://foragents.dev/status",
   };
 
-  // Simulate periodic updates (in production, this would poll an API)
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLastUpdated(new Date());
-    }, 60000); // Update every minute
+    let mounted = true;
 
-    return () => clearInterval(interval);
+    const fetchStatus = async () => {
+      try {
+        const [statusRes, historyRes] = await Promise.all([
+          fetch("/api/status", { cache: "no-store" }),
+          fetch("/api/status/history", { cache: "no-store" }),
+        ]);
+
+        if (!statusRes.ok || !historyRes.ok) {
+          throw new Error("Failed to load status");
+        }
+
+        const statusData = (await statusRes.json()) as StatusResponse;
+        const historyData = (await historyRes.json()) as HistoryResponse;
+
+        if (!mounted) return;
+
+        setServices(statusData.services);
+        setOverallStatus(statusData.overall);
+        setHistory(historyData.history);
+        setLastUpdated(new Date());
+        setError(null);
+      } catch {
+        if (!mounted) return;
+        setError("Unable to load live status checks right now.");
+      }
+    };
+
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 30_000);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
-  const overallStatus: ServiceStatus =
-    services.every((s) => s.status === "operational")
-      ? "operational"
-      : services.some((s) => s.status === "outage")
-        ? "outage"
-        : "degraded";
+  const overallHeading = useMemo(() => {
+    if (overallStatus === "operational") return "All Systems Operational";
+    if (overallStatus === "degraded") return "Some Systems Degraded";
+    return "Service Outage";
+  }, [overallStatus]);
 
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-      year: "numeric",
     });
   };
 
@@ -168,53 +120,35 @@ export default function StatusPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
       />
 
-      {/* Hero Section with Overall Status */}
-      <section className="relative overflow-hidden min-h-[300px] flex items-center">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-[#06D6A0]/5 rounded-full blur-[160px]" />
-        </div>
-
+      <section className="relative overflow-hidden min-h-[260px] flex items-center">
         <div className="relative max-w-5xl mx-auto px-4 py-16 w-full">
           <div className="text-center mb-8">
             <h1 className="text-[40px] md:text-[56px] font-bold tracking-[-0.02em] text-[#F8FAFC] mb-4">
               System Status
             </h1>
-            <p className="text-xl text-foreground/80 mb-6">
-              Real-time status and uptime information
-            </p>
+            <p className="text-xl text-foreground/80">Live health checks, refreshed every 30 seconds</p>
           </div>
 
-          {/* Overall Status Banner */}
           <Card className="bg-[#0f0f0f] border-white/10 max-w-3xl mx-auto">
             <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-4 h-4 rounded-full ${statusConfig[overallStatus].color}`}
-                  />
-                  <div>
-                    <h2 className="text-2xl font-semibold">
-                      {overallStatus === "operational"
-                        ? "All Systems Operational"
-                        : overallStatus === "degraded"
-                          ? "Some Systems Degraded"
-                          : "Service Outage"}
-                    </h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Last updated: {lastUpdated.toLocaleTimeString()}
-                    </p>
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className={`w-4 h-4 rounded-full ${statusConfig[overallStatus].color}`} />
+                <div>
+                  <h2 className="text-2xl font-semibold">{overallHeading}</h2>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {lastUpdated ? `Last updated: ${lastUpdated.toLocaleTimeString()}` : "Loading..."}
+                  </p>
                 </div>
               </div>
             </CardContent>
           </Card>
+
+          {error ? <p className="text-center text-sm text-red-400 mt-4">{error}</p> : null}
         </div>
       </section>
 
-      {/* Services Status */}
-      <section className="relative max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8">Services</h2>
-
+      <section className="relative max-w-5xl mx-auto px-4 py-8">
+        <h2 className="text-3xl font-bold mb-6">Services</h2>
         <div className="space-y-4">
           {services.map((service) => (
             <Card
@@ -224,29 +158,22 @@ export default function StatusPage() {
               <CardContent className="pt-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
-                    <div
-                      className={`w-3 h-3 rounded-full ${statusConfig[service.status].color}`}
-                    />
+                    <div className={`w-3 h-3 rounded-full ${statusConfig[service.status].color}`} />
                     <h3 className="text-xl font-semibold">{service.name}</h3>
-                    <Badge
-                      variant={statusConfig[service.status].badgeVariant}
-                      className="ml-2"
-                    >
+                    <Badge variant={statusConfig[service.status].badgeVariant} className="ml-2">
                       {statusConfig[service.status].text}
                     </Badge>
                   </div>
 
                   <div className="flex gap-8 text-sm">
                     <div>
-                      <p className="text-muted-foreground">Uptime (30d)</p>
-                      <p className="font-semibold text-[#06D6A0]">
-                        {service.uptime.toFixed(2)}%
-                      </p>
+                      <p className="text-muted-foreground">Latency</p>
+                      <p className="font-semibold text-[#06D6A0]">{service.latencyMs}ms</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">Response Time</p>
+                      <p className="text-muted-foreground">Last check</p>
                       <p className="font-semibold text-[#06D6A0]">
-                        {service.responseTime}ms
+                        {new Date(service.lastCheck).toLocaleTimeString()}
                       </p>
                     </div>
                   </div>
@@ -257,80 +184,30 @@ export default function StatusPage() {
         </div>
       </section>
 
-      {/* Incident History */}
-      <section className="relative max-w-5xl mx-auto px-4 py-12">
-        <h2 className="text-3xl font-bold mb-8">Incident History</h2>
+      <section className="relative max-w-5xl mx-auto px-4 py-8 mb-12">
+        <h2 className="text-3xl font-bold mb-6">Uptime (Last 7 Days)</h2>
 
-        <div className="space-y-6">
-          {incidents.map((incident) => (
-            <Card
-              key={incident.id}
-              className="bg-[#0f0f0f] border-white/10"
-            >
-              <CardHeader>
-                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <CardTitle className="text-xl">
-                        {incident.title}
-                      </CardTitle>
-                      <Badge
-                        variant={
-                          incident.status === "resolved"
-                            ? "default"
-                            : "secondary"
-                        }
-                        className="capitalize"
-                      >
-                        {incident.status}
-                      </Badge>
+        <Card className="bg-[#0f0f0f] border-white/10">
+          <CardContent className="pt-6">
+            <div className="grid grid-cols-7 gap-3 h-48 items-end">
+              {history.map((entry) => {
+                const heightPct = Math.max(8, Math.round(entry.uptime));
+
+                return (
+                  <div key={entry.date} className="flex flex-col items-center gap-2">
+                    <div className="w-full h-36 bg-white/5 rounded-md relative overflow-hidden border border-white/10">
+                      <div
+                        className="absolute bottom-0 w-full bg-[#06D6A0]"
+                        style={{ height: `${heightPct}%` }}
+                      />
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {formatDate(incident.date)}
-                    </p>
+                    <p className="text-xs text-muted-foreground">{formatDate(entry.date)}</p>
+                    <p className="text-xs text-[#06D6A0] font-semibold">{entry.uptime.toFixed(2)}%</p>
+                    <p className="text-[10px] text-muted-foreground">Incidents: {entry.incidents}</p>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-foreground/80 mb-4">
-                  {incident.description}
-                </p>
-                <Separator className="my-4" />
-                <div>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Affected Services:
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {incident.affectedServices.map((service) => (
-                      <Badge
-                        key={service}
-                        variant="secondary"
-                        className="bg-white/5"
-                      >
-                        {service}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Subscribe to Updates */}
-      <section className="relative max-w-5xl mx-auto px-4 py-12 mb-12">
-        <Card className="bg-gradient-to-br from-[#06D6A0]/10 to-[#06D6A0]/5 border-[#06D6A0]/20">
-          <CardContent className="pt-6 text-center">
-            <h3 className="text-2xl font-bold mb-2">
-              Stay Updated
-            </h3>
-            <p className="text-foreground/80 mb-4">
-              Subscribe to status updates and be notified of incidents as they happen.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Coming soon: Email and webhook notifications
-            </p>
+                );
+              })}
+            </div>
           </CardContent>
         </Card>
       </section>

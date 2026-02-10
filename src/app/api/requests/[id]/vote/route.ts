@@ -18,8 +18,6 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const ip = getClientIp(request);
-  const rl = checkRateLimit(`requests:vote:${ip}`, { windowMs: 60_000, max: 60 });
-  if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
 
   try {
     await readTextWithLimit(request, MAX_BODY_BYTES);
@@ -44,6 +42,12 @@ export async function POST(
     return NextResponse.json({ error: "Invalid request ID" }, { status: 400 });
   }
 
+  const voteLimit = checkRateLimit(`requests:vote:${id}:${ip}`, {
+    windowMs: 60 * 60 * 1000,
+    max: 1,
+  });
+  if (!voteLimit.ok) return rateLimitResponse(voteLimit.retryAfterSec);
+
   const file = await readKitRequestsFile();
   const exists = file.requests.some((r) => r.id === id);
   if (!exists) {
@@ -58,5 +62,5 @@ export async function POST(
     votes: { ...file.votes, [id]: nextVotes },
   });
 
-  return NextResponse.json({ success: true, id, votes: nextVotes });
+  return NextResponse.json({ id, votes: nextVotes });
 }

@@ -91,6 +91,10 @@ function HostDetectionStep({
   onHostChange: (host: HostId) => void;
 }) {
   const detectedHint = useMemo(() => {
+    if (typeof window === "undefined" || typeof navigator === "undefined") {
+      return "Auto-detect hint: host detection runs after the page loads.";
+    }
+
     const userAgent = navigator.userAgent.toLowerCase();
     const platform = navigator.platform.toLowerCase();
 
@@ -370,7 +374,7 @@ function VerificationStep({ report }: { report: VerificationReport }) {
 }
 
 function copyText(text: string) {
-  if (navigator?.clipboard?.writeText) {
+  if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
     void navigator.clipboard.writeText(text);
   }
 }

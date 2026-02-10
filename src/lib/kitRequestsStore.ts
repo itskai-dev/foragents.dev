@@ -3,11 +3,20 @@ import path from "path";
 
 export type KitRequest = {
   id: string;
-  kitName: string;
+  title: string;
   description: string;
-  useCase: string;
-  requesterAgentId: string | null;
+  category: string;
   createdAt: string;
+};
+
+type LegacyKitRequest = {
+  id?: unknown;
+  title?: unknown;
+  kitName?: unknown;
+  description?: unknown;
+  category?: unknown;
+  createdAt?: unknown;
+  votes?: unknown;
 };
 
 export type KitRequestsFile = {
@@ -21,16 +30,57 @@ export function getRequestsPath() {
   return REQUESTS_PATH;
 }
 
+function normalizeRequest(raw: LegacyKitRequest): KitRequest | null {
+  const id = typeof raw.id === "string" ? raw.id : "";
+  if (!id) return null;
+
+  const title =
+    typeof raw.title === "string" && raw.title.trim()
+      ? raw.title.trim()
+      : typeof raw.kitName === "string" && raw.kitName.trim()
+        ? raw.kitName.trim()
+        : "Untitled request";
+
+  const description =
+    typeof raw.description === "string" && raw.description.trim()
+      ? raw.description.trim()
+      : "No description provided";
+
+  const category =
+    typeof raw.category === "string" && raw.category.trim()
+      ? raw.category.trim().toLowerCase()
+      : "general";
+
+  const createdAt =
+    typeof raw.createdAt === "string" && raw.createdAt.trim()
+      ? raw.createdAt
+      : new Date(0).toISOString();
+
+  return {
+    id,
+    title,
+    description,
+    category,
+    createdAt,
+  };
+}
+
 export async function readKitRequestsFile(): Promise<KitRequestsFile> {
   try {
     const raw = await fs.readFile(REQUESTS_PATH, "utf-8");
     const parsed = JSON.parse(raw) as unknown;
 
     if (!parsed || typeof parsed !== "object") return { requests: [], votes: {} };
-    const obj = parsed as Partial<KitRequestsFile>;
+    const obj = parsed as Partial<KitRequestsFile> & { requests?: LegacyKitRequest[] };
+
+    const requests = Array.isArray(obj.requests)
+      ? obj.requests
+          .map((request) => normalizeRequest(request))
+          .filter((request): request is KitRequest => Boolean(request))
+      : [];
 
     return {
-      requests: Array.isArray(obj.requests) ? (obj.requests as KitRequest[]) : [],
+      requests,
       votes: obj.votes && typeof obj.votes === "object" ? (obj.votes as Record<string, number>) : {},
     };
   } catch {
@@ -53,10 +103,15 @@ export function getVotesForRequest(id: string, file: KitRequestsFile): number {
   return typeof v === "number" && Number.isFinite(v) && v >= 0 ? Math.floor(v) : 0;
 }
 
-export function sortRequestsByVotes(
-  requests: Array<KitRequest & { votes: number }>
+export function sortRequests(
+  requests: Array<KitRequest & { votes: number }>,
+  sort: "votes" | "recent" = "votes"
 ): Array<KitRequest & { votes: number }> {
   return [...requests].sort((a, b) => {
+    if (sort === "recent") {
+      return b.createdAt.localeCompare(a.createdAt);
+    }
+
     if (b.votes !== a.votes) return b.votes - a.votes;
     return b.createdAt.localeCompare(a.createdAt);
   });
