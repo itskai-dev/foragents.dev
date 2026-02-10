@@ -1,0 +1,146 @@
+[
+  {
+    "id": "studio_1001",
+    "skillSlug": "content-summarizer",
+    "skillName": "Content Summarizer",
+    "status": "completed",
+    "inputs": {
+      "source": "https://foragents.dev/docs/bootstrap",
+      "tone": "technical",
+      "maxBullets": 5
+    },
+    "outputs": {
+      "summary": "Bootstrap docs define setup flow, required files, and validation checks.",
+      "bullets": [
+        "Load bootstrap files first",
+        "Validate environment assumptions",
+        "Track run metadata"
+      ]
+    },
+    "logs": [
+      {
+        "timestamp": "2026-02-09T19:00:12.000Z",
+        "message": "Session queued"
+      },
+      {
+        "timestamp": "2026-02-09T19:00:14.000Z",
+        "message": "Fetched source content"
+      },
+      {
+        "timestamp": "2026-02-09T19:00:20.000Z",
+        "message": "Generated summary output"
+      }
+    ],
+    "startedAt": "2026-02-09T19:00:12.000Z",
+    "completedAt": "2026-02-09T19:00:21.000Z"
+  },
+  {
+    "id": "studio_1002",
+    "skillSlug": "dependency-scanner",
+    "skillName": "Dependency Scanner",
+    "status": "active",
+    "inputs": {
+      "repo": "reflectt/foragents.dev",
+      "depth": "full"
+    },
+    "outputs": {
+      "checkedPackages": 112,
+      "vulnerabilities": 0
+    },
+    "logs": [
+      {
+        "timestamp": "2026-02-09T21:10:02.000Z",
+        "message": "Scanning lockfile"
+      },
+      {
+        "timestamp": "2026-02-09T21:10:18.000Z",
+        "message": "Resolving transitive dependency graph"
+      }
+    ],
+    "startedAt": "2026-02-09T21:10:02.000Z",
+    "completedAt": null
+  },
+  {
+    "id": "studio_1003",
+    "skillSlug": "release-note-writer",
+    "skillName": "Release Note Writer",
+    "status": "error",
+    "inputs": {
+      "range": "v0.9.0..v1.0.0",
+      "includeBreaking": true
+    },
+    "outputs": {
+      "error": "No git tag found for v0.9.0"
+    },
+    "logs": [
+      {
+        "timestamp": "2026-02-08T15:42:00.000Z",
+        "message": "Collecting commits"
+      },
+      {
+        "timestamp": "2026-02-08T15:42:03.000Z",
+        "message": "Failed to resolve start tag v0.9.0"
+      }
+    ],
+    "startedAt": "2026-02-08T15:42:00.000Z",
+    "completedAt": "2026-02-08T15:42:03.000Z"
+  },
+  {
+    "id": "studio_1004",
+    "skillSlug": "api-schema-checker",
+    "skillName": "API Schema Checker",
+    "status": "completed",
+    "inputs": {
+      "endpoint": "/api/skill/[slug]",
+      "strict": false
+    },
+    "outputs": {
+      "warnings": [
+        "Missing example for 404 response"
+      ],
+      "status": "pass"
+    },
+    "logs": [
+      {
+        "timestamp": "2026-02-07T12:07:10.000Z",
+        "message": "Loaded route schema"
+      },
+      {
+        "timestamp": "2026-02-07T12:07:13.000Z",
+        "message": "Validated request and response shapes"
+      }
+    ],
+    "startedAt": "2026-02-07T12:07:10.000Z",
+    "completedAt": "2026-02-07T12:07:14.000Z"
+  },
+  {
+    "id": "studio_1005",
+    "skillSlug": "log-triage",
+    "skillName": "Log Triage",
+    "status": "completed",
+    "inputs": {
+      "window": "24h",
+      "severity": "warn"
+    },
+    "outputs": {
+      "clusters": 3,
+      "topIssue": "Missing auth header on /api/verify/start"
+    },
+    "logs": [
+      {
+        "timestamp": "2026-02-06T08:33:44.000Z",
+        "message": "Indexed 1,932 log lines"
+      },
+      {
+        "timestamp": "2026-02-06T08:34:01.000Z",
+        "message": "Ranked anomaly clusters"
+      },
+      {
+        "timestamp": "2026-02-06T08:34:09.000Z",
+        "message": "Exported triage report"
+      }
+    ],
+    "startedAt": "2026-02-06T08:33:44.000Z",
+    "completedAt": "2026-02-06T08:34:09.000Z"
+  }
+]
