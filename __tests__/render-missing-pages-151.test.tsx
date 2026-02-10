@@ -305,8 +305,12 @@ beforeAll(() => {
             whyItMatters: ['Accountability', 'Transparency', 'Safety'],
           },
           pillars: [],
-          readinessChecklist: [],
-          maturityCriteria: [],
+          readinessChecklist: [{ id: 'item1', label: 'Test item' }],
+          maturityCriteria: {
+            basic: { range: [0, 3], label: 'Basic', guidance: 'Getting started' },
+            intermediate: { range: [4, 7], label: 'Intermediate', guidance: 'Making progress' },
+            advanced: { range: [8, 10], label: 'Advanced', guidance: 'Well governed' },
+          },
         }),
       } as Response;
     }
