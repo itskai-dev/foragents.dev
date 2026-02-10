@@ -10,23 +10,76 @@ import {
   type SearchQuotaUserState,
 } from "@/lib/searchQuota";
 import { emitEvent } from "@/lib/telemetry";
+import {
+  getAgents,
+  getBlogPosts,
+  getLlmsTxtEntries,
+  getMcpServers,
+  getSkills,
+} from "@/lib/data";
+import { readGuides } from "@/lib/guides";
+
+type SearchResultType = "skill" | "mcp" | "agent" | "llms-txt" | "blog" | "guide";
 
 type SearchResult = {
   title: string;
   description: string;
   url: string;
-  type: string;
+  type: SearchResultType;
+  score: number;
 };
 
 type SearchResults = {
   query: string;
-  news: SearchResult[];
+  results: SearchResult[];
   skills: SearchResult[];
-  agents: SearchResult[];
   mcp_servers: SearchResult[];
+  agents: SearchResult[];
   llmstxt: SearchResult[];
+  blog: SearchResult[];
+  guides: SearchResult[];
   total: number;
 };
+
+function normalize(input: string): string {
+  return (input || "").toLowerCase().trim();
+}
+
+function scoreMatch(query: string, values: string[]): number {
+  const q = normalize(query);
+  if (!q) return 0;
+
+  let score = 0;
+
+  for (const raw of values) {
+    const value = normalize(raw);
+    if (!value) continue;
+
+    if (value === q) {
+      score += 300;
+      continue;
+    }
+
+    if (value.startsWith(q)) {
+      score += 180;
+      continue;
+    }
+
+    const idx = value.indexOf(q);
+    if (idx >= 0) {
+      score += Math.max(40, 120 - idx);
+    }
+  }
+
+  return score;
+}
+
+function toTopMatches(items: SearchResult[], max: number): SearchResult[] {
+  return items
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title))
+    .slice(0, max);
+}
 
 /**
  * Search endpoint for forAgents.dev
@@ -119,77 +172,124 @@ export async function GET(request: NextRequest) {
     return res;
   }
 
-  const supabase = getSupabase();
-  if (!supabase) {
-    return NextResponse.json(
-      { error: "Database not configured" },
-      { status: 503 }
-    );
-  }
-
   const entitlements = entitlementsFor({ isPremium: !!premiumStatus?.isPremium });
 
-  // Search pattern for ILIKE queries
-  const pattern = `%${q}%`;
-
   try {
-    // Search news table
-    const { data: newsData } = await supabase
-      .from("news")
-      .select("id, title, summary, source_url")
-      .or(`title.ilike.${pattern},summary.ilike.${pattern}`)
-      .order("published_at", { ascending: false })
-      .limit(entitlements.searchLimitMax);
+    const skills = toTopMatches(
+      getSkills().map((skill) => ({
+        title: skill.name,
+        description: skill.description || "",
+        url: `/skills/${skill.slug}`,
+        type: "skill" as const,
+        score: scoreMatch(q, [skill.name, skill.description, ...(skill.tags || []), skill.author]),
+      })),
+      entitlements.searchLimitMax
+    );
 
-    const news: SearchResult[] = (newsData || []).map((item) => ({
-      title: item.title,
-      description: item.summary || "",
-      url: item.source_url,
-      type: "news",
-    }));
+    const mcp_servers = toTopMatches(
+      getMcpServers().map((server) => ({
+        title: server.name,
+        description: server.description || "",
+        url: `/mcp/${server.slug}`,
+        type: "mcp" as const,
+        score: scoreMatch(q, [
+          server.name,
+          server.description,
+          server.category,
+          ...(server.compatibility || []),
+          server.repo_url,
+        ]),
+      })),
+      entitlements.searchLimitMax
+    );
 
-    // Search skills table
-    const { data: skillsData } = await supabase
-      .from("skills")
-      .select("slug, name, description")
-      .or(`name.ilike.${pattern},description.ilike.${pattern}`)
-      .limit(entitlements.searchLimitMax);
+    const agents = toTopMatches(
+      getAgents().map((agent) => ({
+        title: agent.name,
+        description: agent.description || "",
+        url: `/agents/${agent.handle}`,
+        type: "agent" as const,
+        score: scoreMatch(q, [
+          agent.name,
+          agent.handle,
+          agent.domain,
+          agent.role,
+          agent.description,
+          ...(agent.platforms || []),
+          ...(agent.skills || []),
+        ]),
+      })),
+      entitlements.searchLimitMax
+    );
 
-    const skills: SearchResult[] = (skillsData || []).map((item) => ({
-      title: item.name,
-      description: item.description,
-      url: `/skills/${item.slug}`,
-      type: "skill",
-    }));
+    const llmstxt = toTopMatches(
+      getLlmsTxtEntries().map((entry) => ({
+        title: entry.title,
+        description: entry.description || "",
+        url: entry.url,
+        type: "llms-txt" as const,
+        score: scoreMatch(q, [
+          entry.title,
+          entry.description,
+          entry.domain,
+          ...(entry.sections || []),
+          entry.url,
+        ]),
+      })),
+      entitlements.searchLimitMax
+    );
 
-    // Search agents table
-    const { data: agentsData } = await supabase
-      .from("agents")
-      .select("id, name, platform, owner_url")
-      .or(`name.ilike.${pattern},platform.ilike.${pattern}`)
-      .limit(entitlements.searchLimitMax);
+    const blog = toTopMatches(
+      getBlogPosts().map((post) => ({
+        title: post.title,
+        description: post.excerpt || "",
+        url: `/blog/${post.slug}`,
+        type: "blog" as const,
+        score: scoreMatch(q, [
+          post.title,
+          post.excerpt,
+          post.category,
+          ...(post.tags || []),
+          post.author?.name || "",
+        ]),
+      })),
+      entitlements.searchLimitMax
+    );
 
-    const agents: SearchResult[] = (agentsData || []).map((item) => ({
-      title: item.name,
-      description: `${item.platform} agent`,
-      url: item.owner_url || `/agents/${item.id}`,
-      type: "agent",
-    }));
+    const guides = toTopMatches(
+      (await readGuides()).map((guide) => ({
+        title: guide.title,
+        description: guide.description || "",
+        url: `/guides/${guide.slug}`,
+        type: "guide" as const,
+        score: scoreMatch(q, [
+          guide.title,
+          guide.description,
+          guide.category,
+          guide.difficulty,
+          guide.author,
+          ...(guide.tags || []),
+        ]),
+      })),
+      entitlements.searchLimitMax
+    );
 
-    // MCP servers and llmstxt tables don't exist yet, return empty arrays
-    const mcp_servers: SearchResult[] = [];
-    const llmstxt: SearchResult[] = [];
+    const results = [...skills, ...mcp_servers, ...agents, ...llmstxt, ...blog, ...guides].sort(
+      (a, b) => b.score - a.score || a.title.localeCompare(b.title)
+    );
 
-    const results: SearchResults & {
+    const payload: SearchResults & {
       quota?: { remaining: number; limit: number; user_state: SearchQuotaUserState; reset_at: string };
     } = {
       query: q,
-      news,
+      results,
       skills,
-      agents,
       mcp_servers,
+      agents,
       llmstxt,
-      total: news.length + skills.length + agents.length,
+      blog,
+      guides,
+      total: results.length,
       quota: {
         remaining: quota.remaining,
         limit: quota.limit,
@@ -198,14 +298,13 @@ export async function GET(request: NextRequest) {
       },
     };
 
-    // Check if client wants markdown
     const acceptHeader = request.headers.get("accept") || "";
-    const wantsMarkdown = 
-      acceptHeader.includes("text/markdown") || 
+    const wantsMarkdown =
+      acceptHeader.includes("text/markdown") ||
       acceptHeader.includes("text/plain");
 
     if (wantsMarkdown) {
-      const markdown = formatResultsAsMarkdown(results);
+      const markdown = formatResultsAsMarkdown(payload);
       const res = new NextResponse(markdown, {
         headers: {
           "Content-Type": "text/markdown; charset=utf-8",
@@ -226,7 +325,7 @@ export async function GET(request: NextRequest) {
       return res;
     }
 
-    const res = NextResponse.json(results, {
+    const res = NextResponse.json(payload, {
       headers: { "Cache-Control": "public, max-age=60" },
     });
     if (!existingAnonId) {
@@ -250,58 +349,31 @@ export async function GET(request: NextRequest) {
   }
 }
 
+function formatSection(label: string, items: SearchResult[]): string[] {
+  if (items.length === 0) return [];
+
+  const lines: string[] = [label, ""];
+  for (const item of items) {
+    lines.push(`- **[${item.title}](${item.url})**`);
+    lines.push(`  ${item.description}`);
+    lines.push("");
+  }
+  return lines;
+}
+
 function formatResultsAsMarkdown(results: SearchResults): string {
   const lines = [
     `# Search Results for "${results.query}"`,
     "",
     `**Total:** ${results.total} results`,
     "",
+    ...formatSection("## 🛠️ Skills", results.skills),
+    ...formatSection("## 🔌 MCP Servers", results.mcp_servers),
+    ...formatSection("## 🤖 Agents", results.agents),
+    ...formatSection("## 📄 llms.txt", results.llmstxt),
+    ...formatSection("## 📝 Blog", results.blog),
+    ...formatSection("## 📚 Guides", results.guides),
   ];
-
-  if (results.news.length > 0) {
-    lines.push("## 📰 News", "");
-    for (const item of results.news) {
-      lines.push(`- **[${item.title}](${item.url})**`);
-      lines.push(`  ${item.description}`);
-      lines.push("");
-    }
-  }
-
-  if (results.skills.length > 0) {
-    lines.push("## 🛠️ Skills", "");
-    for (const item of results.skills) {
-      lines.push(`- **[${item.title}](${item.url})**`);
-      lines.push(`  ${item.description}`);
-      lines.push("");
-    }
-  }
-
-  if (results.agents.length > 0) {
-    lines.push("## 🤖 Agents", "");
-    for (const item of results.agents) {
-      lines.push(`- **[${item.title}](${item.url})**`);
-      lines.push(`  ${item.description}`);
-      lines.push("");
-    }
-  }
-
-  if (results.mcp_servers.length > 0) {
-    lines.push("## 🔌 MCP Servers", "");
-    for (const item of results.mcp_servers) {
-      lines.push(`- **[${item.title}](${item.url})**`);
-      lines.push(`  ${item.description}`);
-      lines.push("");
-    }
-  }
-
-  if (results.llmstxt.length > 0) {
-    lines.push("## 📄 llms.txt Sites", "");
-    for (const item of results.llmstxt) {
-      lines.push(`- **[${item.title}](${item.url})**`);
-      lines.push(`  ${item.description}`);
-      lines.push("");
-    }
-  }
 
   if (results.total === 0) {
     lines.push("No results found.");
