@@ -1,0 +1,54 @@
+{
+  "overallScore": 86,
+  "wcagLevelTarget": "AA",
+  "auditChecks": [
+    {
+      "name": "Keyboard navigation",
+      "status": "pass",
+      "description": "Primary navigation, forms, and dialogs are fully operable using keyboard controls.",
+      "recommendation": "Maintain keyboard testing in release QA to prevent focus order regressions."
+    },
+    {
+      "name": "Screen reader support",
+      "status": "warning",
+      "description": "Most semantic landmarks are announced correctly, but some dynamic announcements are delayed.",
+      "recommendation": "Add aria-live regions for async success and error state messaging."
+    },
+    {
+      "name": "Color contrast",
+      "status": "fail",
+      "description": "Several secondary text tokens and disabled states fall below WCAG AA contrast thresholds.",
+      "recommendation": "Raise contrast tokens to at least 4.5:1 for normal text and 3:1 for UI indicators."
+    },
+    {
+      "name": "Alt text",
+      "status": "pass",
+      "description": "Meaningful imagery includes descriptive alternatives and decorative assets are hidden from assistive tech.",
+      "recommendation": "Continue enforcing alt text checks in content publishing workflows."
+    },
+    {
+      "name": "Focus indicators",
+      "status": "warning",
+      "description": "Focus rings are visible in most components but can be hard to detect on gradient backgrounds.",
+      "recommendation": "Increase focus ring thickness and contrast on dark and gradient surfaces."
+    },
+    {
+      "name": "Heading structure",
+      "status": "pass",
+      "description": "Pages consistently use hierarchical heading order to support assistive navigation.",
+      "recommendation": "Keep heading lint checks enabled in CI for template changes."
+    },
+    {
+      "name": "Form labels",
+      "status": "pass",
+      "description": "Inputs are programmatically associated with labels and include accessible error text.",
+      "recommendation": "Add label association tests for new dynamic form components."
+    },
+    {
+      "name": "ARIA attributes",
+      "status": "fail",
+      "description": "A subset of interactive widgets has incomplete aria-expanded and aria-controls state sync.",
+      "recommendation": "Audit custom interactive controls and ensure ARIA state is updated on every interaction."
+    }
+  ]
+}
