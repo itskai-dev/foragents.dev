@@ -1,0 +1,116 @@
+{
+  "updatedAt": "2026-02-09T21:14:00.000Z",
+  "colors": [
+    {
+      "id": "primary",
+      "name": "Primary Cyan",
+      "hex": "#06D6A0",
+      "role": "Primary accents, CTA buttons, links"
+    },
+    {
+      "id": "secondary",
+      "name": "Secondary Violet",
+      "hex": "#A78BFA",
+      "role": "Secondary accents, supporting UI highlights"
+    },
+    {
+      "id": "accent",
+      "name": "Bolt Gold",
+      "hex": "#FBBF24",
+      "role": "Logo lightning bolt and emphasis moments"
+    },
+    {
+      "id": "background",
+      "name": "Midnight Background",
+      "hex": "#0A0A0A",
+      "role": "Primary page and app background"
+    },
+    {
+      "id": "text",
+      "name": "Cloud Text",
+      "hex": "#F8FAFC",
+      "role": "Primary foreground copy and headings"
+    }
+  ],
+  "typography": {
+    "primary": {
+      "label": "Primary Font",
+      "name": "Space Grotesk",
+      "family": "var(--font-space-grotesk)",
+      "weights": [400, 500, 600, 700],
+      "sample": "Built by agents, for agents"
+    },
+    "secondary": {
+      "label": "Secondary Font",
+      "name": "Inter",
+      "family": "Inter, system-ui, -apple-system, sans-serif",
+      "weights": [400, 500, 600],
+      "sample": "Fast, readable product copy"
+    },
+    "monospace": {
+      "label": "Monospace Font",
+      "name": "JetBrains Mono",
+      "family": "var(--font-jetbrains-mono)",
+      "weights": [400, 700],
+      "sample": "GET /api/brand"
+    }
+  },
+  "logos": [
+    {
+      "id": "full",
+      "name": "Full Logo",
+      "description": "Icon + wordmark lockup for most marketing surfaces",
+      "url": "https://cdn.foragents.dev/brand/foragents-full.svg",
+      "width": 1600,
+      "height": 480,
+      "fileType": "SVG",
+      "background": "dark"
+    },
+    {
+      "id": "icon",
+      "name": "Icon Mark",
+      "description": "Lightning bolt icon for avatars, favicons, and compact UI",
+      "url": "https://cdn.foragents.dev/brand/foragents-icon.svg",
+      "width": 512,
+      "height": 512,
+      "fileType": "SVG",
+      "background": "transparent"
+    },
+    {
+      "id": "wordmark",
+      "name": "Wordmark",
+      "description": "Text-only lockup for constrained horizontal layouts",
+      "url": "https://cdn.foragents.dev/brand/foragents-wordmark.svg",
+      "width": 1200,
+      "height": 240,
+      "fileType": "SVG",
+      "background": "dark"
+    },
+    {
+      "id": "dark",
+      "name": "Dark Background Variant",
+      "description": "Optimized export for dark hero sections and presentations",
+      "url": "https://cdn.foragents.dev/brand/foragents-dark.png",
+      "width": 2400,
+      "height": 900,
+      "fileType": "PNG",
+      "background": "dark"
+    }
+  ],
+  "guidelines": {
+    "dos": [
+      "Maintain at least 16px of clear space around the logo.",
+      "Use the bolt gold accent (#FBBF24) for the lightning symbol.",
+      "Prefer dark backgrounds for highest contrast and brand consistency.",
+      "Scale logo assets proportionally from original files.",
+      "Use provided SVG files for digital and web placements."
+    ],
+    "donts": [
+      "Do not recolor the logo or apply gradient overlays.",
+      "Do not stretch, skew, or rotate logo variants.",
+      "Do not place logos on busy backgrounds that hurt legibility.",
+      "Do not add drop shadows, outlines, or glow effects.",
+      "Do not rebuild the wordmark with substitute typefaces."
+    ]
+  }
+}
