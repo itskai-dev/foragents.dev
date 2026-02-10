@@ -1,21 +1,5 @@
 import { NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
-
-type ReleaseType = "major" | "minor" | "patch";
-
-type Release = {
-  id: string;
-  version: string;
-  title: string;
-  type: ReleaseType;
-  description: string;
-  changes: string[];
-  publishedAt: string;
-  author: string;
-};
-
-const RELEASES_PATH = path.join(process.cwd(), "data", "releases.json");
+import { readReleases, sortReleasesDesc, type Release } from "@/lib/releases";
 
 function escapeXml(unsafe: string): string {
   return unsafe
@@ -26,65 +10,25 @@ function escapeXml(unsafe: string): string {
     .replace(/'/g, "&apos;");
 }
 
-function normalizeRelease(raw: unknown): Release | null {
-  if (!raw || typeof raw !== "object") return null;
-
-  const item = raw as Partial<Release>;
-  if (
-    typeof item.id !== "string" ||
-    typeof item.version !== "string" ||
-    typeof item.title !== "string" ||
-    (item.type !== "major" && item.type !== "minor" && item.type !== "patch") ||
-    typeof item.description !== "string" ||
-    !Array.isArray(item.changes) ||
-    typeof item.publishedAt !== "string" ||
-    typeof item.author !== "string"
-  ) {
-    return null;
-  }
-
-  return {
-    ...item,
-    type: item.type,
-    changes: item.changes.filter((change): change is string => typeof change === "string"),
-  } as Release;
-}
-
-async function readReleases(): Promise<Release[]> {
-  try {
-    const raw = await fs.readFile(RELEASES_PATH, "utf-8");
-    const parsed = JSON.parse(raw) as unknown;
-
-    if (!Array.isArray(parsed)) return [];
-
-    return parsed
-      .map((item) => normalizeRelease(item))
-      .filter((item): item is Release => Boolean(item))
-      .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-  } catch {
-    return [];
-  }
-}
-
-function formatChanges(release: Release): string {
-  if (release.changes.length === 0) {
+function formatHighlights(release: Release): string {
+  if (release.highlights.length === 0) {
     return `<p>${escapeXml(release.description)}</p>`;
   }
 
   return `
     <p>${escapeXml(release.description)}</p>
     <ul>
-      ${release.changes.map((item) => `<li>${escapeXml(item)}</li>`).join("")}
+      ${release.highlights.map((item) => `<li>${escapeXml(item)}</li>`).join("")}
     </ul>
   `;
 }
 
 export async function GET() {
   const baseUrl = "https://foragents.dev";
-  const releases = await readReleases();
+  const releases = sortReleasesDesc(await readReleases());
 
-  const lastBuildDate = releases[0]?.publishedAt
-    ? new Date(releases[0].publishedAt).toUTCString()
+  const lastBuildDate = releases[0]?.updatedAt
+    ? new Date(releases[0].updatedAt).toUTCString()
     : new Date().toUTCString();
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
@@ -103,11 +47,12 @@ export async function GET() {
       <title>v${escapeXml(release.version)}: ${escapeXml(release.title)}</title>
       <link>${baseUrl}/releases#${escapeXml(release.id)}</link>
       <guid isPermaLink="true">${baseUrl}/releases#${escapeXml(release.id)}</guid>
-      <pubDate>${new Date(release.publishedAt).toUTCString()}</pubDate>
+      <pubDate>${new Date(release.date).toUTCString()}</pubDate>
       <description><![CDATA[
         <p><strong>Type:</strong> ${escapeXml(release.type)}</p>
-        <p><strong>Author:</strong> ${escapeXml(release.author)}</p>
-        ${formatChanges(release)}
+        <p><strong>Date:</strong> ${escapeXml(release.date)}</p>
+        <p><strong>Tags:</strong> ${escapeXml(release.tags.join(", ") || "none")}</p>
+        ${formatHighlights(release)}
       ]]></description>
     </item>`
       )

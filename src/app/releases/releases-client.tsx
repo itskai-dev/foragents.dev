@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -9,17 +10,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-type ReleaseType = "major" | "minor" | "patch";
+type ReleaseType = "major" | "minor" | "patch" | "security";
 
 type Release = {
   id: string;
   version: string;
   title: string;
-  type: ReleaseType;
   description: string;
-  changes: string[];
-  publishedAt: string;
-  author: string;
+  type: ReleaseType;
+  date: string;
+  highlights: string[];
+  tags: string[];
+  updatedAt: string;
 };
 
 type ReleasesResponse = {
@@ -32,30 +34,34 @@ const TYPE_OPTIONS: Array<{ value: "all" | ReleaseType; label: string }> = [
   { value: "major", label: "Major" },
   { value: "minor", label: "Minor" },
   { value: "patch", label: "Patch" },
+  { value: "security", label: "Security" },
 ];
 
-function formatDate(iso: string): string {
+function formatDate(dateValue: string): string {
   try {
-    return new Date(iso).toLocaleDateString(undefined, {
+    const parsed = new Date(dateValue);
+    if (Number.isNaN(parsed.getTime())) return dateValue;
+
+    return parsed.toLocaleDateString(undefined, {
       year: "numeric",
       month: "short",
       day: "2-digit",
     });
   } catch {
-    return iso;
+    return dateValue;
   }
 }
 
 function typeBadgeClass(type: ReleaseType): string {
-  if (type === "major") {
-    return "bg-red-500/10 text-red-300 border-red-500/30";
-  }
-
-  if (type === "minor") {
-    return "bg-blue-500/10 text-blue-300 border-blue-500/30";
-  }
+  if (type === "major") return "bg-red-500/10 text-red-300 border-red-500/30";
+  if (type === "minor") return "bg-blue-500/10 text-blue-300 border-blue-500/30";
+  if (type === "security") return "bg-amber-500/10 text-amber-300 border-amber-500/30";
 
   return "bg-emerald-500/10 text-emerald-300 border-emerald-500/30";
+}
+
+function getTodayDate(): string {
+  return new Date().toISOString().slice(0, 10);
 }
 
 export function ReleasesClient() {
@@ -71,9 +77,10 @@ export function ReleasesClient() {
   const [version, setVersion] = useState("");
   const [title, setTitle] = useState("");
   const [type, setType] = useState<ReleaseType>("minor");
+  const [date, setDate] = useState(getTodayDate());
   const [description, setDescription] = useState("");
-  const [changesText, setChangesText] = useState("");
-  const [author, setAuthor] = useState("forAgents Team");
+  const [highlightsText, setHighlightsText] = useState("");
+  const [tagsText, setTagsText] = useState("release-notes");
 
   const loadReleases = useCallback(async () => {
     setLoading(true);
@@ -114,9 +121,14 @@ export function ReleasesClient() {
     setNotice(null);
 
     try {
-      const changes = changesText
+      const highlights = highlightsText
         .split("\n")
         .map((item) => item.trim())
+        .filter(Boolean);
+
+      const tags = tagsText
+        .split(",")
+        .map((item) => item.trim().toLowerCase())
         .filter(Boolean);
 
       const res = await fetch("/api/releases", {
@@ -126,9 +138,10 @@ export function ReleasesClient() {
           version,
           title,
           type,
+          date,
           description,
-          changes,
-          author,
+          highlights,
+          tags,
         }),
       });
 
@@ -142,9 +155,10 @@ export function ReleasesClient() {
       setVersion("");
       setTitle("");
       setType("minor");
+      setDate(getTodayDate());
       setDescription("");
-      setChangesText("");
-      setAuthor("forAgents Team");
+      setHighlightsText("");
+      setTagsText("release-notes");
       await loadReleases();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to publish release");
@@ -162,7 +176,7 @@ export function ReleasesClient() {
           <Card className="bg-card/30 border-white/10">
             <CardHeader>
               <CardTitle className="text-xl">Publish Release</CardTitle>
-              <p className="text-sm text-muted-foreground">Create a release note for platform updates.</p>
+              <p className="text-sm text-muted-foreground">Create a release note and save it to persistent data.</p>
             </CardHeader>
             <CardContent>
               <form onSubmit={publishRelease} className="space-y-4">
@@ -187,8 +201,20 @@ export function ReleasesClient() {
                       <option value="major">major</option>
                       <option value="minor">minor</option>
                       <option value="patch">patch</option>
+                      <option value="security">security</option>
                     </select>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Date</label>
+                  <Input
+                    value={date}
+                    onChange={(event) => setDate(event.target.value)}
+                    type="date"
+                    className="bg-background/40 border-white/10"
+                    required
+                  />
                 </div>
 
                 <div className="space-y-2">
@@ -214,23 +240,23 @@ export function ReleasesClient() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Changes (one per line)</label>
+                  <label className="text-sm font-medium">Highlights (one per line)</label>
                   <Textarea
-                    value={changesText}
-                    onChange={(event) => setChangesText(event.target.value)}
+                    value={highlightsText}
+                    onChange={(event) => setHighlightsText(event.target.value)}
                     className="min-h-[120px] bg-background/40 border-white/10"
-                    placeholder={"Added API route for releases\nImproved release filtering"}
+                    placeholder={"Added release API filters\nImproved /releases metadata"}
                     required
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Author</label>
+                  <label className="text-sm font-medium">Tags (comma-separated)</label>
                   <Input
-                    value={author}
-                    onChange={(event) => setAuthor(event.target.value)}
+                    value={tagsText}
+                    onChange={(event) => setTagsText(event.target.value)}
                     className="bg-background/40 border-white/10"
-                    placeholder="forAgents Team"
+                    placeholder="release-notes, api, search"
                   />
                 </div>
 
@@ -253,7 +279,7 @@ export function ReleasesClient() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold">Platform releases</h2>
-              <p className="text-sm text-muted-foreground">Latest first. Search title and description.</p>
+              <p className="text-sm text-muted-foreground">Latest first. Search by title, description, highlights, and tags.</p>
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
@@ -287,7 +313,7 @@ export function ReleasesClient() {
           ) : (
             <div className="space-y-4">
               {releases.map((release) => (
-                <Card key={release.id} className="bg-card/30 border-white/10 hover:border-[#06D6A0]/30 transition-colors">
+                <Card id={release.id} key={release.id} className="bg-card/30 border-white/10 hover:border-[#06D6A0]/30 transition-colors">
                   <CardHeader className="pb-3">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0">
@@ -301,7 +327,7 @@ export function ReleasesClient() {
                         </div>
                         <CardTitle className="text-lg text-white/90">{release.title}</CardTitle>
                         <div className="text-xs text-white/60 mt-1">
-                          {formatDate(release.publishedAt)} • {release.author}
+                          {formatDate(release.date)} • Updated {formatDate(release.updatedAt)}
                         </div>
                       </div>
                     </div>
@@ -309,16 +335,25 @@ export function ReleasesClient() {
                   <CardContent>
                     <p className="text-sm text-muted-foreground mb-4">{release.description}</p>
                     <div>
-                      <div className="text-xs uppercase tracking-wide text-white/50 mb-2">Changes</div>
+                      <div className="text-xs uppercase tracking-wide text-white/50 mb-2">Highlights</div>
                       <ul className="space-y-2">
-                        {release.changes.map((change, index) => (
+                        {release.highlights.map((highlight, index) => (
                           <li key={`${release.id}-${index}`} className="text-sm text-white/80 flex items-start gap-2">
                             <span className="text-[#06D6A0] mt-1">•</span>
-                            <span>{change}</span>
+                            <span>{highlight}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
+                    {release.tags.length > 0 && (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {release.tags.map((tag) => (
+                          <Badge key={`${release.id}-${tag}`} variant="secondary" className="bg-white/5 text-white/80 border border-white/10">
+                            #{tag}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               ))}
