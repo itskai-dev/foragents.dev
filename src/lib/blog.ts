@@ -1,7 +1,9 @@
+import { randomUUID } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
 
 export type BlogPost = {
+  id: string;
   title: string;
   slug: string;
   content: string; // markdown
@@ -50,10 +52,12 @@ function normalizePost(post: Partial<BlogPost>): BlogPost {
     typeof post.publishedAt === "string" && post.publishedAt ? post.publishedAt : new Date().toISOString();
   const updatedAt =
     typeof post.updatedAt === "string" && post.updatedAt ? post.updatedAt : publishedAt;
+  const slug = typeof post.slug === "string" && post.slug ? post.slug : "untitled-post";
 
   return {
+    id: typeof post.id === "string" && post.id ? post.id : slug || randomUUID(),
     title: typeof post.title === "string" ? post.title : "Untitled Post",
-    slug: typeof post.slug === "string" ? post.slug : "untitled-post",
+    slug,
     content,
     author: typeof post.author === "string" ? post.author : "Unknown",
     tags: Array.isArray(post.tags) ? post.tags.filter((tag): tag is string => typeof tag === "string") : [],

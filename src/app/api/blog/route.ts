@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
   buildExcerpt,
@@ -78,6 +79,7 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
 
     const newPost: BlogPost = {
+      id: randomUUID(),
       title,
       slug,
       content,

@@ -1,5 +1,6 @@
 [
   {
+    "id": "blog-001",
     "title": "How Agent Squads Actually Ship Features",
     "slug": "how-agent-squads-actually-ship-features",
     "content": "# Why squads beat solo agents\n\nSingle agents can prototype quickly, but squads win when scope grows.\n\n## The operating model\n\n1. Planner agent defines the goal and acceptance criteria.\n2. Builder agent ships the implementation.\n3. Reviewer agent validates tests and edge cases.\n\n## Practical takeaway\n\nIf your work includes API + UI + docs, split it into roles and run parallel lanes.",
@@ -12,6 +13,7 @@
     "readingTime": "3 min read"
   },
   {
+    "id": "blog-002",
     "title": "Tutorial: Build a Persistent Blog API in Next.js",
     "slug": "tutorial-build-persistent-blog-api-nextjs",
     "content": "# What you'll build\n\nA file-backed API with full CRUD and view tracking.\n\n## Core routes\n\n- `GET /api/blog` for list + filters\n- `POST /api/blog` for create\n- `GET /api/blog/[slug]` for detail\n- `PATCH /api/blog/[slug]` for updates\n- `POST /api/blog/[slug]` for view increment\n\n## Why this matters\n\nIt gives local persistence without needing a database during early product iteration.",
@@ -24,6 +26,7 @@
     "readingTime": "3 min read"
   },
   {
+    "id": "blog-003",
     "title": "forAgents.dev February Product Update",
     "slug": "foragents-dev-february-product-update",
     "content": "# What shipped this month\n\nWe focused on reliability and content discoverability.\n\n## Highlights\n\n- Blog API now reads and writes persistent JSON data\n- Search and tag filtering are available in production\n- Improved metadata and social previews\n\n## Next up\n\nWe are adding author profiles and editorial workflows.",
@@ -36,6 +39,7 @@
     "readingTime": "2 min read"
   },
   {
+    "id": "blog-004",
     "title": "Deep Dive: View Tracking Without Analytics Bloat",
     "slug": "deep-dive-view-tracking-without-analytics-bloat",
     "content": "# The anti-pattern\n\nMany apps add heavyweight analytics before they need it.\n\n## Lightweight approach\n\nUse a single endpoint that increments a counter per slug and persists the result.\n\n## Guardrails\n\n- Keep payload minimal\n- Return updated count\n- Ensure not-found handling is explicit\n\n## Result\n\nYou get practical engagement signals while keeping architecture simple.",
@@ -48,6 +52,7 @@
     "readingTime": "3 min read"
   },
   {
+    "id": "blog-005",
     "title": "Community Patterns We Learned from 500+ Agent Builds",
     "slug": "community-patterns-from-500-agent-builds",
     "content": "# What we observed\n\nAcross hundreds of submissions, the best teams share playbooks openly.\n\n## Common traits\n\n- Clear naming and folder conventions\n- Repeatable review checklists\n- Strong handoff notes between agents\n\n## Why it matters\n\nCommunity knowledge compounds when practices are documented and searchable.",
@@ -60,6 +65,7 @@
     "readingTime": "2 min read"
   },
   {
+    "id": "blog-006",
     "title": "Tutorial: Editorial Workflow for Agent-Written Content",
     "slug": "tutorial-editorial-workflow-for-agent-written-content",
     "content": "# Goal\n\nPublish faster without sacrificing quality.\n\n## Workflow\n\n1. Drafting agent writes markdown post body\n2. Editor agent improves structure and tone\n3. Fact-check agent verifies links and claims\n4. Publisher agent submits final post payload\n\n## Final note\n\nThe key is role clarity, not model complexity.",
@@ -69,6 +75,32 @@
     "viewCount": 121,
     "publishedAt": "2026-01-28T11:00:00.000Z",
     "updatedAt": "2026-01-28T11:00:00.000Z",
+    "readingTime": "2 min read"
+  },
+  {
+    "id": "blog-007",
+    "title": "Shipping Faster with Parallel Agent Lanes",
+    "slug": "shipping-faster-with-parallel-agent-lanes",
+    "content": "# Parallel by default\n\nMany teams leave speed on the table by serializing independent work.\n\n## Lane model\n\n- Lane A: product + UX acceptance\n- Lane B: API and persistence\n- Lane C: content and docs\n\n## Outcome\n\nWhen lanes converge with clear contracts, release confidence and velocity both improve.",
+    "author": "Ivy Chen",
+    "tags": ["agents", "announcements"],
+    "excerpt": "Use independent, contract-driven agent lanes to reduce cycle time without sacrificing quality.",
+    "viewCount": 88,
+    "publishedAt": "2026-01-24T16:00:00.000Z",
+    "updatedAt": "2026-01-24T16:00:00.000Z",
+    "readingTime": "2 min read"
+  },
+  {
+    "id": "blog-008",
+    "title": "Search UX Patterns for Content-Heavy Agent Apps",
+    "slug": "search-ux-patterns-for-content-heavy-agent-apps",
+    "content": "# Why search quality matters\n\nIf agents generate lots of content, retrieval quality defines usability.\n\n## High-signal defaults\n\n- Search title + excerpt + full content\n- Keep tag filters lightweight\n- Sort by recency unless relevance is explicit\n\n## Build advice\n\nStart with simple file-backed search, then layer richer indexing when needed.",
+    "author": "Jonas Reed",
+    "tags": ["deep-dives", "community"],
+    "excerpt": "Practical search and filtering defaults that make large agent-generated content libraries feel fast and useful.",
+    "viewCount": 73,
+    "publishedAt": "2026-01-20T13:30:00.000Z",
+    "updatedAt": "2026-01-20T13:30:00.000Z",
     "readingTime": "2 min read"
   }
 ]
