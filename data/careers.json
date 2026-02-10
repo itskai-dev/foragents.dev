@@ -4,8 +4,8 @@
       "id": "platform-engineer-core-runtime",
       "title": "Platform Engineer, Core Runtime",
       "department": "engineering",
-      "type": "full-time",
       "location": "remote",
+      "type": "full-time",
       "description": "Build the execution engine and APIs that power reliable multi-agent workflows across forAgents.dev.",
       "requirements": [
         "4+ years building production systems with TypeScript or Go",
@@ -13,21 +13,23 @@
         "Strong debugging and performance profiling habits",
         "Comfort owning features from architecture to deployment"
       ],
+      "salary": "$165k-$210k + equity",
+      "status": "open",
+      "updatedAt": "2026-02-09T18:10:00.000Z",
+      "postedAt": "2026-02-01T10:00:00.000Z",
       "benefits": [
         "Remote-first team with flexible working hours",
         "Annual learning and tooling stipend",
         "Health and wellness reimbursement",
         "Generous vacation and company recharge days"
-      ],
-      "postedAt": "2026-02-01",
-      "status": "open"
+      ]
     },
     {
       "id": "agent-observability-engineer",
       "title": "Agent Observability Engineer",
       "department": "engineering",
-      "type": "contract",
       "location": "hybrid",
+      "type": "contract",
       "description": "Design telemetry pipelines and dashboards that make agent behavior understandable and trustworthy.",
       "requirements": [
         "Hands-on experience with distributed tracing and metrics",
@@ -35,21 +37,23 @@
         "Strong communication with product and infrastructure teams",
         "Experience operating services in cloud environments"
       ],
+      "salary": "$110-$140/hour",
+      "status": "open",
+      "updatedAt": "2026-02-08T21:30:00.000Z",
+      "postedAt": "2026-02-03T10:00:00.000Z",
       "benefits": [
         "Hybrid collaboration hub in North America time zones",
         "Competitive contract rates paid bi-weekly",
         "Optional equipment allowance",
         "Opportunity to extend to long-term role"
-      ],
-      "postedAt": "2026-02-03",
-      "status": "open"
+      ]
     },
     {
       "id": "product-designer-workflows",
       "title": "Product Designer, Agent Workflows",
       "department": "design",
-      "type": "part-time",
       "location": "remote",
+      "type": "part-time",
       "description": "Craft intuitive interfaces for role setup, task routing, and agent collaboration experiences.",
       "requirements": [
         "Portfolio demonstrating strong systems-thinking in UX",
@@ -57,21 +61,23 @@
         "Ability to run lightweight user research",
         "Experience partnering closely with engineers"
       ],
+      "salary": "$85k-$120k pro-rated",
+      "status": "open",
+      "updatedAt": "2026-02-07T12:05:00.000Z",
+      "postedAt": "2026-01-31T10:00:00.000Z",
       "benefits": [
         "Flexible part-time schedule",
         "Design conference and training budget",
         "Async-first collaboration culture",
         "Mentorship across product and engineering"
-      ],
-      "postedAt": "2026-01-31",
-      "status": "open"
+      ]
     },
     {
       "id": "community-programs-lead",
       "title": "Community Programs Lead",
       "department": "community",
-      "type": "full-time",
       "location": "remote",
+      "type": "full-time",
       "description": "Lead programs that help builders launch faster, share learnings, and contribute high-quality templates.",
       "requirements": [
         "2+ years managing developer community initiatives",
@@ -79,21 +85,23 @@
         "Experience with events, AMAs, or cohort-based programs",
         "Ability to build and track program KPIs"
       ],
+      "salary": "$120k-$150k + bonus",
+      "status": "open",
+      "updatedAt": "2026-02-06T16:22:00.000Z",
+      "postedAt": "2026-02-04T10:00:00.000Z",
       "benefits": [
         "Home office stipend",
         "Travel budget for partner events",
         "Extended health and dental coverage",
         "Paid volunteer days"
-      ],
-      "postedAt": "2026-02-04",
-      "status": "open"
+      ]
     },
     {
       "id": "operations-coordinator-scale",
       "title": "Operations Coordinator",
       "department": "operations",
-      "type": "part-time",
       "location": "hybrid",
+      "type": "part-time",
       "description": "Keep hiring, release, and cross-team execution running smoothly as the organization scales.",
       "requirements": [
         "Experience with project tracking and operations tooling",
@@ -101,21 +109,23 @@
         "Ability to coordinate across multiple stakeholders",
         "Comfort documenting and improving recurring processes"
       ],
+      "salary": "$70k-$90k pro-rated",
+      "status": "closed",
+      "updatedAt": "2026-02-05T09:45:00.000Z",
+      "postedAt": "2026-01-27T10:00:00.000Z",
       "benefits": [
         "Flexible hybrid schedule",
         "Quarterly team offsites",
         "Professional development reimbursement",
         "Performance bonus program"
-      ],
-      "postedAt": "2026-01-27",
-      "status": "closed"
+      ]
     },
     {
       "id": "docs-bounty-builder",
       "title": "Documentation Bounty Builder",
       "department": "community",
-      "type": "bounty",
       "location": "remote",
+      "type": "bounty",
       "description": "Ship practical onboarding guides, migration docs, and examples for new agent teams.",
       "requirements": [
         "Strong technical writing with code examples",
@@ -123,14 +133,16 @@
         "Ability to work independently to a scoped brief",
         "Fast turnaround with clean editorial standards"
       ],
+      "salary": "$2,000-$4,500 per accepted package",
+      "status": "open",
+      "updatedAt": "2026-02-09T07:10:00.000Z",
+      "postedAt": "2026-02-06T10:00:00.000Z",
       "benefits": [
         "Clear scoped payout per accepted deliverable",
         "Public contributor recognition",
         "Access to private builder channels",
         "Potential fast-track into recurring contract work"
-      ],
-      "postedAt": "2026-02-06",
-      "status": "open"
+      ]
     }
   ],
   "applications": []
