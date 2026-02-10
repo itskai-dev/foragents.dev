@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
-export type EventType = "workshop" | "meetup" | "hackathon";
+export type EventType = "workshop" | "meetup" | "hackathon" | "webinar" | "launch";
 
 export type CommunityEvent = {
   id: string;
@@ -11,8 +11,13 @@ export type CommunityEvent = {
   date: string;
   url?: string;
   location?: string;
+  attendeeCount: number;
+  maxAttendees: number;
+  rsvps: string[];
   createdAt: string;
 };
+
+export type PublicCommunityEvent = Omit<CommunityEvent, "rsvps">;
 
 type RawEvent = Partial<CommunityEvent> & Record<string, unknown>;
 
@@ -23,7 +28,27 @@ export function getEventsPath() {
 }
 
 export function isEventType(value: unknown): value is EventType {
-  return value === "workshop" || value === "meetup" || value === "hackathon";
+  return (
+    value === "workshop" ||
+    value === "meetup" ||
+    value === "hackathon" ||
+    value === "webinar" ||
+    value === "launch"
+  );
+}
+
+function normalizeRsvpList(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+
+  const deduped = new Set<string>();
+  for (const entry of raw) {
+    if (typeof entry !== "string") continue;
+    const handle = entry.trim().toLowerCase();
+    if (!handle) continue;
+    deduped.add(handle);
+  }
+
+  return Array.from(deduped);
 }
 
 function normalizeEvent(raw: RawEvent): CommunityEvent | null {
@@ -37,13 +62,31 @@ function normalizeEvent(raw: RawEvent): CommunityEvent | null {
   if (!id || !title || !description || !isEventType(type)) return null;
   if (!date || Number.isNaN(Date.parse(date))) return null;
 
+  const maxAttendeesRaw = typeof raw.maxAttendees === "number" ? raw.maxAttendees : 100;
+  const maxAttendees = Number.isFinite(maxAttendeesRaw)
+    ? Math.max(1, Math.floor(maxAttendeesRaw))
+    : 100;
+
+  const rsvps = normalizeRsvpList(raw.rsvps);
+
+  const attendeeCountRaw = typeof raw.attendeeCount === "number" ? raw.attendeeCount : rsvps.length;
+  const attendeeCount = Number.isFinite(attendeeCountRaw)
+    ? Math.max(0, Math.min(maxAttendees, Math.floor(attendeeCountRaw)))
+    : Math.min(maxAttendees, rsvps.length);
+
   const normalized: CommunityEvent = {
     id,
     title,
     description,
     type,
     date: new Date(date).toISOString(),
-    createdAt: createdAt && !Number.isNaN(Date.parse(createdAt)) ? new Date(createdAt).toISOString() : new Date(0).toISOString(),
+    attendeeCount,
+    maxAttendees,
+    rsvps,
+    createdAt:
+      createdAt && !Number.isNaN(Date.parse(createdAt))
+        ? new Date(createdAt).toISOString()
+        : new Date(0).toISOString(),
   };
 
   if (typeof raw.url === "string" && raw.url.trim()) {
@@ -55,6 +98,12 @@ function normalizeEvent(raw: RawEvent): CommunityEvent | null {
   }
 
   return normalized;
+}
+
+export function toPublicEvent(event: CommunityEvent): PublicCommunityEvent {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { rsvps, ...publicEvent } = event;
+  return publicEvent;
 }
 
 export async function readEventsFile(): Promise<CommunityEvent[]> {

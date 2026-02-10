@@ -12,6 +12,7 @@ import {
   makeEventId,
   readEventsFile,
   sortEventsByDate,
+  toPublicEvent,
   writeEventsFile,
 } from "@/lib/eventsStore";
 
@@ -28,9 +29,9 @@ type CreateEventInput = {
   location?: string;
 };
 
-function validateEventPayload(body: Record<string, unknown>):
-  | { ok: true; value: CreateEventInput }
-  | { ok: false; errors: string[] } {
+function validateEventPayload(
+  body: Record<string, unknown>
+): { ok: true; value: CreateEventInput } | { ok: false; errors: string[] } {
   const errors: string[] = [];
 
   const title = typeof body.title === "string" ? body.title.trim() : "";
@@ -47,11 +48,15 @@ function validateEventPayload(body: Record<string, unknown>):
   if (description.length > 2_000) errors.push("description must be under 2,000 characters");
 
   if (!isEventType(typeRaw)) {
-    errors.push("type must be one of: workshop, meetup, hackathon");
+    errors.push("type must be one of: workshop, meetup, hackathon, webinar, launch");
   }
 
   if (!dateRaw || Number.isNaN(Date.parse(dateRaw))) {
     errors.push("date must be a valid ISO date");
+  }
+
+  if (!url && !location) {
+    errors.push("either location or url is required");
   }
 
   if (url) {
@@ -114,7 +119,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(
     {
-      events: sorted,
+      events: sorted.map(toPublicEvent),
       total: sorted.length,
     },
     {
@@ -145,16 +150,25 @@ export async function POST(request: NextRequest) {
 
     const newEvent: CommunityEvent = {
       id: makeEventId(),
+      attendeeCount: 0,
+      maxAttendees: 100,
+      rsvps: [],
       createdAt: new Date().toISOString(),
       ...validation.value,
     };
 
     await writeEventsFile([...current, newEvent]);
 
-    return NextResponse.json(newEvent, { status: 201 });
-  } catch (err) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;
+    return NextResponse.json(toPublicEvent(newEvent), { status: 201 });
+  } catch (err: unknown) {
+    const status =
+      typeof err === "object" &&
+      err !== null &&
+      "status" in err &&
+      typeof (err as { status?: unknown }).status === "number"
+        ? ((err as { status: number }).status ?? 400)
+        : 400;
+
     if (status === 413) {
       return NextResponse.json({ error: "Request body too large" }, { status: 413 });
     }

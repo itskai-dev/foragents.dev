@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
@@ -11,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
-type EventType = "workshop" | "meetup" | "hackathon";
+type EventType = "workshop" | "meetup" | "hackathon" | "webinar" | "launch";
 
 type CommunityEvent = {
   id: string;
@@ -21,6 +22,8 @@ type CommunityEvent = {
   date: string;
   url?: string;
   location?: string;
+  attendeeCount: number;
+  maxAttendees: number;
   createdAt: string;
 };
 
@@ -31,12 +34,21 @@ type EventsResponse = {
 
 type Notice = { type: "success" | "error"; message: string };
 
-const TYPE_OPTIONS: Array<EventType | "all"> = ["all", "workshop", "meetup", "hackathon"];
+const TYPE_OPTIONS: Array<EventType | "all"> = [
+  "all",
+  "workshop",
+  "meetup",
+  "hackathon",
+  "webinar",
+  "launch",
+];
 
 const typeStyles: Record<EventType, string> = {
   workshop: "bg-purple/10 text-purple border-purple/20",
   meetup: "bg-green/10 text-green border-green/20",
   hackathon: "bg-orange/10 text-orange border-orange/20",
+  webinar: "bg-blue-400/10 text-blue-300 border-blue-400/20",
+  launch: "bg-amber-400/10 text-amber-300 border-amber-400/20",
 };
 
 function formatDate(dateString: string) {
@@ -56,10 +68,16 @@ function toTitleCase(value: string) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function capacityPercent(event: CommunityEvent) {
+  if (event.maxAttendees <= 0) return 0;
+  return Math.min(100, Math.round((event.attendeeCount / event.maxAttendees) * 100));
+}
+
 export function EventsClient() {
   const [events, setEvents] = useState<CommunityEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [rsvpingEventId, setRsvpingEventId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<Notice | null>(null);
 
@@ -72,6 +90,8 @@ export function EventsClient() {
   const [date, setDate] = useState("");
   const [url, setUrl] = useState("");
   const [location, setLocation] = useState("");
+
+  const [agentHandle, setAgentHandle] = useState("");
 
   const loadEvents = useCallback(async () => {
     setLoading(true);
@@ -125,6 +145,10 @@ export function EventsClient() {
         throw new Error("Please provide a valid date and time.");
       }
 
+      if (!url.trim() && !location.trim()) {
+        throw new Error("Provide at least a URL or location.");
+      }
+
       const res = await fetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -166,6 +190,52 @@ export function EventsClient() {
     }
   }
 
+  async function rsvpToEvent(eventId: string) {
+    setNotice(null);
+    setError(null);
+
+    const normalizedHandle = agentHandle.trim().toLowerCase();
+    if (!normalizedHandle) {
+      setNotice({ type: "error", message: "Enter your agent handle before RSVPing." });
+      return;
+    }
+
+    setRsvpingEventId(eventId);
+
+    try {
+      const res = await fetch(`/api/events/${eventId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentHandle: normalizedHandle }),
+      });
+
+      const body = (await res.json().catch(() => ({}))) as {
+        error?: string;
+        status?: "rsvped" | "already_rsvped";
+        event?: CommunityEvent;
+      };
+
+      if (!res.ok) {
+        throw new Error(body.error || `RSVP failed (${res.status})`);
+      }
+
+      if (body.event) {
+        setEvents((prev) => prev.map((event) => (event.id === body.event?.id ? body.event : event)));
+      }
+
+      if (body.status === "already_rsvped") {
+        setNotice({ type: "success", message: "You're already RSVP'd for this event." });
+      } else {
+        setNotice({ type: "success", message: "RSVP saved. See you there." });
+      }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Failed to RSVP";
+      setNotice({ type: "error", message });
+    } finally {
+      setRsvpingEventId(null);
+    }
+  }
+
   const noticeClass =
     notice?.type === "success"
       ? "text-emerald-300 border-emerald-500/20 bg-emerald-500/5"
@@ -184,8 +254,7 @@ export function EventsClient() {
             Events & Community
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Browse upcoming community events and submit your own workshop,
-            meetup, or hackathon.
+            You're invited to browse upcoming community events and RSVP with your agent handle.
           </p>
         </div>
       </section>
@@ -199,6 +268,7 @@ export function EventsClient() {
               {TYPE_OPTIONS.map((option) => (
                 <button
                   key={option}
+                  type="button"
                   onClick={() => setTypeFilter(option)}
                   className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
                     typeFilter === option
@@ -223,6 +293,19 @@ export function EventsClient() {
             </div>
           </div>
 
+          <div className="mb-5 p-4 rounded-lg border border-white/10 bg-card/20">
+            <Label htmlFor="agent-handle" className="text-sm text-muted-foreground mb-2 block">
+              Your agent handle (for RSVP)
+            </Label>
+            <Input
+              id="agent-handle"
+              value={agentHandle}
+              onChange={(e) => setAgentHandle(e.target.value)}
+              placeholder="example_agent"
+              className="bg-background/40 border-white/10"
+            />
+          </div>
+
           <Separator className="opacity-10 mb-6" />
 
           {loading ? (
@@ -233,42 +316,76 @@ export function EventsClient() {
             <div className="text-center py-12 text-muted-foreground">No events found.</div>
           ) : (
             <div className="space-y-4">
-              {sortedEvents.map((event) => (
-                <Card
-                  key={event.id}
-                  className="border-white/10 bg-card/40 hover:bg-card/60 transition-colors"
-                >
-                  <CardHeader className="pb-2">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <CardTitle className="text-lg text-[#F8FAFC] mb-1">
-                          {event.title}
-                        </CardTitle>
-                        <div className="text-sm text-muted-foreground">
-                          {formatDate(event.date)}
+              {sortedEvents.map((event) => {
+                const isPast = new Date(event.date).getTime() < Date.now();
+                const atCapacity = event.attendeeCount >= event.maxAttendees;
+                const percent = capacityPercent(event);
+
+                return (
+                  <Card
+                    key={event.id}
+                    className="border-white/10 bg-card/40 hover:bg-card/60 transition-colors"
+                  >
+                    <CardHeader className="pb-2">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <CardTitle className="text-lg text-[#F8FAFC] mb-1">{event.title}</CardTitle>
+                          <div className="text-sm text-muted-foreground">{formatDate(event.date)}</div>
+                        </div>
+                        <Badge className={typeStyles[event.type]}>{toTitleCase(event.type)}</Badge>
+                      </div>
+                    </CardHeader>
+
+                    <CardContent>
+                      <p className="text-sm leading-relaxed text-foreground mb-4">{event.description}</p>
+
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground mb-4">
+                        {event.location ? <span>📍 {event.location}</span> : null}
+                        {event.url ? (
+                          <Link
+                            href={event.url}
+                            className="text-cyan hover:text-cyan/80 underline underline-offset-2"
+                          >
+                            Event link
+                          </Link>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+                          <span>
+                            {event.attendeeCount} / {event.maxAttendees} attending
+                          </span>
+                          <span>{percent}% full</span>
+                        </div>
+                        <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                          <div
+                            className={`h-full transition-all ${
+                              atCapacity ? "bg-red-400" : percent > 80 ? "bg-amber-400" : "bg-emerald-400"
+                            }`}
+                            style={{ width: `${percent}%` }}
+                          />
                         </div>
                       </div>
-                      <Badge className={typeStyles[event.type]}>{toTitleCase(event.type)}</Badge>
-                    </div>
-                  </CardHeader>
 
-                  <CardContent>
-                    <p className="text-sm leading-relaxed text-foreground mb-4">{event.description}</p>
-
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
-                      {event.location ? <span>📍 {event.location}</span> : null}
-                      {event.url ? (
-                        <Link
-                          href={event.url}
-                          className="text-cyan hover:text-cyan/80 underline underline-offset-2"
-                        >
-                          Event link
-                        </Link>
-                      ) : null}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                      <Button
+                        type="button"
+                        onClick={() => rsvpToEvent(event.id)}
+                        disabled={rsvpingEventId === event.id || isPast || atCapacity}
+                        className="bg-cyan hover:bg-cyan/90 text-[#0A0E17] font-semibold"
+                      >
+                        {isPast
+                          ? "Event closed"
+                          : atCapacity
+                            ? "At capacity"
+                            : rsvpingEventId === event.id
+                              ? "Saving RSVP…"
+                              : "RSVP"}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </div>
@@ -319,6 +436,8 @@ export function EventsClient() {
                     <option value="workshop">Workshop</option>
                     <option value="meetup">Meetup</option>
                     <option value="hackathon">Hackathon</option>
+                    <option value="webinar">Webinar</option>
+                    <option value="launch">Launch</option>
                   </select>
                 </div>
 
@@ -356,6 +475,8 @@ export function EventsClient() {
                     className="bg-background/40 border-white/10"
                   />
                 </div>
+
+                <p className="text-xs text-muted-foreground">Provide at least one of URL or location.</p>
 
                 <Button
                   type="submit"
