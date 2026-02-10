@@ -2,7 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
 import { getSupabase } from "@/lib/supabase";
 import { ensureUniqueSlug, normalizeOwnerHandle } from "@/lib/collections";
-import { getSkillCollections } from "@/lib/skillCollections";
+import {
+  getSkillCollections,
+  readCollectionsFile,
+  searchSkillCollections,
+  type SkillCollection,
+  writeCollectionsFile,
+} from "@/lib/skillCollections";
+import { getSkills } from "@/lib/data";
 
 function getOwnerHandleFromRequest(req: NextRequest): string | null {
   const header = req.headers.get("x-owner-handle") || req.headers.get("x-agent-handle");
@@ -15,9 +22,11 @@ function getOwnerHandleFromRequest(req: NextRequest): string | null {
 export async function GET(req: NextRequest) {
   const ownerHandle = getOwnerHandleFromRequest(req);
 
-  // If no ownerHandle is provided, return the curated skill-bundle collections.
+  // If no ownerHandle is provided, return curated collections from JSON.
   if (!ownerHandle) {
-    const collections = await getSkillCollections();
+    const search = req.nextUrl.searchParams.get("search") || "";
+    const collections = search ? await searchSkillCollections(search) : await getSkillCollections();
+
     return NextResponse.json({
       collections: collections.map((c) => ({
         slug: c.slug,
@@ -27,6 +36,7 @@ export async function GET(req: NextRequest) {
         skillCount: c.skillCount,
         totalInstalls: c.totalInstalls,
       })),
+      total: collections.length,
     });
   }
 
@@ -74,15 +84,11 @@ export async function GET(req: NextRequest) {
       updatedAt: c.updated_at,
       itemCount: counts[c.id] || 0,
     })),
+    total: (data || []).length,
   });
 }
 
 export async function POST(req: NextRequest) {
-  const supabase = getSupabase();
-  if (!supabase) {
-    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
-  }
-
   const ip = getClientIp(req);
   const rl = checkRateLimit(`collections:post:${ip}`, { windowMs: 60_000, max: 20 });
   if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
@@ -91,6 +97,7 @@ export async function POST(req: NextRequest) {
     ownerHandle?: string;
     name?: string;
     description?: string;
+    skills?: unknown;
   } = null;
 
   try {
@@ -103,11 +110,68 @@ export async function POST(req: NextRequest) {
   }
 
   const ownerHandle = normalizeOwnerHandle(body?.ownerHandle || "");
+
+  // If no ownerHandle is provided, create/editable custom collection in JSON data file.
   if (!ownerHandle) {
+    const name = (body?.name || "").trim();
+    const description = typeof body?.description === "string" ? body.description.trim() : "";
+
+    if (!name) {
+      return NextResponse.json({ error: "name is required" }, { status: 400 });
+    }
+
+    const incomingSkills = Array.isArray(body?.skills)
+      ? body.skills.filter((s): s is string => typeof s === "string").map((s) => s.trim())
+      : null;
+
+    if (!incomingSkills) {
+      return NextResponse.json({ error: "skills is required and must be an array of skill slugs" }, { status: 400 });
+    }
+
+    const skills = [...new Set(incomingSkills.filter(Boolean))];
+    const knownSkillSlugs = new Set(getSkills().map((s) => s.slug));
+    const invalidSkills = skills.filter((s) => !knownSkillSlugs.has(s));
+
+    if (invalidSkills.length > 0) {
+      return NextResponse.json(
+        {
+          error: "Unknown skill slugs in skills[]",
+          invalidSkills,
+        },
+        { status: 400 }
+      );
+    }
+
+    const existing = await readCollectionsFile().catch(() => []);
+    const slug = await ensureUniqueSlug({
+      desired: name,
+      exists: async (candidate) => existing.some((c) => c.slug === candidate),
+    });
+
+    const created: SkillCollection = {
+      slug,
+      name,
+      description,
+      skills,
+    };
+
+    await writeCollectionsFile([...existing, created]);
+
     return NextResponse.json(
-      { error: "ownerHandle is required (format: @name@domain)" },
-      { status: 401 }
+      {
+        collection: {
+          ...created,
+          skillCount: created.skills.length,
+          totalInstalls: 0,
+        },
+      },
+      { status: 201 }
     );
+  }
+
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json({ error: "Database not configured" }, { status: 500 });
   }
 
   const name = (body?.name || "").trim();

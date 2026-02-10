@@ -34,13 +34,13 @@ async function assertOwner(opts: {
   return { collection: data };
 }
 
-export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
   const ownerHandle = ownerHandleFrom(req);
-  const { id } = await context.params;
+  const { slug } = await context.params;
 
   // If no ownerHandle is provided, treat this as a curated skill-bundle lookup by slug.
   if (!ownerHandle) {
-    const curated = await getSkillCollectionBySlug(id);
+    const curated = await getSkillCollectionBySlug(slug);
     if (!curated) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     return NextResponse.json({
@@ -55,6 +55,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
       skills: curated.resolvedSkills,
     });
   }
+
+  const id = slug;
 
   const supabase = getSupabase();
   if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
@@ -131,7 +133,7 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
   });
 }
 
-export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
   const ip = getClientIp(req);
   const rl = checkRateLimit(`collections_patch:${ip}`, { windowMs: 60_000, max: 30 });
   if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
@@ -142,7 +144,8 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   const ownerHandle = ownerHandleFrom(req);
   if (!ownerHandle) return NextResponse.json({ error: "ownerHandle is required" }, { status: 401 });
 
-  const { id } = await context.params;
+  const { slug } = await context.params;
+  const id = slug;
   const owned = await assertOwner({ supabase, id, ownerHandle });
   if ("error" in owned) return NextResponse.json({ error: owned.error }, { status: owned.status });
 
@@ -221,7 +224,7 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ id: s
   });
 }
 
-export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
   const ip = getClientIp(req);
   const rl = checkRateLimit(`collections_delete:${ip}`, { windowMs: 60_000, max: 20 });
   if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
@@ -237,7 +240,8 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
   const ownerHandle = ownerHandleFrom(req);
   if (!ownerHandle) return NextResponse.json({ error: "ownerHandle is required" }, { status: 401 });
 
-  const { id } = await context.params;
+  const { slug } = await context.params;
+  const id = slug;
   const owned = await assertOwner({ supabase, id, ownerHandle });
   if ("error" in owned) return NextResponse.json({ error: owned.error }, { status: owned.status });
 

@@ -1,19 +1,59 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { VerifiedSkillBadge } from "@/components/verified-badge";
-import { getSkillCollectionBySlug, getSkillCollections } from "@/lib/skillCollections";
 import { CollectionDetailClient } from "@/app/collections/[slug]/collection-detail-client";
 import { RunInReflecttButton } from "@/components/RunInReflecttButton";
 
+type CollectionSkill = {
+  slug: string;
+  name: string;
+  author: string;
+  description: string;
+  installs: number;
+  verification?: unknown;
+};
+
+type CollectionDetailResponse = {
+  collection?: {
+    slug: string;
+    name: string;
+    description: string;
+    skills: string[];
+    skillCount: number;
+    totalInstalls: number;
+  };
+  skills?: CollectionSkill[];
+};
+
 export const revalidate = 300;
+
+async function getBaseUrl(): Promise<string> {
+  const hdrs = await headers();
+  const host = hdrs.get("x-forwarded-host") || hdrs.get("host");
+  const protocol = hdrs.get("x-forwarded-proto") || "https";
+  const fallbackBase = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  return host ? `${protocol}://${host}` : fallbackBase;
+}
+
+async function fetchCollectionBySlug(slug: string): Promise<CollectionDetailResponse | null> {
+  const base = await getBaseUrl();
+  const res = await fetch(`${base}/api/collections/${encodeURIComponent(slug)}`, {
+    next: { revalidate: 300 },
+  });
+
+  if (!res.ok) return null;
+  return (await res.json()) as CollectionDetailResponse;
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await props.params;
-  const col = await getSkillCollectionBySlug(slug);
+  const detail = await fetchCollectionBySlug(slug);
+  const col = detail?.collection;
 
   // Personal collections (UUID) fall back to layout metadata.
   if (!col) {
@@ -47,13 +87,15 @@ export default async function CollectionRoute(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
-
-  const curated = await getSkillCollectionBySlug(slug);
+  const detail = await fetchCollectionBySlug(slug);
 
   // If this isn't one of our curated skill bundles, render the existing user-collections UI.
-  if (!curated) {
+  if (!detail?.collection) {
     return <CollectionDetailClient />;
   }
+
+  const curated = detail.collection;
+  const resolvedSkills = Array.isArray(detail.skills) ? detail.skills : [];
 
   return (
     <div className="min-h-screen">
@@ -87,7 +129,7 @@ export default async function CollectionRoute(props: {
         <Separator className="opacity-10 my-8" />
 
         <div className="grid gap-3">
-          {curated.resolvedSkills.map((s) => (
+          {resolvedSkills.map((s) => (
             <Link
               key={s.slug}
               href={`/skills/${s.slug}`}
@@ -112,7 +154,7 @@ export default async function CollectionRoute(props: {
           ))}
         </div>
 
-        {curated.resolvedSkills.length !== curated.skillCount ? (
+        {resolvedSkills.length !== curated.skillCount ? (
           <div className="mt-6 text-xs text-slate-500">
             Note: some skills in this collection are not yet in the directory.
           </div>
@@ -127,6 +169,5 @@ export default async function CollectionRoute(props: {
 }
 
 export async function generateStaticParams() {
-  const cols = await getSkillCollections();
-  return cols.map((c) => ({ slug: c.slug }));
+  return [];
 }

@@ -11,7 +11,7 @@ function ownerHandleFrom(req: NextRequest): string | null {
   return normalizeOwnerHandle(candidate);
 }
 
-export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
   const supabase = getSupabase();
   if (!supabase) return NextResponse.json({ error: "Database not configured" }, { status: 500 });
 
@@ -22,7 +22,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ id: st
   const ownerHandle = ownerHandleFrom(req);
   if (!ownerHandle) return NextResponse.json({ error: "ownerHandle is required" }, { status: 401 });
 
-  const { id } = await context.params;
+  const { slug } = await context.params;
+  const id = slug;
 
   const { data: collection } = await supabase
     .from("collections")

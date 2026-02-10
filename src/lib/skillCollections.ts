@@ -22,9 +22,32 @@ export type SkillCollectionDetail = SkillCollectionSummary & {
 };
 
 const COLLECTIONS_PATH = path.join(process.cwd(), "data", "collections.json");
+const COLLECTIONS_PATH_SRC = path.join(process.cwd(), "src", "data", "collections.json");
+
+async function pathExists(filePath: string): Promise<boolean> {
+  try {
+    await fs.access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function resolveCollectionsPathForRead(): Promise<string> {
+  if (await pathExists(COLLECTIONS_PATH)) return COLLECTIONS_PATH;
+  if (await pathExists(COLLECTIONS_PATH_SRC)) return COLLECTIONS_PATH_SRC;
+  return COLLECTIONS_PATH;
+}
+
+async function resolveCollectionsPathForWrite(): Promise<string> {
+  if (await pathExists(COLLECTIONS_PATH)) return COLLECTIONS_PATH;
+  if (await pathExists(COLLECTIONS_PATH_SRC)) return COLLECTIONS_PATH_SRC;
+  return COLLECTIONS_PATH;
+}
 
 export async function readCollectionsFile(): Promise<SkillCollection[]> {
-  const raw = await fs.readFile(COLLECTIONS_PATH, "utf-8");
+  const filePath = await resolveCollectionsPathForRead();
+  const raw = await fs.readFile(filePath, "utf-8");
   const parsed = JSON.parse(raw) as unknown;
   if (!Array.isArray(parsed)) return [];
 
@@ -43,20 +66,38 @@ export async function readCollectionsFile(): Promise<SkillCollection[]> {
     .filter((c) => c.slug && c.name);
 }
 
+export async function writeCollectionsFile(collections: SkillCollection[]): Promise<void> {
+  const filePath = await resolveCollectionsPathForWrite();
+  const next = JSON.stringify(collections, null, 2) + "\n";
+  await fs.writeFile(filePath, next, "utf-8");
+}
+
 export async function getSkillCollections(): Promise<SkillCollectionSummary[]> {
   const collections = await readCollectionsFile().catch(() => []);
   const store = await readSkillMetricStore();
 
   return collections.map((c) => {
-    const totalInstalls = c.skills.reduce(
-      (sum, slug) => sum + (store.installs_total[slug] ?? 0),
-      0
-    );
+    const totalInstalls = c.skills.reduce((sum, slug) => sum + (store.installs_total[slug] ?? 0), 0);
     return {
       ...c,
       skillCount: c.skills.length,
       totalInstalls,
     };
+  });
+}
+
+export async function searchSkillCollections(query: string): Promise<SkillCollectionSummary[]> {
+  const all = await getSkillCollections();
+  const q = query.trim().toLowerCase();
+  if (!q) return all;
+
+  return all.filter((c) => {
+    return (
+      c.slug.toLowerCase().includes(q) ||
+      c.name.toLowerCase().includes(q) ||
+      c.description.toLowerCase().includes(q) ||
+      c.skills.some((s) => s.toLowerCase().includes(q))
+    );
   });
 }
 

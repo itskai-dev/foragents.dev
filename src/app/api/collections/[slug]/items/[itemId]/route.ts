@@ -13,7 +13,7 @@ function ownerHandleFrom(req: NextRequest): string | null {
   return normalizeOwnerHandle(candidate);
 }
 
-export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string; itemId: string }> }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ slug: string; itemId: string }> }) {
   const ip = getClientIp(req);
   const rl = checkRateLimit(`collections:items:delete:${ip}`, { windowMs: 60_000, max: 60 });
   if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
@@ -30,7 +30,8 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ id: 
   const ownerHandle = ownerHandleFrom(req);
   if (!ownerHandle) return NextResponse.json({ error: "ownerHandle is required" }, { status: 401 });
 
-  const { id, itemId } = await context.params;
+  const { slug, itemId } = await context.params;
+  const id = slug;
 
   const { data: collection } = await supabase
     .from("collections")
