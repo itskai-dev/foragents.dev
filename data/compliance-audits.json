@@ -1,0 +1,98 @@
+[
+  {
+    "id": "audit-001",
+    "framework": "GDPR",
+    "controlId": "GDPR-ART30",
+    "controlName": "Records of Processing Activities",
+    "status": "pass",
+    "evidence": "https://foragents.dev/evidence/gdpr-art30-records",
+    "auditor": "Maya Patel",
+    "auditDate": "2026-01-10",
+    "nextReviewDate": "2026-07-10",
+    "notes": "Processing records are complete and updated quarterly."
+  },
+  {
+    "id": "audit-002",
+    "framework": "GDPR",
+    "controlId": "GDPR-ART32",
+    "controlName": "Security of Processing",
+    "status": "partial",
+    "evidence": "https://foragents.dev/evidence/gdpr-art32-security",
+    "auditor": "Maya Patel",
+    "auditDate": "2026-01-12",
+    "nextReviewDate": "2026-04-12",
+    "notes": "Encryption at rest is enabled; key rotation policy needs formal sign-off."
+  },
+  {
+    "id": "audit-003",
+    "framework": "SOC2",
+    "controlId": "SOC2-CC6.1",
+    "controlName": "Logical and Physical Access Controls",
+    "status": "pass",
+    "evidence": "https://foragents.dev/evidence/soc2-cc6-1-access",
+    "auditor": "Jonah Wu",
+    "auditDate": "2026-01-15",
+    "nextReviewDate": "2026-07-15",
+    "notes": "RBAC and MFA enforcement verified for production systems."
+  },
+  {
+    "id": "audit-004",
+    "framework": "SOC2",
+    "controlId": "SOC2-CC7.2",
+    "controlName": "Monitoring for Security Events",
+    "status": "fail",
+    "evidence": "https://foragents.dev/evidence/soc2-cc7-2-monitoring",
+    "auditor": "Jonah Wu",
+    "auditDate": "2026-01-17",
+    "nextReviewDate": "2026-03-01",
+    "notes": "Alert escalation runbook is missing after-hours ownership definitions."
+  },
+  {
+    "id": "audit-005",
+    "framework": "HIPAA",
+    "controlId": "HIPAA-164.312(a)(1)",
+    "controlName": "Access Control",
+    "status": "pass",
+    "evidence": "https://foragents.dev/evidence/hipaa-access-control",
+    "auditor": "Elena Rossi",
+    "auditDate": "2026-01-20",
+    "nextReviewDate": "2026-07-20",
+    "notes": "Unique user identification and emergency access procedures documented."
+  },
+  {
+    "id": "audit-006",
+    "framework": "HIPAA",
+    "controlId": "HIPAA-164.312(b)",
+    "controlName": "Audit Controls",
+    "status": "na",
+    "evidence": "https://foragents.dev/evidence/hipaa-audit-controls",
+    "auditor": "Elena Rossi",
+    "auditDate": "2026-01-20",
+    "nextReviewDate": "2026-07-20",
+    "notes": "Control marked not applicable for this service boundary; covered by upstream provider."
+  },
+  {
+    "id": "audit-007",
+    "framework": "ISO27001",
+    "controlId": "ISO-A.12.6.1",
+    "controlName": "Management of Technical Vulnerabilities",
+    "status": "partial",
+    "evidence": "https://foragents.dev/evidence/iso-a-12-6-1-vuln",
+    "auditor": "Derrick Cole",
+    "auditDate": "2026-01-24",
+    "nextReviewDate": "2026-04-24",
+    "notes": "Monthly scanning is in place; remediation SLA tracking is inconsistent."
+  },
+  {
+    "id": "audit-008",
+    "framework": "ISO27001",
+    "controlId": "ISO-A.16.1.5",
+    "controlName": "Response to Information Security Incidents",
+    "status": "pass",
+    "evidence": "https://foragents.dev/evidence/iso-a-16-1-5-response",
+    "auditor": "Derrick Cole",
+    "auditDate": "2026-01-24",
+    "nextReviewDate": "2026-07-24",
+    "notes": "Incident response workflow tested in tabletop exercise with documented outcomes."
+  }
+]
