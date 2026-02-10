@@ -1,0 +1,90 @@
+[
+  {
+    "id": "ctr_001",
+    "name": "Maya Rodriguez",
+    "handle": "@maya-maintains",
+    "role": "maintainer",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Maya",
+    "contributions": 214,
+    "skills": ["release-management", "typescript", "ci-cd"],
+    "joinedAt": "2024-03-14T00:00:00.000Z",
+    "bio": "Keeps core APIs stable and mentors first-time contributors through their first merged PRs."
+  },
+  {
+    "id": "ctr_002",
+    "name": "Noah Kim",
+    "handle": "@reviewnoah",
+    "role": "reviewer",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Noah",
+    "contributions": 167,
+    "skills": ["code-review", "security", "nextjs"],
+    "joinedAt": "2024-05-02T00:00:00.000Z",
+    "bio": "Focuses on safe defaults, clean architecture, and high-signal review feedback."
+  },
+  {
+    "id": "ctr_003",
+    "name": "Ava Patel",
+    "handle": "@ava-builds",
+    "role": "contributor",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Ava",
+    "contributions": 128,
+    "skills": ["react", "tailwind", "ux"],
+    "joinedAt": "2024-06-19T00:00:00.000Z",
+    "bio": "Ships polished UI features and smooth interaction flows for the community tools."
+  },
+  {
+    "id": "ctr_004",
+    "name": "Liam Nguyen",
+    "handle": "@liam-tests",
+    "role": "tester",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Liam",
+    "contributions": 141,
+    "skills": ["playwright", "regression-testing", "qa"],
+    "joinedAt": "2024-07-08T00:00:00.000Z",
+    "bio": "Builds reliable test plans and catches edge cases before they hit production."
+  },
+  {
+    "id": "ctr_005",
+    "name": "Sofia Almeida",
+    "handle": "@sofia-docs",
+    "role": "documentation",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Sofia",
+    "contributions": 119,
+    "skills": ["technical-writing", "api-docs", "tutorials"],
+    "joinedAt": "2024-08-21T00:00:00.000Z",
+    "bio": "Turns complex concepts into clear docs that agents and humans can both follow."
+  },
+  {
+    "id": "ctr_006",
+    "name": "Ethan Brooks",
+    "handle": "@ethan-contrib",
+    "role": "contributor",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Ethan",
+    "contributions": 93,
+    "skills": ["api-integration", "mcp", "automation"],
+    "joinedAt": "2024-09-04T00:00:00.000Z",
+    "bio": "Builds integrations that connect agent workflows across tools and environments."
+  },
+  {
+    "id": "ctr_007",
+    "name": "Isabella Rossi",
+    "handle": "@bella-reviews",
+    "role": "reviewer",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Isabella",
+    "contributions": 108,
+    "skills": ["performance", "architecture", "observability"],
+    "joinedAt": "2024-10-11T00:00:00.000Z",
+    "bio": "Reviews system-level changes and helps teams keep performance budgets in check."
+  },
+  {
+    "id": "ctr_008",
+    "name": "Jack Turner",
+    "handle": "@jack-maintainer",
+    "role": "maintainer",
+    "avatar": "https://api.dicebear.com/9.x/adventurer/svg?seed=Jack",
+    "contributions": 176,
+    "skills": ["repo-maintenance", "tooling", "mentorship"],
+    "joinedAt": "2024-02-01T00:00:00.000Z",
+    "bio": "Maintains contributor pipelines and ensures issues, labels, and reviews keep flowing."
+  }
+]
