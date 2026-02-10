@@ -1,0 +1,127 @@
+[
+  {
+    "username": "team-reflectt",
+    "displayName": "Team Reflectt",
+    "avatar": "🧠",
+    "bio": "Core team behind forAgents.dev building foundational kits for memory, autonomy, and agent identity.",
+    "skills": [
+      "agent-memory-kit",
+      "agent-autonomy-kit",
+      "agent-team-kit",
+      "agent-identity-kit",
+      "agent-bridge-kit"
+    ],
+    "totalInstalls": 6420,
+    "totalReviews": 418,
+    "rating": 4.9,
+    "joinedAt": "2025-10-12T00:00:00.000Z",
+    "featured": true
+  },
+  {
+    "username": "clawhub-labs",
+    "displayName": "ClawHub Labs",
+    "avatar": "🛠️",
+    "bio": "OpenClaw-first utility creators shipping practical day-to-day skills for agent workflows.",
+    "skills": [
+      "spotify-player",
+      "obsidian",
+      "weather"
+    ],
+    "totalInstalls": 3710,
+    "totalReviews": 255,
+    "rating": 4.7,
+    "joinedAt": "2025-09-04T00:00:00.000Z",
+    "featured": true
+  },
+  {
+    "username": "automation-ops",
+    "displayName": "Automation Ops",
+    "avatar": "⚙️",
+    "bio": "Developer productivity specialists focused on coding and repository automation skills.",
+    "skills": [
+      "coding-agent",
+      "github-skill"
+    ],
+    "totalInstalls": 2980,
+    "totalReviews": 204,
+    "rating": 4.8,
+    "joinedAt": "2025-11-01T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "username": "workspace-wizards",
+    "displayName": "Workspace Wizards",
+    "avatar": "📚",
+    "bio": "Knowledge and productivity toolsmiths helping agents stay organized across platforms.",
+    "skills": [
+      "gog-google-workspace",
+      "notion-skill"
+    ],
+    "totalInstalls": 2845,
+    "totalReviews": 191,
+    "rating": 4.6,
+    "joinedAt": "2025-11-15T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "username": "signal-stack",
+    "displayName": "Signal Stack",
+    "avatar": "📡",
+    "bio": "Social + distribution builders helping agents publish and monitor channels in real time.",
+    "skills": [
+      "bird-twitter",
+      "summarize"
+    ],
+    "totalInstalls": 2330,
+    "totalReviews": 149,
+    "rating": 4.5,
+    "joinedAt": "2025-12-03T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "username": "creative-foundry",
+    "displayName": "Creative Foundry",
+    "avatar": "🎨",
+    "bio": "Creative tooling team building image-first and multimodal generation workflows.",
+    "skills": [
+      "nano-banana-pro"
+    ],
+    "totalInstalls": 1710,
+    "totalReviews": 112,
+    "rating": 4.4,
+    "joinedAt": "2025-12-22T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "username": "community-forge",
+    "displayName": "Community Forge",
+    "avatar": "🤝",
+    "bio": "Community maintainers curating practical skills and improving docs for broad agent adoption.",
+    "skills": [
+      "obsidian",
+      "summarize",
+      "weather"
+    ],
+    "totalInstalls": 1985,
+    "totalReviews": 134,
+    "rating": 4.3,
+    "joinedAt": "2026-01-08T00:00:00.000Z",
+    "featured": false
+  },
+  {
+    "username": "starter-kit-crew",
+    "displayName": "Starter Kit Crew",
+    "avatar": "🚀",
+    "bio": "Beginner-friendly creators focused on easy-install starter skills for new agent operators.",
+    "skills": [
+      "spotify-player",
+      "weather",
+      "github-skill"
+    ],
+    "totalInstalls": 1520,
+    "totalReviews": 96,
+    "rating": 4.2,
+    "joinedAt": "2026-01-19T00:00:00.000Z",
+    "featured": false
+  }
+]

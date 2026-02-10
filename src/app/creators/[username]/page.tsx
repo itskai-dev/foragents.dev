@@ -1,313 +1,196 @@
-import { getCreatorByUsername, getCreators } from "@/lib/data";
+/* eslint-disable react/no-unescaped-entities */
+'use client';
+
 import { Badge } from "@/components/ui/badge";
-import { SkillVersionBadge } from "@/components/skill-version-badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Breadcrumbs } from "@/components/breadcrumbs";
 import Link from "next/link";
-import Image from "next/image";
-import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-type Props = {
-  params: Promise<{ username: string }>;
+type Skill = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  author: string;
+  install_cmd: string;
+  repo_url: string;
+  tags: string[];
 };
 
-export async function generateStaticParams() {
-  const creators = getCreators();
-  return creators.map((creator) => ({
-    username: encodeURIComponent(creator.username),
-  }));
-}
+type Creator = {
+  username: string;
+  displayName: string;
+  avatar: string;
+  bio: string;
+  skills: Skill[];
+  totalInstalls: number;
+  totalReviews: number;
+  rating: number;
+  joinedAt: string;
+  featured: boolean;
+};
 
-export async function generateMetadata({ params }: Props) {
-  const { username } = await params;
-  const creator = getCreatorByUsername(decodeURIComponent(username));
+export default function CreatorProfilePage() {
+  const params = useParams<{ username: string }>();
+  const [creator, setCreator] = useState<Creator | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!creator) {
-    return {
-      title: "Creator Not Found — forAgents.dev",
+  useEffect(() => {
+    let ignore = false;
+
+    const run = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(`/api/creators/${encodeURIComponent(params.username)}`, {
+          cache: "no-store",
+        });
+
+        if (response.status === 404) {
+          throw new Error("not-found");
+        }
+
+        if (!response.ok) {
+          throw new Error(`status-${response.status}`);
+        }
+
+        const data = (await response.json()) as { creator: Creator };
+
+        if (!ignore) {
+          setCreator(data.creator);
+        }
+      } catch (fetchError) {
+        if (!ignore) {
+          if (fetchError instanceof Error && fetchError.message === "not-found") {
+            setError("Creator not found.");
+          } else {
+            setError("Couldn't load this creator profile right now.");
+          }
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
     };
+
+    run();
+
+    return () => {
+      ignore = true;
+    };
+  }, [params.username]);
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto px-4 py-12">
+        <div className="h-12 w-64 bg-white/5 rounded mb-4 animate-pulse" />
+        <div className="h-6 w-full max-w-xl bg-white/5 rounded mb-8 animate-pulse" />
+        <div className="grid gap-4 md:grid-cols-2">
+          {[...Array(4)].map((_, index) => (
+            <div key={index} className="h-48 rounded-xl border border-white/5 bg-card/50 animate-pulse" />
+          ))}
+        </div>
+      </div>
+    );
   }
 
-  const description = `View ${creator.username}&apos;s skills and contributions: ${creator.skillCount} skills published with ${creator.totalTags} total tags.`;
-  const ogImageUrl = `https://foragents.dev/api/og/creator/${encodeURIComponent(creator.username)}`;
-
-  return {
-    title: `${creator.username} — Creator Profile — forAgents.dev`,
-    description,
-    openGraph: {
-      title: `${creator.username} — Creator Profile — forAgents.dev`,
-      description,
-      url: `https://foragents.dev/creators/${encodeURIComponent(creator.username)}`,
-      siteName: "forAgents.dev",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: `${creator.username} - Creator Profile on forAgents.dev`,
-        },
-      ],
-      type: "profile",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${creator.username} — Creator Profile — forAgents.dev`,
-      description,
-      images: [ogImageUrl],
-    },
-  };
-}
-
-export default async function CreatorProfilePage({ params }: Props) {
-  const { username } = await params;
-  const creator = getCreatorByUsername(decodeURIComponent(username));
-
-  if (!creator) {
-    notFound();
+  if (error || !creator) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16">
+        <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-6 text-destructive text-sm">
+          {error ?? "Creator not found."}
+        </div>
+      </div>
+    );
   }
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": creator.verified ? "Organization" : "Person",
-    "name": creator.username,
-    "url": `https://foragents.dev/creators/${encodeURIComponent(creator.username)}`,
-    "description": `Creator on forAgents.dev with ${creator.skillCount} skill${creator.skillCount !== 1 ? 's' : ''} published.`,
-    "keywords": creator.topTags.map(t => t.tag).join(", "),
-    "numberOfWorks": creator.skillCount,
-    "workExample": creator.skills.map(skill => ({
-      "@type": "SoftwareApplication",
-      "name": skill.name,
-      "description": skill.description,
-      "url": `https://foragents.dev/skills/${skill.slug}`
-    }))
-  };
 
   return (
     <div className="min-h-screen">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      {/* Profile Header */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-cyan/5 rounded-full blur-[120px]" />
-        </div>
-
-        <div className="relative max-w-5xl mx-auto px-4 py-12">
-          <div className="flex items-start gap-6">
-            <div className="flex-shrink-0">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-cyan/20 to-purple/20 border border-cyan/20 flex items-center justify-center text-4xl">
-                👤
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-3 mb-3">
-                <h1 className="text-3xl md:text-4xl font-bold text-[#F8FAFC]">
-                  {creator.username}
-                </h1>
-                {creator.verified && (
-                  <Image
-                    src="/badges/verified-skill.svg"
-                    alt="Verified Creator"
-                    title="Verified: Team Reflectt"
-                    width={28}
-                    height={28}
-                    className="w-7 h-7"
-                  />
-                )}
-              </div>
-
-              <div className="flex flex-wrap gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">📦</span>
-                  <div>
-                    <div className="text-2xl font-bold text-cyan">{creator.skillCount}</div>
-                    <div className="text-xs text-muted-foreground">Skill{creator.skillCount !== 1 ? 's' : ''} Published</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🏷️</span>
-                  <div>
-                    <div className="text-2xl font-bold text-cyan">{creator.totalTags}</div>
-                    <div className="text-xs text-muted-foreground">Total Tags</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">⭐</span>
-                  <div>
-                    <div className="text-2xl font-bold text-cyan">{creator.topTags.length}</div>
-                    <div className="text-xs text-muted-foreground">Tag Categories</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Top Tags */}
-      <section className="max-w-5xl mx-auto px-4 py-8">
-        <h2 className="text-xl font-bold mb-4">🏷️ Top Tags</h2>
-        <div className="flex flex-wrap gap-2">
-          {creator.topTags.map((tagData) => (
-            <Badge
-              key={tagData.tag}
-              variant="outline"
-              className="text-sm bg-cyan/10 text-cyan border-cyan/20 px-4 py-2"
-            >
-              {tagData.tag}
-              <span className="ml-2 text-xs text-cyan/60">×{tagData.count}</span>
-            </Badge>
-          ))}
-        </div>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Skills */}
       <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-2xl font-bold">🧰 Published Skills</h2>
-          <div className="text-sm text-muted-foreground">
-            {creator.skillCount} skill{creator.skillCount !== 1 ? 's' : ''}
+        <div className="flex items-start gap-4 mb-4">
+          <span className="text-5xl">{creator.avatar}</span>
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-3xl md:text-4xl font-bold">{creator.displayName}</h1>
+              {creator.featured && (
+                <Badge variant="outline" className="bg-cyan/10 text-cyan border-cyan/20">
+                  Featured
+                </Badge>
+              )}
+            </div>
+            <p className="text-muted-foreground">@{creator.username}</p>
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {creator.skills.map((skill) => (
-            <Link key={skill.id} href={`/skills/${skill.slug}`}>
-              <Card className="bg-card/50 border-white/5 hover:border-cyan/20 transition-all group h-full">
+        <p className="text-muted-foreground max-w-3xl mb-6">{creator.bio}</p>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-lg border border-white/10 bg-card/40 p-4">
+            <div className="text-xs text-muted-foreground">Total installs</div>
+            <div className="text-2xl font-bold text-cyan">{creator.totalInstalls.toLocaleString()}</div>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-card/40 p-4">
+            <div className="text-xs text-muted-foreground">Total reviews</div>
+            <div className="text-2xl font-bold text-cyan">{creator.totalReviews.toLocaleString()}</div>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-card/40 p-4">
+            <div className="text-xs text-muted-foreground">Rating</div>
+            <div className="text-2xl font-bold text-cyan">{creator.rating.toFixed(1)}</div>
+          </div>
+          <div className="rounded-lg border border-white/10 bg-card/40 p-4">
+            <div className="text-xs text-muted-foreground">Joined</div>
+            <div className="text-2xl font-bold text-cyan">
+              {new Date(creator.joinedAt).getFullYear()}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Separator className="opacity-10" />
+
+      <section className="max-w-5xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">🧰 Published Skills</h2>
+          <Link href={`/creators/${encodeURIComponent(creator.username)}/stats`} className="text-cyan text-sm hover:underline">
+            View stats →
+          </Link>
+        </div>
+
+        {creator.skills.length === 0 ? (
+          <div className="rounded-xl border border-white/10 bg-card/40 p-6 text-sm text-muted-foreground">
+            No linked skills yet.
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {creator.skills.map((skill) => (
+              <Card key={skill.id} className="bg-card/50 border-white/5">
                 <CardHeader>
-                  <CardTitle className="text-lg group-hover:text-cyan transition-colors flex items-center gap-2">
-                    <span className="truncate flex-1">{skill.name}</span>
-                    {creator.verified && (
-                      <Image
-                        src="/badges/verified-skill.svg"
-                        alt="Verified Skill"
-                        title="Verified: Team Reflectt skill"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5 inline-block"
-                      />
-                    )}
-                    <SkillVersionBadge slug={skill.slug} />
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    by {skill.author}
-                  </CardDescription>
+                  <CardTitle className="text-lg">{skill.name}</CardTitle>
+                  <CardDescription>by {skill.author}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {skill.description}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-3">{skill.description}</p>
                   <code className="block text-xs text-green bg-black/30 rounded px-2 py-1.5 mb-3 overflow-x-auto">
                     {skill.install_cmd}
                   </code>
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1">
-                      {skill.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="outline"
-                          className="text-xs bg-white/5 text-white/60 border-white/10"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mt-3">
-                    <a
-                      href={skill.repo_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-cyan hover:underline"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      View Repository ↗
-                    </a>
+                  <div className="flex flex-wrap gap-1.5">
+                    {skill.tags.map((tag) => (
+                      <Badge key={tag} variant="outline" className="text-xs bg-white/5 border-white/10">
+                        {tag}
+                      </Badge>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <Separator className="opacity-10" />
-
-      {/* Stats Summary */}
-      <section className="max-w-5xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold">📊 Statistics</h2>
-          <Link
-            href={`/creators/${encodeURIComponent(creator.username)}/stats`}
-            className="text-sm text-cyan hover:underline transition-colors"
-          >
-            View Full Analytics →
-          </Link>
-        </div>
-        
-        <div className="grid gap-4 md:grid-cols-3">
-          <Card className="bg-card/50 border-cyan/20">
-            <CardHeader>
-              <CardTitle className="text-sm text-muted-foreground">Total Skills</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-cyan">{creator.skillCount}</div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/50 border-cyan/20">
-            <CardHeader>
-              <CardTitle className="text-sm text-muted-foreground">Tags Used</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-cyan">{creator.totalTags}</div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-card/50 border-cyan/20">
-            <CardHeader>
-              <CardTitle className="text-sm text-muted-foreground">Avg Tags per Skill</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-3xl font-bold text-cyan">
-                {(creator.totalTags / creator.skillCount).toFixed(1)}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {creator.verified && (
-          <div className="mt-6 p-4 rounded-lg bg-cyan/10 border border-cyan/20">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/badges/verified-skill.svg"
-                alt="Verified"
-                width={24}
-                height={24}
-                className="w-6 h-6"
-              />
-              <div>
-                <div className="font-semibold text-cyan">Verified Creator</div>
-                <div className="text-xs text-muted-foreground">
-                  This creator is verified by Team Reflectt
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         )}
       </section>
-
     </div>
   );
 }
