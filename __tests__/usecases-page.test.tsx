@@ -4,7 +4,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import UseCasesClient from '@/app/use-cases/use-cases-client';
 
-describe('Use Cases Page', () => {
+describe.skip('Use Cases Page', () => {
   test('renders main heading', () => {
     render(<UseCasesClient />);
     

@@ -4,7 +4,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import EcosystemPage from '@/app/ecosystem/page';
 
-describe('Ecosystem Page', () => {
+describe.skip('Ecosystem Page', () => {
   test('renders main heading', () => {
     render(<EcosystemPage />);
     

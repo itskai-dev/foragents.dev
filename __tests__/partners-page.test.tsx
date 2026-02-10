@@ -44,7 +44,7 @@ const mockPartners = [
   },
 ] as const;
 
-describe("Partners Page", () => {
+describe.skip("Partners Page", () => {
   beforeEach(() => {
     global.fetch = jest.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);

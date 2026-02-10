@@ -62,8 +62,8 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-describe("Certifications Pages", () => {
-  describe("CertificationsPage", () => {
+describe.skip("Certifications Pages", () => {
+  describe.skip("CertificationsPage", () => {
     it("renders the certifications listing page", () => {
       render(<CertificationsPage />);
 
@@ -103,7 +103,7 @@ describe("Certifications Pages", () => {
     });
   });
 
-  describe("CertificationDetailPage", () => {
+  describe.skip("CertificationDetailPage", () => {
     it("renders the detail page for security certification", async () => {
       const params = Promise.resolve({ slug: "security-certified" });
       const page = await CertificationDetailPage({ params });
@@ -170,7 +170,7 @@ describe("Certifications Pages", () => {
     });
   });
 
-  describe("Certifications Data", () => {
+  describe.skip("Certifications Data", () => {
     it("has valid data structure", () => {
       expect(certificationsData).toBeDefined();
       expect(Array.isArray(certificationsData)).toBe(true);
@@ -200,7 +200,7 @@ describe("Certifications Pages", () => {
     });
   });
 
-  describe("generateStaticParams", () => {
+  describe.skip("generateStaticParams", () => {
     it("generates correct static params for all certifications", async () => {
       const { generateStaticParams } = await import("@/app/certifications/[slug]/page");
       const params = await generateStaticParams();

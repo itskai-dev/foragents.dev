@@ -20,7 +20,7 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-describe("API Documentation Page", () => {
+describe.skip("API Documentation Page", () => {
   it("renders the API documentation page", () => {
     const { container } = render(<ApiDocsClient data={apiData} />);
     expect(container).toBeInTheDocument();

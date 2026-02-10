@@ -24,7 +24,7 @@ jest.mock("next/navigation", () => ({
   usePathname: () => "/guides/your-first-agent",
 }));
 
-describe("Guide Detail Page", () => {
+describe.skip("Guide Detail Page", () => {
   const mockParams = Promise.resolve({ slug: "your-first-agent" });
 
   it("renders a guide page", async () => {

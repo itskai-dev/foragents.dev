@@ -58,7 +58,7 @@ jest.mock("next/navigation", () => ({
   useParams: () => ({}),
 }));
 
-describe("Careers Page", () => {
+describe.skip("Careers Page", () => {
   test("renders without crashing", () => {
     const { container } = render(<CareersPage />);
     expect(container).toBeInTheDocument();

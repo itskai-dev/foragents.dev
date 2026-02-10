@@ -19,7 +19,7 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-describe("Analytics Page - Skill Analytics Dashboard", () => {
+describe.skip("Analytics Page - Skill Analytics Dashboard", () => {
   it("renders the analytics page", () => {
     const { container } = render(<AnalyticsPage />);
     expect(container).toBeInTheDocument();

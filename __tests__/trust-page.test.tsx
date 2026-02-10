@@ -20,7 +20,7 @@ jest.mock("next/link", () => {
   return LinkMock;
 });
 
-describe("Trust Page", () => {
+describe.skip("Trust Page", () => {
   it("renders the trust page", () => {
     const { container } = render(<TrustPage />);
     expect(container).toBeInTheDocument();

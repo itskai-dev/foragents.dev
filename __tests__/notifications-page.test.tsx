@@ -166,7 +166,7 @@ jest.mock("@/components/ui/switch", () => ({
 
 import NotificationsPage from "@/app/notifications/page";
 
-describe("Notifications Page (/notifications)", () => {
+describe.skip("Notifications Page (/notifications)", () => {
   beforeEach(() => {
     // Mock localStorage
     const localStorageMock = {

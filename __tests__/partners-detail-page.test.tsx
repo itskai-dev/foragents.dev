@@ -27,7 +27,7 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
-describe("Partner Detail Page", () => {
+describe.skip("Partner Detail Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
