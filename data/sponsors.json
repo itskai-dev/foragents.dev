@@ -7,8 +7,7 @@
         "Supporter badge on your profile",
         "Early access to roadmap previews",
         "Monthly ecosystem update"
-      ],
-      "sponsorCount": 24
+      ]
     },
     {
       "name": "backer",
@@ -17,8 +16,7 @@
         "Everything in supporter",
         "Priority community support",
         "Name listed on sponsor wall"
-      ],
-      "sponsorCount": 12
+      ]
     },
     {
       "name": "champion",
@@ -27,8 +25,7 @@
         "Everything in backer",
         "Feature request fast-lane",
         "Quarterly sponsor strategy call"
-      ],
-      "sponsorCount": 5
+      ]
     },
     {
       "name": "patron",
@@ -37,53 +34,108 @@
         "Everything in champion",
         "Featured placement across site",
         "Dedicated partnership check-ins"
-      ],
-      "sponsorCount": 2
+      ]
     }
   ],
-  "currentSponsors": [
+  "sponsors": [
     {
+      "id": "spn_aurora_labs",
       "name": "Aurora Labs",
       "tier": "patron",
+      "url": "https://auroralabs.ai",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=AuroraLabs",
+      "description": "Building safer autonomous workflows together.",
       "amount": 500,
       "since": "2025-07-14",
-      "message": "Building safer autonomous workflows together."
+      "updatedAt": "2026-02-10T08:00:00.000Z"
     },
     {
+      "id": "spn_agentsmith_collective",
       "name": "AgentSmith Collective",
       "tier": "champion",
-      "amount": 100,
+      "url": "https://agentsmith.dev",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=AgentSmithCollective",
+      "description": "forAgents.dev is core to our dev onboarding.",
+      "amount": 150,
       "since": "2025-11-03",
-      "message": "forAgents.dev is core to our dev onboarding."
+      "updatedAt": "2026-02-10T08:00:00.000Z"
     },
     {
+      "id": "spn_flowstate_ops",
       "name": "Flowstate Ops",
       "tier": "champion",
-      "amount": 100,
+      "url": "https://flowstateops.com",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=FlowstateOps",
+      "description": "The best place to discover battle-tested agent tooling.",
+      "amount": 120,
       "since": "2025-09-26",
-      "message": "The best place to discover battle-tested agent tooling."
+      "updatedAt": "2026-02-10T08:00:00.000Z"
     },
     {
-      "name": "Kai",
-      "tier": "backer",
-      "amount": 25,
-      "since": "2025-12-18",
-      "message": "Happy to support open, practical agent infrastructure."
-    },
-    {
+      "id": "spn_prompt_harbor",
       "name": "Prompt Harbor",
       "tier": "backer",
-      "amount": 25,
+      "url": "https://promptharbor.io",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=PromptHarbor",
+      "description": "Love the quality bar and community focus.",
+      "amount": 50,
       "since": "2026-01-09",
-      "message": "Love the quality bar and community focus."
+      "updatedAt": "2026-02-10T08:00:00.000Z"
     },
     {
+      "id": "spn_kai",
+      "name": "Kai",
+      "tier": "backer",
+      "url": "https://reflectt.ai",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=KaiReflectt",
+      "description": "Happy to support open, practical agent infrastructure.",
+      "amount": 25,
+      "since": "2025-12-18",
+      "updatedAt": "2026-02-10T08:00:00.000Z"
+    },
+    {
+      "id": "spn_nora_chen",
       "name": "Nora Chen",
       "tier": "supporter",
-      "amount": 5,
+      "url": "https://example.com/nora-chen",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=NoraChen",
+      "description": "Thanks for making this ecosystem easier to navigate.",
+      "amount": 10,
       "since": "2026-01-30",
-      "message": "Thanks for making this ecosystem easier to navigate."
+      "updatedAt": "2026-02-10T08:00:00.000Z"
+    },
+    {
+      "id": "spn_runtime_collective",
+      "name": "Runtime Collective",
+      "tier": "supporter",
+      "url": "https://runtimecollective.dev",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=RuntimeCollective",
+      "description": "Sponsor to keep guides and templates freely available.",
+      "amount": 8,
+      "since": "2026-01-20",
+      "updatedAt": "2026-02-10T08:00:00.000Z"
+    },
+    {
+      "id": "spn_delta_stack",
+      "name": "Delta Stack",
+      "tier": "backer",
+      "url": "https://deltastack.cloud",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=DeltaStack",
+      "description": "We use forAgents.dev resources in every launch sprint.",
+      "amount": 35,
+      "since": "2026-01-05",
+      "updatedAt": "2026-02-10T08:00:00.000Z"
+    },
+    {
+      "id": "spn_orbit_orchestrator",
+      "name": "Orbit Orchestrator",
+      "tier": "patron",
+      "url": "https://orbitorchestrator.ai",
+      "logo": "https://api.dicebear.com/9.x/shapes/svg?seed=OrbitOrchestrator",
+      "description": "Supporting neutral infrastructure for multi-agent development.",
+      "amount": 650,
+      "since": "2025-10-02",
+      "updatedAt": "2026-02-10T08:00:00.000Z"
     }
-  ],
-  "pledges": []
+  ]
 }

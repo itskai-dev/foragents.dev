@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -9,29 +11,42 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Check } from "lucide-react";
 
-type SponsorTier = {
+export type SponsorTier = {
   name: string;
   price: number;
   perks: string[];
   sponsorCount: number;
 };
 
-type CurrentSponsor = {
+export type Sponsor = {
+  id: string;
   name: string;
   tier: string;
+  url: string;
+  logo: string;
+  description: string;
   amount: number;
   since: string;
-  message?: string;
+  updatedAt: string;
 };
 
 type SponsorResponse = {
   tiers: SponsorTier[];
-  currentSponsors: CurrentSponsor[];
+  sponsors: Sponsor[];
+  filters?: {
+    tier?: string;
+    search?: string;
+  };
 };
 
 type Notice = {
   type: "success" | "error";
   message: string;
+};
+
+type SponsorClientProps = {
+  initialTiers?: SponsorTier[];
+  initialSponsors?: Sponsor[];
 };
 
 function formatTierName(name: string) {
@@ -66,31 +81,45 @@ function getTierBadgeColor(tier: string) {
   }
 }
 
-export function SponsorClient() {
-  const [loading, setLoading] = useState(true);
+export function SponsorClient({ initialTiers = [], initialSponsors = [] }: SponsorClientProps) {
+  const [loading, setLoading] = useState(initialTiers.length === 0);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<Notice | null>(null);
 
-  const [tiers, setTiers] = useState<SponsorTier[]>([]);
-  const [currentSponsors, setCurrentSponsors] = useState<CurrentSponsor[]>([]);
+  const [tiers, setTiers] = useState<SponsorTier[]>(initialTiers);
+  const [sponsors, setSponsors] = useState<Sponsor[]>(initialSponsors);
+
+  const [selectedTierFilter, setSelectedTierFilter] = useState("all");
+  const [searchFilter, setSearchFilter] = useState("");
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [tier, setTier] = useState("");
-  const [amount, setAmount] = useState("");
-  const [message, setMessage] = useState("");
+  const [tier, setTier] = useState(initialTiers[0]?.name ?? "");
+  const [amount, setAmount] = useState(initialTiers[0] ? String(initialTiers[0].price) : "");
+  const [url, setUrl] = useState("");
+  const [logo, setLogo] = useState("");
+  const [description, setDescription] = useState("");
 
   const tierByName = useMemo(() => {
     return new Map(tiers.map((item) => [item.name.toLowerCase(), item]));
   }, [tiers]);
 
-  async function loadSponsorData() {
+  async function loadSponsorData(nextTier = selectedTierFilter, nextSearch = searchFilter) {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch("/api/sponsor", { cache: "no-store" });
+      const params = new URLSearchParams();
+      if (nextTier && nextTier !== "all") {
+        params.set("tier", nextTier);
+      }
+      if (nextSearch.trim()) {
+        params.set("search", nextSearch.trim());
+      }
+
+      const query = params.toString();
+      const response = await fetch(`/api/sponsor${query ? `?${query}` : ""}`, { cache: "no-store" });
+
       if (!response.ok) {
         const body = (await response.json().catch(() => ({}))) as { error?: string };
         throw new Error(body.error || `Failed to load sponsor data (${response.status})`);
@@ -98,10 +127,10 @@ export function SponsorClient() {
 
       const data = (await response.json()) as SponsorResponse;
       const nextTiers = Array.isArray(data.tiers) ? data.tiers : [];
-      const nextSponsors = Array.isArray(data.currentSponsors) ? data.currentSponsors : [];
+      const nextSponsors = Array.isArray(data.sponsors) ? data.sponsors : [];
 
       setTiers(nextTiers);
-      setCurrentSponsors(nextSponsors);
+      setSponsors(nextSponsors);
 
       if (nextTiers.length > 0) {
         setTier((prev) => prev || nextTiers[0].name.toLowerCase());
@@ -115,8 +144,18 @@ export function SponsorClient() {
   }
 
   useEffect(() => {
-    void loadSponsorData();
+    if (initialTiers.length === 0) {
+      void loadSponsorData();
+    }
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      void loadSponsorData(selectedTierFilter, searchFilter);
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [selectedTierFilter, searchFilter]);
 
   function onTierChange(value: string) {
     setTier(value);
@@ -126,7 +165,7 @@ export function SponsorClient() {
     }
   }
 
-  async function submitPledge(event: React.FormEvent<HTMLFormElement>) {
+  async function submitSponsor(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitting(true);
     setNotice(null);
@@ -139,32 +178,35 @@ export function SponsorClient() {
         },
         body: JSON.stringify({
           name,
-          email,
           tier,
           amount: Number(amount),
-          message,
+          url,
+          logo,
+          description,
+          since: new Date().toISOString(),
         }),
       });
 
       if (!response.ok) {
         const body = (await response.json().catch(() => ({}))) as { error?: string; details?: string[] };
         const details = Array.isArray(body.details) ? `: ${body.details.join(" • ")}` : "";
-        throw new Error(body.error ? `${body.error}${details}` : `Failed to submit pledge (${response.status})`);
+        throw new Error(body.error ? `${body.error}${details}` : `Failed to add sponsor (${response.status})`);
       }
 
       setNotice({
         type: "success",
-        message: "Pledge submitted! Thanks for supporting forAgents.dev.",
+        message: "Sponsor added successfully.",
       });
       setName("");
-      setEmail("");
-      setMessage("");
+      setUrl("");
+      setLogo("");
+      setDescription("");
 
-      await loadSponsorData();
+      await loadSponsorData(selectedTierFilter, searchFilter);
     } catch (e) {
       setNotice({
         type: "error",
-        message: e instanceof Error ? e.message : "Unable to submit pledge",
+        message: e instanceof Error ? e.message : "Unable to add sponsor",
       });
     } finally {
       setSubmitting(false);
@@ -231,34 +273,70 @@ export function SponsorClient() {
       <Separator className="opacity-10" />
 
       <section className="max-w-5xl mx-auto px-4 py-16">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-[#F8FAFC] mb-4">Current Sponsors</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Backers helping keep the ecosystem open and useful for agent builders.
           </p>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="md:col-span-2">
+            <Input
+              value={searchFilter}
+              onChange={(event) => setSearchFilter(event.target.value)}
+              placeholder="Search sponsors"
+              className="bg-background/40 border-white/10"
+            />
+          </div>
+          <div>
+            <select
+              value={selectedTierFilter}
+              onChange={(event) => setSelectedTierFilter(event.target.value)}
+              className="w-full rounded-md border border-white/10 bg-background/40 px-3 py-2 text-sm"
+            >
+              <option value="all">All tiers</option>
+              {tiers.map((tierItem) => (
+                <option key={tierItem.name} value={tierItem.name.toLowerCase()}>
+                  {formatTierName(tierItem.name)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
         {loading ? (
           <div className="text-center text-muted-foreground">Loading sponsors…</div>
         ) : error ? (
           <div className="text-center text-sm text-red-300">Unable to load current sponsors.</div>
-        ) : currentSponsors.length === 0 ? (
-          <div className="text-center text-sm text-muted-foreground">No sponsors yet. Be the first.</div>
+        ) : sponsors.length === 0 ? (
+          <div className="text-center text-sm text-muted-foreground">No matching sponsors found.</div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {currentSponsors.map((sponsor) => (
-              <Card key={`${sponsor.name}-${sponsor.since}`} className="border-white/10 bg-card/40">
+            {sponsors.map((sponsor) => (
+              <Card key={sponsor.id} className="border-white/10 bg-card/40">
                 <CardContent className="pt-6">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-semibold text-[#F8FAFC]">{sponsor.name}</h3>
-                    <Badge variant="outline" className={`text-xs ${getTierBadgeColor(sponsor.tier)}`}>
-                      {formatTierName(sponsor.tier)}
-                    </Badge>
+                  <div className="flex items-center gap-3">
+                    <img src={sponsor.logo} alt={`${sponsor.name} logo`} className="w-10 h-10 rounded-md bg-white/5" />
+                    <div className="min-w-0">
+                      <h3 className="font-semibold text-[#F8FAFC] truncate">{sponsor.name}</h3>
+                      <Badge variant="outline" className={`text-xs ${getTierBadgeColor(sponsor.tier)}`}>
+                        {formatTierName(sponsor.tier)}
+                      </Badge>
+                    </div>
                   </div>
                   <div className="mt-2 text-sm text-muted-foreground">
                     ${sponsor.amount}/mo · since {formatDate(sponsor.since)}
                   </div>
-                  {sponsor.message ? <p className="mt-3 text-sm text-foreground/90">“{sponsor.message}”</p> : null}
+                  <p className="mt-3 text-sm text-foreground/90">{sponsor.description}</p>
+                  <a
+                    href={sponsor.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-sm text-cyan hover:underline"
+                  >
+                    Visit sponsor
+                  </a>
                 </CardContent>
               </Card>
             ))}
@@ -271,14 +349,14 @@ export function SponsorClient() {
       <section className="max-w-3xl mx-auto px-4 py-16">
         <Card className="border-white/10 bg-card/40">
           <CardHeader>
-            <CardTitle className="text-2xl text-[#F8FAFC]">Become a Sponsor</CardTitle>
+            <CardTitle className="text-2xl text-[#F8FAFC]">Add a Sponsor</CardTitle>
             <p className="text-sm text-muted-foreground">
-              Submit a pledge and we&apos;ll follow up with onboarding details.
+              Create a new sponsor entry and persist it to the sponsor data file.
             </p>
           </CardHeader>
 
           <CardContent>
-            <form onSubmit={submitPledge} className="space-y-4">
+            <form onSubmit={submitSponsor} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="sponsor-name" className="text-sm font-medium">
@@ -288,29 +366,12 @@ export function SponsorClient() {
                     id="sponsor-name"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
-                    placeholder="Your name"
+                    placeholder="Sponsor name"
                     className="bg-background/40 border-white/10"
                     required
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <label htmlFor="sponsor-email" className="text-sm font-medium">
-                    Email
-                  </label>
-                  <Input
-                    id="sponsor-email"
-                    type="email"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="you@company.com"
-                    className="bg-background/40 border-white/10"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="sponsor-tier" className="text-sm font-medium">
                     Tier
@@ -329,7 +390,9 @@ export function SponsorClient() {
                     ))}
                   </select>
                 </div>
+              </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="sponsor-amount" className="text-sm font-medium">
                     Monthly amount (USD)
@@ -344,18 +407,47 @@ export function SponsorClient() {
                     required
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <label htmlFor="sponsor-url" className="text-sm font-medium">
+                    Website URL
+                  </label>
+                  <Input
+                    id="sponsor-url"
+                    value={url}
+                    onChange={(event) => setUrl(event.target.value)}
+                    placeholder="https://example.com"
+                    className="bg-background/40 border-white/10"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="sponsor-message" className="text-sm font-medium">
-                  Message (optional)
+                <label htmlFor="sponsor-logo" className="text-sm font-medium">
+                  Logo URL
+                </label>
+                <Input
+                  id="sponsor-logo"
+                  value={logo}
+                  onChange={(event) => setLogo(event.target.value)}
+                  placeholder="https://example.com/logo.svg"
+                  className="bg-background/40 border-white/10"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="sponsor-description" className="text-sm font-medium">
+                  Description
                 </label>
                 <Textarea
-                  id="sponsor-message"
-                  value={message}
-                  onChange={(event) => setMessage(event.target.value)}
-                  placeholder="Tell us why you&apos;re sponsoring"
+                  id="sponsor-description"
+                  value={description}
+                  onChange={(event) => setDescription(event.target.value)}
+                  placeholder="Short sponsor description"
                   className="min-h-[100px] bg-background/40 border-white/10"
+                  required
                 />
               </div>
 
@@ -364,7 +456,7 @@ export function SponsorClient() {
                 className="w-full bg-cyan text-black hover:bg-cyan/90 font-mono"
                 disabled={submitting || loading || tiers.length === 0}
               >
-                {submitting ? "Submitting pledge…" : "Submit sponsorship pledge"}
+                {submitting ? "Saving sponsor…" : "Save sponsor"}
               </Button>
 
               {notice ? <div className={`text-sm border rounded-lg p-3 ${noticeClass}`}>{notice.message}</div> : null}

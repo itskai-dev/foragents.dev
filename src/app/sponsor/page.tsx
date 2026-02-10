@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import { Separator } from "@/components/ui/separator";
+import { buildTierSummaries, filterSponsors, readSponsorsData } from "@/lib/sponsor";
 import { SponsorClient } from "./sponsor-client";
 
 export const metadata = {
@@ -9,7 +10,11 @@ export const metadata = {
     "Support the future of AI agents. Help us build tools, resources, and community infrastructure for agent developers worldwide.",
 };
 
-export default function SponsorPage() {
+export default async function SponsorPage() {
+  const data = await readSponsorsData();
+  const initialTiers = buildTierSummaries(data.tiers, data.sponsors);
+  const initialSponsors = filterSponsors(data.sponsors, { tier: "all", search: "" });
+
   return (
     <div className="min-h-screen">
       <section className="relative overflow-hidden">
@@ -30,7 +35,7 @@ export default function SponsorPage() {
 
       <Separator className="opacity-10" />
 
-      <SponsorClient />
+      <SponsorClient initialTiers={initialTiers} initialSponsors={initialSponsors} />
     </div>
   );
 }
