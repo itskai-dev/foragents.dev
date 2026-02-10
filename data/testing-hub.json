@@ -1,0 +1,92 @@
+[
+  {
+    "id": "th-001",
+    "title": "Tool Reliability: API Timeout Recovery",
+    "description": "Validate that the agent retries idempotent API calls with exponential backoff and returns a helpful fallback message when retries fail.",
+    "category": "cases",
+    "status": "stable",
+    "framework": "Jest",
+    "tags": ["retries", "timeouts", "error-handling"],
+    "updatedAt": "2026-02-01T16:30:00.000Z"
+  },
+  {
+    "id": "th-002",
+    "title": "Context Handling: Multi-turn Memory Integrity",
+    "description": "Check if key user preferences persist for 20+ turns without leaking or mutating unrelated memory.",
+    "category": "cases",
+    "status": "active",
+    "framework": "Vitest",
+    "tags": ["memory", "multi-turn", "consistency"],
+    "updatedAt": "2026-02-02T18:10:00.000Z"
+  },
+  {
+    "id": "th-003",
+    "title": "Response Quality Baseline v2",
+    "description": "Weighted rubric benchmark scoring factuality, helpfulness, actionability, and safety across representative prompts.",
+    "category": "benchmarks",
+    "status": "active",
+    "framework": "Promptfoo",
+    "tags": ["quality", "rubric", "scoring"],
+    "updatedAt": "2026-02-03T14:20:00.000Z"
+  },
+  {
+    "id": "th-004",
+    "title": "Tool Efficiency Benchmark",
+    "description": "Measure tool-call count, latency, and completion rate for common workflows to optimize cost/performance.",
+    "category": "benchmarks",
+    "status": "stable",
+    "framework": "LangSmith",
+    "tags": ["latency", "cost", "tool-calls"],
+    "updatedAt": "2026-02-04T09:45:00.000Z"
+  },
+  {
+    "id": "th-005",
+    "title": "GitHub Actions: Pre-deploy Validation",
+    "description": "A CI pipeline template that runs lint, type checks, deterministic test suites, and smoke tests before deployment.",
+    "category": "ci-cd",
+    "status": "stable",
+    "framework": "GitHub Actions",
+    "tags": ["ci", "quality-gates", "automation"],
+    "updatedAt": "2026-02-05T11:55:00.000Z"
+  },
+  {
+    "id": "th-006",
+    "title": "Canary Rollout for Agent Prompts",
+    "description": "Progressively deploy prompt changes to a subset of traffic with automatic rollback on regression signals.",
+    "category": "ci-cd",
+    "status": "active",
+    "framework": "Argo Rollouts",
+    "tags": ["canary", "rollback", "deployment"],
+    "updatedAt": "2026-02-06T07:40:00.000Z"
+  },
+  {
+    "id": "th-007",
+    "title": "Edge-case Fuzzing Suite",
+    "description": "Generate adversarial and malformed inputs to validate resilience against prompt injection and parser failures.",
+    "category": "cases",
+    "status": "draft",
+    "framework": "Playwright",
+    "tags": ["fuzzing", "security", "edge-cases"],
+    "updatedAt": "2026-02-07T13:25:00.000Z"
+  },
+  {
+    "id": "th-008",
+    "title": "Long-context Retention Benchmark",
+    "description": "Evaluate retrieval fidelity and instruction adherence across 50-turn sessions with mixed tasks.",
+    "category": "benchmarks",
+    "status": "active",
+    "framework": "AgentOps",
+    "tags": ["long-context", "retention", "evaluation"],
+    "updatedAt": "2026-02-08T20:05:00.000Z"
+  },
+  {
+    "id": "th-009",
+    "title": "Blue/Green Deployment Runbook",
+    "description": "Operational checklist and automation hooks for zero-downtime agent releases with fast rollback.",
+    "category": "ci-cd",
+    "status": "stable",
+    "framework": "Terraform",
+    "tags": ["blue-green", "infrastructure", "runbook"],
+    "updatedAt": "2026-02-09T10:15:00.000Z"
+  }
+]
