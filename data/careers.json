@@ -1,0 +1,101 @@
+{
+  "positions": [
+    {
+      "id": "platform-software-engineer",
+      "title": "Platform Software Engineer",
+      "department": "engineering",
+      "type": "full-time",
+      "location": "remote",
+      "description": "Build and maintain the core platform powering forAgents.dev, from APIs to internal tools.",
+      "requirements": [
+        "4+ years shipping production web applications",
+        "Strong TypeScript, React, and Node.js skills",
+        "Experience designing reliable API and data models",
+        "Comfort working in fast-moving product teams"
+      ],
+      "postedAt": "2026-02-01",
+      "open": true
+    },
+    {
+      "id": "agent-infrastructure-engineer",
+      "title": "Agent Infrastructure Engineer",
+      "department": "engineering",
+      "type": "contract",
+      "location": "hybrid",
+      "description": "Improve runtime reliability, tracing, and observability for agent execution paths.",
+      "requirements": [
+        "Experience with distributed systems and observability",
+        "Proficiency in TypeScript or Go",
+        "Ability to debug performance issues end-to-end",
+        "Familiarity with cloud infrastructure"
+      ],
+      "postedAt": "2026-02-03",
+      "open": true
+    },
+    {
+      "id": "community-programs-manager",
+      "title": "Community Programs Manager",
+      "department": "community",
+      "type": "full-time",
+      "location": "remote",
+      "description": "Grow and support a thriving builder community through events, programs, and contributor workflows.",
+      "requirements": [
+        "2+ years in developer community or ecosystem roles",
+        "Excellent async communication and moderation skills",
+        "Experience running programs or ambassador initiatives",
+        "Strong organizational skills"
+      ],
+      "postedAt": "2026-02-04",
+      "open": true
+    },
+    {
+      "id": "product-designer",
+      "title": "Product Designer",
+      "department": "design",
+      "type": "part-time",
+      "location": "hybrid",
+      "description": "Design clear, developer-first experiences across dashboard and docs surfaces.",
+      "requirements": [
+        "Portfolio showing strong UX and UI systems thinking",
+        "Proficiency in Figma and prototyping workflows",
+        "Experience collaborating directly with engineers",
+        "Ability to simplify technical complexity"
+      ],
+      "postedAt": "2026-01-30",
+      "open": true
+    },
+    {
+      "id": "technical-content-lead",
+      "title": "Technical Content Lead",
+      "department": "content",
+      "type": "contract",
+      "location": "remote",
+      "description": "Create practical guides, launch writeups, and technical tutorials for agent builders.",
+      "requirements": [
+        "Strong technical writing and editing skills",
+        "Hands-on experience with modern web stacks",
+        "Ability to translate product changes into clear docs",
+        "Comfort owning editorial calendars"
+      ],
+      "postedAt": "2026-02-05",
+      "open": true
+    },
+    {
+      "id": "operations-coordinator",
+      "title": "Operations Coordinator",
+      "department": "operations",
+      "type": "part-time",
+      "location": "remote",
+      "description": "Support hiring ops, release workflows, and cross-functional planning as the team scales.",
+      "requirements": [
+        "Experience coordinating operational processes",
+        "Strong project tracking and communication habits",
+        "Ability to manage multiple priorities independently",
+        "Attention to detail with documentation"
+      ],
+      "postedAt": "2026-01-27",
+      "open": false
+    }
+  ],
+  "applications": []
+}
