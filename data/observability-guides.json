@@ -1,0 +1,83 @@
+[
+  {
+    "id": "obs-logging-structured",
+    "title": "Adopt Structured Logging for Every Agent Action",
+    "content": "Emit JSON logs for prompts, tool calls, retries, and final outcomes so your team can query behavior reliably in production.",
+    "category": "logging",
+    "difficulty": "beginner",
+    "tags": ["json", "pino", "audit", "operations"],
+    "updatedAt": "2026-02-10T08:00:00.000Z"
+  },
+  {
+    "id": "obs-logging-correlation",
+    "title": "Propagate Correlation IDs Across Requests",
+    "content": "Generate a request correlation ID at ingress and include it in every downstream log, metric label, and trace span to speed up incident triage.",
+    "category": "logging",
+    "difficulty": "intermediate",
+    "tags": ["correlation-id", "debugging", "incident-response"],
+    "updatedAt": "2026-02-10T08:05:00.000Z"
+  },
+  {
+    "id": "obs-metrics-latency",
+    "title": "Track Latency Percentiles, Not Just Averages",
+    "content": "Measure p50/p95/p99 request latency for agent orchestration and tool calls to uncover tail latency and user-impacting slow paths.",
+    "category": "metrics",
+    "difficulty": "beginner",
+    "tags": ["prometheus", "latency", "slo"],
+    "updatedAt": "2026-02-10T08:10:00.000Z"
+  },
+  {
+    "id": "obs-metrics-token-cost",
+    "title": "Monitor Token and Cost Burn Rate",
+    "content": "Capture prompt/completion token usage per model and operation, then alert when daily or hourly spend deviates from baseline.",
+    "category": "metrics",
+    "difficulty": "intermediate",
+    "tags": ["llm", "cost", "token-usage", "finops"],
+    "updatedAt": "2026-02-10T08:15:00.000Z"
+  },
+  {
+    "id": "obs-tracing-root",
+    "title": "Create Root Spans for Every User Request",
+    "content": "Start one root span per incoming request and attach key metadata so each workflow can be replayed end-to-end across services.",
+    "category": "tracing",
+    "difficulty": "beginner",
+    "tags": ["opentelemetry", "spans", "request-flow"],
+    "updatedAt": "2026-02-10T08:20:00.000Z"
+  },
+  {
+    "id": "obs-tracing-delegation",
+    "title": "Trace Multi-Agent Delegation Boundaries",
+    "content": "Inject and extract W3C trace context when one agent delegates to another so cross-agent bottlenecks are visible.",
+    "category": "tracing",
+    "difficulty": "advanced",
+    "tags": ["delegation", "tracecontext", "distributed-systems"],
+    "updatedAt": "2026-02-10T08:25:00.000Z"
+  },
+  {
+    "id": "obs-alerting-error-budget",
+    "title": "Alert on Error Budget Burn, Not Raw Noise",
+    "content": "Use SLO-driven alerts based on error-budget burn rate to reduce pager fatigue and focus incidents on meaningful user impact.",
+    "category": "alerting",
+    "difficulty": "advanced",
+    "tags": ["slo", "error-budget", "on-call"],
+    "updatedAt": "2026-02-10T08:30:00.000Z"
+  },
+  {
+    "id": "obs-alerting-runbooks",
+    "title": "Pair Alerts with Actionable Runbooks",
+    "content": "Every alert should include owner, probable causes, and remediation steps so responders can resolve incidents faster and consistently.",
+    "category": "alerting",
+    "difficulty": "intermediate",
+    "tags": ["runbooks", "incident-management", "reliability"],
+    "updatedAt": "2026-02-10T08:35:00.000Z"
+  },
+  {
+    "id": "obs-metrics-quality",
+    "title": "Measure Agent Output Quality with Business KPIs",
+    "content": "Add task success, retry rate, and human override metrics so observability captures both technical health and user-facing quality.",
+    "category": "metrics",
+    "difficulty": "advanced",
+    "tags": ["kpi", "quality", "product-metrics"],
+    "updatedAt": "2026-02-10T08:40:00.000Z"
+  }
+]
