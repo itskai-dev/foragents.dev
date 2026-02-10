@@ -1,0 +1,95 @@
+{
+  "overallTrustScore": 93,
+  "securityCategories": [
+    {
+      "id": "data-protection",
+      "label": "Data Protection",
+      "score": 95
+    },
+    {
+      "id": "authentication",
+      "label": "Authentication",
+      "score": 91
+    },
+    {
+      "id": "encryption",
+      "label": "Encryption",
+      "score": 96
+    },
+    {
+      "id": "access-control",
+      "label": "Access Control",
+      "score": 89
+    },
+    {
+      "id": "monitoring",
+      "label": "Monitoring",
+      "score": 92
+    }
+  ],
+  "auditResults": {
+    "overallStatus": "passed",
+    "lastAudit": "2026-01-20",
+    "nextAudit": "2026-04-20",
+    "findings": {
+      "critical": 0,
+      "high": 0,
+      "medium": 2,
+      "low": 5
+    }
+  },
+  "certifications": [
+    {
+      "name": "SOC 2 Type II",
+      "status": "passed",
+      "lastAudit": "2026-01-20"
+    },
+    {
+      "name": "ISO 27001",
+      "status": "in-progress",
+      "lastAudit": "2025-12-05"
+    },
+    {
+      "name": "GDPR Readiness",
+      "status": "passed",
+      "lastAudit": "2026-01-08"
+    },
+    {
+      "name": "CCPA Compliance",
+      "status": "passed",
+      "lastAudit": "2025-11-30"
+    }
+  ],
+  "incidentHistory": [
+    {
+      "date": "2026-02-02",
+      "severity": "low",
+      "description": "Automated rate limiter flagged abnormal signup bursts from a single ASN.",
+      "status": "resolved"
+    },
+    {
+      "date": "2026-01-27",
+      "severity": "medium",
+      "description": "Temporary API token validation mismatch impacted a subset of requests.",
+      "status": "resolved"
+    },
+    {
+      "date": "2026-01-19",
+      "severity": "high",
+      "description": "Credential stuffing attempt blocked by adaptive challenge policy.",
+      "status": "resolved"
+    },
+    {
+      "date": "2026-01-11",
+      "severity": "low",
+      "description": "False-positive malware signature quarantined one uploaded artifact.",
+      "status": "resolved"
+    },
+    {
+      "date": "2026-01-06",
+      "severity": "medium",
+      "description": "Suspicious session replay pattern detected during anomaly monitoring.",
+      "status": "investigating"
+    }
+  ]
+}
