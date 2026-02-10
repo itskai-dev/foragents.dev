@@ -1,0 +1,102 @@
+[
+  {
+    "id": "res-001",
+    "title": "OpenClaw TypeScript SDK",
+    "url": "https://github.com/openclaw-ai/openclaw-ts",
+    "type": "sdk",
+    "description": "Official TypeScript SDK for building, testing, and deploying OpenClaw-powered agents.",
+    "language": "TypeScript",
+    "stars": 1820,
+    "updatedAt": "2026-02-02T15:40:00.000Z"
+  },
+  {
+    "id": "res-002",
+    "title": "OpenClaw Python SDK",
+    "url": "https://github.com/openclaw-ai/openclaw-py",
+    "type": "sdk",
+    "description": "Python client with async support, retries, and streaming primitives for agent workflows.",
+    "language": "Python",
+    "stars": 1460,
+    "updatedAt": "2026-01-30T11:22:00.000Z"
+  },
+  {
+    "id": "res-003",
+    "title": "Agent Memory Toolkit",
+    "url": "https://github.com/foragents-dev/agent-memory-toolkit",
+    "type": "library",
+    "description": "Drop-in persistence, embeddings, and retrieval helpers for long-running autonomous agents.",
+    "language": "TypeScript",
+    "stars": 930,
+    "updatedAt": "2026-01-26T18:10:00.000Z"
+  },
+  {
+    "id": "res-004",
+    "title": "Structured Prompting Utilities",
+    "url": "https://github.com/foragents-dev/structured-prompts",
+    "type": "library",
+    "description": "Composable prompt templates, validators, and schema-backed generation utilities.",
+    "language": "Python",
+    "stars": 680,
+    "updatedAt": "2026-01-18T09:45:00.000Z"
+  },
+  {
+    "id": "res-005",
+    "title": "Slack Triage Bot Example",
+    "url": "https://github.com/foragents-dev/examples-slack-triage",
+    "type": "example",
+    "description": "End-to-end sample that triages support tickets from Slack into action queues.",
+    "language": "TypeScript",
+    "stars": 540,
+    "updatedAt": "2026-02-01T20:04:00.000Z"
+  },
+  {
+    "id": "res-006",
+    "title": "GitHub PR Review Agent Example",
+    "url": "https://github.com/foragents-dev/examples-pr-review",
+    "type": "example",
+    "description": "Reference implementation for automated pull request reviews with policy checks.",
+    "language": "Go",
+    "stars": 790,
+    "updatedAt": "2026-02-04T07:12:00.000Z"
+  },
+  {
+    "id": "res-007",
+    "title": "Building Reliable Agent Loops",
+    "url": "https://foragents.dev/guides/reliable-agent-loops",
+    "type": "tutorial",
+    "description": "Hands-on tutorial for retries, state checkpoints, and safe execution patterns.",
+    "language": "Markdown",
+    "stars": 420,
+    "updatedAt": "2026-01-29T13:32:00.000Z"
+  },
+  {
+    "id": "res-008",
+    "title": "Observability for Multi-Agent Systems",
+    "url": "https://foragents.dev/guides/agent-observability",
+    "type": "tutorial",
+    "description": "Guide to tracing, metrics, and debugging workflows across distributed agent runtimes.",
+    "language": "Markdown",
+    "stars": 388,
+    "updatedAt": "2026-01-31T16:55:00.000Z"
+  },
+  {
+    "id": "res-009",
+    "title": "Prompt Diff Inspector",
+    "url": "https://github.com/foragents-dev/prompt-diff-inspector",
+    "type": "tool",
+    "description": "CLI tool for comparing prompt revisions, outputs, and evaluation changes side-by-side.",
+    "language": "Rust",
+    "stars": 1015,
+    "updatedAt": "2026-02-03T22:18:00.000Z"
+  },
+  {
+    "id": "res-010",
+    "title": "Agent Sandbox Runner",
+    "url": "https://github.com/foragents-dev/agent-sandbox-runner",
+    "type": "tool",
+    "description": "Secure local sandbox for replaying agent tasks with deterministic fixtures and logs.",
+    "language": "TypeScript",
+    "stars": 1240,
+    "updatedAt": "2026-02-05T10:06:00.000Z"
+  }
+]

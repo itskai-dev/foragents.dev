@@ -1,467 +1,320 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import { ExternalLink, Loader2, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
-import developerData from "@/data/developer.json";
+import { Textarea } from "@/components/ui/textarea";
 
-interface ApiKey {
+type ResourceType = "sdk" | "library" | "example" | "tutorial" | "tool";
+
+interface DeveloperResource {
   id: string;
-  name: string;
-  key: string;
-  created: string;
-  lastUsed: string;
-  usage: {
-    today: number;
-    thisMonth: number;
-    rateLimit: {
-      limit: number;
-      remaining: number;
-      resetAt: string;
-    };
-  };
-}
-
-interface SDK {
-  name: string;
-  icon: string;
-  description: string;
-  installCommand: string;
-  version: string;
-  docsUrl: string;
-  exampleCode: string;
-}
-
-interface QuickLink {
   title: string;
   url: string;
-  icon: string;
+  type: ResourceType;
   description: string;
+  language: string;
+  stars: number;
+  updatedAt: string;
 }
 
-interface WebhookEvent {
-  name: string;
-  description: string;
+interface ApiResponse {
+  resources: DeveloperResource[];
 }
 
-interface DeveloperData {
-  hero: {
-    title: string;
-    description: string;
-    quickLinks: QuickLink[];
-  };
-  apiKeys: ApiKey[];
-  sdks: SDK[];
-  webhooks: {
-    description: string;
-    events: WebhookEvent[];
-    configured: {
-      url: string;
-      secret: string;
-      subscribedEvents: string[];
-    };
-  };
-  quickStart: {
-    [key: string]: {
-      title: string;
-      code: string;
-    };
-  };
-}
+const RESOURCE_TYPES: ResourceType[] = ["sdk", "library", "example", "tutorial", "tool"];
 
-const data = developerData as DeveloperData;
+const formatTypeLabel = (type: string) => type.charAt(0).toUpperCase() + type.slice(1);
 
 export default function DeveloperPage() {
-  const [copiedKey, setCopiedKey] = useState<string | null>(null);
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
-  const [showNewKeyForm, setShowNewKeyForm] = useState(false);
-  const [webhookUrl, setWebhookUrl] = useState(data.webhooks.configured.url);
-  const [selectedEvents, setSelectedEvents] = useState<string[]>(
-    data.webhooks.configured.subscribedEvents
-  );
+  const [resources, setResources] = useState<DeveloperResource[]>([]);
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
-  const maskApiKey = (key: string) => {
-    const prefix = key.substring(0, 12);
-    const suffix = key.substring(key.length - 4);
-    return `${prefix}${"•".repeat(20)}${suffix}`;
-  };
+  const [title, setTitle] = useState("");
+  const [url, setUrl] = useState("");
+  const [type, setType] = useState<ResourceType>("sdk");
+  const [description, setDescription] = useState("");
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
 
-  const copyToClipboard = async (text: string, type: "key" | "code", id: string) => {
-    await navigator.clipboard.writeText(text);
-    if (type === "key") {
-      setCopiedKey(id);
-      setTimeout(() => setCopiedKey(null), 2000);
-    } else {
-      setCopiedCode(id);
-      setTimeout(() => setCopiedCode(null), 2000);
+  const fetchResources = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const params = new URLSearchParams();
+      if (typeFilter !== "all") params.set("type", typeFilter);
+      if (search.trim()) params.set("search", search.trim());
+
+      const response = await fetch(`/api/developer?${params.toString()}`, {
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to load resources");
+      }
+
+      const data = (await response.json()) as ApiResponse;
+      setResources(data.resources);
+    } catch {
+      setError("Unable to load developer resources right now.");
+    } finally {
+      setLoading(false);
+    }
+  }, [search, typeFilter]);
+
+  useEffect(() => {
+    fetchResources();
+  }, [fetchResources]);
+
+  const groupedResources = useMemo(() => {
+    const groups: Record<ResourceType, DeveloperResource[]> = {
+      sdk: [],
+      library: [],
+      example: [],
+      tutorial: [],
+      tool: [],
+    };
+
+    for (const resource of resources) {
+      groups[resource.type].push(resource);
+    }
+
+    return groups;
+  }, [resources]);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitMessage(null);
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/api/developer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          url,
+          type,
+          description,
+        }),
+      });
+
+      const payload = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Failed to submit resource");
+      }
+
+      setTitle("");
+      setUrl("");
+      setType("sdk");
+      setDescription("");
+      setSubmitMessage("Resource submitted successfully.");
+      await fetchResources();
+    } catch (submitError) {
+      if (submitError instanceof Error) {
+        setSubmitMessage(submitError.message);
+      } else {
+        setSubmitMessage("Failed to submit resource.");
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const toggleEvent = (eventName: string) => {
-    setSelectedEvents((prev) =>
-      prev.includes(eventName)
-        ? prev.filter((e) => e !== eventName)
-        : [...prev, eventName]
-    );
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      {/* Hero Section */}
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold mb-4">{data.hero.title}</h1>
-        <p className="text-xl text-muted-foreground mb-8">
-          {data.hero.description}
+    <div className="container mx-auto max-w-6xl px-4 py-10">
+      <header className="mb-8">
+        <h1 className="text-4xl font-bold tracking-tight">Developer Resources</h1>
+        <p className="mt-3 text-muted-foreground">
+          Browse SDKs, libraries, tutorials, tools, and examples shared by the forAgents community.
+          Here's what's new and useful for your next build.
         </p>
+      </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {data.hero.quickLinks.map((link) => (
-            <Card key={link.title} className="hover:border-primary transition-colors cursor-pointer">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <span className="text-2xl">{link.icon}</span>
-                  {link.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">{link.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-
-      <Separator className="my-12" />
-
-      {/* API Keys Section */}
-      <section className="mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold mb-2">API Keys</h2>
-            <p className="text-muted-foreground">
-              Manage your API keys and monitor usage
-            </p>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Filter Resources</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="type-filter">Type</Label>
+            <Select value={typeFilter} onValueChange={setTypeFilter}>
+              <SelectTrigger id="type-filter">
+                <SelectValue placeholder="All types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                {RESOURCE_TYPES.map((resourceType) => (
+                  <SelectItem key={resourceType} value={resourceType}>
+                    {formatTypeLabel(resourceType)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <Button onClick={() => setShowNewKeyForm(!showNewKeyForm)}>
-            {showNewKeyForm ? "Cancel" : "Create New Key"}
-          </Button>
+
+          <div className="space-y-2">
+            <Label htmlFor="search">Search</Label>
+            <Input
+              id="search"
+              placeholder="Search title, description, or language"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {loading && (
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Loading resources...
         </div>
+      )}
 
-        {showNewKeyForm && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Create New API Key</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="keyName">Key Name</Label>
-                  <Input
-                    id="keyName"
-                    placeholder="e.g., Production API Key"
-                    className="mt-2"
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <Button>Create Key</Button>
-                  <Button variant="outline" onClick={() => setShowNewKeyForm(false)}>
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+      {!loading && error && (
+        <Card className="mb-8 border-destructive">
+          <CardContent className="py-6 text-destructive">{error}</CardContent>
+        </Card>
+      )}
 
-        <div className="space-y-4">
-          {data.apiKeys.map((apiKey) => (
-            <Card key={apiKey.id}>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle className="text-xl">{apiKey.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Created {formatDate(apiKey.created)} • Last used{" "}
-                      {formatDateTime(apiKey.lastUsed)}
-                    </p>
-                  </div>
-                  <Button variant="destructive" size="sm">
-                    Revoke
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">API KEY</Label>
-                    <div className="flex items-center gap-2 mt-2">
-                      <code className="flex-1 bg-muted px-3 py-2 rounded text-sm font-mono">
-                        {maskApiKey(apiKey.key)}
-                      </code>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => copyToClipboard(apiKey.key, "key", apiKey.id)}
-                      >
-                        {copiedKey === apiKey.id ? "Copied!" : "Copy"}
-                      </Button>
-                    </div>
-                  </div>
+      {!loading && !error && (
+        <div className="space-y-8">
+          {RESOURCE_TYPES.map((resourceType) => {
+            const items = groupedResources[resourceType];
+            if (items.length === 0) return null;
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label className="text-xs text-muted-foreground">
-                        REQUESTS TODAY
-                      </Label>
-                      <p className="text-2xl font-bold mt-1">
-                        {apiKey.usage.today.toLocaleString()}
-                      </p>
-                    </div>
-                    <div>
-                      <Label className="text-xs text-muted-foreground">
-                        REQUESTS THIS MONTH
-                      </Label>
-                      <p className="text-2xl font-bold mt-1">
-                        {apiKey.usage.thisMonth.toLocaleString()}
-                      </p>
-                    </div>
-                    <div>
-                      <Label className="text-xs text-muted-foreground">
-                        RATE LIMIT STATUS
-                      </Label>
-                      <p className="text-2xl font-bold mt-1">
-                        {apiKey.usage.rateLimit.remaining.toLocaleString()} /{" "}
-                        {apiKey.usage.rateLimit.limit.toLocaleString()}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        Resets {formatDateTime(apiKey.usage.rateLimit.resetAt)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <Separator className="my-12" />
-
-      {/* SDK Downloads Section */}
-      <section className="mb-12" id="sdks">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold mb-2">SDKs & Libraries</h2>
-          <p className="text-muted-foreground">
-            Official client libraries for your favorite languages
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {data.sdks.map((sdk) => (
-            <Card key={sdk.name}>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2 text-xl">
-                    <span className="text-3xl">{sdk.icon}</span>
-                    {sdk.name}
-                  </CardTitle>
-                  <Badge variant="outline">v{sdk.version}</Badge>
-                </div>
-                <p className="text-sm text-muted-foreground">{sdk.description}</p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-xs text-muted-foreground">INSTALL</Label>
-                    <div className="flex items-center gap-2 mt-2">
-                      <code className="flex-1 bg-muted px-3 py-2 rounded text-sm font-mono">
-                        {sdk.installCommand}
-                      </code>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                          copyToClipboard(sdk.installCommand, "code", `install-${sdk.name}`)
-                        }
-                      >
-                        {copiedCode === `install-${sdk.name}` ? "Copied!" : "Copy"}
-                      </Button>
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-xs text-muted-foreground mb-2 block">
-                      EXAMPLE
-                    </Label>
-                    <div className="relative">
-                      <pre className="bg-muted p-3 rounded text-xs font-mono overflow-x-auto">
-                        {sdk.exampleCode}
-                      </pre>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="absolute top-2 right-2"
-                        onClick={() =>
-                          copyToClipboard(sdk.exampleCode, "code", `example-${sdk.name}`)
-                        }
-                      >
-                        {copiedCode === `example-${sdk.name}` ? "Copied!" : "Copy"}
-                      </Button>
-                    </div>
-                  </div>
-                  <Button variant="outline" className="w-full" asChild>
-                    <a href={sdk.docsUrl} target="_blank" rel="noopener noreferrer">
-                      View Documentation →
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <Separator className="my-12" />
-
-      {/* Webhooks Section */}
-      <section className="mb-12" id="webhooks">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold mb-2">Webhooks</h2>
-          <p className="text-muted-foreground">{data.webhooks.description}</p>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Webhook Configuration</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-6">
-              <div>
-                <Label htmlFor="webhookUrl">Endpoint URL</Label>
-                <Input
-                  id="webhookUrl"
-                  value={webhookUrl}
-                  onChange={(e) => setWebhookUrl(e.target.value)}
-                  placeholder="https://api.example.com/webhooks/foragents"
-                  className="mt-2"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="webhookSecret">Signing Secret</Label>
-                <div className="flex items-center gap-2 mt-2">
-                  <code className="flex-1 bg-muted px-3 py-2 rounded text-sm font-mono">
-                    {maskApiKey(data.webhooks.configured.secret)}
-                  </code>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() =>
-                      copyToClipboard(data.webhooks.configured.secret, "key", "webhook-secret")
-                    }
-                  >
-                    {copiedKey === "webhook-secret" ? "Copied!" : "Copy"}
-                  </Button>
-                  <Button size="sm" variant="outline">
-                    Regenerate
-                  </Button>
-                </div>
-              </div>
-
-              <div>
-                <Label className="mb-3 block">Events to Subscribe</Label>
-                <div className="space-y-3">
-                  {data.webhooks.events.map((event) => (
-                    <div key={event.name} className="flex items-start gap-3">
-                      <Checkbox
-                        id={event.name}
-                        checked={selectedEvents.includes(event.name)}
-                        onCheckedChange={() => toggleEvent(event.name)}
-                      />
-                      <div className="flex-1">
-                        <label
-                          htmlFor={event.name}
-                          className="text-sm font-medium cursor-pointer"
-                        >
-                          {event.name}
-                        </label>
-                        <p className="text-xs text-muted-foreground">
-                          {event.description}
-                        </p>
-                      </div>
-                    </div>
+            return (
+              <section key={resourceType}>
+                <h2 className="mb-4 text-2xl font-semibold">{formatTypeLabel(resourceType)}</h2>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {items.map((resource) => (
+                    <Card key={resource.id}>
+                      <CardHeader>
+                        <CardTitle className="flex items-center justify-between gap-2 text-lg">
+                          <span>{resource.title}</span>
+                          <Button asChild variant="ghost" size="icon">
+                            <a href={resource.url} target="_blank" rel="noopener noreferrer" aria-label={`Open ${resource.title}`}>
+                              <ExternalLink className="h-4 w-4" />
+                            </a>
+                          </Button>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="mb-4 text-sm text-muted-foreground">{resource.description}</p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant="secondary">{resource.language}</Badge>
+                          <Badge variant="outline" className="inline-flex items-center gap-1">
+                            <Star className="h-3 w-3" />
+                            {resource.stars.toLocaleString()}
+                          </Badge>
+                          <Badge variant="outline">Updated {new Date(resource.updatedAt).toLocaleDateString()}</Badge>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
                 </div>
-              </div>
+              </section>
+            );
+          })}
 
-              <div className="flex gap-2">
-                <Button>Save Configuration</Button>
-                <Button variant="outline">Test Webhook</Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </section>
-
-      <Separator className="my-12" />
-
-      {/* Quick Start Section */}
-      <section className="mb-12">
-        <div className="mb-6">
-          <h2 className="text-3xl font-bold mb-2">Quick Start</h2>
-          <p className="text-muted-foreground">
-            Get started with these code snippets
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {Object.entries(data.quickStart).map(([key, snippet]) => (
-            <Card key={key}>
-              <CardHeader>
-                <CardTitle className="text-lg">{snippet.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="relative">
-                  <pre className="bg-muted p-4 rounded text-sm font-mono overflow-x-auto">
-                    {snippet.code}
-                  </pre>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="absolute top-2 right-2"
-                    onClick={() =>
-                      copyToClipboard(snippet.code, "code", `quickstart-${key}`)
-                    }
-                  >
-                    {copiedCode === `quickstart-${key}` ? "Copied!" : "Copy"}
-                  </Button>
-                </div>
+          {resources.length === 0 && (
+            <Card>
+              <CardContent className="py-8 text-center text-muted-foreground">
+                No resources found for the selected filters.
               </CardContent>
             </Card>
-          ))}
+          )}
         </div>
-      </section>
+      )}
+
+      <Separator className="my-10" />
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Submit Resource</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+              <Label htmlFor="resource-title">Title</Label>
+              <Input
+                id="resource-title"
+                value={title}
+                onChange={(event) => setTitle(event.target.value)}
+                placeholder="Resource name"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="resource-url">URL</Label>
+              <Input
+                id="resource-url"
+                type="url"
+                value={url}
+                onChange={(event) => setUrl(event.target.value)}
+                placeholder="https://example.com/resource"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="resource-type">Type</Label>
+              <Select value={type} onValueChange={(value) => setType(value as ResourceType)}>
+                <SelectTrigger id="resource-type">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {RESOURCE_TYPES.map((resourceType) => (
+                    <SelectItem key={resourceType} value={resourceType}>
+                      {formatTypeLabel(resourceType)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="resource-description">Description</Label>
+              <Textarea
+                id="resource-description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                placeholder="Tell developers what this resource is useful for"
+                rows={4}
+                required
+              />
+            </div>
+
+            <Button type="submit" disabled={submitting}>
+              {submitting ? "Submitting..." : "Submit Resource"}
+            </Button>
+
+            {submitMessage && (
+              <p className="text-sm text-muted-foreground">{submitMessage}</p>
+            )}
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
