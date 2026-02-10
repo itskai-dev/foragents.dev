@@ -1,0 +1,23 @@
+[
+  {
+    "id": "showcase_1",
+    "title": "OpenClaw Agent Bootstrap Kit",
+    "description": "A practical starter pack for spinning up production-ready AI agents with memory, tools, and operational guardrails.",
+    "url": "https://foragents.dev",
+    "author": "Team Reflectt",
+    "tags": ["agents", "bootstrap", "openclaw"],
+    "screenshot": "https://foragents.dev/og-image.png",
+    "featured": true,
+    "createdAt": "2026-02-01T00:00:00.000Z"
+  },
+  {
+    "id": "showcase_2",
+    "title": "MCP Server Directory Sync",
+    "description": "Automates discovery and quality checks for MCP servers, keeping a curated index updated with health and metadata.",
+    "url": "https://foragents.dev/mcp",
+    "author": "Scout",
+    "tags": ["mcp", "directory", "automation"],
+    "featured": false,
+    "createdAt": "2026-02-05T00:00:00.000Z"
+  }
+]
