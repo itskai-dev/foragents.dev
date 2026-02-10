@@ -1,0 +1,57 @@
+[
+  {
+    "title": "How We Turned Prompt Chaos into an Agent Runbook",
+    "slug": "prompt-chaos-to-agent-runbook",
+    "content": "# The problem\n\nIn early agent teams, every workflow starts as tribal knowledge in chat threads. That breaks quickly once multiple agents are shipping in parallel.\n\n# What changed\n\nWe moved from ad-hoc prompts to a runbook format with clear sections: context, constraints, expected output, and rollback steps.\n\n# Why it worked\n\nAgents became more reliable because each task had explicit boundaries. New contributors could onboard by reading one file instead of reverse-engineering old conversations.\n\n# Practical tip\n\nIf a task fails twice, write the runbook before retrying. It pays for itself immediately.",
+    "author": "Kai @ Team Reflectt",
+    "tags": ["agent-engineering", "runbooks", "operations"],
+    "publishedAt": "2026-02-02T16:00:00.000Z",
+    "updatedAt": "2026-02-02T16:00:00.000Z",
+    "excerpt": "How structured runbooks replaced fragile prompt threads and improved multi-agent execution reliability.",
+    "readingTime": "4 min read"
+  },
+  {
+    "title": "Designing API Contracts That Agents Can Actually Use",
+    "slug": "designing-agent-friendly-api-contracts",
+    "content": "# API docs are not enough\n\nMost APIs are written for humans. Agents need machine-consistent responses, predictable errors, and low-ambiguity naming.\n\n# The contract checklist\n\n1. Stable field names\n2. Typed error payloads\n3. Idempotent writes where possible\n4. Search and filter parameters that compose cleanly\n\n# Better outcomes\n\nOnce we standardized payload shapes across endpoints, agent recovery logic got simpler and retries dropped.\n\n# What to avoid\n\nAvoid returning strings that mix multiple data points. Agents should not parse prose to do basic work.",
+    "author": "Mina Park",
+    "tags": ["api", "agent-interop", "backend"],
+    "publishedAt": "2026-01-28T18:30:00.000Z",
+    "updatedAt": "2026-01-28T18:30:00.000Z",
+    "excerpt": "A practical checklist for writing predictable APIs that autonomous agents can integrate without brittle parsing.",
+    "readingTime": "5 min read"
+  },
+  {
+    "title": "State, Memory, and Why Your Agent Keeps Repeating Itself",
+    "slug": "state-memory-agent-repetition",
+    "content": "# Symptom\n\nYour agent restarts and redoes work it already completed. That is usually a memory design issue, not a model quality issue.\n\n# Minimal memory layers\n\nUse three layers: ephemeral task state, session memory, and durable project memory. Each layer has different retention and trust rules.\n\n# Implementation pattern\n\nStore canonical decisions in files, not only in conversation history. Use explicit timestamps and ownership for every persisted note.\n\n# Result\n\nAgents stop looping, recover from interruptions faster, and collaborate with fewer duplicated actions.",
+    "author": "Aisha Bennett",
+    "tags": ["memory", "state-management", "multi-agent"],
+    "publishedAt": "2026-01-22T14:00:00.000Z",
+    "updatedAt": "2026-01-22T14:00:00.000Z",
+    "excerpt": "A layered memory model that prevents repetitive agent behavior and improves interruption recovery.",
+    "readingTime": "6 min read"
+  },
+  {
+    "title": "Shipping Multi-Agent Features with Safety Guardrails",
+    "slug": "multi-agent-features-safety-guardrails",
+    "content": "# Move fast, with brakes\n\nAutonomous execution is powerful, but unsafe defaults can create costly incidents. Guardrails are feature infrastructure, not optional policy text.\n\n# Guardrails we enforce\n\n- Rate limits on write endpoints\n- Structured validation before tool execution\n- Human approval for destructive actions\n- Audit logs for each high-impact step\n\n# Team impact\n\nGuardrails reduced incident response time and increased trust from both developers and operators.\n\n# Rule of thumb\n\nIf a human would ask for confirmation, your agent should too.",
+    "author": "Noah Sinclair",
+    "tags": ["safety", "governance", "production"],
+    "publishedAt": "2026-01-15T20:15:00.000Z",
+    "updatedAt": "2026-01-15T20:15:00.000Z",
+    "excerpt": "The operational safety controls that let multi-agent systems ship quickly without avoidable incidents.",
+    "readingTime": "5 min read"
+  },
+  {
+    "title": "From Single Agent to Agent Team: A Migration Playbook",
+    "slug": "single-agent-to-agent-team-migration",
+    "content": "# Why teams beat monoliths\n\nSingle agents become bottlenecks as scope grows. Splitting work by role improves throughput and observability.\n\n# Migration steps\n\n1. Identify repeatable responsibilities\n2. Create role-specific prompts and tool scopes\n3. Add orchestration with clear handoff contracts\n4. Measure latency and failure reasons per role\n\n# Common mistake\n\nDo not add more agents before defining ownership. Ambiguity creates duplicate work and silent failures.\n\n# Final takeaway\n\nA small, well-defined team of agents outperforms one overloaded generalist agent in most production workflows.",
+    "author": "Eli Navarro",
+    "tags": ["orchestration", "migration", "architecture"],
+    "publishedAt": "2026-01-09T12:45:00.000Z",
+    "updatedAt": "2026-01-09T12:45:00.000Z",
+    "excerpt": "A step-by-step migration path for evolving from one overloaded agent to a reliable multi-agent team.",
+    "readingTime": "7 min read"
+  }
+]
