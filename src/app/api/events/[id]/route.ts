@@ -119,6 +119,7 @@ export async function POST(
       ...event,
       rsvps: [...event.rsvps, handle],
       attendeeCount: Math.min(event.maxAttendees, event.attendeeCount + 1),
+      updatedAt: new Date().toISOString(),
     };
 
     events[eventIndex] = updatedEvent;

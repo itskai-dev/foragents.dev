@@ -11,15 +11,24 @@ export type CommunityEvent = {
   date: string;
   url?: string;
   location?: string;
+  speakers: string[];
+  tags: string[];
   attendeeCount: number;
   maxAttendees: number;
   rsvps: string[];
   createdAt: string;
+  updatedAt: string;
 };
 
 export type PublicCommunityEvent = Omit<CommunityEvent, "rsvps">;
 
 type RawEvent = Partial<CommunityEvent> & Record<string, unknown>;
+
+type EventFilters = {
+  type?: EventType;
+  search?: string;
+  upcomingOnly?: boolean;
+};
 
 const EVENTS_PATH = path.join(process.cwd(), "data", "events.json");
 
@@ -35,6 +44,20 @@ export function isEventType(value: unknown): value is EventType {
     value === "webinar" ||
     value === "launch"
   );
+}
+
+function normalizeStringList(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+
+  const deduped = new Set<string>();
+  for (const entry of raw) {
+    if (typeof entry !== "string") continue;
+    const value = entry.trim();
+    if (!value) continue;
+    deduped.add(value);
+  }
+
+  return Array.from(deduped);
 }
 
 function normalizeRsvpList(raw: unknown): string[] {
@@ -57,7 +80,8 @@ function normalizeEvent(raw: RawEvent): CommunityEvent | null {
   const description = typeof raw.description === "string" ? raw.description.trim() : "";
   const type = raw.type;
   const date = typeof raw.date === "string" ? raw.date : "";
-  const createdAt = typeof raw.createdAt === "string" ? raw.createdAt : "";
+  const createdAtRaw = typeof raw.createdAt === "string" ? raw.createdAt : "";
+  const updatedAtRaw = typeof raw.updatedAt === "string" ? raw.updatedAt : "";
 
   if (!id || !title || !description || !isEventType(type)) return null;
   if (!date || Number.isNaN(Date.parse(date))) return null;
@@ -74,19 +98,29 @@ function normalizeEvent(raw: RawEvent): CommunityEvent | null {
     ? Math.max(0, Math.min(maxAttendees, Math.floor(attendeeCountRaw)))
     : Math.min(maxAttendees, rsvps.length);
 
+  const createdAt =
+    createdAtRaw && !Number.isNaN(Date.parse(createdAtRaw))
+      ? new Date(createdAtRaw).toISOString()
+      : new Date(date).toISOString();
+
+  const updatedAt =
+    updatedAtRaw && !Number.isNaN(Date.parse(updatedAtRaw))
+      ? new Date(updatedAtRaw).toISOString()
+      : createdAt;
+
   const normalized: CommunityEvent = {
     id,
     title,
     description,
     type,
     date: new Date(date).toISOString(),
+    speakers: normalizeStringList(raw.speakers),
+    tags: normalizeStringList(raw.tags),
     attendeeCount,
     maxAttendees,
     rsvps,
-    createdAt:
-      createdAt && !Number.isNaN(Date.parse(createdAt))
-        ? new Date(createdAt).toISOString()
-        : new Date(0).toISOString(),
+    createdAt,
+    updatedAt,
   };
 
   if (typeof raw.url === "string" && raw.url.trim()) {
@@ -131,6 +165,39 @@ export async function writeEventsFile(events: CommunityEvent[]) {
 
 export function sortEventsByDate(events: CommunityEvent[]) {
   return [...events].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+}
+
+export function filterEvents(events: CommunityEvent[], filters: EventFilters = {}) {
+  const { type, search, upcomingOnly = false } = filters;
+  const normalizedSearch = (search ?? "").trim().toLowerCase();
+  const now = Date.now();
+
+  return events.filter((event) => {
+    if (type && event.type !== type) {
+      return false;
+    }
+
+    if (upcomingOnly && new Date(event.date).getTime() <= now) {
+      return false;
+    }
+
+    if (!normalizedSearch) {
+      return true;
+    }
+
+    const haystack = [
+      event.title,
+      event.description,
+      event.location ?? "",
+      event.type,
+      ...event.speakers,
+      ...event.tags,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return haystack.includes(normalizedSearch);
+  });
 }
 
 export function makeEventId() {

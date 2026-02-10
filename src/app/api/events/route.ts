@@ -8,6 +8,7 @@ import {
 import {
   CommunityEvent,
   EventType,
+  filterEvents,
   isEventType,
   makeEventId,
   readEventsFile,
@@ -27,7 +28,23 @@ type CreateEventInput = {
   date: string;
   url?: string;
   location?: string;
+  speakers: string[];
+  tags: string[];
 };
+
+function normalizeList(raw: unknown): string[] {
+  if (!Array.isArray(raw)) return [];
+
+  const deduped = new Set<string>();
+  for (const value of raw) {
+    if (typeof value !== "string") continue;
+    const trimmed = value.trim();
+    if (!trimmed) continue;
+    deduped.add(trimmed);
+  }
+
+  return Array.from(deduped);
+}
 
 function validateEventPayload(
   body: Record<string, unknown>
@@ -40,6 +57,8 @@ function validateEventPayload(
   const dateRaw = typeof body.date === "string" ? body.date.trim() : "";
   const url = typeof body.url === "string" ? body.url.trim() : "";
   const location = typeof body.location === "string" ? body.location.trim() : "";
+  const speakers = normalizeList(body.speakers);
+  const tags = normalizeList(body.tags);
 
   if (!title) errors.push("title is required");
   if (title.length > 120) errors.push("title must be under 120 characters");
@@ -78,6 +97,14 @@ function validateEventPayload(
     errors.push("location must be under 120 characters");
   }
 
+  if (speakers.some((speaker) => speaker.length > 80)) {
+    errors.push("each speaker must be under 80 characters");
+  }
+
+  if (tags.some((tag) => tag.length > 40)) {
+    errors.push("each tag must be under 40 characters");
+  }
+
   if (errors.length > 0 || !isEventType(typeRaw) || !dateRaw) {
     return { ok: false, errors };
   }
@@ -91,6 +118,8 @@ function validateEventPayload(
       date: new Date(dateRaw).toISOString(),
       ...(url ? { url } : {}),
       ...(location ? { location } : {}),
+      speakers,
+      tags,
     },
   };
 }
@@ -101,19 +130,17 @@ export async function GET(request: NextRequest) {
   if (!rl.ok) return rateLimitResponse(rl.retryAfterSec);
 
   const typeParam = request.nextUrl.searchParams.get("type")?.trim().toLowerCase();
+  const searchParam = request.nextUrl.searchParams.get("search")?.trim() ?? "";
   const upcomingParam = request.nextUrl.searchParams.get("upcoming");
   const upcomingOnly = upcomingParam === "true";
 
   const allEvents = await readEventsFile();
 
-  const withTypeFilter = isEventType(typeParam)
-    ? allEvents.filter((event) => event.type === typeParam)
-    : allEvents;
-
-  const now = Date.now();
-  const filtered = upcomingOnly
-    ? withTypeFilter.filter((event) => new Date(event.date).getTime() > now)
-    : withTypeFilter;
+  const filtered = filterEvents(allEvents, {
+    ...(isEventType(typeParam) ? { type: typeParam } : {}),
+    ...(searchParam ? { search: searchParam } : {}),
+    upcomingOnly,
+  });
 
   const sorted = sortEventsByDate(filtered);
 
@@ -147,13 +174,15 @@ export async function POST(request: NextRequest) {
     }
 
     const current = await readEventsFile();
+    const now = new Date().toISOString();
 
     const newEvent: CommunityEvent = {
       id: makeEventId(),
       attendeeCount: 0,
       maxAttendees: 100,
       rsvps: [],
-      createdAt: new Date().toISOString(),
+      createdAt: now,
+      updatedAt: now,
       ...validation.value,
     };
 
