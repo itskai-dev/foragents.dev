@@ -1,42 +1,72 @@
 [
   {
     "id": "contrib-001",
-    "contributorName": "Ari Kim",
-    "type": "docs",
     "title": "Clarified bootstrap troubleshooting section",
+    "type": "docs",
+    "description": "Expanded the bootstrap troubleshooting guide with specific fix paths for missing environment variables and package manager mismatch errors.",
+    "author": "Ari Kim",
     "status": "merged",
-    "submittedAt": "2026-02-05T18:30:00.000Z"
+    "url": "https://github.com/reflectt/foragents.dev/pull/412",
+    "createdAt": "2026-02-05T18:30:00.000Z"
   },
   {
     "id": "contrib-002",
-    "contributorName": "Mateo Singh",
-    "type": "testing",
     "title": "Added route-level tests for API error handling",
+    "type": "testing",
+    "description": "Introduced integration tests for 400/500 edge cases across submission routes and standardized response snapshots.",
+    "author": "Mateo Singh",
     "status": "approved",
-    "submittedAt": "2026-02-06T09:15:00.000Z"
+    "url": "https://github.com/reflectt/foragents.dev/pull/419",
+    "createdAt": "2026-02-06T09:15:00.000Z"
   },
   {
     "id": "contrib-003",
-    "contributorName": "Lina Park",
-    "type": "design",
     "title": "Updated contribution cards for mobile readability",
+    "type": "design",
+    "description": "Adjusted card spacing, heading sizes, and badge wrapping behavior for narrow viewports under 380px width.",
+    "author": "Lina Park",
     "status": "pending",
-    "submittedAt": "2026-02-06T22:05:00.000Z"
+    "url": "https://github.com/reflectt/foragents.dev/pull/423",
+    "createdAt": "2026-02-06T22:05:00.000Z"
   },
   {
     "id": "contrib-004",
-    "contributorName": "Owen Patel",
-    "type": "skills",
     "title": "Published skill template for CLI-based workflows",
+    "type": "skills",
+    "description": "Created a reusable skill template with strict input/output contracts for command-line execution and recovery paths.",
+    "author": "Owen Patel",
     "status": "merged",
-    "submittedAt": "2026-02-07T14:42:00.000Z"
+    "url": "https://github.com/reflectt/foragents.dev/pull/427",
+    "createdAt": "2026-02-07T14:42:00.000Z"
   },
   {
     "id": "contrib-005",
-    "contributorName": "Nora Alvarez",
-    "type": "community",
     "title": "Triaged onboarding questions into common-answer pack",
+    "type": "community",
+    "description": "Collected top onboarding questions from community channels and converted them into curated, link-backed answers.",
+    "author": "Nora Alvarez",
     "status": "pending",
-    "submittedAt": "2026-02-08T01:20:00.000Z"
+    "url": "https://github.com/reflectt/foragents.dev/issues/430",
+    "createdAt": "2026-02-08T01:20:00.000Z"
+  },
+  {
+    "id": "contrib-006",
+    "title": "Localized quickstart into Portuguese (pt-BR)",
+    "type": "translations",
+    "description": "Translated quickstart and submission docs into pt-BR and added terminology notes for maintainers.",
+    "author": "Camila Souza",
+    "status": "approved",
+    "url": "https://github.com/reflectt/foragents.dev/pull/434",
+    "createdAt": "2026-02-08T16:48:00.000Z"
+  },
+  {
+    "id": "contrib-007",
+    "title": "Improved docs linking for contribution paths",
+    "type": "docs",
+    "description": "Connected contribution guide cards to related docs pages and removed outdated references from onboarding copy.",
+    "author": "Devon Clarke",
+    "status": "merged",
+    "url": "https://github.com/reflectt/foragents.dev/pull/438",
+    "createdAt": "2026-02-09T11:12:00.000Z"
   }
 ]

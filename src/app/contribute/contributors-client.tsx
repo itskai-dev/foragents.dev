@@ -26,16 +26,19 @@ type ContributionGuide = {
 
 type Contribution = {
   id: string;
-  contributorName: string;
-  type: string;
+  type: GuideCategory;
   title: string;
+  description: string;
+  author: string;
   status: ContributionStatus;
-  submittedAt: string;
+  url: string;
+  createdAt: string;
 };
 
 type ContributeResponse = {
   guides: ContributionGuide[];
-  recentContributions: Contribution[];
+  contributions?: Contribution[];
+  recentContributions?: Contribution[];
 };
 
 type FormState = {
@@ -44,6 +47,7 @@ type FormState = {
   type: GuideCategory;
   title: string;
   description: string;
+  url: string;
 };
 
 const CATEGORY_LABELS: Record<GuideCategory, string> = {
@@ -73,6 +77,7 @@ const initialForm: FormState = {
   type: "skills",
   title: "",
   description: "",
+  url: "",
 };
 
 function formatDate(date: string) {
@@ -88,6 +93,10 @@ export function ContributorsClient() {
   const [recentContributions, setRecentContributions] = useState<Contribution[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+
+  const [typeFilter, setTypeFilter] = useState<"all" | GuideCategory>("all");
+  const [statusFilter, setStatusFilter] = useState<"all" | ContributionStatus>("all");
+  const [searchFilter, setSearchFilter] = useState("");
 
   const [form, setForm] = useState<FormState>(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -110,7 +119,14 @@ export function ContributorsClient() {
     setLoadError(null);
 
     try {
-      const response = await fetch("/api/contribute", { cache: "no-store" });
+      const params = new URLSearchParams();
+
+      if (typeFilter !== "all") params.set("type", typeFilter);
+      if (statusFilter !== "all") params.set("status", statusFilter);
+      if (searchFilter.trim()) params.set("search", searchFilter.trim());
+
+      const query = params.toString();
+      const response = await fetch(`/api/contribute${query ? `?${query}` : ""}`, { cache: "no-store" });
 
       if (!response.ok) {
         throw new Error("Failed to load contribution data.");
@@ -118,13 +134,13 @@ export function ContributorsClient() {
 
       const payload = (await response.json()) as ContributeResponse;
       setGuides(payload.guides ?? []);
-      setRecentContributions(payload.recentContributions ?? []);
+      setRecentContributions(payload.contributions ?? payload.recentContributions ?? []);
     } catch {
       setLoadError("Couldn't load contribution guides right now. Please try again in a moment.");
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [searchFilter, statusFilter, typeFilter]);
 
   useEffect(() => {
     void loadData();
@@ -148,6 +164,7 @@ export function ContributorsClient() {
           type: form.type,
           title: form.title,
           description: form.description,
+          url: form.url,
         }),
       });
 
@@ -237,10 +254,57 @@ export function ContributorsClient() {
               <p className="text-foreground/70">Latest submissions and their current review status.</p>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="contrib-type-filter">Filter by type</Label>
+                <Select value={typeFilter} onValueChange={(value) => setTypeFilter(value as "all" | GuideCategory)}>
+                  <SelectTrigger id="contrib-type-filter">
+                    <SelectValue placeholder="All types" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All types</SelectItem>
+                    {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="contrib-status-filter">Filter by status</Label>
+                <Select
+                  value={statusFilter}
+                  onValueChange={(value) => setStatusFilter(value as "all" | ContributionStatus)}
+                >
+                  <SelectTrigger id="contrib-status-filter">
+                    <SelectValue placeholder="All statuses" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All statuses</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="approved">Approved</SelectItem>
+                    <SelectItem value="merged">Merged</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="contrib-search-filter">Search</Label>
+                <Input
+                  id="contrib-search-filter"
+                  value={searchFilter}
+                  onChange={(event) => setSearchFilter(event.target.value)}
+                  placeholder="Title, description, or author"
+                />
+              </div>
+            </div>
+
             {recentContributions.length === 0 ? (
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="py-8 text-center text-foreground/70">
-                  No contributions yet. Be the first to submit.
+                  No contributions found for this filter.
                 </CardContent>
               </Card>
             ) : (
@@ -250,7 +314,7 @@ export function ContributorsClient() {
                     <CardHeader className="space-y-2">
                       <div className="flex items-center justify-between gap-2">
                         <Badge variant="outline" className="border-[#06D6A0]/30 bg-[#06D6A0]/10 text-[#06D6A0]">
-                          {CATEGORY_LABELS[contribution.type as GuideCategory] ?? contribution.type}
+                          {CATEGORY_LABELS[contribution.type]}
                         </Badge>
                         <Badge variant="outline" className={STATUS_CLASSES[contribution.status]}>
                           {contribution.status}
@@ -258,9 +322,22 @@ export function ContributorsClient() {
                       </div>
                       <CardTitle className="text-[#F8FAFC] text-lg">{contribution.title}</CardTitle>
                       <CardDescription>
-                        Submitted by {contribution.contributorName} on {formatDate(contribution.submittedAt)}
+                        Submitted by {contribution.author} on {formatDate(contribution.createdAt)}
                       </CardDescription>
                     </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="text-sm text-foreground/80">{contribution.description}</p>
+                      {contribution.url ? (
+                        <a
+                          href={contribution.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm text-[#06D6A0] hover:text-[#5EEAD4] underline underline-offset-4"
+                        >
+                          View submission
+                        </a>
+                      ) : null}
+                    </CardContent>
                   </Card>
                 ))}
               </div>
@@ -331,6 +408,17 @@ export function ContributorsClient() {
                     placeholder="Short summary of your contribution"
                   />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="url">Link (optional)</Label>
+                <Input
+                  id="url"
+                  type="url"
+                  value={form.url}
+                  onChange={(event) => setForm((prev) => ({ ...prev, url: event.target.value }))}
+                  placeholder="https://github.com/reflectt/foragents.dev/pull/123"
+                />
               </div>
 
               <div className="space-y-2">
