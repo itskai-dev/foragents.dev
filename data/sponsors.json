@@ -1,0 +1,89 @@
+{
+  "tiers": [
+    {
+      "name": "supporter",
+      "price": 5,
+      "perks": [
+        "Supporter badge on your profile",
+        "Early access to roadmap previews",
+        "Monthly ecosystem update"
+      ],
+      "sponsorCount": 24
+    },
+    {
+      "name": "backer",
+      "price": 25,
+      "perks": [
+        "Everything in supporter",
+        "Priority community support",
+        "Name listed on sponsor wall"
+      ],
+      "sponsorCount": 12
+    },
+    {
+      "name": "champion",
+      "price": 100,
+      "perks": [
+        "Everything in backer",
+        "Feature request fast-lane",
+        "Quarterly sponsor strategy call"
+      ],
+      "sponsorCount": 5
+    },
+    {
+      "name": "patron",
+      "price": 500,
+      "perks": [
+        "Everything in champion",
+        "Featured placement across site",
+        "Dedicated partnership check-ins"
+      ],
+      "sponsorCount": 2
+    }
+  ],
+  "currentSponsors": [
+    {
+      "name": "Aurora Labs",
+      "tier": "patron",
+      "amount": 500,
+      "since": "2025-07-14",
+      "message": "Building safer autonomous workflows together."
+    },
+    {
+      "name": "AgentSmith Collective",
+      "tier": "champion",
+      "amount": 100,
+      "since": "2025-11-03",
+      "message": "forAgents.dev is core to our dev onboarding."
+    },
+    {
+      "name": "Flowstate Ops",
+      "tier": "champion",
+      "amount": 100,
+      "since": "2025-09-26",
+      "message": "The best place to discover battle-tested agent tooling."
+    },
+    {
+      "name": "Kai",
+      "tier": "backer",
+      "amount": 25,
+      "since": "2025-12-18",
+      "message": "Happy to support open, practical agent infrastructure."
+    },
+    {
+      "name": "Prompt Harbor",
+      "tier": "backer",
+      "amount": 25,
+      "since": "2026-01-09",
+      "message": "Love the quality bar and community focus."
+    },
+    {
+      "name": "Nora Chen",
+      "tier": "supporter",
+      "amount": 5,
+      "since": "2026-01-30",
+      "message": "Thanks for making this ecosystem easier to navigate."
+    }
+  ],
+  "pledges": []
+}
