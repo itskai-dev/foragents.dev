@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { claimBounty, getBountyById } from "@/lib/bounties";
+import { transitionBounty } from "@/lib/bounties";
 
 type ClaimBody = {
   claimant?: unknown;
@@ -49,19 +49,16 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
     );
   }
 
-  const existing = await getBountyById(id);
-  if (!existing) {
-    return NextResponse.json({ error: "Bounty not found" }, { status: 404 });
+  const result = await transitionBounty({
+    bountyId: id,
+    action: "claim",
+    agentHandle: validation.value.claimant,
+    notes: validation.value.message,
+  });
+
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
   }
 
-  if (existing.status === "completed") {
-    return NextResponse.json({ error: "Completed bounties cannot be claimed" }, { status: 409 });
-  }
-
-  const bounty = await claimBounty(id, validation.value);
-  if (!bounty) {
-    return NextResponse.json({ error: "Bounty not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(bounty);
+  return NextResponse.json(result.bounty);
 }

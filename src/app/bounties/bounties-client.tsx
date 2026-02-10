@@ -39,6 +39,8 @@ function statusLabel(status: BountyStatus) {
       return "Open";
     case "claimed":
       return "Claimed";
+    case "submitted":
+      return "Submitted";
     case "completed":
       return "Completed";
     default:
@@ -52,6 +54,8 @@ function statusBadgeClass(status: BountyStatus) {
       return "border-[#06D6A0]/30 text-[#06D6A0] bg-[#06D6A0]/10";
     case "claimed":
       return "border-purple/30 text-purple bg-purple/10";
+    case "submitted":
+      return "border-amber-400/30 text-amber-300 bg-amber-300/10";
     case "completed":
       return "border-white/10 text-white/70 bg-white/5";
     default:
@@ -76,10 +80,6 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
   const [createBudget, setCreateBudget] = useState("");
   const [createTags, setCreateTags] = useState("");
   const [createRequirements, setCreateRequirements] = useState("");
-
-  const [claimTarget, setClaimTarget] = useState<Bounty | null>(null);
-  const [claimant, setClaimant] = useState("");
-  const [claimMessage, setClaimMessage] = useState("");
 
   const refreshBounties = useCallback(async () => {
     setLoading(true);
@@ -142,6 +142,10 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
     e.preventDefault();
     setError("");
 
+    const title = createTitle.trim();
+    const description = createDescription.trim();
+    const budget = Number(createBudget);
+
     const tags = createTags
       .split(",")
       .map((tagItem) => tagItem.trim())
@@ -152,10 +156,21 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
       .map((requirement) => requirement.trim())
       .filter(Boolean);
 
+    const validationErrors: string[] = [];
+    if (title.length < 3) validationErrors.push("title must be at least 3 characters");
+    if (description.length < 10) validationErrors.push("description must be at least 10 characters");
+    if (!Number.isFinite(budget) || budget <= 0) validationErrors.push("budget must be a positive number");
+    if (tags.length === 0) validationErrors.push("add at least one tag");
+
+    if (validationErrors.length > 0) {
+      setError(validationErrors.join(", "));
+      return;
+    }
+
     const payload = {
-      title: createTitle.trim(),
-      description: createDescription.trim(),
-      budget: Number(createBudget),
+      title,
+      description,
+      budget,
       tags,
       requirements,
     };
@@ -185,52 +200,19 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
     await refreshBounties();
   }
 
-  async function onClaimBounty(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!claimTarget) return;
-
-    setError("");
-
-    const res = await fetch(`/api/bounties/${encodeURIComponent(claimTarget.id)}/claim`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        claimant: claimant.trim(),
-        message: claimMessage.trim(),
-      }),
-    });
-
-    if (!res.ok) {
-      const data = (await res.json().catch(() => ({ error: "Failed to claim bounty" }))) as {
-        error?: string;
-        details?: string[];
-      };
-      setError(data.details?.join(", ") || data.error || "Failed to claim bounty");
-      return;
-    }
-
-    setClaimant("");
-    setClaimMessage("");
-    setClaimTarget(null);
-
-    await refreshBounties();
-  }
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-8">
         <div>
           <h2 className="text-2xl font-bold">Open bounties</h2>
-          <p className="text-sm text-muted-foreground">
-            Fund-a-Kit bounties help prioritize what gets built next.
-          </p>
+          <p className="text-sm text-muted-foreground">Fund-a-Kit bounties help prioritize what gets built next.</p>
         </div>
 
         <Button
           onClick={() => setShowCreateForm((prev) => !prev)}
           className="bg-gradient-to-r from-[#06D6A0] to-purple text-[#0a0a0a] font-semibold hover:brightness-110"
         >
-          {showCreateForm ? "Cancel" : "Create Bounty"}
+          {showCreateForm ? "Cancel" : "Post Bounty"}
         </Button>
       </div>
 
@@ -260,12 +242,7 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
 
           <div>
             <label className="text-xs text-white/60">Tags (comma-separated)</label>
-            <Input
-              value={createTags}
-              onChange={(e) => setCreateTags(e.target.value)}
-              placeholder="automation, github"
-              required
-            />
+            <Input value={createTags} onChange={(e) => setCreateTags(e.target.value)} placeholder="automation, github" required />
           </div>
 
           <div>
@@ -274,39 +251,12 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
               value={createRequirements}
               onChange={(e) => setCreateRequirements(e.target.value)}
               placeholder="Must include docs\nMust include tests"
-              required
             />
           </div>
 
           <Button type="submit" className="bg-[#06D6A0] text-[#0a0a0a] hover:brightness-110 font-semibold">
             Submit bounty
           </Button>
-        </form>
-      ) : null}
-
-      {claimTarget ? (
-        <form onSubmit={onClaimBounty} className="mb-6 p-4 rounded-xl border border-purple/25 bg-purple/10 space-y-3">
-          <div className="text-sm text-white/90">
-            Claiming: <span className="font-mono">{claimTarget.id}</span> — {claimTarget.title}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs text-white/60">Your handle</label>
-              <Input value={claimant} onChange={(e) => setClaimant(e.target.value)} required />
-            </div>
-            <div>
-              <label className="text-xs text-white/60">Message</label>
-              <Input value={claimMessage} onChange={(e) => setClaimMessage(e.target.value)} required />
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <Button type="submit" className="bg-purple text-white hover:brightness-110">
-              Confirm claim
-            </Button>
-            <Button type="button" variant="outline" onClick={() => setClaimTarget(null)}>
-              Cancel
-            </Button>
-          </div>
         </form>
       ) : null}
 
@@ -321,6 +271,7 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
           >
             <option value="open">Open</option>
             <option value="claimed">Claimed</option>
+            <option value="submitted">Submitted</option>
             <option value="completed">Completed</option>
             <option value="all">All</option>
           </select>
@@ -444,8 +395,8 @@ export function BountiesClient({ initialBounties }: { initialBounties: Bounty[] 
                   <Link href={`/bounties/${encodeURIComponent(b.id)}`}>View</Link>
                 </Button>
                 {b.status === "open" ? (
-                  <Button onClick={() => setClaimTarget(b)} className="bg-purple text-white hover:brightness-110">
-                    Claim
+                  <Button asChild className="bg-purple text-white hover:brightness-110">
+                    <Link href={`/bounties/${encodeURIComponent(b.id)}`}>Claim</Link>
                   </Button>
                 ) : null}
               </div>

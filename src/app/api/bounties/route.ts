@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createBounty, getBounties, type BountyStatus } from "@/lib/bounties";
+import {
+  createBounty,
+  getBounties,
+  transitionBounty,
+  type BountyAction,
+  type BountyStatus,
+} from "@/lib/bounties";
 
 type CreateBody = {
   title?: unknown;
@@ -9,12 +15,21 @@ type CreateBody = {
   requirements?: unknown;
 };
 
+type TransitionBody = {
+  bountyId?: unknown;
+  action?: unknown;
+  agentHandle?: unknown;
+  notes?: unknown;
+};
+
 function parseStatus(value: string | null): BountyStatus | null {
-  if (value === "open" || value === "claimed" || value === "completed") return value;
+  if (value === "open" || value === "claimed" || value === "submitted" || value === "completed") return value;
   return null;
 }
 
-function validateCreateBody(body: CreateBody):
+function validateCreateBody(
+  body: CreateBody
+):
   | {
       ok: true;
       value: {
@@ -32,6 +47,10 @@ function validateCreateBody(body: CreateBody):
   const description = typeof body.description === "string" ? body.description.trim() : "";
   const budget = typeof body.budget === "number" ? body.budget : Number(body.budget);
 
+  if (!Array.isArray(body.tags)) {
+    errors.push("tags must be an array");
+  }
+
   const tags = Array.isArray(body.tags)
     ? body.tags.filter((tag): tag is string => typeof tag === "string" && tag.trim().length > 0).map((tag) => tag.trim())
     : [];
@@ -42,11 +61,11 @@ function validateCreateBody(body: CreateBody):
         .map((requirement) => requirement.trim())
     : [];
 
-  if (!title) errors.push("title is required");
-  if (!description) errors.push("description is required");
+  if (title.length < 3) errors.push("title must be at least 3 characters");
+  if (description.length < 10) errors.push("description must be at least 10 characters");
   if (!Number.isFinite(budget) || budget <= 0) errors.push("budget must be a positive number");
-  if (tags.length === 0) errors.push("tags is required");
-  if (requirements.length === 0) errors.push("requirements is required");
+  if (tags.length === 0) errors.push("tags must include at least one item");
+  if (requirements.length === 0) errors.push("requirements must include at least one item");
 
   if (errors.length > 0) return { ok: false, errors };
 
@@ -58,6 +77,49 @@ function validateCreateBody(body: CreateBody):
       budget,
       tags,
       requirements,
+    },
+  };
+}
+
+function parseAction(value: unknown): BountyAction | null {
+  if (value === "claim" || value === "submit" || value === "complete") return value;
+  return null;
+}
+
+function validateTransitionBody(
+  body: TransitionBody
+):
+  | {
+      ok: true;
+      value: {
+        bountyId: string;
+        action: BountyAction;
+        agentHandle: string;
+        notes?: string;
+      };
+    }
+  | { ok: false; errors: string[] } {
+  const errors: string[] = [];
+
+  const bountyId = typeof body.bountyId === "string" ? body.bountyId.trim() : "";
+  const agentHandle = typeof body.agentHandle === "string" ? body.agentHandle.trim() : "";
+  const action = parseAction(body.action);
+  const notes = typeof body.notes === "string" ? body.notes.trim() : "";
+
+  if (!bountyId) errors.push("bountyId is required");
+  if (!action) errors.push("action must be one of: claim, submit, complete");
+  if (!agentHandle) errors.push("agentHandle is required");
+  if (action === "submit" && notes.length < 3) errors.push("notes must be at least 3 characters when action is submit");
+
+  if (errors.length > 0) return { ok: false, errors };
+
+  return {
+    ok: true,
+    value: {
+      bountyId,
+      action,
+      agentHandle,
+      ...(notes ? { notes } : {}),
     },
   };
 }
@@ -123,4 +185,32 @@ export async function POST(request: NextRequest) {
 
   const bounty = await createBounty(validation.value);
   return NextResponse.json(bounty, { status: 201 });
+}
+
+export async function PATCH(request: NextRequest) {
+  let body: TransitionBody;
+
+  try {
+    body = (await request.json()) as TransitionBody;
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+  }
+
+  const validation = validateTransitionBody(body);
+  if (!validation.ok) {
+    return NextResponse.json(
+      {
+        error: "Validation failed",
+        details: validation.errors,
+      },
+      { status: 400 }
+    );
+  }
+
+  const result = await transitionBounty(validation.value);
+  if (!result.ok) {
+    return NextResponse.json({ error: result.error }, { status: result.status });
+  }
+
+  return NextResponse.json(result.bounty);
 }
