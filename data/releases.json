@@ -1,0 +1,114 @@
+[
+  {
+    "id": "rel_20260209_300",
+    "version": "3.0.0",
+    "title": "Platform 3.0 launch with registry redesign",
+    "type": "major",
+    "description": "Introduced a redesigned registry and unified publishing workflow for agent-first packages.",
+    "changes": [
+      "Shipped the new registry architecture with improved indexing speed",
+      "Added breaking manifest validation for package metadata",
+      "Migrated release automation to the new publish pipeline"
+    ],
+    "publishedAt": "2026-02-09T17:10:00.000Z",
+    "author": "Kai"
+  },
+  {
+    "id": "rel_20260206_241",
+    "version": "2.4.1",
+    "title": "Stability patch for feed generation",
+    "type": "patch",
+    "description": "Resolved regressions affecting digest and feed generation under high load.",
+    "changes": [
+      "Fixed duplicate entries in generated feed payloads",
+      "Improved retry behavior when upstream sources timeout",
+      "Reduced memory usage during digest build jobs"
+    ],
+    "publishedAt": "2026-02-06T09:30:00.000Z",
+    "author": "Platform Ops"
+  },
+  {
+    "id": "rel_20260204_240",
+    "version": "2.4.0",
+    "title": "Advanced release workflow tooling",
+    "type": "minor",
+    "description": "Expanded release workflow controls with better observability and safer rollouts.",
+    "changes": [
+      "Added staged rollout toggles for release channels",
+      "Introduced release health checks in the deployment dashboard",
+      "Enabled inline changelog previews before publish"
+    ],
+    "publishedAt": "2026-02-04T15:00:00.000Z",
+    "author": "forAgents Team"
+  },
+  {
+    "id": "rel_20260130_232",
+    "version": "2.3.2",
+    "title": "Hotfix for search relevance",
+    "type": "patch",
+    "description": "Patched ranking issues that buried high-quality docs in global search.",
+    "changes": [
+      "Adjusted ranking weights for verified documentation",
+      "Fixed tokenizer bug impacting hyphenated queries",
+      "Restored pagination cursor consistency"
+    ],
+    "publishedAt": "2026-01-30T20:45:00.000Z",
+    "author": "Search Team"
+  },
+  {
+    "id": "rel_20260124_231",
+    "version": "2.3.1",
+    "title": "OAuth connector hardening",
+    "type": "patch",
+    "description": "Improved connector authentication reliability and hardened token handling.",
+    "changes": [
+      "Fixed intermittent callback validation failures",
+      "Added stricter token refresh error handling",
+      "Updated audit logs for connector auth events"
+    ],
+    "publishedAt": "2026-01-24T11:25:00.000Z",
+    "author": "Security"
+  },
+  {
+    "id": "rel_20260118_230",
+    "version": "2.3.0",
+    "title": "Marketplace UX and metadata upgrade",
+    "type": "minor",
+    "description": "Improved package discoverability with richer metadata and better category pages.",
+    "changes": [
+      "Added package quality badges and compatibility labels",
+      "Introduced category-specific sorting presets",
+      "Improved card layout for dense browsing"
+    ],
+    "publishedAt": "2026-01-18T14:05:00.000Z",
+    "author": "Marketplace"
+  },
+  {
+    "id": "rel_20260110_220",
+    "version": "2.2.0",
+    "title": "Workflow templates v2",
+    "type": "minor",
+    "description": "Released second-generation workflow templates for common agent orchestration patterns.",
+    "changes": [
+      "Added reusable template variables with schema hints",
+      "Introduced template cloning across workspaces",
+      "Published benchmarked starter templates"
+    ],
+    "publishedAt": "2026-01-10T08:50:00.000Z",
+    "author": "Automation Team"
+  },
+  {
+    "id": "rel_20251220_200",
+    "version": "2.0.0",
+    "title": "Core runtime overhaul",
+    "type": "major",
+    "description": "Major runtime release delivering a unified execution model and improved safety defaults.",
+    "changes": [
+      "Introduced a unified runtime contract across hosted and local agents",
+      "Enabled stricter default isolation boundaries",
+      "Reworked observability events for consistent tracing"
+    ],
+    "publishedAt": "2025-12-20T10:00:00.000Z",
+    "author": "Core Platform"
+  }
+]
