@@ -1,68 +1,154 @@
 [
   {
-    "id": "openclaw",
     "name": "OpenClaw",
     "slug": "openclaw",
-    "icon": "🦅",
-    "description": "Open-source AI agent orchestration platform with native support for multi-agent workflows and tool routing.",
-    "tier": "Gold",
-    "integrationType": "SDK",
-    "type": "partner",
-    "website": "https://openclaw.dev"
+    "website": "https://openclaw.dev",
+    "description": "Open-source agent runtime and orchestration platform for tool-using autonomous systems.",
+    "logo": "https://placehold.co/120x120/0b1324/06D6A0.png?text=OC",
+    "tier": "founding",
+    "featured": true,
+    "joinedAt": "2025-10-12",
+    "fullDescription": "OpenClaw powers production AI agents with robust tool routing, memory, and workflow automation.",
+    "features": [
+      "Multi-agent orchestration",
+      "Tool calling and runtime sandboxing",
+      "Extensible plugin architecture"
+    ],
+    "integrationGuide": "# OpenClaw integration\nnpm install @openclaw/sdk\n\nimport { OpenClaw } from '@openclaw/sdk';",
+    "docsUrl": "https://openclaw.dev/docs",
+    "contactEmail": "partners@openclaw.dev"
   },
   {
-    "id": "supabase",
-    "name": "Supabase",
-    "slug": "supabase",
-    "icon": "⚡",
-    "description": "Open-source Firebase alternative with PostgreSQL, auth, and realtime subscriptions for agent data storage.",
-    "tier": "Gold",
-    "integrationType": "API",
-    "type": "partner",
-    "website": "https://supabase.com"
-  },
-  {
-    "id": "vercel",
-    "name": "Vercel",
-    "slug": "vercel",
-    "icon": "▲",
-    "description": "Deploy AI agents and web apps instantly with zero-config deployments and global edge infrastructure.",
-    "tier": "Silver",
-    "integrationType": "Service",
-    "type": "partner",
-    "website": "https://vercel.com"
-  },
-  {
-    "id": "anthropic",
     "name": "Anthropic",
     "slug": "anthropic",
-    "icon": "🧠",
-    "description": "Build safe, reliable agents with Claude and long-context reasoning.",
-    "tier": "Gold",
-    "integrationType": "API",
-    "type": "sponsor",
-    "website": "https://anthropic.com"
+    "website": "https://anthropic.com",
+    "description": "Build reliable long-context workflows with Claude models and advanced reasoning capabilities.",
+    "logo": "https://placehold.co/120x120/1a1024/c084fc.png?text=AN",
+    "tier": "founding",
+    "featured": true,
+    "joinedAt": "2025-11-01",
+    "fullDescription": "Anthropic helps teams deliver safe, high-performance AI experiences with Claude APIs.",
+    "features": [
+      "Long context windows",
+      "Robust tool use",
+      "Safety-tuned model family"
+    ],
+    "integrationGuide": "# Anthropic integration\ncurl https://api.anthropic.com/v1/messages \\\n  -H 'x-api-key: $ANTHROPIC_API_KEY'",
+    "docsUrl": "https://docs.anthropic.com",
+    "contactEmail": "partnerships@anthropic.com"
   },
   {
-    "id": "openai",
+    "name": "Supabase",
+    "slug": "supabase",
+    "website": "https://supabase.com",
+    "description": "Postgres, auth, and realtime primitives for persistent agent state and app backends.",
+    "logo": "https://placehold.co/120x120/0f2a18/22c55e.png?text=SB",
+    "tier": "gold",
+    "featured": true,
+    "joinedAt": "2025-12-03",
+    "fullDescription": "Supabase gives teams a developer-friendly backend for fast shipping and strong data ownership.",
+    "features": [
+      "Managed Postgres",
+      "Built-in authentication",
+      "Realtime subscriptions"
+    ],
+    "integrationGuide": "# Supabase integration\nnpm install @supabase/supabase-js\n\nconst client = createClient(url, key);",
+    "docsUrl": "https://supabase.com/docs",
+    "contactEmail": "partners@supabase.com"
+  },
+  {
+    "name": "Vercel",
+    "slug": "vercel",
+    "website": "https://vercel.com",
+    "description": "Global edge hosting and deployment workflows for agent dashboards and APIs.",
+    "logo": "https://placehold.co/120x120/111111/ffffff.png?text=VE",
+    "tier": "gold",
+    "featured": false,
+    "joinedAt": "2025-12-15",
+    "fullDescription": "Vercel enables rapid iteration and low-latency experiences for modern web and AI apps.",
+    "features": [
+      "Instant rollbacks",
+      "Preview deployments",
+      "Edge runtime support"
+    ],
+    "integrationGuide": "# Vercel deployment\nvercel --prod",
+    "docsUrl": "https://vercel.com/docs",
+    "contactEmail": "partners@vercel.com"
+  },
+  {
     "name": "OpenAI",
     "slug": "openai",
-    "icon": "🤖",
-    "description": "Power agents with state-of-the-art models, tool use, and multimodal capabilities.",
-    "tier": "Silver",
-    "integrationType": "API",
-    "type": "sponsor",
-    "website": "https://openai.com"
+    "website": "https://openai.com",
+    "description": "State-of-the-art multimodal model APIs for assistants, automation, and analysis.",
+    "logo": "https://placehold.co/120x120/06201b/2dd4bf.png?text=OA",
+    "tier": "silver",
+    "featured": true,
+    "joinedAt": "2026-01-07",
+    "fullDescription": "OpenAI provides flexible APIs for chat, tools, images, and advanced automation use cases.",
+    "features": [
+      "Multimodal model access",
+      "Tool and function calling",
+      "Realtime and batch workflows"
+    ],
+    "integrationGuide": "# OpenAI integration\nnpm install openai\n\nconst client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });",
+    "docsUrl": "https://platform.openai.com/docs",
+    "contactEmail": "partnerships@openai.com"
   },
   {
-    "id": "stripe",
-    "name": "Stripe",
-    "slug": "stripe",
-    "icon": "💳",
-    "description": "Handle payments, subscriptions, and usage billing for agent products.",
-    "tier": "Silver",
-    "integrationType": "API",
-    "type": "sponsor",
-    "website": "https://stripe.com"
+    "name": "Cloudflare",
+    "slug": "cloudflare",
+    "website": "https://cloudflare.com",
+    "description": "Edge networking, security, and serverless infrastructure for resilient AI products.",
+    "logo": "https://placehold.co/120x120/2c1603/f59e0b.png?text=CF",
+    "tier": "silver",
+    "featured": false,
+    "joinedAt": "2026-01-15",
+    "fullDescription": "Cloudflare helps agent apps scale globally with secure APIs and edge compute primitives.",
+    "features": [
+      "DDoS and API protection",
+      "Workers edge compute",
+      "Global cache and routing"
+    ],
+    "integrationGuide": "# Cloudflare Worker\nnpx wrangler deploy",
+    "docsUrl": "https://developers.cloudflare.com",
+    "contactEmail": "partners@cloudflare.com"
+  },
+  {
+    "name": "LangChain",
+    "slug": "langchain",
+    "website": "https://langchain.com",
+    "description": "Composable framework for building LLM applications with memory, retrieval, and tools.",
+    "logo": "https://placehold.co/120x120/0d1f2e/38bdf8.png?text=LC",
+    "tier": "community",
+    "featured": false,
+    "joinedAt": "2026-01-20",
+    "fullDescription": "LangChain accelerates experimentation with reusable components for model-powered workflows.",
+    "features": [
+      "Chains and agents",
+      "Retrieval integrations",
+      "Tracing and observability"
+    ],
+    "integrationGuide": "# LangChain\npip install langchain",
+    "docsUrl": "https://python.langchain.com/docs",
+    "contactEmail": "partners@langchain.dev"
+  },
+  {
+    "name": "Mastra",
+    "slug": "mastra",
+    "website": "https://mastra.ai",
+    "description": "Agent-first framework for workflows, tools, and production-ready orchestration.",
+    "logo": "https://placehold.co/120x120/1f1022/f472b6.png?text=MA",
+    "tier": "community",
+    "featured": false,
+    "joinedAt": "2026-01-28",
+    "fullDescription": "Mastra provides a practical developer toolkit for shipping robust AI workflows faster.",
+    "features": [
+      "Workflow composition",
+      "Developer-focused runtime",
+      "Extensible tool registry"
+    ],
+    "integrationGuide": "# Mastra\nnpm install mastra",
+    "docsUrl": "https://mastra.ai/docs",
+    "contactEmail": "partners@mastra.ai"
   }
 ]
