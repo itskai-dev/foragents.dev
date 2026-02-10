@@ -7,7 +7,27 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import roadmapData from "@/data/roadmap.json";
-import type { RoadmapItem, RoadmapStatus, RoadmapCategory } from "../page";
+
+type RoadmapStatus = "Planned" | "In Progress" | "Shipped" | "Considering";
+type RoadmapCategory = "Platform" | "Skills" | "Community" | "API" | "Enterprise";
+
+type RoadmapItem = {
+  id: string;
+  title: string;
+  description: string;
+  fullDescription: string;
+  category: RoadmapCategory;
+  status: RoadmapStatus;
+  upvotes: number;
+  commentCount: number;
+  createdAt: string;
+  updatedAt: string;
+  timeline: Array<{
+    date: string;
+    status: RoadmapStatus;
+    note: string;
+  }>;
+};
 
 const categoryColors: Record<RoadmapCategory, string> = {
   Platform: "bg-cyan/10 text-cyan border-cyan/30",
