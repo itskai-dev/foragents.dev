@@ -1,8 +1,16 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+
+type PlaygroundClientProps = {
+  endpoints: ApiEndpoint[];
+  initialSelection?: {
+    endpoint?: string;
+    path?: string;
+    method?: string;
+  };
+};
 
 type ParamType = "string" | "number" | "boolean" | "json";
 
@@ -43,17 +51,6 @@ type ResponseState = {
   durationMs: number;
   url: string;
   method: string;
-};
-
-type PlaygroundProxyResponse = {
-  endpoint?: string;
-  method?: string;
-  status?: number;
-  statusText?: string;
-  headers?: Record<string, string>;
-  durationMs?: number;
-  data?: unknown;
-  error?: string;
 };
 
 const HISTORY_KEY = "foragents_api_playground_history_v1";
@@ -159,25 +156,6 @@ function buildRequest(endpoint: ApiEndpoint, values: Record<string, string>): {
   return { url, init };
 }
 
-function buildProxyParams(endpoint: ApiEndpoint, values: Record<string, string>): Record<string, unknown> {
-  const params: Record<string, unknown> = {};
-
-  for (const p of endpoint.params || []) {
-    const raw = values[p.name] ?? "";
-    if (!raw.trim()) continue;
-
-    const loc = inferParamLocation(endpoint, p);
-    if (loc === "body") {
-      params[p.name] = coerceValue(p.type, raw);
-      continue;
-    }
-
-    params[p.name] = raw;
-  }
-
-  return params;
-}
-
 function formatTs(ts: number): string {
   try {
     return new Date(ts).toLocaleString();
@@ -186,8 +164,7 @@ function formatTs(ts: number): string {
   }
 }
 
-export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint[] }) {
-  const searchParams = useSearchParams();
+export default function PlaygroundClient({ endpoints, initialSelection }: PlaygroundClientProps) {
   const defaultEndpointId = endpoints[0]?.id;
 
   const [selectedId, setSelectedId] = useState<string>(defaultEndpointId ?? "");
@@ -202,7 +179,6 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<ResponseState | null>(null);
-  const [copied, setCopied] = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -223,9 +199,9 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
   }, []);
 
   useEffect(() => {
-    const queryEndpointId = searchParams.get("endpoint");
-    const queryPath = searchParams.get("path");
-    const queryMethod = searchParams.get("method")?.toUpperCase();
+    const queryEndpointId = initialSelection?.endpoint;
+    const queryPath = initialSelection?.path;
+    const queryMethod = initialSelection?.method?.toUpperCase();
 
     if (queryEndpointId) {
       const matchedById = endpoints.find((endpoint) => endpoint.id === queryEndpointId);
@@ -248,20 +224,17 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
         setSelectedId((current) => (current === matchedByPath.id ? current : matchedByPath.id));
       }
     }
-  }, [endpoints, searchParams]);
+  }, [endpoints, initialSelection]);
 
   // Initialize param fields when endpoint changes
   useEffect(() => {
-    if (!selectedEndpoint) return;
-
     const next: Record<string, string> = {};
-    for (const p of selectedEndpoint.params || []) {
+    for (const p of selectedEndpoint?.params || []) {
       next[p.name] = "";
     }
     setValues(next);
     setError(null);
     setResponse(null);
-    setCopied(false);
   }, [selectedEndpoint]);
 
   function persistHistory(next: RequestHistoryItem[]) {
@@ -279,7 +252,6 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
     setLoading(true);
     setError(null);
     setResponse(null);
-    setCopied(false);
 
     if (abortRef.current) abortRef.current.abort();
     const ac = new AbortController();
@@ -303,63 +275,36 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
       params: values,
     };
 
-    const requestStart = performance.now();
-
+    const t0 = performance.now();
     try {
-      const res = await fetch("/api/playground", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          endpoint: selectedEndpoint.path,
-          method: selectedEndpoint.method.toUpperCase(),
-          params: buildProxyParams(selectedEndpoint, values),
-        }),
-        signal: ac.signal,
+      const res = await fetch(built.url, { ...built.init, signal: ac.signal });
+      const durationMs = Math.round(performance.now() - t0);
+
+      const headers: Record<string, string> = {};
+      res.headers.forEach((v, k) => {
+        headers[k] = v;
       });
 
-      const fallbackDurationMs = Math.round(performance.now() - requestStart);
       const ct = res.headers.get("content-type") || "";
-
-      let payload: PlaygroundProxyResponse | null = null;
+      let body: unknown;
       if (ct.includes("application/json")) {
-        payload = (await res.json().catch(() => null)) as PlaygroundProxyResponse | null;
-      }
-
-      if (!payload) {
+        body = await res.json().catch(async () => safeJsonParse(await res.text()));
+      } else {
         const text = await res.text();
-        payload = {
-          status: res.status,
-          statusText: res.statusText,
-          data: safeJsonParse(text),
-          headers: {},
-          durationMs: fallbackDurationMs,
-        };
+        body = safeJsonParse(text);
       }
-
-      const proxyHeaders = payload.headers ?? {};
-      const status = typeof payload.status === "number" ? payload.status : res.status;
-      const statusText = payload.statusText || res.statusText;
-      const durationMs = typeof payload.durationMs === "number" ? payload.durationMs : fallbackDurationMs;
-      const body = typeof payload.data === "undefined" ? payload : payload.data;
 
       setResponse({
-        status,
-        statusText,
-        headers: proxyHeaders,
+        status: res.status,
+        statusText: res.statusText,
+        headers,
         body,
         durationMs,
         url: built.url,
         method: selectedEndpoint.method.toUpperCase(),
       });
 
-      if (payload.error) {
-        setError(payload.error);
-      }
-
-      const nextHistory = [{ ...historyItem, status, ok: status >= 200 && status < 300 }, ...history]
+      const nextHistory = [{ ...historyItem, status: res.status, ok: res.ok }, ...history]
         .slice(0, HISTORY_LIMIT);
       persistHistory(nextHistory);
     } catch (err) {
@@ -379,27 +324,10 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
     setValues(item.params || {});
     setError(null);
     setResponse(null);
-    setCopied(false);
   }
 
   function clearHistory() {
     persistHistory([]);
-  }
-
-  async function copyResponseBody() {
-    if (!response) return;
-
-    const text = typeof response.body === "string"
-      ? response.body
-      : JSON.stringify(response.body, null, 2);
-
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1500);
-    } catch {
-      setCopied(false);
-    }
   }
 
   const builtPreview = useMemo(() => {
@@ -553,12 +481,7 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
                   disabled={loading || !selectedEndpoint}
                   className="bg-[#06D6A0] hover:bg-[#06D6A0]/90 text-black font-semibold"
                 >
-                  {loading ? (
-                    <span className="inline-flex items-center gap-2">
-                      <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-black/30 border-t-black" />
-                      Sending…
-                    </span>
-                  ) : "Send Request"}
+                  {loading ? "Sending…" : "Send Request"}
                 </Button>
 
                 {loading ? (
@@ -589,10 +512,7 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
               ) : null}
 
               {loading ? (
-                <div className="inline-flex items-center gap-2 text-sm text-muted-foreground">
-                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-slate-500/30 border-t-slate-300" />
-                  Loading response…
-                </div>
+                <p className="text-sm text-muted-foreground">Loading…</p>
               ) : null}
 
               {response ? (
@@ -614,13 +534,6 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
                         {response.status} {response.statusText}
                       </span>
                       <span className="text-slate-500">{response.durationMs}ms</span>
-                      <button
-                        type="button"
-                        onClick={copyResponseBody}
-                        className="rounded border border-white/10 px-2 py-1 text-[11px] text-slate-300 hover:text-white hover:bg-white/5 transition-colors"
-                      >
-                        {copied ? "Copied" : "Copy Response"}
-                      </button>
                     </div>
                   </div>
 
@@ -650,7 +563,7 @@ export default function PlaygroundClient({ endpoints }: { endpoints: ApiEndpoint
             </div>
 
             <div className="text-xs text-muted-foreground">
-              Tip: Requests go through <span className="font-mono">/api/playground</span>, which applies a 10 req/min/IP limit and then proxies to real API routes.
+              Tip: This playground uses <span className="font-mono">fetch()</span> from your browser, so cookies, auth, and rate limits apply.
             </div>
 
             <div className="rounded-lg border border-white/10 bg-white/5 p-4">

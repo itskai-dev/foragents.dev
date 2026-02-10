@@ -212,7 +212,7 @@ function mergeSeedWithDiscovered(seed: ApiDocsSeed, discovered: Array<{ method: 
       },
     });
 
-    categories.set(category.id, category);
+    categories.set(inferred.id, category);
   }
 
   return Array.from(categories.values()).map((category) => ({

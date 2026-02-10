@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 
 import PlaygroundClient from "./PlaygroundClient";
 
@@ -47,10 +46,25 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function PlaygroundPage() {
+type PlaygroundPageProps = {
+  searchParams?: Promise<{
+    endpoint?: string;
+    path?: string;
+    method?: string;
+  }>;
+};
+
+export default async function PlaygroundPage({ searchParams }: PlaygroundPageProps) {
+  const params = await searchParams;
+
   return (
-    <Suspense fallback={<div className="px-4 py-16 text-center text-muted-foreground">Loading playground...</div>}>
-      <PlaygroundClient endpoints={endpoints as ApiEndpoint[]} />
-    </Suspense>
+    <PlaygroundClient
+      endpoints={endpoints as ApiEndpoint[]}
+      initialSelection={{
+        endpoint: params?.endpoint,
+        path: params?.path,
+        method: params?.method,
+      }}
+    />
   );
 }
