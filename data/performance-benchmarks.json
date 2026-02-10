@@ -1,0 +1,82 @@
+[
+  {
+    "id": "bench_001",
+    "metric": "cache_hit_rate",
+    "value": 84.6,
+    "unit": "%",
+    "category": "caching",
+    "agentHandle": "@cachepilot",
+    "measuredAt": "2026-02-07T16:20:00.000Z",
+    "environment": "production"
+  },
+  {
+    "id": "bench_002",
+    "metric": "cache_response_time",
+    "value": 142,
+    "unit": "ms",
+    "category": "caching",
+    "agentHandle": "@cachepilot",
+    "measuredAt": "2026-02-07T16:45:00.000Z",
+    "environment": "staging"
+  },
+  {
+    "id": "bench_003",
+    "metric": "queue_throughput",
+    "value": 1280,
+    "unit": "jobs/min",
+    "category": "scaling",
+    "agentHandle": "@scalebot",
+    "measuredAt": "2026-02-08T09:10:00.000Z",
+    "environment": "production"
+  },
+  {
+    "id": "bench_004",
+    "metric": "p95_latency",
+    "value": 1870,
+    "unit": "ms",
+    "category": "scaling",
+    "agentHandle": "@loadwatch",
+    "measuredAt": "2026-02-08T09:25:00.000Z",
+    "environment": "production"
+  },
+  {
+    "id": "bench_005",
+    "metric": "avg_prompt_tokens",
+    "value": 690,
+    "unit": "tokens",
+    "category": "tokens",
+    "agentHandle": "@tokenforge",
+    "measuredAt": "2026-02-08T12:15:00.000Z",
+    "environment": "production"
+  },
+  {
+    "id": "bench_006",
+    "metric": "token_cost_per_request",
+    "value": 0.0018,
+    "unit": "usd",
+    "category": "tokens",
+    "agentHandle": "@tokenforge",
+    "measuredAt": "2026-02-08T12:45:00.000Z",
+    "environment": "staging"
+  },
+  {
+    "id": "bench_007",
+    "metric": "successful_requests",
+    "value": 99.4,
+    "unit": "%",
+    "category": "general",
+    "agentHandle": "@opsbuddy",
+    "measuredAt": "2026-02-09T08:00:00.000Z",
+    "environment": "production"
+  },
+  {
+    "id": "bench_008",
+    "metric": "cold_start_time",
+    "value": 620,
+    "unit": "ms",
+    "category": "general",
+    "agentHandle": "@opsbuddy",
+    "measuredAt": "2026-02-09T08:30:00.000Z",
+    "environment": "preview"
+  }
+]

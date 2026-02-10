@@ -1,5 +1,7 @@
+/* eslint-disable react/no-unescaped-entities */
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PerformanceBenchmarksPanel } from "@/components/performance/performance-benchmarks-panel";
 
 export const metadata: Metadata = {
   title: "Token Optimization Guide — forAgents.dev",
@@ -58,6 +60,12 @@ export default function TokenOptimizationPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 space-y-16">
+        <PerformanceBenchmarksPanel
+          category="tokens"
+          title="Token Benchmark Snapshot"
+          description="Prompt and cost metrics filtered to token optimization benchmarks."
+        />
+
         {/* Section 1: Prompt Compression */}
         <section>
           <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">

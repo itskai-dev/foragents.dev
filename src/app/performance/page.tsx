@@ -1,8 +1,10 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
 import performanceData from "@/data/performance.json";
+import { PerformanceBenchmarksPanel } from "@/components/performance/performance-benchmarks-panel";
 
 interface PerformanceArea {
   slug: string;
@@ -189,6 +191,13 @@ export default function PerformanceHubPage() {
             </Link>
           ))}
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <PerformanceBenchmarksPanel
+          title="Performance Overview"
+          description="Cross-category benchmark data loaded from the persistent performance dataset."
+        />
       </div>
 
       {/* Bottom CTA */}
