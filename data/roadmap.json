@@ -1,0 +1,107 @@
+[
+  {
+    "id": "workspace-profiles",
+    "title": "Workspace Profiles",
+    "description": "Save and switch between project-specific agent configurations.",
+    "status": "planned",
+    "votes": 42
+  },
+  {
+    "id": "smart-context-packs",
+    "title": "Smart Context Packs",
+    "description": "Auto-load relevant docs and memories based on the current task.",
+    "status": "planned",
+    "votes": 57
+  },
+  {
+    "id": "voice-story-mode",
+    "title": "Voice Story Mode",
+    "description": "One-click narrated summaries and updates using built-in TTS.",
+    "status": "planned",
+    "votes": 33
+  },
+  {
+    "id": "team-handoffs",
+    "title": "Team Handoffs",
+    "description": "Structured lane handoff notes between agents and teammates.",
+    "status": "planned",
+    "votes": 61
+  },
+  {
+    "id": "prompt-diff-view",
+    "title": "Prompt Diff View",
+    "description": "Compare instruction changes over time with inline highlights.",
+    "status": "planned",
+    "votes": 25
+  },
+  {
+    "id": "roadmap-voting-api",
+    "title": "Roadmap Voting API",
+    "description": "Public API support for roadmap voting and analytics.",
+    "status": "in-progress",
+    "votes": 74
+  },
+  {
+    "id": "agent-observability",
+    "title": "Agent Observability",
+    "description": "Latency, token, and failure dashboards for agent runs.",
+    "status": "in-progress",
+    "votes": 89
+  },
+  {
+    "id": "marketplace-reviews",
+    "title": "Marketplace Reviews",
+    "description": "Community ratings and written reviews for shared artifacts.",
+    "status": "in-progress",
+    "votes": 52
+  },
+  {
+    "id": "premium-entitlements-v2",
+    "title": "Premium Entitlements v2",
+    "description": "Granular usage limits and team-level premium features.",
+    "status": "in-progress",
+    "votes": 48
+  },
+  {
+    "id": "changelog-digests",
+    "title": "Changelog Digests",
+    "description": "Weekly digest emails and API feed summaries.",
+    "status": "in-progress",
+    "votes": 40
+  },
+  {
+    "id": "public-skill-registry",
+    "title": "Public Skill Registry",
+    "description": "Searchable index of verified skills and metadata.",
+    "status": "completed",
+    "votes": 96
+  },
+  {
+    "id": "agent-verification-badges",
+    "title": "Agent Verification Badges",
+    "description": "Visual trust indicators for validated agents and MCP servers.",
+    "status": "completed",
+    "votes": 87
+  },
+  {
+    "id": "digest-api",
+    "title": "Digest API",
+    "description": "Programmatic digest endpoint for external clients.",
+    "status": "completed",
+    "votes": 65
+  },
+  {
+    "id": "artifacts-rss-feeds",
+    "title": "Artifacts RSS Feeds",
+    "description": "RSS/JSON feeds for artifact publishing and updates.",
+    "status": "completed",
+    "votes": 58
+  },
+  {
+    "id": "search-quota-controls",
+    "title": "Search Quota Controls",
+    "description": "Per-user search quota tracking and upgrade prompts.",
+    "status": "completed",
+    "votes": 71
+  }
+]

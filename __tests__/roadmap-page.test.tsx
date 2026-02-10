@@ -1,104 +1,82 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import RoadmapPage from "../src/app/roadmap/page";
 
-type LinkProps = {
-  href: string;
-  children?: React.ReactNode;
-} & React.AnchorHTMLAttributes<HTMLAnchorElement>;
-
-jest.mock("next/link", () => {
-  const LinkMock = ({ href, children, ...props }: LinkProps) => (
-    <a href={href} {...props}>
-      {children}
-    </a>
-  );
-  LinkMock.displayName = "Link";
-  return LinkMock;
-});
-
-jest.mock("next/navigation", () => ({
-  usePathname: jest.fn(() => "/roadmap"),
-}));
+const mockItems = [
+  {
+    id: "workspace-profiles",
+    title: "Workspace Profiles",
+    description: "Save and switch between project-specific agent configurations.",
+    status: "planned",
+    votes: 42,
+  },
+  {
+    id: "roadmap-voting-api",
+    title: "Roadmap Voting API",
+    description: "Public API support for roadmap voting and analytics.",
+    status: "in-progress",
+    votes: 74,
+  },
+  {
+    id: "public-skill-registry",
+    title: "Public Skill Registry",
+    description: "Searchable index of verified skills and metadata.",
+    status: "completed",
+    votes: 96,
+  },
+];
 
 describe("Roadmap Page", () => {
-  it("renders the roadmap page", () => {
-    const { container } = render(<RoadmapPage />);
-    expect(container).toBeInTheDocument();
+  beforeEach(() => {
+    global.fetch = jest.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+
+      if (url === "/api/roadmap" && (!init || init.method === undefined)) {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ items: mockItems, total: mockItems.length }),
+        } as Response);
+      }
+
+      if (url === "/api/roadmap/vote" && init?.method === "POST") {
+        return Promise.resolve({
+          ok: true,
+          json: async () => ({ id: "workspace-profiles", votes: 43 }),
+        } as Response);
+      }
+
+      return Promise.resolve({ ok: false } as Response);
+    }) as jest.Mock;
   });
 
-  it("displays the page title", () => {
-    render(<RoadmapPage />);
-    expect(screen.getByText("Product Roadmap")).toBeInTheDocument();
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
-  it("displays the page description", () => {
+  it("renders roadmap columns from API data", async () => {
     render(<RoadmapPage />);
-    expect(
-      screen.getByText(/See what we're building/i)
-    ).toBeInTheDocument();
-  });
 
-  it("displays category filter buttons", () => {
-    render(<RoadmapPage />);
-    expect(screen.getByRole("button", { name: "All" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Platform" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Skills" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Community" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "API" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Enterprise" })).toBeInTheDocument();
-  });
+    await waitFor(() => {
+      expect(screen.getByText("Workspace Profiles")).toBeInTheDocument();
+    });
 
-  it("displays sort dropdown", () => {
-    render(<RoadmapPage />);
-    expect(screen.getByText("Sort by:")).toBeInTheDocument();
-    const select = screen.getByRole("combobox");
-    expect(select).toBeInTheDocument();
-  });
-
-  it("displays all status columns", () => {
-    render(<RoadmapPage />);
-    expect(screen.getByText("Planned")).toBeInTheDocument();
     expect(screen.getByText("In Progress")).toBeInTheDocument();
-    expect(screen.getByText("Shipped")).toBeInTheDocument();
-    expect(screen.getByText("Considering")).toBeInTheDocument();
+    expect(screen.getByText("Completed")).toBeInTheDocument();
   });
 
-  it("displays roadmap items", () => {
+  it("votes on planned items", async () => {
     render(<RoadmapPage />);
-    // Check for at least one item from the seed data
-    expect(screen.getByText("Real-time Agent Monitoring")).toBeInTheDocument();
-  });
 
-  it("allows filtering by category", () => {
-    render(<RoadmapPage />);
-    const platformButton = screen.getByRole("button", { name: "Platform" });
-    fireEvent.click(platformButton);
-    expect(screen.getByText("Real-time Agent Monitoring")).toBeInTheDocument();
-  });
+    await waitFor(() => {
+      expect(screen.getByText("Workspace Profiles")).toBeInTheDocument();
+    });
 
-  it("allows sorting items", () => {
-    render(<RoadmapPage />);
-    const select = screen.getByRole("combobox");
-    fireEvent.change(select, { target: { value: "newest" } });
-    expect(select).toHaveValue("newest");
-  });
+    fireEvent.click(screen.getByRole("button", { name: "Vote" }));
 
-  it("displays upvote and comment counts", () => {
-    render(<RoadmapPage />);
-    // Check that vote/comment icons and counts are rendered
-    const cards = screen.getAllByRole("link");
-    expect(cards.length).toBeGreaterThan(0);
-  });
-
-  it("items link to detail pages", () => {
-    render(<RoadmapPage />);
-    const links = screen.getAllByRole("link");
-    const roadmapLink = links.find((link) =>
-      link.getAttribute("href")?.startsWith("/roadmap/")
-    );
-    expect(roadmapLink).toBeTruthy();
+    await waitFor(() => {
+      expect(screen.getByText("43 votes")).toBeInTheDocument();
+    });
   });
 });
