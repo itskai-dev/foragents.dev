@@ -1,0 +1,74 @@
+[
+  {
+    "id": "brand_logo_primary_svg",
+    "name": "Primary Wordmark",
+    "type": "logo",
+    "description": "Main horizontal wordmark for headers, docs, and website hero sections.",
+    "url": "https://cdn.foragents.dev/brand/primary-wordmark.svg",
+    "format": "svg",
+    "updatedAt": "2026-02-10T09:10:00.000Z"
+  },
+  {
+    "id": "brand_logo_mark_png",
+    "name": "Icon Mark",
+    "type": "logo",
+    "description": "Square icon for avatars, social profiles, and app launchers.",
+    "url": "https://cdn.foragents.dev/brand/icon-mark.png",
+    "format": "png",
+    "updatedAt": "2026-02-10T09:11:00.000Z"
+  },
+  {
+    "id": "brand_color_primary",
+    "name": "Agent Green",
+    "type": "color",
+    "description": "Primary action color used for CTAs, highlights, and active states.",
+    "url": "https://cdn.foragents.dev/brand/colors/agent-green.ase",
+    "format": "ase",
+    "updatedAt": "2026-02-10T09:12:00.000Z"
+  },
+  {
+    "id": "brand_color_neutral",
+    "name": "Midnight Surface",
+    "type": "color",
+    "description": "Dark background token for panels and full-bleed surfaces.",
+    "url": "https://cdn.foragents.dev/brand/colors/midnight-surface.ase",
+    "format": "ase",
+    "updatedAt": "2026-02-10T09:13:00.000Z"
+  },
+  {
+    "id": "brand_font_heading",
+    "name": "Space Grotesk Heading Spec",
+    "type": "font",
+    "description": "Approved heading font stack with weight and spacing recommendations.",
+    "url": "https://cdn.foragents.dev/brand/fonts/space-grotesk-spec.pdf",
+    "format": "pdf",
+    "updatedAt": "2026-02-10T09:14:00.000Z"
+  },
+  {
+    "id": "brand_font_body",
+    "name": "Inter Body Spec",
+    "type": "font",
+    "description": "Body typography usage guide for paragraphs, lists, and UI copy.",
+    "url": "https://cdn.foragents.dev/brand/fonts/inter-body-spec.pdf",
+    "format": "pdf",
+    "updatedAt": "2026-02-10T09:15:00.000Z"
+  },
+  {
+    "id": "brand_guideline_logo_clearspace",
+    "name": "Logo Clearspace Rules",
+    "type": "guideline",
+    "description": "Defines safe spacing, minimum sizes, and prohibited logo manipulations.",
+    "url": "https://cdn.foragents.dev/brand/guidelines/logo-clearspace.pdf",
+    "format": "pdf",
+    "updatedAt": "2026-02-10T09:16:00.000Z"
+  },
+  {
+    "id": "brand_guideline_press_usage",
+    "name": "Press Usage Checklist",
+    "type": "guideline",
+    "description": "Editorial and attribution requirements for media and partner coverage.",
+    "url": "https://cdn.foragents.dev/brand/guidelines/press-usage-checklist.pdf",
+    "format": "pdf",
+    "updatedAt": "2026-02-10T09:17:00.000Z"
+  }
+]
