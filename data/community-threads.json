@@ -1,0 +1,218 @@
+[
+  {
+    "id": "thread-general-memory-patterns",
+    "title": "What memory strategy works best for long-running agents?",
+    "body": "My agent handles support conversations 24/7 and context grows fast. I currently summarize every 30 messages, but sometimes it drops key details. Curious what patterns are working for everyone else in production.",
+    "author": "@context-crafter",
+    "category": "general",
+    "createdAt": "2026-02-02T16:10:00.000Z",
+    "replyCount": 3,
+    "lastActivity": "2026-02-08T17:34:00.000Z",
+    "replies": [
+      {
+        "id": "reply-general-memory-1",
+        "body": "Hybrid works well for us: short-term raw transcript + long-term summary embeddings tagged by intent.",
+        "author": "@ops-fox",
+        "createdAt": "2026-02-02T18:22:00.000Z"
+      },
+      {
+        "id": "reply-general-memory-2",
+        "body": "Try promoting facts to a structured memory table before summarization. It reduced hallucinated follow-ups on our side.",
+        "author": "@schema-sage",
+        "createdAt": "2026-02-04T11:05:00.000Z"
+      },
+      {
+        "id": "reply-general-memory-3",
+        "body": "We keep summaries but rehydrate on demand by semantic search over raw chunks. Best of both worlds.",
+        "author": "@vector-grove",
+        "createdAt": "2026-02-08T17:34:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-help-rate-limit-loops",
+    "title": "Help: my agent loops when external APIs hit rate limits",
+    "body": "When OpenAI or Stripe throttles requests, my retry logic keeps the conversation stuck in a loop. Looking for a practical pattern that balances UX and reliability.",
+    "author": "@retry-raccoon",
+    "category": "help",
+    "createdAt": "2026-02-06T07:50:00.000Z",
+    "replyCount": 2,
+    "lastActivity": "2026-02-08T09:11:00.000Z",
+    "replies": [
+      {
+        "id": "reply-help-rate-limit-1",
+        "body": "Add a retry budget per request and surface a fallback message after budget is exhausted. Avoid silent retries.",
+        "author": "@incident-monk",
+        "createdAt": "2026-02-06T08:23:00.000Z"
+      },
+      {
+        "id": "reply-help-rate-limit-2",
+        "body": "Use server-side queue + idempotency keys, then return 'working on it' to the user. Prevents chat loops entirely.",
+        "author": "@queue-otter",
+        "createdAt": "2026-02-08T09:11:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-showcase-oncall-assistant",
+    "title": "Showcase: shipped an on-call copilot for incident triage",
+    "body": "Built a small assistant that summarizes PagerDuty alerts, links recent deploys, and drafts incident updates. It cut triage time by ~35% for our team.",
+    "author": "@prod-watcher",
+    "category": "showcase",
+    "createdAt": "2026-02-03T14:42:00.000Z",
+    "replyCount": 3,
+    "lastActivity": "2026-02-07T20:05:00.000Z",
+    "replies": [
+      {
+        "id": "reply-showcase-oncall-1",
+        "body": "This is sick. Are you using Slack actions for acknowledge/escalate?",
+        "author": "@alert-penguin",
+        "createdAt": "2026-02-03T16:10:00.000Z"
+      },
+      {
+        "id": "reply-showcase-oncall-2",
+        "body": "Yes — plus we append a runbook snippet based on service tags. Happy to share the prompt template.",
+        "author": "@prod-watcher",
+        "createdAt": "2026-02-03T17:02:00.000Z"
+      },
+      {
+        "id": "reply-showcase-oncall-3",
+        "body": "Would love a write-up on how you keep hallucinations out of incident comms.",
+        "author": "@chaos-beaver",
+        "createdAt": "2026-02-07T20:05:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-feedback-community-search",
+    "title": "Feedback on community UX: should search include reply text?",
+    "body": "Right now most forums search title + body only. For technical threads, many useful answers live in replies. Should we index replies too or keep it lightweight?",
+    "author": "@ux-scout",
+    "category": "feedback",
+    "createdAt": "2026-02-05T18:30:00.000Z",
+    "replyCount": 2,
+    "lastActivity": "2026-02-08T05:14:00.000Z",
+    "replies": [
+      {
+        "id": "reply-feedback-search-1",
+        "body": "Search should include replies but rank title/body higher so result quality stays strong.",
+        "author": "@ranking-wolf",
+        "createdAt": "2026-02-05T19:03:00.000Z"
+      },
+      {
+        "id": "reply-feedback-search-2",
+        "body": "+1. Maybe add a toggle for 'search replies' to avoid noisy defaults.",
+        "author": "@signal-heron",
+        "createdAt": "2026-02-08T05:14:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-ideas-agent-runbooks",
+    "title": "Idea: reusable runbook blocks for agent workflows",
+    "body": "Thinking of a shared library of runbook blocks (incident response, billing disputes, migration checks) that agents can compose on demand. Worth building?",
+    "author": "@blueprint-hawk",
+    "category": "ideas",
+    "createdAt": "2026-02-01T11:18:00.000Z",
+    "replyCount": 3,
+    "lastActivity": "2026-02-07T13:41:00.000Z",
+    "replies": [
+      {
+        "id": "reply-ideas-runbooks-1",
+        "body": "Absolutely. If you add versioning + changelog per block, teams can safely pin and upgrade.",
+        "author": "@release-mantis",
+        "createdAt": "2026-02-01T12:44:00.000Z"
+      },
+      {
+        "id": "reply-ideas-runbooks-2",
+        "body": "Could pair this with policy gates so sensitive runbooks require human approval.",
+        "author": "@guardrail-owl",
+        "createdAt": "2026-02-03T09:27:00.000Z"
+      },
+      {
+        "id": "reply-ideas-runbooks-3",
+        "body": "I would use this instantly for customer onboarding and migration playbooks.",
+        "author": "@growth-jelly",
+        "createdAt": "2026-02-07T13:41:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-general-evals-stack",
+    "title": "What does your eval stack look like in 2026?",
+    "body": "Trying to refresh our eval workflow: scenario tests, regression prompts, and production sampling. Curious what tools and cadence other teams are using.",
+    "author": "@eval-gardener",
+    "category": "general",
+    "createdAt": "2026-02-04T21:04:00.000Z",
+    "replyCount": 2,
+    "lastActivity": "2026-02-08T22:19:00.000Z",
+    "replies": [
+      {
+        "id": "reply-general-evals-1",
+        "body": "Nightly synthetic suite + weekly human review session. We tag failures by capability to spot drift quickly.",
+        "author": "@qa-cormorant",
+        "createdAt": "2026-02-05T07:55:00.000Z"
+      },
+      {
+        "id": "reply-general-evals-2",
+        "body": "We pipe live transcripts into a shadow grader and only promote prompt changes after pass-rate confidence thresholds.",
+        "author": "@ship-captain",
+        "createdAt": "2026-02-08T22:19:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-help-supabase-rls",
+    "title": "Need help debugging Supabase RLS for multi-tenant tools",
+    "body": "My tool registry API works locally but fails in production with RLS violations. Table policies seem right, but inserts from service roles are inconsistent.",
+    "author": "@tenant-tracker",
+    "category": "help",
+    "createdAt": "2026-02-07T01:20:00.000Z",
+    "replyCount": 3,
+    "lastActivity": "2026-02-09T01:06:00.000Z",
+    "replies": [
+      {
+        "id": "reply-help-rls-1",
+        "body": "Check if your edge runtime is using anon key in some paths. I hit this with route handlers that mixed env vars.",
+        "author": "@policy-pelican",
+        "createdAt": "2026-02-07T02:12:00.000Z"
+      },
+      {
+        "id": "reply-help-rls-2",
+        "body": "Also verify JWT claims. Missing tenant_id claim will silently fail policy checks in many setups.",
+        "author": "@claims-lynx",
+        "createdAt": "2026-02-08T12:09:00.000Z"
+      },
+      {
+        "id": "reply-help-rls-3",
+        "body": "Solved mine by separating read/write policies and adding explicit WITH CHECK conditions.",
+        "author": "@tenant-tracker",
+        "createdAt": "2026-02-09T01:06:00.000Z"
+      }
+    ]
+  },
+  {
+    "id": "thread-showcase-self-healing-jobs",
+    "title": "Showcase: self-healing background jobs for agent pipelines",
+    "body": "We implemented a watchdog that replays failed agent jobs with contextual checkpoints and policy-aware retries. Error recovery rate improved from 61% to 89%.",
+    "author": "@pipeline-lynx",
+    "category": "showcase",
+    "createdAt": "2026-02-06T12:05:00.000Z",
+    "replyCount": 2,
+    "lastActivity": "2026-02-08T14:48:00.000Z",
+    "replies": [
+      {
+        "id": "reply-showcase-healing-1",
+        "body": "How do you prevent replay storms when an upstream dependency is down?",
+        "author": "@resilience-raven",
+        "createdAt": "2026-02-06T12:40:00.000Z"
+      },
+      {
+        "id": "reply-showcase-healing-2",
+        "body": "Global circuit breaker + queue pause. Replays only resume after health checks pass for 3 consecutive intervals.",
+        "author": "@pipeline-lynx",
+        "createdAt": "2026-02-08T14:48:00.000Z"
+      }
+    ]
+  }
+]
