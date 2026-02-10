@@ -1,0 +1,74 @@
+[
+  {
+    "id": "pricing-usage-based-models",
+    "title": "When usage-based pricing beats seat-based pricing",
+    "content": "Usage-based pricing usually outperforms seat pricing when value scales with automation volume rather than headcount. Agent products tied to runs, tasks, or tokens can map revenue directly to customer outcomes and reduce friction for small teams adopting early.",
+    "category": "pricing",
+    "tags": ["pricing", "usage-based", "packaging"],
+    "updatedAt": "2026-02-01T09:00:00.000Z"
+  },
+  {
+    "id": "pricing-tier-design",
+    "title": "Designing pricing tiers for AI agent products",
+    "content": "A strong tier model combines one clear value metric with operational guardrails. Keep starter tiers generous enough to activate adoption, then gate premium features like private data connectors, advanced workflows, and team controls at higher plans.",
+    "category": "pricing",
+    "tags": ["pricing", "tiers", "saas"],
+    "updatedAt": "2026-02-02T10:30:00.000Z"
+  },
+  {
+    "id": "costs-token-governance",
+    "title": "Token cost governance for production agents",
+    "content": "Token governance starts with observability per workflow and model. Teams that enforce prompt budgets, caching strategies, and fallback routing can often reduce monthly inference spend by double-digit percentages without harming quality.",
+    "category": "costs",
+    "tags": ["costs", "tokens", "governance"],
+    "updatedAt": "2026-02-03T08:15:00.000Z"
+  },
+  {
+    "id": "costs-infra-overhead",
+    "title": "Estimating infrastructure overhead beyond model spend",
+    "content": "Model inference is only one part of unit economics. Storage, vector indexing, retries, queue workers, monitoring, and support overhead should be included in cost per task calculations before pricing decisions are finalized.",
+    "category": "costs",
+    "tags": ["costs", "infrastructure", "unit-economics"],
+    "updatedAt": "2026-02-03T17:45:00.000Z"
+  },
+  {
+    "id": "revenue-expansion-playbooks",
+    "title": "Revenue expansion with agent capability ladders",
+    "content": "Expansion revenue improves when customers can graduate from simple automations to higher-leverage orchestrations. Packaging advanced reliability, integrations, and analytics as clear upgrade paths increases net revenue retention.",
+    "category": "revenue",
+    "tags": ["revenue", "expansion", "nrr"],
+    "updatedAt": "2026-02-04T11:10:00.000Z"
+  },
+  {
+    "id": "revenue-onboarding-activation",
+    "title": "Onboarding activation as a revenue multiplier",
+    "content": "Fast activation shortens time-to-value and raises paid conversion. Product onboarding should guide teams to one measurable win in week one, then surface monetizable next steps through templates and integrations.",
+    "category": "revenue",
+    "tags": ["revenue", "onboarding", "activation"],
+    "updatedAt": "2026-02-05T12:00:00.000Z"
+  },
+  {
+    "id": "roi-baseline-method",
+    "title": "How to set an ROI baseline before deploying agents",
+    "content": "Reliable ROI measurement starts with a pre-launch baseline for cycle time, manual hours, defect rate, and throughput. Without baseline metrics, post-launch wins can be hard to attribute and defend with finance teams.",
+    "category": "roi",
+    "tags": ["roi", "measurement", "baseline"],
+    "updatedAt": "2026-02-06T14:20:00.000Z"
+  },
+  {
+    "id": "roi-payback-window",
+    "title": "Calculating payback windows for agent initiatives",
+    "content": "Payback window analysis should include build time, implementation support, and ongoing model/infrastructure costs. Teams with disciplined rollout sequencing can often recover costs in one to two quarters.",
+    "category": "roi",
+    "tags": ["roi", "payback", "finance"],
+    "updatedAt": "2026-02-07T16:35:00.000Z"
+  },
+  {
+    "id": "roi-risk-adjusted-forecasting",
+    "title": "Risk-adjusted forecasting for AI agent rollouts",
+    "content": "Forecast ranges should account for adoption risk, quality regressions, and integration delays. Scenario planning with conservative, expected, and upside cases improves stakeholder confidence and reduces planning surprises.",
+    "category": "roi",
+    "tags": ["roi", "forecasting", "risk"],
+    "updatedAt": "2026-02-08T09:40:00.000Z"
+  }
+]
