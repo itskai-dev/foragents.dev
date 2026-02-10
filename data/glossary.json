@@ -1,0 +1,247 @@
+[
+  {
+    "id": "agent",
+    "term": "Agent",
+    "definition": "An autonomous AI system that can perceive its environment, make decisions, and take actions to achieve specific goals. Unlike traditional chatbots, agents can use tools, access external data, and execute multi-step workflows.",
+    "relatedTerms": ["autonomy", "llm", "tool", "skill"],
+    "seeAlso": ["Multi-Agent System", "Agent Framework"]
+  },
+  {
+    "id": "autonomy",
+    "term": "Autonomy",
+    "definition": "The ability of an agent to operate independently, making decisions and taking actions without constant human intervention. Autonomous agents can plan, execute, and adapt to changing conditions.",
+    "relatedTerms": ["agent", "self-directed"],
+    "seeAlso": ["Agent", "Workflow"]
+  },
+  {
+    "id": "bootstrap",
+    "term": "Bootstrap",
+    "definition": "The initial setup process for an agent, including configuration, identity establishment, and capability discovery. The bootstrap phase typically involves reading core files (SOUL.md, USER.md) and initializing the agent's workspace.",
+    "relatedTerms": ["initialization", "setup", "identity"],
+    "seeAlso": ["Gateway", "Identity"]
+  },
+  {
+    "id": "capability",
+    "term": "Capability",
+    "definition": "A specific function or skill that an agent can perform. Capabilities can be native (built into the agent platform) or acquired through skill installation and tool integration.",
+    "relatedTerms": ["skill", "tool", "function"],
+    "seeAlso": ["Skill", "Tool", "MCP"]
+  },
+  {
+    "id": "discovery",
+    "term": "Discovery",
+    "definition": "The process by which agents find and catalog available tools, skills, APIs, and other resources. Discovery mechanisms enable agents to adapt to new capabilities without manual configuration.",
+    "relatedTerms": ["registry", "capability", "protocol"],
+    "seeAlso": ["Registry", "Protocol"]
+  },
+  {
+    "id": "endpoint",
+    "term": "Endpoint",
+    "definition": "A network address (URL) where an API, service, or agent can be accessed. In agent systems, endpoints define where agents send requests and receive data from external services.",
+    "relatedTerms": ["api", "url", "webhook"],
+    "seeAlso": ["API", "Webhook", "Gateway"]
+  },
+  {
+    "id": "framework",
+    "term": "Framework",
+    "definition": "A structured platform that provides the foundation for building and deploying agents. Agent frameworks typically include runtime environments, tool integrations, memory management, and orchestration capabilities.",
+    "relatedTerms": ["platform", "infrastructure", "openclaw"],
+    "seeAlso": ["OpenClaw", "Protocol"]
+  },
+  {
+    "id": "gateway",
+    "term": "Gateway",
+    "definition": "A service that routes messages and requests between agents, users, and external systems. Gateways handle authentication, protocol translation, and message delivery across different platforms.",
+    "relatedTerms": ["router", "proxy", "endpoint"],
+    "seeAlso": ["Endpoint", "Protocol", "OpenClaw"]
+  },
+  {
+    "id": "heartbeat",
+    "term": "Heartbeat",
+    "definition": "A periodic check-in mechanism where an agent proactively evaluates its state, environment, and pending tasks. Heartbeats enable agents to stay responsive and perform background maintenance without explicit user commands.",
+    "relatedTerms": ["polling", "monitoring", "proactive"],
+    "seeAlso": ["Autonomy", "Workflow"]
+  },
+  {
+    "id": "identity",
+    "term": "Identity",
+    "definition": "The unique identifier and associated metadata that defines an agent's persona, role, permissions, and authentication credentials. Agent identity is typically established during bootstrap and persists across sessions.",
+    "relatedTerms": ["authentication", "persona", "bootstrap"],
+    "seeAlso": ["Bootstrap", "Zero-Trust", "Verification"]
+  },
+  {
+    "id": "json-ld",
+    "term": "JSON-LD",
+    "definition": "JSON for Linking Data - a method of encoding linked data using JSON. In agent systems, JSON-LD provides structured, machine-readable metadata about skills, capabilities, and relationships between entities.",
+    "relatedTerms": ["metadata", "schema", "semantic-web"],
+    "seeAlso": ["Protocol", "Registry"]
+  },
+  {
+    "id": "kit",
+    "term": "Kit",
+    "definition": "A bundled collection of related skills, tools, and configurations designed to solve a specific use case. Kits provide a quick-start package for agents to gain multiple capabilities at once.",
+    "relatedTerms": ["bundle", "package", "skill"],
+    "seeAlso": ["Skill", "Tool"]
+  },
+  {
+    "id": "llm",
+    "term": "LLM",
+    "definition": "Large Language Model - a neural network trained on vast amounts of text data to understand and generate human language. LLMs power the reasoning and decision-making capabilities of AI agents.",
+    "relatedTerms": ["model", "ai", "reasoning"],
+    "seeAlso": ["Agent", "Tool"]
+  },
+  {
+    "id": "mcp",
+    "term": "MCP",
+    "definition": "Model Context Protocol - a standardized protocol for connecting LLMs to external data sources and tools. MCP servers expose capabilities that agents can discover and invoke dynamically.",
+    "relatedTerms": ["protocol", "integration", "tool"],
+    "seeAlso": ["Protocol", "Tool", "Discovery"]
+  },
+  {
+    "id": "node",
+    "term": "Node",
+    "definition": "An individual instance or execution environment in a distributed agent system. Nodes can host agents, run tools, store data, or provide specialized capabilities within a network.",
+    "relatedTerms": ["instance", "runtime", "distributed"],
+    "seeAlso": ["Gateway", "Multi-Agent System"]
+  },
+  {
+    "id": "openclaw",
+    "term": "OpenClaw",
+    "definition": "An open-source agent framework that provides tools for building, deploying, and managing AI agents. OpenClaw includes gateway services, skill management, and cross-platform integrations.",
+    "relatedTerms": ["framework", "platform", "gateway"],
+    "seeAlso": ["Framework", "Gateway", "Skill"]
+  },
+  {
+    "id": "protocol",
+    "term": "Protocol",
+    "definition": "A standardized set of rules and formats for communication between agents, tools, and services. Protocols ensure interoperability and enable agents to work with diverse systems.",
+    "relatedTerms": ["standard", "interface", "mcp"],
+    "seeAlso": ["MCP", "Gateway", "Endpoint"]
+  },
+  {
+    "id": "queue",
+    "term": "Queue",
+    "definition": "A data structure that manages tasks or messages in a first-in, first-out (FIFO) order. In agent systems, queues coordinate work distribution, handle asynchronous operations, and manage task priorities.",
+    "relatedTerms": ["task", "async", "workflow"],
+    "seeAlso": ["Workflow", "Multi-Agent System"]
+  },
+  {
+    "id": "registry",
+    "term": "Registry",
+    "definition": "A centralized catalog of available skills, tools, agents, or services. Registries enable discovery and provide metadata about capabilities, versions, dependencies, and compatibility.",
+    "relatedTerms": ["catalog", "discovery", "repository"],
+    "seeAlso": ["Discovery", "Skill", "Protocol"]
+  },
+  {
+    "id": "skill",
+    "term": "Skill",
+    "definition": "A packaged capability that agents can install and use to extend their functionality. Skills typically include installation scripts, configuration files (SKILL.md), and integration code for specific tools or services.",
+    "relatedTerms": ["capability", "plugin", "extension"],
+    "seeAlso": ["Tool", "Kit", "Capability"]
+  },
+  {
+    "id": "tool",
+    "term": "Tool",
+    "definition": "A specific function or API that an agent can invoke to perform actions or retrieve information. Tools provide the building blocks for agent capabilities, from web searches to database queries.",
+    "relatedTerms": ["function", "api", "capability"],
+    "seeAlso": ["Skill", "MCP", "Capability"]
+  },
+  {
+    "id": "uri",
+    "term": "URI",
+    "definition": "Uniform Resource Identifier - a string that identifies a resource by location, name, or both. In agent systems, URIs provide standard ways to reference skills, tools, endpoints, and data sources.",
+    "relatedTerms": ["url", "identifier", "reference"],
+    "seeAlso": ["Endpoint", "Protocol"]
+  },
+  {
+    "id": "verification",
+    "term": "Verification",
+    "definition": "The process of confirming the authenticity, integrity, and authorization of agents, skills, or data. Verification mechanisms prevent unauthorized access and ensure trust in agent operations.",
+    "relatedTerms": ["authentication", "security", "trust"],
+    "seeAlso": ["Identity", "Zero-Trust"]
+  },
+  {
+    "id": "webhook",
+    "term": "Webhook",
+    "definition": "An HTTP callback that delivers real-time data to applications when specific events occur. Agents use webhooks to receive notifications, trigger workflows, and integrate with external services.",
+    "relatedTerms": ["callback", "event", "integration"],
+    "seeAlso": ["Endpoint", "Gateway", "Protocol"]
+  },
+  {
+    "id": "workflow",
+    "term": "Workflow",
+    "definition": "A sequence of tasks or operations that an agent executes to achieve a goal. Workflows can include conditional logic, loops, error handling, and coordination between multiple tools or agents.",
+    "relatedTerms": ["task", "pipeline", "orchestration"],
+    "seeAlso": ["Queue", "Multi-Agent System", "Autonomy"]
+  },
+  {
+    "id": "x402",
+    "term": "x402",
+    "definition": "A protocol extension for micropayments and value exchange in agent-to-agent interactions. x402 enables agents to pay for API access, computational resources, or services from other agents.",
+    "relatedTerms": ["payment", "micropayment", "protocol"],
+    "seeAlso": ["Protocol", "Gateway"]
+  },
+  {
+    "id": "yaml",
+    "term": "YAML",
+    "definition": "YAML Ain't Markup Language - a human-readable data serialization format commonly used for configuration files. In agent systems, YAML files define skill manifests, workflow definitions, and environment settings.",
+    "relatedTerms": ["config", "format", "serialization"],
+    "seeAlso": ["JSON-LD", "Skill"]
+  },
+  {
+    "id": "zero-trust",
+    "term": "Zero-Trust",
+    "definition": "A security model that assumes no user, device, or service should be trusted by default. In agent systems, zero-trust principles require continuous verification and least-privilege access for all operations.",
+    "relatedTerms": ["security", "verification", "authentication"],
+    "seeAlso": ["Verification", "Identity"]
+  },
+  {
+    "id": "api",
+    "term": "API",
+    "definition": "Application Programming Interface - a set of rules and protocols that allows different software systems to communicate. Agents use APIs to access external services, retrieve data, and execute remote functions.",
+    "relatedTerms": ["interface", "endpoint", "integration"],
+    "seeAlso": ["Endpoint", "Tool", "MCP"]
+  },
+  {
+    "id": "context",
+    "term": "Context",
+    "definition": "The information and state that an agent maintains about its environment, conversation history, and current tasks. Context enables agents to make informed decisions and maintain continuity across interactions.",
+    "relatedTerms": ["state", "memory", "session"],
+    "seeAlso": ["Memory", "Session"]
+  },
+  {
+    "id": "memory",
+    "term": "Memory",
+    "definition": "The persistent storage of information that agents use to recall past interactions, learned patterns, and important context. Memory can be short-term (session-based) or long-term (persistent across sessions).",
+    "relatedTerms": ["storage", "persistence", "context"],
+    "seeAlso": ["Context", "Session"]
+  },
+  {
+    "id": "multi-agent-system",
+    "term": "Multi-Agent System",
+    "definition": "An architecture where multiple specialized agents collaborate to solve complex problems. Multi-agent systems distribute tasks based on agent expertise and coordinate through message passing or shared state.",
+    "relatedTerms": ["distributed", "orchestration", "coordination"],
+    "seeAlso": ["Agent", "Queue", "Workflow"]
+  },
+  {
+    "id": "orchestration",
+    "term": "Orchestration",
+    "definition": "The coordination and management of multiple agents, tools, or workflows to achieve complex goals. Orchestration involves task scheduling, dependency management, and resource allocation.",
+    "relatedTerms": ["coordination", "management", "workflow"],
+    "seeAlso": ["Multi-Agent System", "Workflow", "Queue"]
+  },
+  {
+    "id": "prompt",
+    "term": "Prompt",
+    "definition": "The input text or instructions given to an LLM to guide its behavior and responses. In agent systems, prompts define the agent's role, capabilities, constraints, and decision-making strategies.",
+    "relatedTerms": ["instruction", "system-message", "llm"],
+    "seeAlso": ["LLM", "Agent", "Identity"]
+  },
+  {
+    "id": "session",
+    "term": "Session",
+    "definition": "A temporary context or conversation instance that maintains state during a period of interaction. Sessions isolate conversations and track context that doesn't need to persist long-term.",
+    "relatedTerms": ["context", "instance", "temporary"],
+    "seeAlso": ["Context", "Memory"]
+  }
+]
