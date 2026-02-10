@@ -23,8 +23,10 @@ type JobListing = {
   location: JobLocation;
   description: string;
   requirements: string[];
-  benefits: string[];
-  postedAt: string;
+  benefits?: string[];
+  salary: string;
+  updatedAt: string;
+  postedAt?: string;
   status: JobStatus;
 };
 
@@ -204,7 +206,7 @@ export default function CareersPage() {
     "@type": "JobPosting",
     title: job.title,
     description: job.description,
-    datePosted: job.postedAt,
+    datePosted: job.postedAt ?? job.updatedAt,
     employmentType:
       job.type === "full-time"
         ? "FULL_TIME"
@@ -363,8 +365,11 @@ export default function CareersPage() {
                           {job.type}
                         </span>
                         <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+                          Salary: {job.salary}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
                           <Calendar className="h-4 w-4" />
-                          Posted {formatDate(job.postedAt)}
+                          Updated {formatDate(job.updatedAt)}
                         </span>
                       </div>
                     </CardHeader>
@@ -407,12 +412,15 @@ export default function CareersPage() {
                               Benefits
                             </h3>
                             <ul className="space-y-2">
-                              {job.benefits.map((benefit) => (
+                              {(job.benefits ?? []).map((benefit) => (
                                 <li key={benefit} className="flex gap-2 text-sm text-foreground/80">
                                   <span className="text-emerald-300">•</span>
                                   <span>{benefit}</span>
                                 </li>
                               ))}
+                              {(job.benefits ?? []).length === 0 && (
+                                <li className="text-sm text-foreground/60">Benefits shared during interview process.</li>
+                              )}
                             </ul>
                           </div>
                         </div>
