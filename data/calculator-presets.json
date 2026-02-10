@@ -1,0 +1,46 @@
+[
+  {
+    "id": "solo-developer",
+    "name": "Solo Developer",
+    "description": "One builder automating repetitive coding and support tasks.",
+    "inputs": {
+      "agents": 1,
+      "hoursSavedPerAgentPerDay": 1.5,
+      "hourlyRate": 90,
+      "monthlyToolCosts": 149
+    }
+  },
+  {
+    "id": "small-team",
+    "name": "Small Team",
+    "description": "A startup squad using agents across product and operations.",
+    "inputs": {
+      "agents": 5,
+      "hoursSavedPerAgentPerDay": 2,
+      "hourlyRate": 75,
+      "monthlyToolCosts": 699
+    }
+  },
+  {
+    "id": "enterprise",
+    "name": "Enterprise",
+    "description": "Cross-functional enterprise deployment with strict SLAs.",
+    "inputs": {
+      "agents": 40,
+      "hoursSavedPerAgentPerDay": 1.75,
+      "hourlyRate": 95,
+      "monthlyToolCosts": 9500
+    }
+  },
+  {
+    "id": "agency",
+    "name": "Agency",
+    "description": "Client services team using agents to speed delivery.",
+    "inputs": {
+      "agents": 12,
+      "hoursSavedPerAgentPerDay": 2.5,
+      "hourlyRate": 85,
+      "monthlyToolCosts": 2200
+    }
+  }
+]

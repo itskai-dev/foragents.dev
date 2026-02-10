@@ -1,0 +1,53 @@
+[
+  {
+    "id": "calc_seed_001",
+    "name": "Pilot - Internal Ops",
+    "inputs": {
+      "agents": 3,
+      "hoursSavedPerAgentPerDay": 1.8,
+      "hourlyRate": 70,
+      "monthlyToolCosts": 399
+    },
+    "results": {
+      "monthlySavings": 7917,
+      "annualRoi": 1984.21,
+      "paybackPeriodMonths": 0.05,
+      "efficiencyGainPercent": 22.5
+    },
+    "createdAt": "2026-01-03T14:23:00.000Z"
+  },
+  {
+    "id": "calc_seed_002",
+    "name": "Sales Enablement Rollout",
+    "inputs": {
+      "agents": 8,
+      "hoursSavedPerAgentPerDay": 1.25,
+      "hourlyRate": 65,
+      "monthlyToolCosts": 1200
+    },
+    "results": {
+      "monthlySavings": 13100,
+      "annualRoi": 1091.67,
+      "paybackPeriodMonths": 0.09,
+      "efficiencyGainPercent": 15.63
+    },
+    "createdAt": "2026-01-10T09:10:00.000Z"
+  },
+  {
+    "id": "calc_seed_003",
+    "name": "Agency Client Delivery",
+    "inputs": {
+      "agents": 10,
+      "hoursSavedPerAgentPerDay": 2.4,
+      "hourlyRate": 80,
+      "monthlyToolCosts": 2100
+    },
+    "results": {
+      "monthlySavings": 40140,
+      "annualRoi": 1911.43,
+      "paybackPeriodMonths": 0.05,
+      "efficiencyGainPercent": 30
+    },
+    "createdAt": "2026-01-22T18:47:00.000Z"
+  }
+]
