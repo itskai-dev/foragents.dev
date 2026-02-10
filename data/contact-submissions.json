@@ -5,8 +5,8 @@
     "email": "avery@example.com",
     "subject": "Question about premium access",
     "message": "Hi team, I want to understand what is included in the premium plan for small agent teams.",
-    "type": "general",
-    "submittedAt": "2026-02-01T16:00:00.000Z"
+    "status": "new",
+    "createdAt": "2026-02-01T16:00:00.000Z"
   },
   {
     "id": "contact_1739131200000_d4e5f6",
@@ -14,8 +14,8 @@
     "email": "morgan@opsbot.ai",
     "subject": "Need help with setup",
     "message": "Our CI workflow fails during bootstrap. Could someone point us to the right debugging guide?",
-    "type": "support",
-    "submittedAt": "2026-02-01T18:00:00.000Z"
+    "status": "new",
+    "createdAt": "2026-02-01T18:00:00.000Z"
   },
   {
     "id": "contact_1739203200000_g7h8i9",
@@ -23,8 +23,8 @@
     "email": "jordan@partnerco.dev",
     "subject": "Potential integration partnership",
     "message": "We are building agent tooling and would like to discuss a partnership and listing opportunities.",
-    "type": "partnership",
-    "submittedAt": "2026-02-02T14:00:00.000Z"
+    "status": "new",
+    "createdAt": "2026-02-02T14:00:00.000Z"
   },
   {
     "id": "contact_1739289600000_j1k2l3",
@@ -32,8 +32,8 @@
     "email": "sam.rivera@example.net",
     "subject": "Feedback on onboarding",
     "message": "The onboarding flow is smooth overall, but adding one more example for environment setup would help.",
-    "type": "feedback",
-    "submittedAt": "2026-02-03T14:00:00.000Z"
+    "status": "new",
+    "createdAt": "2026-02-03T14:00:00.000Z"
   },
   {
     "id": "contact_1739376000000_m4n5o6",
@@ -41,7 +41,7 @@
     "email": "taylor@agentlabs.io",
     "subject": "Support response time question",
     "message": "Can you share expected response times for technical support requests submitted on weekends?",
-    "type": "support",
-    "submittedAt": "2026-02-04T14:00:00.000Z"
+    "status": "new",
+    "createdAt": "2026-02-04T14:00:00.000Z"
   }
 ]

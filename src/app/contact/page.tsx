@@ -9,14 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Github, MessageSquare, MapPin, Clock } from "lucide-react";
 
-type ContactType = "general" | "support" | "partnership" | "feedback";
-
 type FormData = {
   name: string;
   email: string;
   subject: string;
   message: string;
-  type: ContactType;
 };
 
 const INITIAL_FORM: FormData = {
@@ -24,7 +21,6 @@ const INITIAL_FORM: FormData = {
   email: "",
   subject: "",
   message: "",
-  type: "general",
 };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -51,7 +47,6 @@ export default function ContactPage() {
     if (!EMAIL_REGEX.test(data.email.trim())) errors.email = "Enter a valid email address.";
     if (data.subject.trim().length < 3) errors.subject = "Subject must be at least 3 characters.";
     if (data.message.trim().length < 10) errors.message = "Message must be at least 10 characters.";
-    if (!data.type) errors.type = "Please select a message type.";
 
     return errors;
   };
@@ -82,7 +77,6 @@ export default function ContactPage() {
           email: formData.email.trim(),
           subject: formData.subject.trim(),
           message: formData.message.trim(),
-          type: formData.type,
         }),
       });
 
@@ -114,7 +108,7 @@ export default function ContactPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -197,26 +191,6 @@ export default function ContactPage() {
                       aria-invalid={Boolean(fieldErrors.email)}
                     />
                     {fieldErrors.email ? <p className="mt-1 text-sm text-red-300">{fieldErrors.email}</p> : null}
-                  </div>
-
-                  <div>
-                    <label htmlFor="type" className="block text-sm font-medium mb-2">
-                      Type
-                    </label>
-                    <select
-                      id="type"
-                      name="type"
-                      value={formData.type}
-                      onChange={handleChange}
-                      className="w-full px-3 py-2 bg-[#0a0a0a] border border-white/10 rounded-md focus:border-[#06D6A0] focus:outline-none focus:ring-1 focus:ring-[#06D6A0]"
-                      aria-invalid={Boolean(fieldErrors.type)}
-                    >
-                      <option value="general">General</option>
-                      <option value="support">Support</option>
-                      <option value="partnership">Partnership</option>
-                      <option value="feedback">Feedback</option>
-                    </select>
-                    {fieldErrors.type ? <p className="mt-1 text-sm text-red-300">{fieldErrors.type}</p> : null}
                   </div>
 
                   <div>
