@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkRateLimit, getClientIp, rateLimitResponse, readJsonWithLimit } from "@/lib/requestLimits";
-import { createSkillReview, getSkillReviews, incrementReviewHelpful } from "@/lib/reviews";
+import { createSkillReview, queryReviews } from "@/lib/reviews";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,11 +9,14 @@ function isNonEmptyString(v: unknown): v is string {
   return typeof v === "string" && v.trim().length > 0;
 }
 
+function parseSort(value: string | null): "recent" | "highest" {
+  return value === "highest" ? "highest" : "recent";
+}
+
 function validateNewReview(body: Record<string, unknown>): string[] {
   const errors: string[] = [];
 
   if (!isNonEmptyString(body.skillSlug)) errors.push("skillSlug is required");
-  if (!isNonEmptyString(body.author)) errors.push("author is required");
   if (!isNonEmptyString(body.title)) errors.push("title is required");
   if (!isNonEmptyString(body.body)) errors.push("body is required");
 
@@ -24,36 +27,27 @@ function validateNewReview(body: Record<string, unknown>): string[] {
     errors.push("rating must be between 1 and 5");
   }
 
-  if (typeof body.title === "string" && body.title.length > 140) {
-    errors.push("title must be under 140 characters");
-  }
-  if (typeof body.body === "string" && body.body.length > 8000) {
-    errors.push("body must be under 8,000 characters");
-  }
-
   return errors;
 }
 
-// GET /api/reviews?skill=<slug>&sort=helpful|newest
+// GET /api/reviews?skill=<slug>&sort=recent|highest
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-  const skill = url.searchParams.get("skill");
-  const sort = url.searchParams.get("sort") as "helpful" | "newest" | null;
+  const skill = url.searchParams.get("skill")?.trim() || undefined;
+  const sort = parseSort(url.searchParams.get("sort"));
 
-  if (!skill) {
-    return NextResponse.json(
-      { error: "Missing required query param: skill" },
-      { status: 400 }
-    );
-  }
+  const reviews = await queryReviews({ skillSlug: skill, sort });
+  const total = reviews.length;
+  const averageRating =
+    total > 0
+      ? Number((reviews.reduce((sum, review) => sum + (Number(review.rating) || 0), 0) / total).toFixed(2))
+      : 0;
 
-  const reviews = await getSkillReviews(skill, { sort: sort ?? "helpful" });
-  return NextResponse.json({ skill, count: reviews.length, reviews });
+  return NextResponse.json({ reviews, total, averageRating });
 }
 
 // POST /api/reviews
-// - Create a new review: { skillSlug, author, rating, title, body }
-// - Increment helpful: { id, helpfulDelta: 1 }
+// body: { skillSlug, rating, title, body, author }
 export async function POST(req: NextRequest) {
   try {
     const ip = getClientIp(req);
@@ -62,16 +56,6 @@ export async function POST(req: NextRequest) {
 
     const body = await readJsonWithLimit(req, 24_000);
 
-    // Helpful increment (optional, used by UI)
-    if (isNonEmptyString(body.id) && typeof body.helpfulDelta === "number") {
-      const delta = Number.isFinite(body.helpfulDelta) ? body.helpfulDelta : 1;
-      const updated = await incrementReviewHelpful(body.id, delta);
-      if (!updated) {
-        return NextResponse.json({ error: "Review not found" }, { status: 404 });
-      }
-      return NextResponse.json({ success: true, review: updated });
-    }
-
     const errors = validateNewReview(body);
     if (errors.length > 0) {
       return NextResponse.json({ error: "Validation failed", details: errors }, { status: 400 });
@@ -79,13 +63,13 @@ export async function POST(req: NextRequest) {
 
     const review = await createSkillReview({
       skillSlug: (body.skillSlug as string).trim(),
-      author: (body.author as string).trim(),
-      rating: body.rating as number,
+      author: typeof body.author === "string" ? body.author.trim() : "anonymous",
+      rating: Number(body.rating),
       title: (body.title as string).trim(),
       body: (body.body as string).trim(),
     });
 
-    return NextResponse.json({ success: true, review }, { status: 201 });
+    return NextResponse.json({ review }, { status: 201 });
   } catch (err) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const status = typeof (err as any)?.status === "number" ? (err as any).status : 400;

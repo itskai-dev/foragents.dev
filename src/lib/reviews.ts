@@ -9,7 +9,7 @@ export type SkillReview = {
   title: string;
   body: string;
   helpful: number;
-  createdAt: string; // YYYY-MM-DD
+  createdAt: string;
 };
 
 const REVIEWS_PATH = path.join(process.cwd(), "data", "skill-reviews.json");
@@ -31,31 +31,47 @@ async function writeAllReviews(reviews: SkillReview[]): Promise<void> {
   await fs.writeFile(REVIEWS_PATH, JSON.stringify(reviews, null, 2));
 }
 
-function safeDateKey(d: string): number {
-  const t = new Date(d).getTime();
+function safeDateKey(value: string): number {
+  const t = new Date(value).getTime();
   return Number.isFinite(t) ? t : 0;
 }
 
-export type ReviewSort = "helpful" | "newest";
+export type ReviewSort = "recent" | "highest" | "newest" | "helpful";
+
+function sortReviews(reviews: SkillReview[], sort: ReviewSort): SkillReview[] {
+  const normalizedSort = sort === "newest" ? "recent" : sort;
+
+  if (normalizedSort === "highest") {
+    return reviews.sort((a, b) => {
+      if (b.rating !== a.rating) return b.rating - a.rating;
+      return safeDateKey(b.createdAt) - safeDateKey(a.createdAt);
+    });
+  }
+
+  if (normalizedSort === "helpful") {
+    return reviews.sort((a, b) => {
+      if (b.helpful !== a.helpful) return b.helpful - a.helpful;
+      return safeDateKey(b.createdAt) - safeDateKey(a.createdAt);
+    });
+  }
+
+  return reviews.sort((a, b) => safeDateKey(b.createdAt) - safeDateKey(a.createdAt));
+}
+
+export async function queryReviews(opts?: {
+  skillSlug?: string;
+  sort?: ReviewSort;
+}): Promise<SkillReview[]> {
+  const all = await readAllReviews();
+  const filtered = opts?.skillSlug ? all.filter((r) => r.skillSlug === opts.skillSlug) : all;
+  return sortReviews(filtered, opts?.sort ?? "recent");
+}
 
 export async function getSkillReviews(
   slug: string,
   opts?: { sort?: ReviewSort }
 ): Promise<SkillReview[]> {
-  const all = await readAllReviews();
-  const filtered = all.filter((r) => r.skillSlug === slug);
-
-  const sort = opts?.sort ?? "helpful";
-
-  if (sort === "newest") {
-    return filtered.sort((a, b) => safeDateKey(b.createdAt) - safeDateKey(a.createdAt));
-  }
-
-  // default: helpful, then newest
-  return filtered.sort((a, b) => {
-    if (b.helpful !== a.helpful) return b.helpful - a.helpful;
-    return safeDateKey(b.createdAt) - safeDateKey(a.createdAt);
-  });
+  return queryReviews({ skillSlug: slug, sort: opts?.sort ?? "recent" });
 }
 
 export async function getReviewCount(slug: string): Promise<number> {
@@ -73,23 +89,20 @@ export async function getAverageRating(slug: string): Promise<number> {
 
 export async function createSkillReview(input: {
   skillSlug: string;
-  author: string;
+  author?: string;
   rating: number;
   title: string;
   body: string;
 }): Promise<SkillReview> {
-  const now = new Date();
-  const createdAt = now.toISOString().slice(0, 10);
-
   const review: SkillReview = {
-    id: `review_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+    id: `review_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`,
     skillSlug: input.skillSlug,
-    author: input.author,
+    author: (input.author && input.author.trim()) || "anonymous",
     rating: input.rating,
     title: input.title,
     body: input.body,
     helpful: 0,
-    createdAt,
+    createdAt: new Date().toISOString(),
   };
 
   const all = await readAllReviews();
