@@ -4,7 +4,7 @@ test.describe("Core page navigation", () => {
   test("homepage loads and shows skills directory", async ({ page }) => {
     await page.goto("/");
     await expect(page).toHaveTitle(/forAgents\.dev/);
-    // Should have skill cards or a skills section
+    // Should have a main heading
     await expect(
       page.getByRole("heading", { level: 1 }).first()
     ).toBeVisible();
@@ -30,15 +30,15 @@ test.describe("Core page navigation", () => {
     await page.goto("/search");
     await expect(page).toHaveTitle(/search/i);
     await expect(
-      page.getByRole("textbox").or(page.getByPlaceholder(/search/i)).first()
+      page.getByPlaceholder(/search/i)
     ).toBeVisible();
   });
 
   test("/auth/signin loads with sign-in form", async ({ page }) => {
     await page.goto("/auth/signin");
-    // Should show a sign-in heading or form
+    // Should show a sign-in heading
     await expect(
-      page.getByRole("heading", { name: /sign in/i }).or(page.getByText(/sign in/i).first())
+      page.getByRole("heading", { name: /sign in/i })
     ).toBeVisible();
   });
 

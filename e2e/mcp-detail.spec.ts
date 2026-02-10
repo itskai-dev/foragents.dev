@@ -1,6 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-const INSTALL_TABS = ["Claude Desktop", "Cursor", "VS Code", "OpenClaw", "Generic"];
+const INSTALL_TABS = [
+  "Claude Desktop",
+  "Cursor",
+  "VS Code (Copilot)",
+  "OpenClaw",
+  "Generic (npx)",
+];
 
 test.describe("MCP detail page with install tabs", () => {
   test.beforeEach(async ({ page }) => {
@@ -14,24 +20,24 @@ test.describe("MCP detail page with install tabs", () => {
   test("client install tabs are visible", async ({ page }) => {
     for (const tabName of INSTALL_TABS) {
       await expect(
-        page.getByRole("tab", { name: new RegExp(tabName, "i") })
+        page.getByRole("button", { name: tabName, exact: true })
       ).toBeVisible();
     }
   });
 
-  test("clicking each tab shows different config snippet", async ({ page }) => {
+  test("clicking each tab shows config with server name", async ({ page }) => {
     for (const tabName of INSTALL_TABS) {
-      const tab = page.getByRole("tab", { name: new RegExp(tabName, "i") });
+      const tab = page.getByRole("button", { name: tabName, exact: true });
       await tab.click();
 
       // Each tab panel should show a code snippet containing the server slug
       await expect(
-        page.getByText(/filesystem/).first()
+        page.locator("pre, code").filter({ hasText: /filesystem/ }).first()
       ).toBeVisible();
     }
   });
 
-  test("config snippets contain the server name", async ({ page }) => {
+  test("default tab shows config snippet", async ({ page }) => {
     // Default tab should show config with the server slug
     await expect(
       page.locator("pre, code").filter({ hasText: /filesystem/ }).first()

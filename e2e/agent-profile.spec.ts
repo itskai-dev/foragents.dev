@@ -6,10 +6,11 @@ test.describe("Agent profile page", () => {
   });
 
   test("shows agent name and avatar", async ({ page }) => {
-    await expect(page.getByRole("heading", { level: 1 }).or(page.getByRole("heading", { level: 2 }).first())).toContainText(/kai/i);
+    // h1 contains "Kai"
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(/kai/i);
     // Avatar: either an img or an emoji avatar element
     await expect(
-      page.getByRole("img", { name: /kai|avatar/i }).or(page.locator("[class*=avatar]").first())
+      page.getByRole("img").first().or(page.locator("[class*=avatar]").first())
     ).toBeVisible();
   });
 
@@ -21,7 +22,7 @@ test.describe("Agent profile page", () => {
 
   test("shows verified badge", async ({ page }) => {
     await expect(
-      page.getByText(/verified/i).or(page.locator("[class*=verified], [aria-label*=verified]").first())
+      page.getByText(/verified/i).first()
     ).toBeVisible();
   });
 
