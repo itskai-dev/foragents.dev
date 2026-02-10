@@ -1,0 +1,172 @@
+{
+  "guides": [
+    {
+      "id": "langchain-to-foragents",
+      "fromPlatform": "langchain",
+      "toPlatform": "foragents",
+      "title": "LangChain → forAgents.dev",
+      "description": "Move from chain-heavy orchestration to modular skills, reusable prompts, and persistent memory.",
+      "difficulty": "medium",
+      "estimatedTime": "2-3 hours",
+      "completions": 134,
+      "steps": [
+        {
+          "title": "Audit your current chains",
+          "content": "List your active chains, tools, and memory modules.\n\n- Document each chain purpose\n- Note external APIs and secrets\n- Capture expected outputs for test parity"
+        },
+        {
+          "title": "Map chains to skills",
+          "content": "Replace tightly coupled chain logic with dedicated skills.\n\n```bash\nmkdir -p skills/research skills/summarize\n```\n\nCreate a `SKILL.md` for each capability so behavior is explicit and versionable."
+        },
+        {
+          "title": "Port memory strategy",
+          "content": "Use file-based memory conventions:\n\n- `memory/YYYY-MM-DD.md` for daily context\n- `MEMORY.md` for durable facts\n\nThis makes context portable across hosts and sessions."
+        },
+        {
+          "title": "Validate with side-by-side prompts",
+          "content": "Run 5-10 representative prompts in both systems. Compare correctness, latency, and token usage before cutover."
+        }
+      ]
+    },
+    {
+      "id": "crewai-to-foragents",
+      "fromPlatform": "crewai",
+      "toPlatform": "foragents",
+      "title": "CrewAI → forAgents.dev",
+      "description": "Convert role-based crews into lane-based workflows with shared backlog and deterministic handoffs.",
+      "difficulty": "easy",
+      "estimatedTime": "60-90 minutes",
+      "completions": 89,
+      "steps": [
+        {
+          "title": "Define lane ownership",
+          "content": "Translate CrewAI roles into lanes (`research`, `build`, `review`) and assign single owners to avoid duplicate work."
+        },
+        {
+          "title": "Move tasks into BACKLOG.md",
+          "content": "Represent each task with status and output location.\n\n```md\n### Improve onboarding flow\n- lane: build\n- status: ready\n- output: docs/onboarding.md\n```"
+        },
+        {
+          "title": "Add heartbeat instructions",
+          "content": "Set heartbeat rules so agents can self-pull ready work and report blockers without central orchestration."
+        },
+        {
+          "title": "Run a pilot sprint",
+          "content": "Use one real backlog item and verify handoff quality across at least two lanes before full migration."
+        }
+      ]
+    },
+    {
+      "id": "autogen-to-foragents",
+      "fromPlatform": "autogen",
+      "toPlatform": "foragents",
+      "title": "AutoGen → forAgents.dev",
+      "description": "Simplify multi-agent chat loops into actionable artifacts, lane contracts, and reusable skills.",
+      "difficulty": "medium",
+      "estimatedTime": "2 hours",
+      "completions": 57,
+      "steps": [
+        {
+          "title": "Capture your current agent graph",
+          "content": "Document which agents talk to whom, and where decisions are currently made in free-form chat loops."
+        },
+        {
+          "title": "Replace chat loops with artifacts",
+          "content": "Require each stage to write a concrete output (spec, diff, test report) instead of unbounded conversation."
+        },
+        {
+          "title": "Extract stable behaviors into skills",
+          "content": "Any repeated behavior should become a `SKILL.md` plus examples. This reduces drift and improves onboarding."
+        },
+        {
+          "title": "Enforce acceptance checks",
+          "content": "Before handoff, validate against explicit criteria (tests pass, docs updated, no lint regressions)."
+        }
+      ]
+    },
+    {
+      "id": "openai-agents-to-foragents",
+      "fromPlatform": "openai-agents",
+      "toPlatform": "foragents",
+      "title": "OpenAI Agents SDK → forAgents.dev",
+      "description": "Retain tool-calling power while moving execution contracts and memory into portable workspace files.",
+      "difficulty": "hard",
+      "estimatedTime": "3-4 hours",
+      "completions": 31,
+      "steps": [
+        {
+          "title": "Inventory tools and guards",
+          "content": "List all tools, guardrails, and expected input/output schemas from your current SDK setup."
+        },
+        {
+          "title": "Recreate tool contracts in skills",
+          "content": "Define each tool's capability, constraints, and failure handling in skill docs so behavior is transparent."
+        },
+        {
+          "title": "Externalize runtime context",
+          "content": "Move persistent instructions into `AGENTS.md`, `SOUL.md`, and memory files to avoid hidden runtime coupling."
+        },
+        {
+          "title": "Test fallback paths",
+          "content": "Validate retries, partial failures, and rate limits. Add runbooks in `memory/procedures/` for recurring incidents."
+        }
+      ]
+    },
+    {
+      "id": "custom-stack-to-foragents",
+      "fromPlatform": "custom",
+      "toPlatform": "foragents",
+      "title": "Custom Stack → forAgents.dev",
+      "description": "Migrate bespoke scripts and prompts into a maintainable, shareable skill-and-memory architecture.",
+      "difficulty": "hard",
+      "estimatedTime": "4-6 hours",
+      "completions": 22,
+      "steps": [
+        {
+          "title": "Snapshot current behavior",
+          "content": "Record baseline outputs for your top workflows so you can verify migration parity later."
+        },
+        {
+          "title": "Decompose monolith logic",
+          "content": "Split script logic into capabilities: retrieval, transformation, reporting, and escalation."
+        },
+        {
+          "title": "Build skill folders",
+          "content": "Create one folder per capability with a concise `SKILL.md`, examples, and required env vars."
+        },
+        {
+          "title": "Introduce shared operational memory",
+          "content": "Track incidents, fixes, and lessons in memory files to reduce repeated debugging and onboarding time."
+        }
+      ]
+    },
+    {
+      "id": "foragents-v1-to-v2",
+      "fromPlatform": "foragents-v1",
+      "toPlatform": "foragents",
+      "title": "forAgents v1 → v2",
+      "description": "Upgrade to v2 conventions with cleaner memory boundaries, better API integrations, and improved workflow clarity.",
+      "difficulty": "easy",
+      "estimatedTime": "30-45 minutes",
+      "completions": 203,
+      "steps": [
+        {
+          "title": "Update workspace conventions",
+          "content": "Adopt v2 defaults for memory and heartbeat files; remove obsolete v1 task patterns."
+        },
+        {
+          "title": "Refresh core skills",
+          "content": "Pull latest skill versions and verify local overrides still match your intent."
+        },
+        {
+          "title": "Re-run lint and build",
+          "content": "Use project checks to catch outdated imports, stale APIs, and typing regressions before rollout."
+        },
+        {
+          "title": "Document migration decisions",
+          "content": "Write what changed and why in `memory/YYYY-MM-DD.md` so future contributors can reason about the upgrade."
+        }
+      ]
+    }
+  ]
+}
