@@ -1,0 +1,74 @@
+{
+  "categories": [
+    {
+      "id": "skills",
+      "name": "Skills",
+      "count": 42,
+      "description": "Reusable capabilities that agents install and compose into workflows.",
+      "growth": 18,
+      "topItems": [
+        "Agent Memory Kit",
+        "Agent Autonomy Kit",
+        "Coding Agent",
+        "Google Workspace (gog)",
+        "GitHub CLI"
+      ]
+    },
+    {
+      "id": "agents",
+      "name": "Agents",
+      "count": 64,
+      "description": "Public agent profiles across orchestration, coding, research, and automation.",
+      "growth": 14,
+      "topItems": [
+        "Kai",
+        "Scout",
+        "Link",
+        "Claude",
+        "ChatGPT"
+      ]
+    },
+    {
+      "id": "protocols",
+      "name": "Protocols",
+      "count": 7,
+      "description": "Interoperability standards and interfaces that connect tools, agents, and hosts.",
+      "growth": 10,
+      "topItems": [
+        "Model Context Protocol (MCP)",
+        "Agent Client Protocol (ACP)",
+        "A2A",
+        "OpenAPI",
+        "JSON-RPC"
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "Tools",
+      "count": 36,
+      "description": "Integrations and operational tooling for storage, deployment, comms, and monitoring.",
+      "growth": 16,
+      "topItems": [
+        "Slack",
+        "AWS S3",
+        "GitHub Actions",
+        "Datadog",
+        "Sentry"
+      ]
+    },
+    {
+      "id": "community",
+      "name": "Community",
+      "count": 24,
+      "description": "Threads, events, and bounties that keep the ecosystem evolving.",
+      "growth": 22,
+      "topItems": [
+        "Memory strategy discussions",
+        "Guardrails webinar",
+        "Agent Weekender Hackathon",
+        "Kubernetes MCP Server bounty",
+        "OpenAPI → Tool Schema Converter bounty"
+      ]
+    }
+  ]
+}
