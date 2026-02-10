@@ -1,46 +1,52 @@
 [
   {
-    "id": "solo-developer",
-    "name": "Solo Developer",
-    "description": "One builder automating repetitive coding and support tasks.",
-    "inputs": {
-      "agents": 1,
-      "hoursSavedPerAgentPerDay": 1.5,
-      "hourlyRate": 90,
-      "monthlyToolCosts": 149
-    }
+    "id": "solo-builder",
+    "name": "Solo Builder",
+    "description": "One founder using a single agent stack for coding and support triage.",
+    "agents": 1,
+    "tokensPerDay": 450000,
+    "costPerToken": 0.0000012,
+    "hoursPerDay": 1.5,
+    "humanHourlyCost": 95
   },
   {
-    "id": "small-team",
-    "name": "Small Team",
-    "description": "A startup squad using agents across product and operations.",
-    "inputs": {
-      "agents": 5,
-      "hoursSavedPerAgentPerDay": 2,
-      "hourlyRate": 75,
-      "monthlyToolCosts": 699
-    }
+    "id": "lean-startup",
+    "name": "Lean Startup Team",
+    "description": "Five agents helping product, support, and growth in a fast-moving startup.",
+    "agents": 5,
+    "tokensPerDay": 700000,
+    "costPerToken": 0.0000011,
+    "hoursPerDay": 2.2,
+    "humanHourlyCost": 78
   },
   {
-    "id": "enterprise",
-    "name": "Enterprise",
-    "description": "Cross-functional enterprise deployment with strict SLAs.",
-    "inputs": {
-      "agents": 40,
-      "hoursSavedPerAgentPerDay": 1.75,
-      "hourlyRate": 95,
-      "monthlyToolCosts": 9500
-    }
+    "id": "agency-ops",
+    "name": "Agency Operations",
+    "description": "Client delivery team using AI agents to speed production and QA cycles.",
+    "agents": 12,
+    "tokensPerDay": 900000,
+    "costPerToken": 0.000001,
+    "hoursPerDay": 2.8,
+    "humanHourlyCost": 85
   },
   {
-    "id": "agency",
-    "name": "Agency",
-    "description": "Client services team using agents to speed delivery.",
-    "inputs": {
-      "agents": 12,
-      "hoursSavedPerAgentPerDay": 2.5,
-      "hourlyRate": 85,
-      "monthlyToolCosts": 2200
-    }
+    "id": "enterprise-coe",
+    "name": "Enterprise COE",
+    "description": "Central AI center of excellence supporting multiple internal departments.",
+    "agents": 30,
+    "tokensPerDay": 1200000,
+    "costPerToken": 0.00000095,
+    "hoursPerDay": 1.9,
+    "humanHourlyCost": 105
+  },
+  {
+    "id": "support-heavy",
+    "name": "Support-Heavy Org",
+    "description": "Customer operations team running always-on assistant workflows.",
+    "agents": 20,
+    "tokensPerDay": 1600000,
+    "costPerToken": 0.0000009,
+    "hoursPerDay": 2.4,
+    "humanHourlyCost": 62
   }
 ]

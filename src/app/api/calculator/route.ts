@@ -2,97 +2,68 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest, NextResponse } from "next/server";
 
-type CalculatorInputs = {
-  agents: number;
-  hoursSavedPerAgentPerDay: number;
-  hourlyRate: number;
-  monthlyToolCosts: number;
-};
-
-type CalculatorResults = {
-  monthlySavings: number;
-  annualRoi: number;
-  paybackPeriodMonths: number | null;
-  efficiencyGainPercent: number;
-};
-
-type SavedCalculation = {
+type CalculatorPreset = {
   id: string;
   name: string;
-  inputs: CalculatorInputs;
-  results: CalculatorResults;
-  createdAt: string;
+  description: string;
+  agents: number;
+  tokensPerDay: number;
+  costPerToken: number;
+  hoursPerDay: number;
+  humanHourlyCost: number;
 };
 
-type SaveCalculationBody = {
-  name?: unknown;
-  inputs?: unknown;
-  results?: unknown;
+type ComputeRequestBody = {
+  agentCount?: unknown;
+  tokensPerDay?: unknown;
+  costPerToken?: unknown;
+  humanEquivalentHours?: unknown;
+  hourlyRate?: unknown;
 };
 
 const PRESETS_PATH = path.join(process.cwd(), "data", "calculator-presets.json");
-const RESULTS_PATH = path.join(process.cwd(), "data", "calculator-results.json");
+const DAYS_PER_MONTH = 30;
+const WORK_DAYS_PER_MONTH = 22;
 
 function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-function isInputs(value: unknown): value is CalculatorInputs {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const inputs = value as Partial<CalculatorInputs>;
-
-  return (
-    isFiniteNumber(inputs.agents) &&
-    isFiniteNumber(inputs.hoursSavedPerAgentPerDay) &&
-    isFiniteNumber(inputs.hourlyRate) &&
-    isFiniteNumber(inputs.monthlyToolCosts)
-  );
+function clamp(value: number, min: number): number {
+  return value < min ? min : value;
 }
 
-function isResults(value: unknown): value is CalculatorResults {
-  if (!value || typeof value !== "object") {
-    return false;
+async function readPresets(): Promise<CalculatorPreset[]> {
+  const raw = await fs.readFile(PRESETS_PATH, "utf8");
+  const parsed = JSON.parse(raw) as unknown;
+
+  if (!Array.isArray(parsed)) {
+    return [];
   }
 
-  const results = value as Partial<CalculatorResults>;
+  return parsed.filter((item): item is CalculatorPreset => {
+    if (!item || typeof item !== "object") {
+      return false;
+    }
 
-  const paybackValid =
-    results.paybackPeriodMonths === null || isFiniteNumber(results.paybackPeriodMonths);
+    const preset = item as Partial<CalculatorPreset>;
 
-  return (
-    isFiniteNumber(results.monthlySavings) &&
-    isFiniteNumber(results.annualRoi) &&
-    paybackValid &&
-    isFiniteNumber(results.efficiencyGainPercent)
-  );
-}
-
-async function readJsonFile<T>(filePath: string, fallback: T): Promise<T> {
-  try {
-    const raw = await fs.readFile(filePath, "utf8");
-    return JSON.parse(raw) as T;
-  } catch {
-    return fallback;
-  }
-}
-
-async function writeResults(results: SavedCalculation[]): Promise<void> {
-  const dir = path.dirname(RESULTS_PATH);
-  await fs.mkdir(dir, { recursive: true });
-  await fs.writeFile(RESULTS_PATH, JSON.stringify(results, null, 2), "utf8");
+    return (
+      typeof preset.id === "string" &&
+      typeof preset.name === "string" &&
+      typeof preset.description === "string" &&
+      isFiniteNumber(preset.agents) &&
+      isFiniteNumber(preset.tokensPerDay) &&
+      isFiniteNumber(preset.costPerToken) &&
+      isFiniteNumber(preset.hoursPerDay) &&
+      isFiniteNumber(preset.humanHourlyCost)
+    );
+  });
 }
 
 export async function GET() {
   try {
-    const presets = await readJsonFile(PRESETS_PATH, []);
-
-    if (!Array.isArray(presets)) {
-      return NextResponse.json({ error: "Invalid presets format" }, { status: 500 });
-    }
-
+    const presets = await readPresets();
     return NextResponse.json({ presets });
   } catch (error) {
     console.error("Failed to load calculator presets", error);
@@ -102,50 +73,48 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as SaveCalculationBody;
+    const body = (await request.json()) as ComputeRequestBody;
 
-    const name = typeof body.name === "string" ? body.name.trim() : "";
-    const inputs = body.inputs;
-    const results = body.results;
-
-    if (!name) {
-      return NextResponse.json({ error: "name is required" }, { status: 400 });
-    }
-
-    if (!isInputs(inputs)) {
-      return NextResponse.json(
-        { error: "inputs must include agents, hoursSavedPerAgentPerDay, hourlyRate, and monthlyToolCosts" },
-        { status: 400 }
-      );
-    }
-
-    if (!isResults(results)) {
+    if (
+      !isFiniteNumber(body.agentCount) ||
+      !isFiniteNumber(body.tokensPerDay) ||
+      !isFiniteNumber(body.costPerToken) ||
+      !isFiniteNumber(body.humanEquivalentHours) ||
+      !isFiniteNumber(body.hourlyRate)
+    ) {
       return NextResponse.json(
         {
           error:
-            "results must include monthlySavings, annualRoi, paybackPeriodMonths, and efficiencyGainPercent",
+            "agentCount, tokensPerDay, costPerToken, humanEquivalentHours, and hourlyRate must be valid numbers",
         },
         { status: 400 }
       );
     }
 
-    const existingResults = await readJsonFile<SavedCalculation[]>(RESULTS_PATH, []);
-    const safeResults = Array.isArray(existingResults) ? existingResults : [];
+    const agentCount = clamp(body.agentCount, 0);
+    const tokensPerDay = clamp(body.tokensPerDay, 0);
+    const costPerToken = clamp(body.costPerToken, 0);
+    const humanEquivalentHours = clamp(body.humanEquivalentHours, 0);
+    const hourlyRate = clamp(body.hourlyRate, 0);
 
-    const record: SavedCalculation = {
-      id: `calc_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
-      name,
-      inputs,
-      results,
-      createdAt: new Date().toISOString(),
-    };
+    const monthlyCost = agentCount * tokensPerDay * costPerToken * DAYS_PER_MONTH;
+    const monthlySavings = agentCount * humanEquivalentHours * hourlyRate * WORK_DAYS_PER_MONTH;
 
-    safeResults.unshift(record);
-    await writeResults(safeResults);
+    const netMonthly = monthlySavings - monthlyCost;
+    const roiPercentage =
+      monthlyCost > 0 ? (netMonthly / monthlyCost) * 100 : monthlySavings > 0 ? 9999 : 0;
 
-    return NextResponse.json({ calculation: record }, { status: 201 });
+    const netDaily = netMonthly / DAYS_PER_MONTH;
+    const breakevenDays = netDaily > 0 && monthlyCost > 0 ? monthlyCost / netDaily : null;
+
+    return NextResponse.json({
+      monthlyCost: Number(monthlyCost.toFixed(2)),
+      monthlySavings: Number(monthlySavings.toFixed(2)),
+      roiPercentage: Number(roiPercentage.toFixed(2)),
+      breakevenDays: breakevenDays === null ? null : Number(breakevenDays.toFixed(2)),
+    });
   } catch (error) {
-    console.error("Failed to save calculator result", error);
-    return NextResponse.json({ error: "Failed to save calculator result" }, { status: 500 });
+    console.error("Failed to compute calculator ROI", error);
+    return NextResponse.json({ error: "Failed to compute calculator ROI" }, { status: 500 });
   }
 }
