@@ -9,22 +9,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import notificationsData from "@/data/notifications.json";
-
-type NotificationCategory = "New Skills" | "Security Alerts" | "Platform Updates" | "Community Activity" | "Weekly Digest";
 
 type Channel = "email" | "discord" | "webhook" | "in-app";
 type Category = "security-alerts" | "new-skills" | "bounty-updates" | "community" | "system";
 type Frequency = "instant" | "daily" | "weekly" | "off";
+type NotificationType = "new-skills" | "security-alerts" | "platform-updates" | "community-activity" | "weekly-digest";
 
 interface Notification {
   id: string;
-  category: NotificationCategory;
   title: string;
   message: string;
-  timestamp: string;
+  type: NotificationType;
   read: boolean;
-  link: string;
+  userId: string;
+  createdAt: string;
+  link?: string;
 }
 
 interface CategoryPreference {
@@ -37,6 +36,7 @@ interface NotificationPreferences {
   categories: Record<Category, CategoryPreference>;
 }
 
+const DEMO_USER_ID = "agent-001";
 const CATEGORY_ORDER: Category[] = ["security-alerts", "new-skills", "bounty-updates", "community", "system"];
 const CHANNEL_ORDER: Channel[] = ["email", "discord", "webhook", "in-app"];
 
@@ -46,6 +46,14 @@ const CATEGORY_LABELS: Record<Category, string> = {
   "bounty-updates": "Bounty Updates",
   community: "Community",
   system: "System",
+};
+
+const NOTIFICATION_TYPE_LABELS: Record<NotificationType, string> = {
+  "new-skills": "New Skills",
+  "security-alerts": "Security Alerts",
+  "platform-updates": "Platform Updates",
+  "community-activity": "Community Activity",
+  "weekly-digest": "Weekly Digest",
 };
 
 const CHANNEL_LABELS: Record<Channel, string> = {
@@ -79,11 +87,14 @@ export default function NotificationsPage() {
   const [preferences, setPreferences] = useState<NotificationPreferences | null>(null);
   const [defaults, setDefaults] = useState<NotificationPreferences | null>(null);
   const [isLoadingPreferences, setIsLoadingPreferences] = useState(true);
+  const [isLoadingNotifications, setIsLoadingNotifications] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
+  const [isUpdatingNotifications, setIsUpdatingNotifications] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<Notification[]>(notificationsData as Notification[]);
+  const [notificationsError, setNotificationsError] = useState<string | null>(null);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   useEffect(() => {
     const loadPreferences = async () => {
@@ -111,6 +122,33 @@ export default function NotificationsPage() {
     };
 
     void loadPreferences();
+  }, []);
+
+  useEffect(() => {
+    const loadNotifications = async () => {
+      setIsLoadingNotifications(true);
+      setNotificationsError(null);
+
+      try {
+        const response = await fetch(`/api/notifications?userId=${encodeURIComponent(DEMO_USER_ID)}`, {
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to load notifications");
+        }
+
+        const data = (await response.json()) as { notifications: Notification[] };
+        setNotifications(data.notifications);
+      } catch (error) {
+        console.error(error);
+        setNotificationsError("Could not load notifications. Please refresh and try again.");
+      } finally {
+        setIsLoadingNotifications(false);
+      }
+    };
+
+    void loadNotifications();
   }, []);
 
   const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
@@ -201,14 +239,58 @@ export default function NotificationsPage() {
     }
   };
 
-  const toggleNotificationRead = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notif) => (notif.id === id ? { ...notif, read: !notif.read } : notif))
-    );
+  const toggleNotificationRead = async (id: string, nextReadValue: boolean) => {
+    setIsUpdatingNotifications(true);
+    setNotificationsError(null);
+
+    try {
+      const response = await fetch("/api/notifications", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, read: nextReadValue }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update notification");
+      }
+
+      setNotifications((prev) =>
+        prev.map((notif) => (notif.id === id ? { ...notif, read: nextReadValue } : notif))
+      );
+    } catch (error) {
+      console.error(error);
+      setNotificationsError("Could not update notification status.");
+    } finally {
+      setIsUpdatingNotifications(false);
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
+  const markAllAsRead = async () => {
+    setIsUpdatingNotifications(true);
+    setNotificationsError(null);
+
+    try {
+      const response = await fetch("/api/notifications", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ markAll: true, userId: DEMO_USER_ID, read: true }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to mark notifications as read");
+      }
+
+      setNotifications((prev) => prev.map((notif) => ({ ...notif, read: true })));
+    } catch (error) {
+      console.error(error);
+      setNotificationsError("Could not mark all notifications as read.");
+    } finally {
+      setIsUpdatingNotifications(false);
+    }
   };
 
   return (
@@ -337,6 +419,7 @@ export default function NotificationsPage() {
                   variant="outline"
                   size="sm"
                   onClick={markAllAsRead}
+                  disabled={isUpdatingNotifications}
                   className="border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800"
                 >
                   Mark all as read
@@ -344,40 +427,50 @@ export default function NotificationsPage() {
               )}
             </div>
 
-            <div className="space-y-3">
-              {notifications.map((notif) => (
-                <Link
-                  key={notif.id}
-                  href={notif.link}
-                  onClick={() => !notif.read && toggleNotificationRead(notif.id)}
-                  className={`block rounded-lg border p-4 transition-all ${
-                    notif.read
-                      ? "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
-                      : "bg-slate-800/70 border-[#06D6A0]/30 hover:border-[#06D6A0]/50"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <Badge
-                      variant="outline"
-                      className={`text-xs ${
-                        notif.read
-                          ? "bg-slate-700/30 text-slate-400 border-slate-600"
-                          : "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
-                      }`}
-                    >
-                      {notif.category}
-                    </Badge>
-                    <span className="text-xs text-slate-500">{formatTimestamp(notif.timestamp)}</span>
-                  </div>
-                  <h3 className={`font-semibold mb-1 ${notif.read ? "text-slate-300" : "text-white"}`}>
-                    {notif.title}
-                  </h3>
-                  <p className={`text-sm ${notif.read ? "text-slate-500" : "text-slate-400"}`}>
-                    {notif.message}
-                  </p>
-                </Link>
-              ))}
-            </div>
+            {notificationsError && (
+              <div className="rounded-md border border-red-400/40 bg-red-500/10 p-3 text-sm text-red-300">
+                {notificationsError}
+              </div>
+            )}
+
+            {isLoadingNotifications && <p className="text-slate-300">Loading notifications...</p>}
+
+            {!isLoadingNotifications && !notificationsError && (
+              <div className="space-y-3">
+                {notifications.map((notif) => (
+                  <Link
+                    key={notif.id}
+                    href={notif.link ?? "/notifications"}
+                    onClick={() => {
+                      if (!notif.read) {
+                        void toggleNotificationRead(notif.id, true);
+                      }
+                    }}
+                    className={`block rounded-lg border p-4 transition-all ${
+                      notif.read
+                        ? "bg-slate-800/30 border-slate-700/50 hover:border-slate-600"
+                        : "bg-slate-800/70 border-[#06D6A0]/30 hover:border-[#06D6A0]/50"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <Badge
+                        variant="outline"
+                        className={`text-xs ${
+                          notif.read
+                            ? "bg-slate-700/30 text-slate-400 border-slate-600"
+                            : "bg-[#06D6A0]/10 text-[#06D6A0] border-[#06D6A0]/30"
+                        }`}
+                      >
+                        {NOTIFICATION_TYPE_LABELS[notif.type]}
+                      </Badge>
+                      <span className="text-xs text-slate-500">{formatTimestamp(notif.createdAt)}</span>
+                    </div>
+                    <h3 className={`font-semibold mb-1 ${notif.read ? "text-slate-300" : "text-white"}`}>{notif.title}</h3>
+                    <p className={`text-sm ${notif.read ? "text-slate-500" : "text-slate-400"}`}>{notif.message}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "notif_001",
+    "title": "New Skill Available: Agent Memory Kit Pro",
+    "message": "An enhanced memory kit with semantic recall is now available.",
+    "type": "new-skills",
+    "read": false,
+    "userId": "agent-001",
+    "createdAt": "2026-02-09T17:30:00.000Z",
+    "link": "/skills/agent-memory-kit-pro"
+  },
+  {
+    "id": "notif_002",
+    "title": "Security Advisory: OAuth Token Rotation",
+    "message": "Rotate OAuth credentials to apply the latest security hardening update.",
+    "type": "security-alerts",
+    "read": false,
+    "userId": "agent-001",
+    "createdAt": "2026-02-09T13:15:00.000Z",
+    "link": "/changelog"
+  },
+  {
+    "id": "notif_003",
+    "title": "Platform Update: Improved Search Index",
+    "message": "Search now supports semantic ranking across skills, docs, and playbooks.",
+    "type": "platform-updates",
+    "read": true,
+    "userId": "agent-001",
+    "createdAt": "2026-02-08T18:45:00.000Z",
+    "link": "/changelog"
+  },
+  {
+    "id": "notif_004",
+    "title": "Community Activity: New Reply on Your Artifact",
+    "message": "A community member replied to your artifact discussion thread.",
+    "type": "community-activity",
+    "read": true,
+    "userId": "agent-001",
+    "createdAt": "2026-02-08T09:20:00.000Z",
+    "link": "/community"
+  },
+  {
+    "id": "notif_005",
+    "title": "Weekly Digest Ready",
+    "message": "Your weekly digest is available with top launches and trending conversations.",
+    "type": "weekly-digest",
+    "read": false,
+    "userId": "agent-001",
+    "createdAt": "2026-02-07T08:00:00.000Z",
+    "link": "/changelog"
+  },
+  {
+    "id": "notif_006",
+    "title": "New Skills: Workflow Automation Bundle",
+    "message": "A new bundle for agent workflow automation has been published.",
+    "type": "new-skills",
+    "read": true,
+    "userId": "agent-001",
+    "createdAt": "2026-02-06T16:10:00.000Z",
+    "link": "/skills"
+  },
+  {
+    "id": "notif_007",
+    "title": "Security Alert: Suspicious API Key Pattern",
+    "message": "We detected a pattern associated with leaked test keys. Review active keys.",
+    "type": "security-alerts",
+    "read": true,
+    "userId": "agent-001",
+    "createdAt": "2026-02-06T10:05:00.000Z",
+    "link": "/settings/notifications"
+  },
+  {
+    "id": "notif_008",
+    "title": "Platform Update: Profile Milestones",
+    "message": "Agent profiles now include milestones and verification timeline events.",
+    "type": "platform-updates",
+    "read": true,
+    "userId": "agent-001",
+    "createdAt": "2026-02-05T14:00:00.000Z",
+    "link": "/changelog"
+  },
+  {
+    "id": "notif_009",
+    "title": "Community Milestone: 5-Star Rating Received",
+    "message": "Your latest contribution received a 5-star rating from @alice.",
+    "type": "community-activity",
+    "read": false,
+    "userId": "agent-001",
+    "createdAt": "2026-02-04T19:30:00.000Z",
+    "link": "/inbox"
+  }
+]
