@@ -5,6 +5,7 @@ import type { McpServer } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/copy-button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type HealthStatus = "operational" | "degraded" | "outage" | "unknown";
 
@@ -18,6 +19,16 @@ type McpDetailResponse = {
   };
 };
 
+type InstallInstruction = {
+  id: "claude" | "cursor" | "vscode" | "openclaw" | "generic";
+  label: string;
+  filePath: string;
+  snippetLabel: string;
+  snippet: string;
+  note: string;
+  copyText: string;
+};
+
 const UNKNOWN_HEALTH: McpDetailResponse["health"] = {
   status: "unknown",
   lastCheck: null,
@@ -29,21 +40,102 @@ function tokenizeCommand(command: string): string[] {
   return matches.map((token) => token.replace(/^"|"$/g, ""));
 }
 
-function buildConfigSnippet(server: McpServer): string {
+function parseInstallCommand(server: McpServer): { command: string; args: string[] } {
   const tokens = tokenizeCommand(server.install_cmd);
-  const command = tokens[0] ?? "npx";
-  const args = tokens.slice(1);
+  return {
+    command: tokens[0] ?? "npx",
+    args: tokens.slice(1),
+  };
+}
 
-  const config = {
+function buildMcpServerEntry(server: McpServer): { command: string; args: string[] } {
+  return parseInstallCommand(server);
+}
+
+function formatJson(value: unknown): string {
+  return JSON.stringify(value, null, 2);
+}
+
+function buildInstallInstructions(server: McpServer): InstallInstruction[] {
+  const entry = buildMcpServerEntry(server);
+
+  const mcpServerConfig = {
     mcpServers: {
-      [server.slug]: {
-        command,
-        args,
-      },
+      [server.slug]: entry,
     },
   };
 
-  return JSON.stringify(config, null, 2);
+  return [
+    {
+      id: "claude",
+      label: "Claude Desktop",
+      filePath: "~/Library/Application Support/Claude/claude_desktop_config.json",
+      snippetLabel: "JSON snippet",
+      snippet: formatJson(mcpServerConfig),
+      note: "Add this under mcpServers and restart Claude Desktop.",
+      copyText: formatJson(mcpServerConfig),
+    },
+    {
+      id: "cursor",
+      label: "Cursor",
+      filePath: ".cursor/mcp.json",
+      snippetLabel: "JSON snippet",
+      snippet: formatJson(mcpServerConfig),
+      note: "Create this file if missing, then reload Cursor.",
+      copyText: formatJson(mcpServerConfig),
+    },
+    {
+      id: "vscode",
+      label: "VS Code (Copilot)",
+      filePath: ".vscode/mcp.json",
+      snippetLabel: "JSON snippet",
+      snippet: formatJson(mcpServerConfig),
+      note: "Save, then run “Developer: Reload Window” in VS Code.",
+      copyText: formatJson(mcpServerConfig),
+    },
+    {
+      id: "openclaw",
+      label: "OpenClaw",
+      filePath: "~/.openclaw/openclaw.json",
+      snippetLabel: "skills entry snippet",
+      snippet: formatJson({
+        skills: {
+          entries: {
+            [server.slug]: {
+              enabled: true,
+              config: {
+                command: entry.command,
+                args: entry.args,
+              },
+            },
+          },
+        },
+      }),
+      note: "Merge under skills.entries, then restart the OpenClaw gateway.",
+      copyText: formatJson({
+        skills: {
+          entries: {
+            [server.slug]: {
+              enabled: true,
+              config: {
+                command: entry.command,
+                args: entry.args,
+              },
+            },
+          },
+        },
+      }),
+    },
+    {
+      id: "generic",
+      label: "Generic (npx)",
+      filePath: "Terminal / shell",
+      snippetLabel: "Command",
+      snippet: server.install_cmd,
+      note: "Run this command directly to start the MCP server over stdio.",
+      copyText: server.install_cmd,
+    },
+  ];
 }
 
 function healthClass(status: HealthStatus): string {
@@ -58,6 +150,7 @@ export function McpDetailClient({ slug, initialServer }: { slug: string; initial
   const [loading, setLoading] = React.useState(true);
   const [adding, setAdding] = React.useState(false);
   const [added, setAdded] = React.useState(false);
+  const [activeInstallTab, setActiveInstallTab] = React.useState<InstallInstruction["id"]>("claude");
 
   React.useEffect(() => {
     const controller = new AbortController();
@@ -86,10 +179,18 @@ export function McpDetailClient({ slug, initialServer }: { slug: string; initial
   const activeServer = payload?.server ?? initialServer;
   const installs = payload?.installs ?? 0;
   const health = payload?.health;
-  const configSnippet = React.useMemo(() => buildConfigSnippet(activeServer), [activeServer]);
+  const installInstructions = React.useMemo(() => buildInstallInstructions(activeServer), [activeServer]);
+  const activeInstruction = React.useMemo(
+    () => installInstructions.find((instruction) => instruction.id === activeInstallTab) ?? installInstructions[0],
+    [activeInstallTab, installInstructions]
+  );
+
+  React.useEffect(() => {
+    setAdded(false);
+  }, [activeInstallTab]);
 
   const onAddToConfig = React.useCallback(async () => {
-    if (adding) return;
+    if (adding || !activeInstruction) return;
     setAdding(true);
 
     try {
@@ -107,7 +208,7 @@ export function McpDetailClient({ slug, initialServer }: { slug: string; initial
       }
 
       if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(configSnippet);
+        await navigator.clipboard.writeText(activeInstruction.copyText);
       }
 
       setAdded(true);
@@ -116,7 +217,7 @@ export function McpDetailClient({ slug, initialServer }: { slug: string; initial
     } finally {
       setAdding(false);
     }
-  }, [activeServer, adding, configSnippet, health, slug]);
+  }, [activeInstruction, activeServer, adding, health, slug]);
 
   return (
     <div className="space-y-8">
@@ -152,41 +253,46 @@ export function McpDetailClient({ slug, initialServer }: { slug: string; initial
             disabled={adding}
             className={added ? "bg-emerald-500/20 text-emerald-200 border border-emerald-400/30" : "bg-cyan text-background hover:bg-cyan/90"}
           >
-            {adding ? "Adding…" : added ? "Added to Config" : "Add to Config"}
+            {adding ? "Copying…" : added ? "Copied" : "Copy Install Snippet"}
           </Button>
         </div>
 
-        <div>
-          <p className="mb-2 text-xs font-mono text-muted-foreground">Connection string</p>
-          <div className="relative">
-            <pre className="rounded-lg border border-white/10 bg-black/40 p-3 pr-12 overflow-x-auto">
-              <code className="text-xs text-green whitespace-pre-wrap">{activeServer.install_cmd}</code>
-            </pre>
-            <CopyButton
-              text={activeServer.install_cmd}
-              label="Connection string"
-              size="icon"
-              variant="ghost"
-              className="absolute top-1.5 right-1.5 h-8 w-8 text-white/70 hover:text-white"
-            />
-          </div>
-        </div>
+        <Tabs value={activeInstallTab} onValueChange={(value) => setActiveInstallTab(value as InstallInstruction["id"])}>
+          <TabsList className="h-auto w-full flex-wrap justify-start gap-1 rounded-lg bg-white/5 p-1">
+            {installInstructions.map((instruction) => (
+              <TabsTrigger key={instruction.id} value={instruction.id} className="text-xs sm:text-sm">
+                {instruction.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-        <div>
-          <p className="mb-2 text-xs font-mono text-muted-foreground">Config snippet</p>
-          <div className="relative">
-            <pre className="rounded-lg border border-white/10 bg-black/40 p-3 pr-12 overflow-x-auto">
-              <code className="text-xs text-green whitespace-pre-wrap">{configSnippet}</code>
-            </pre>
-            <CopyButton
-              text={configSnippet}
-              label="Config snippet"
-              size="icon"
-              variant="ghost"
-              className="absolute top-1.5 right-1.5 h-8 w-8 text-white/70 hover:text-white"
-            />
-          </div>
-        </div>
+          {installInstructions.map((instruction) => (
+            <TabsContent key={instruction.id} value={instruction.id} className="space-y-3">
+              <div>
+                <p className="mb-1 text-xs font-mono text-muted-foreground">Config path</p>
+                <code className="text-xs text-cyan break-all">{instruction.filePath}</code>
+              </div>
+
+              <div>
+                <p className="mb-2 text-xs font-mono text-muted-foreground">{instruction.snippetLabel}</p>
+                <div className="relative">
+                  <pre className="rounded-lg border border-white/10 bg-black/40 p-3 pr-12 overflow-x-auto">
+                    <code className="text-xs text-green whitespace-pre-wrap">{instruction.snippet}</code>
+                  </pre>
+                  <CopyButton
+                    text={instruction.copyText}
+                    label={`${instruction.label} snippet`}
+                    size="icon"
+                    variant="ghost"
+                    className="absolute top-1.5 right-1.5 h-8 w-8 text-white/70 hover:text-white"
+                  />
+                </div>
+              </div>
+
+              <p className="text-xs text-muted-foreground">{instruction.note}</p>
+            </TabsContent>
+          ))}
+        </Tabs>
       </div>
     </div>
   );
