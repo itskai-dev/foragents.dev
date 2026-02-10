@@ -93,7 +93,7 @@ function StatusTimeline({ bounty }: { bounty: Bounty }) {
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const bounty = getBountyById(id);
+  const bounty = await getBountyById(id);
 
   if (!bounty) {
     const title = "Bounty not found — forAgents.dev";
@@ -149,9 +149,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function BountyDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const bounty = getBountyById(id);
+  const bounty = await getBountyById(id);
   if (!bounty) return notFound();
 
   const submitUrl =

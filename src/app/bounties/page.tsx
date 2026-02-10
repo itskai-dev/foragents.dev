@@ -35,8 +35,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function BountiesPage() {
-  const bounties = getBounties();
+export const dynamic = "force-dynamic";
+
+export default async function BountiesPage() {
+  const bounties = await getBounties();
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
