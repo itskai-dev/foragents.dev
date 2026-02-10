@@ -1,0 +1,94 @@
+{
+  "faqs": [
+    {
+      "id": "faq-getting-started-1",
+      "category": "getting-started",
+      "question": "What is forAgents.dev in one sentence?",
+      "answer": "forAgents.dev is an agent-first directory of reusable skills, MCP servers, templates, and guides that help AI agents become useful faster."
+    },
+    {
+      "id": "faq-getting-started-2",
+      "category": "getting-started",
+      "question": "How do I bootstrap a new agent with forAgents.dev?",
+      "answer": "Start with /bootstrap, copy the bootstrap prompt or JSON, and load it into your agent so it understands project structure, skills, and best practices."
+    },
+    {
+      "id": "faq-getting-started-3",
+      "category": "getting-started",
+      "question": "Do I need an account to use forAgents.dev?",
+      "answer": "No account is required for public browsing and basic usage. Accounts are useful for submissions, personalization, and premium features."
+    },
+    {
+      "id": "faq-skills-1",
+      "category": "skills",
+      "question": "What is a skill on forAgents.dev?",
+      "answer": "A skill is a focused capability package with docs and install instructions that an agent can adopt, such as web scraping, summarization, or workflow orchestration."
+    },
+    {
+      "id": "faq-skills-2",
+      "category": "skills",
+      "question": "How do I know if a skill is safe to install?",
+      "answer": "Review verification signals, source links, docs quality, and community feedback before installing. Prefer transparent, well-maintained skills with clear permissions."
+    },
+    {
+      "id": "faq-skills-3",
+      "category": "skills",
+      "question": "Can I publish my own skill?",
+      "answer": "Yes. Use the submission flow, include clear documentation, and provide reproducible install steps so agents and developers can evaluate your skill quickly."
+    },
+    {
+      "id": "faq-mcp-1",
+      "category": "mcp",
+      "question": "Does forAgents.dev support MCP servers?",
+      "answer": "Yes. MCP is a first-class concept on forAgents.dev, including server discovery, integration details, and health metadata where available."
+    },
+    {
+      "id": "faq-mcp-2",
+      "category": "mcp",
+      "question": "What MCP details are shown on listings?",
+      "answer": "Listings can include install commands, transport type, required environment variables, and operational notes so agents can integrate with fewer failures."
+    },
+    {
+      "id": "faq-mcp-3",
+      "category": "mcp",
+      "question": "How can I troubleshoot MCP integration issues?",
+      "answer": "Check server logs, validate required env vars, verify transport configuration, and test with minimal prompts before scaling to production workflows."
+    },
+    {
+      "id": "faq-pricing-1",
+      "category": "pricing",
+      "question": "Is forAgents.dev free to use?",
+      "answer": "Core discovery and many resources are available for free. Some advanced features and premium workflows are part of paid plans."
+    },
+    {
+      "id": "faq-pricing-2",
+      "category": "pricing",
+      "question": "What does premium unlock?",
+      "answer": "Premium can include expanded discovery tools, deeper analytics, higher limits, and priority experiences for active builders and teams."
+    },
+    {
+      "id": "faq-pricing-3",
+      "category": "pricing",
+      "question": "Do listed tools have separate costs?",
+      "answer": "Often yes. forAgents.dev indexes tools, skills, and MCP servers that may have their own pricing, so always review each listing's licensing details."
+    },
+    {
+      "id": "faq-agents-1",
+      "category": "agents",
+      "question": "Which agent frameworks work with forAgents.dev?",
+      "answer": "forAgents.dev is framework-agnostic and works with many agent stacks as long as they can consume structured docs, APIs, or MCP integrations."
+    },
+    {
+      "id": "faq-agents-2",
+      "category": "agents",
+      "question": "Can teams standardize agent behavior using forAgents.dev?",
+      "answer": "Yes. Teams can use shared templates, preferred skill sets, and onboarding docs to make agents more consistent across projects and environments."
+    },
+    {
+      "id": "faq-agents-3",
+      "category": "agents",
+      "question": "How often is content updated?",
+      "answer": "The catalog evolves continuously as new skills, MCP servers, and guides are submitted and curated by the community and maintainers."
+    }
+  ]
+}
