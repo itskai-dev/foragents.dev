@@ -1,38 +1,82 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import type { Skill } from "@/lib/data";
-import { parseCompareIdsParam } from "@/lib/compare";
-import type { TrendingBadgeKind } from "@/lib/trendingTypes";
+import { parseCompareSkillsParam } from "@/lib/compare";
 import type { AggregatedScorecard } from "@/lib/server/canaryScorecardStore";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { InstallCount } from "@/components/InstallCount";
-import { RunInReflecttButton } from "@/components/RunInReflecttButton";
-import { SkillTrendingBadge } from "@/components/skill-trending-badge";
-import { VerifiedSkillBadge } from "@/components/verified-badge";
 
-function formatMs(ms: number) {
-  if (!Number.isFinite(ms)) return "—";
-  if (ms < 1000) return `${Math.round(ms)}ms`;
-  return `${(ms / 1000).toFixed(2)}s`;
+type RatingSummary = {
+  artifact_slug: string;
+  count: number;
+  avg: number | null;
+  updated_at: string;
+};
+
+type ComparedSkill = Skill & {
+  installs: number;
+  ratings: RatingSummary;
+  canary: AggregatedScorecard | null;
+};
+
+type CompareApiResponse = {
+  updated_at: string;
+  slugs: string[];
+  skills: Array<ComparedSkill | { slug: string; error: string }>;
+};
+
+function getDefaultSlugs(allSkills: Skill[]): [string, string] {
+  const first = allSkills[0]?.slug ?? "";
+  const second = allSkills[1]?.slug ?? first;
+  return [first, second];
 }
 
-function formatPct(n: number) {
-  if (!Number.isFinite(n)) return "—";
-  return `${(n * 100).toFixed(2)}%`;
+function formatRating(avg: number | null, count: number): string {
+  if (avg == null) return "—";
+  return `${avg.toFixed(2)} / 5 (${count} ratings)`;
 }
 
-function skillCategory(skill: Skill | null) {
+function formatCanary(canary: AggregatedScorecard | null): string {
+  if (!canary) return "—";
+  return `${(canary.passRate * 100).toFixed(2)}% pass · ${Math.round(canary.avgLatencyMs)}ms · ${canary.testsPassed}/${canary.testsRun}`;
+}
+
+function valueForField(skill: ComparedSkill | null, field: string): string {
   if (!skill) return "—";
-  const n = skill.name.toLowerCase();
-  if (n.includes("kit")) return "Kit";
-  if (n.includes("template")) return "Template";
-  return "Skill";
+
+  switch (field) {
+    case "id":
+      return skill.id;
+    case "slug":
+      return skill.slug;
+    case "name":
+      return skill.name;
+    case "author":
+      return skill.author;
+    case "description":
+      return skill.description;
+    case "install_cmd":
+      return skill.install_cmd;
+    case "repo_url":
+      return skill.repo_url;
+    case "tags":
+      return skill.tags?.join(", ") || "—";
+    case "verified":
+      return skill.verification ? "Yes" : "No";
+    case "install_count":
+      return String(skill.installs ?? 0);
+    case "rating":
+      return formatRating(skill.ratings?.avg ?? null, skill.ratings?.count ?? 0);
+    case "canary":
+      return formatCanary(skill.canary ?? null);
+    default:
+      return "—";
+  }
 }
 
 export default function CompareSkillsPageClient({
@@ -45,506 +89,217 @@ export default function CompareSkillsPageClient({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const defaults = useMemo(() => getDefaultSlugs(allSkills), [allSkills]);
 
-  const slugs = useMemo(() => {
-    const raw = searchParams.get("skills");
-    return parseCompareIdsParam(raw);
-  }, [searchParams]);
+  const urlSlugs = useMemo(() => {
+    const parsed = parseCompareSkillsParam(searchParams.get("skills")).slice(0, 2);
+    if (parsed.length === 2) return [parsed[0]!, parsed[1]!] as [string, string];
 
-  // Used for rendering even before the first client navigation sync.
-  const effectiveSlugs = slugs.length ? slugs : initialSlugs;
+    const initial = initialSlugs.slice(0, 2);
+    if (initial.length === 2) return [initial[0]!, initial[1]!] as [string, string];
 
-  const selectedSkills = useMemo(() => {
-    const bySlug = new Map(allSkills.map((s) => [s.slug, s] as const));
-    return effectiveSlugs.map((slug) => bySlug.get(slug) ?? null);
-  }, [effectiveSlugs, allSkills]);
+    return defaults;
+  }, [searchParams, initialSlugs, defaults]);
 
-  const [query, setQuery] = useState("");
-  const [limitHit, setLimitHit] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [leftSlug, setLeftSlug] = useState<string>(urlSlugs[0] ?? defaults[0]);
+  const [rightSlug, setRightSlug] = useState<string>(urlSlugs[1] ?? defaults[1]);
 
-  const [trendingBadgesBySlug, setTrendingBadgesBySlug] = useState<
-    Record<string, TrendingBadgeKind | null>
-  >({});
-  const [scorecardsBySlug, setScorecardsBySlug] = useState<
-    Record<string, AggregatedScorecard | null>
-  >({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [leftSkill, setLeftSkill] = useState<ComparedSkill | null>(null);
+  const [rightSkill, setRightSkill] = useState<ComparedSkill | null>(null);
 
   useEffect(() => {
-    if (!copied) return;
-    const t = window.setTimeout(() => setCopied(false), 1400);
-    return () => window.clearTimeout(t);
-  }, [copied]);
+    setLeftSlug(urlSlugs[0]);
+    setRightSlug(urlSlugs[1]);
+  }, [urlSlugs]);
 
-  // Trending badges
   useEffect(() => {
-    let cancelled = false;
+    if (!leftSlug || !rightSlug) return;
 
-    async function loadTrending() {
-      try {
-        const res = await fetch("/api/trending/skills");
-        if (!res.ok) return;
-        const data = (await res.json()) as {
-          skills?: Array<{ slug: string; trendingBadge: TrendingBadgeKind | null }>;
-        };
-        const next: Record<string, TrendingBadgeKind | null> = {};
-        for (const s of data.skills ?? []) {
-          if (!s?.slug) continue;
-          next[s.slug] = s.trendingBadge ?? null;
-        }
-        if (!cancelled) setTrendingBadgesBySlug(next);
-      } catch {
-        // ignore
-      }
+    const next = `/compare?skills=${encodeURIComponent(`${leftSlug},${rightSlug}`)}`;
+    const current = searchParams.get("skills") || "";
+    const currentNormalized = parseCompareSkillsParam(current).slice(0, 2).join(",");
+    const nextNormalized = `${leftSlug},${rightSlug}`;
+
+    if (currentNormalized !== nextNormalized) {
+      router.replace(next);
     }
+  }, [leftSlug, rightSlug, router, searchParams]);
 
-    loadTrending();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Canary scorecards (pass rate / latency)
   useEffect(() => {
     let cancelled = false;
 
-    async function loadScorecards() {
-      try {
-        if (effectiveSlugs.length === 0) {
-          if (!cancelled) setScorecardsBySlug({});
-          return;
-        }
+    async function loadComparison() {
+      if (!leftSlug || !rightSlug) {
+        setLeftSkill(null);
+        setRightSkill(null);
+        return;
+      }
 
+      setLoading(true);
+      setError(null);
+
+      try {
         const res = await fetch(
-          `/api/canary/scorecards?skills=${encodeURIComponent(
-            effectiveSlugs.join(",")
-          )}`
+          `/api/compare?skills=${encodeURIComponent(`${leftSlug},${rightSlug}`)}`
         );
-        if (!res.ok) return;
 
-        const data = (await res.json()) as {
-          scorecards?: Record<string, AggregatedScorecard | null>;
-        };
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(text || "Failed to load comparison");
+        }
 
-        if (!cancelled) setScorecardsBySlug(data.scorecards ?? {});
-      } catch {
-        // ignore
+        const data = (await res.json()) as CompareApiResponse;
+        const a = data.skills[0];
+        const b = data.skills[1];
+
+        const aOk = a && !("error" in a) ? a : null;
+        const bOk = b && !("error" in b) ? b : null;
+
+        if (!cancelled) {
+          setLeftSkill(aOk);
+          setRightSkill(bOk);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Failed to load comparison");
+          setLeftSkill(null);
+          setRightSkill(null);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
 
-    loadScorecards();
+    loadComparison();
+
     return () => {
       cancelled = true;
     };
-  }, [effectiveSlugs.join(",")]);
+  }, [leftSlug, rightSlug]);
 
-  function buildUrl(next: string[]) {
-    const safe = next.filter(Boolean).slice(0, 4);
-    return safe.length > 0
-      ? `/compare?skills=${encodeURIComponent(safe.join(","))}`
-      : "/compare";
-  }
-
-  function sync(next: string[]) {
-    setLimitHit(false);
-    router.replace(buildUrl(next));
-  }
-
-  function addSkill(slug: string) {
-    const current = effectiveSlugs;
-    if (current.includes(slug)) {
-      setQuery("");
-      return;
-    }
-    if (current.length >= 4) {
-      setLimitHit(true);
-      return;
-    }
-    sync([...current, slug]);
-    setQuery("");
-  }
-
-  function removeSkill(slug: string) {
-    const current = effectiveSlugs;
-    sync(current.filter((s) => s !== slug));
-  }
-
-  async function copyLink() {
-    const url = window.location.href;
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(url);
-    } else {
-      const el = document.createElement("textarea");
-      el.value = url;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand("copy");
-      document.body.removeChild(el);
-    }
-    setCopied(true);
-  }
-
-  const empty = effectiveSlugs.length === 0;
-  const notEnough = effectiveSlugs.length > 0 && effectiveSlugs.length < 2;
-  const canCompare = effectiveSlugs.length >= 2;
-
-  const suggestions = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-
-    const selected = new Set(effectiveSlugs);
-
-    const scored = allSkills
-      .filter((s) => !selected.has(s.slug))
-      .map((s) => {
-        const hay = `${s.name} ${s.slug} ${s.author} ${(s.tags || []).join(" ")}`.toLowerCase();
-        const idx = hay.indexOf(q);
-        // Simple ranking: early substring matches first.
-        const score = idx === -1 ? 10_000 : idx;
-        return { s, score };
-      })
-      .filter((x) => x.score !== 10_000)
-      .sort((a, b) => a.score - b.score || a.s.name.localeCompare(b.s.name))
-      .slice(0, 8)
-      .map((x) => x.s);
-
-    return scored;
-  }, [query, allSkills, effectiveSlugs]);
-
-  // Calculate unique tags for highlighting (like diff markers).
-  const allTagsPerSkill = selectedSkills.map((s) => new Set(s?.tags || []));
-  const uniqueTagsPerSkill = allTagsPerSkill.map((tags, idx) => {
-    const otherTags = allTagsPerSkill
-      .filter((_, i) => i !== idx)
-      .flatMap((set) => Array.from(set));
-    return Array.from(tags).filter((tag) => !otherTags.includes(tag));
-  });
-
-  const rows: Array<{
-    label: string;
-    render: (s: Skill | null, idx: number) => React.ReactNode;
-  }> = [
-    {
-      label: "Description",
-      render: (s) => (
-        <p className="text-sm text-foreground/80 leading-relaxed">
-          {s?.description || "—"}
-        </p>
-      ),
-    },
-    {
-      label: "Category",
-      render: (s) => <span className="text-sm text-foreground/90">{skillCategory(s)}</span>,
-    },
-    {
-      label: "Tags",
-      render: (s, idx) => (
-        <div className="flex flex-wrap gap-1">
-          {(s?.tags || []).map((tag) => {
-            const isUnique = uniqueTagsPerSkill[idx]?.includes(tag);
-            return (
-              <span
-                key={tag}
-                className={`text-[11px] font-mono rounded border px-2 py-0.5 ${
-                  isUnique
-                    ? "bg-cyan/20 border-cyan/40 text-cyan"
-                    : "border-white/10 bg-white/5 text-foreground/70"
-                }`}
-              >
-                {tag}
-              </span>
-            );
-          })}
-          {(s?.tags || []).length === 0 ? (
-            <span className="text-sm text-muted-foreground">—</span>
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      label: "Installs",
-      render: (s) =>
-        s ? (
-          <InstallCount skillSlug={s.slug} className="text-sm text-cyan" />
-        ) : (
-          <span className="text-sm text-muted-foreground">—</span>
-        ),
-    },
-    {
-      label: "Verified",
-      render: (s) => (
-        <span className="text-sm text-foreground/90">
-          {s?.verification ? "✓ Verified" : "—"}
-        </span>
-      ),
-    },
-    {
-      label: "Trending",
-      render: (s) => (
-        <div className="flex items-center gap-2">
-          {s ? <SkillTrendingBadge badge={trendingBadgesBySlug[s.slug] ?? null} /> : null}
-          {!s || !trendingBadgesBySlug[s?.slug ?? ""] ? (
-            <span className="text-sm text-muted-foreground">—</span>
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      label: "Reliability (canary)",
-      render: (s) => {
-        if (!s) return <span className="text-sm text-muted-foreground">—</span>;
-        const sc = scorecardsBySlug[s.slug];
-        if (!sc) return <span className="text-sm text-muted-foreground">—</span>;
-        return (
-          <div className="text-sm text-foreground/90">
-            <div>
-              <span className="text-muted-foreground">Pass rate:</span> {formatPct(sc.passRate)}
-            </div>
-            <div>
-              <span className="text-muted-foreground">Avg latency:</span> {formatMs(sc.avgLatencyMs)}
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      label: "Repository",
-      render: (s) =>
-        s?.repo_url ? (
-          <a
-            className="text-sm text-cyan hover:underline break-all"
-            href={s.repo_url}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {s.repo_url}
-          </a>
-        ) : (
-          <span className="text-sm text-muted-foreground">—</span>
-        ),
-    },
+  const fields = [
+    { key: "id", label: "ID" },
+    { key: "slug", label: "Slug" },
+    { key: "name", label: "Name" },
+    { key: "author", label: "Author" },
+    { key: "description", label: "Description" },
+    { key: "install_cmd", label: "Install command" },
+    { key: "repo_url", label: "Repository" },
+    { key: "tags", label: "Tags" },
+    { key: "verified", label: "Verified" },
+    { key: "install_count", label: "Install count" },
+    { key: "rating", label: "Rating" },
+    { key: "canary", label: "Canary score" },
   ];
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-10">
-      <header className="flex flex-col gap-4 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <header className="mb-6">
+        <div className="flex items-center justify-between gap-3 flex-wrap mb-3">
           <div>
             <h1 className="text-2xl font-bold">Compare skills</h1>
             <p className="text-sm text-muted-foreground">
-              Compare up to 4 skills/kits side-by-side.
+              Pick two skills and compare real install, rating, and canary data side-by-side.
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/skills">Browse skills</Link>
-            </Button>
-
-            {effectiveSlugs.length > 0 ? (
-              <>
-                <Button variant="outline" size="sm" onClick={() => sync([])}>
-                  Clear
-                </Button>
-                <Button size="sm" onClick={() => copyLink().catch(() => null)}>
-                  {copied ? "Copied" : "Share comparison"}
-                </Button>
-              </>
-            ) : null}
-          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/skills">Browse skills</Link>
+          </Button>
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-card/40 p-4">
-          <label className="block text-xs font-mono text-muted-foreground mb-2">
-            Add a skill
-          </label>
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              ref={inputRef}
-              value={query}
-              onChange={(e) => {
-                setLimitHit(false);
-                setQuery(e.target.value);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && suggestions[0]) {
-                  e.preventDefault();
-                  addSkill(suggestions[0].slug);
-                }
-              }}
-              placeholder="Search by name, slug, tag, or author…"
-              className="w-full bg-background border border-white/10 rounded-md px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-cyan/50"
-              aria-label="Search skills to compare"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => inputRef.current?.focus()}
+        <div className="rounded-xl border border-white/10 bg-card/40 p-4 grid grid-cols-1 md:grid-cols-2 gap-3">
+          <label className="text-sm">
+            <span className="block text-xs font-mono text-muted-foreground mb-2">Skill A</span>
+            <select
+              value={leftSlug}
+              onChange={(e) => setLeftSlug(e.target.value)}
+              className="w-full bg-background border border-white/10 rounded-md px-3 py-2 text-sm text-foreground"
             >
-              Focus
-            </Button>
-          </div>
-
-          {limitHit ? (
-            <p className="mt-2 text-xs text-muted-foreground">
-              You can compare up to <span className="text-foreground">4</span> skills.
-            </p>
-          ) : null}
-
-          {suggestions.length > 0 ? (
-            <div className="mt-3 rounded-lg border border-white/10 overflow-hidden">
-              {suggestions.map((s) => (
-                <button
-                  key={s.slug}
-                  type="button"
-                  onClick={() => addSkill(s.slug)}
-                  className="w-full text-left px-3 py-2 bg-background/40 hover:bg-white/5 transition-colors flex items-start justify-between gap-3"
-                >
-                  <div className="min-w-0">
-                    <div className="text-sm text-foreground font-medium truncate">
-                      {s.name}
-                    </div>
-                    <div className="text-xs text-muted-foreground truncate font-mono">
-                      {s.slug} · {s.author}
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="text-xs bg-white/5 text-white/70 border-white/10">
-                    Add
-                  </Badge>
-                </button>
+              {allSkills.map((skill) => (
+                <option key={skill.slug} value={skill.slug}>
+                  {skill.name} ({skill.slug})
+                </option>
               ))}
-            </div>
-          ) : null}
+            </select>
+          </label>
 
-          {effectiveSlugs.length > 0 ? (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {selectedSkills.map((s, idx) => {
-                const slug = effectiveSlugs[idx]!;
-                const name = s?.name ?? slug;
-                return (
-                  <span
-                    key={slug}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs"
-                  >
-                    <Link href={s ? `/skills/${s.slug}` : `/skills/${slug}`} className="hover:text-cyan">
-                      {name}
-                    </Link>
-                    <button
-                      type="button"
-                      className="text-muted-foreground hover:text-foreground"
-                      onClick={() => removeSkill(slug)}
-                      aria-label={`Remove ${name} from comparison`}
-                    >
-                      ×
-                    </button>
-                  </span>
-                );
-              })}
-            </div>
-          ) : null}
+          <label className="text-sm">
+            <span className="block text-xs font-mono text-muted-foreground mb-2">Skill B</span>
+            <select
+              value={rightSlug}
+              onChange={(e) => setRightSlug(e.target.value)}
+              className="w-full bg-background border border-white/10 rounded-md px-3 py-2 text-sm text-foreground"
+            >
+              {allSkills.map((skill) => (
+                <option key={skill.slug} value={skill.slug}>
+                  {skill.name} ({skill.slug})
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </header>
 
-      {empty ? (
-        <div className="rounded-xl border border-white/10 bg-card/40 p-6 text-center">
-          <p className="text-muted-foreground">No skills selected yet.</p>
-          <p className="text-xs text-muted-foreground mt-2">
-            Tip: try <span className="font-mono">agent-memory-kit</span> or <span className="font-mono">agent-autonomy-kit</span>.
-          </p>
+      {error ? (
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-100 mb-4">
+          {error}
         </div>
       ) : null}
 
-      {notEnough ? (
-        <div className="rounded-xl border border-white/10 bg-card/40 p-6 text-center">
-          <p className="text-muted-foreground">Add at least 2 skills to compare.</p>
-        </div>
-      ) : null}
+      <div className="rounded-xl border border-white/10 bg-card/30 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-white/10 bg-background/50">
+                <th className="text-left p-3 font-mono text-xs text-muted-foreground">Field</th>
+                <th className="text-left p-3">
+                  {leftSkill ? (
+                    <Link href={`/skills/${leftSkill.slug}`} className="text-cyan hover:underline">
+                      {leftSkill.name}
+                    </Link>
+                  ) : (
+                    leftSlug
+                  )}
+                </th>
+                <th className="text-left p-3">
+                  {rightSkill ? (
+                    <Link href={`/skills/${rightSkill.slug}`} className="text-cyan hover:underline">
+                      {rightSkill.name}
+                    </Link>
+                  ) : (
+                    rightSlug
+                  )}
+                </th>
+              </tr>
+            </thead>
 
-      {canCompare ? (
-        <div className="rounded-xl border border-white/10 bg-card/30 overflow-hidden">
-          <div className="overflow-x-auto">
-            <div
-              className="grid"
-              style={{
-                gridTemplateColumns: `minmax(140px, 220px) repeat(${effectiveSlugs.length}, minmax(300px, 1fr))`,
-              }}
-            >
-              {/* Header row */}
-              <div className="sticky left-0 z-20 bg-background/90 backdrop-blur border-b border-white/10 p-4">
-                <span className="text-xs font-mono text-muted-foreground">Field</span>
-              </div>
+            <tbody>
+              {fields.map((field) => {
+                const leftValue = valueForField(leftSkill, field.key);
+                const rightValue = valueForField(rightSkill, field.key);
+                const different = leftValue !== rightValue;
 
-              {selectedSkills.map((s, idx) => {
-                const slug = effectiveSlugs[idx]!;
-                const trending = s ? (trendingBadgesBySlug[s.slug] ?? null) : null;
                 return (
-                  <div key={slug} className="border-b border-white/10 p-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <Link
-                            href={s ? `/skills/${s.slug}` : `/skills/${slug}`}
-                            className="font-semibold text-lg text-foreground hover:text-cyan transition-colors"
-                          >
-                            {s?.name ?? slug}
-                          </Link>
-                          {s ? <VerifiedSkillBadge info={s.verification ?? null} mode="icon" /> : null}
-                          {trending ? <SkillTrendingBadge badge={trending} /> : null}
-                        </div>
-                        <div className="text-xs text-muted-foreground mt-1 flex items-center gap-2 flex-wrap">
-                          <span className="font-mono">{slug}</span>
-                          <span className="text-white/20">•</span>
-                          {s ? <InstallCount skillSlug={s.slug} className="text-xs text-cyan" /> : null}
-                        </div>
-                        <div className="mt-3 flex items-center gap-2 flex-wrap">
-                          {s ? (
-                            <RunInReflecttButton
-                              skillSlug={s.slug}
-                              name={s.name}
-                              size="sm"
-                              variant="secondary"
-                              className="bg-white/5 border border-white/10 hover:bg-white/10"
-                            />
-                          ) : null}
-                          <Button variant="outline" size="sm" onClick={() => removeSkill(slug)}>
-                            Remove
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <tr key={field.key} className="border-b border-white/5 align-top">
+                    <td className="p-3 font-mono text-xs text-muted-foreground">{field.label}</td>
+                    <td className={`p-3 ${different ? "bg-cyan/10" : ""}`}>{leftValue}</td>
+                    <td className={`p-3 ${different ? "bg-cyan/10" : ""}`}>{rightValue}</td>
+                  </tr>
                 );
               })}
-
-              {/* Data rows */}
-              {rows.map((row) => (
-                <div key={row.label} className="contents">
-                  <div className="sticky left-0 z-10 bg-background/90 backdrop-blur border-b border-white/5 p-4">
-                    <span className="text-xs font-mono text-muted-foreground">
-                      {row.label}
-                    </span>
-                  </div>
-                  {selectedSkills.map((s, i) => (
-                    <div
-                      key={`${row.label}:${effectiveSlugs[i]}`}
-                      className="border-b border-white/5 p-4"
-                    >
-                      {row.render(s, i)}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="px-4 py-3 border-t border-white/10 bg-background/40">
-            <p className="text-xs text-muted-foreground">
-              Tags highlighted in <span className="text-cyan">cyan</span> are unique to that skill.
-            </p>
-          </div>
+            </tbody>
+          </table>
         </div>
-      ) : null}
+
+        <div className="px-4 py-3 border-t border-white/10 bg-background/40">
+          <p className="text-xs text-muted-foreground">
+            {loading ? "Loading latest comparison data…" : "Rows highlighted in cyan are different between the two skills."}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

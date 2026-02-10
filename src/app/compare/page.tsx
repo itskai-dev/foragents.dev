@@ -1,7 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Suspense } from "react";
 
 import { getAgents, getSkills, type Agent } from "@/lib/data";
-import { parseCompareIdsParam } from "@/lib/compare";
+import { parseCompareIdsParam, parseCompareSkillsParam } from "@/lib/compare";
 
 import ComparePageClient from "@/components/compare/ComparePageClient";
 import CompareSkillsPageClient from "@/components/compare/CompareSkillsPageClient";
@@ -18,7 +19,7 @@ export async function generateMetadata({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const skillsParam = firstParam(searchParams?.skills);
-  const slugs = parseCompareIdsParam(skillsParam);
+  const slugs = parseCompareSkillsParam(skillsParam);
 
   const aParam = firstParam(searchParams?.a);
   const agentIds = parseCompareIdsParam(aParam);
@@ -83,7 +84,7 @@ export default function ComparePage({
   searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const skillsParam = firstParam(searchParams?.skills);
-  const slugs = parseCompareIdsParam(skillsParam);
+  const slugs = parseCompareSkillsParam(skillsParam);
 
   // Legacy agent compare mode: /compare?a=1,2,3
   const aParam = firstParam(searchParams?.a);
