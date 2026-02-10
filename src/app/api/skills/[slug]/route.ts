@@ -3,6 +3,7 @@ import { getSkillBySlug } from "@/lib/data";
 import { getSkillReviews } from "@/lib/reviews";
 import versionsData from "@/data/skill-versions.json";
 import compatibilityData from "@/data/compatibility.json";
+import { getSkillInstalls } from "@/lib/server/skillInstalls";
 
 type SkillVersionEntry = {
   slug: string;
@@ -51,9 +52,12 @@ export async function GET(
     (compatibilityData as Record<string, CompatibilityRecord>)[slug] ??
     FALLBACK_COMPATIBILITY;
 
+  const installs = await getSkillInstalls(slug);
+
   return NextResponse.json(
     {
       ...skill,
+      installs,
       metadata: {
         reviews_count: reviewsCount,
         average_rating: Number(averageRating.toFixed(2)),

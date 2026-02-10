@@ -5,6 +5,7 @@ import path from "path";
 import { getSupabase } from "@/lib/supabase";
 import type { Skill } from "@/lib/data";
 import { readSkillMetricStore } from "@/lib/server/skillMetrics";
+import { readSkillInstallCounts } from "@/lib/server/skillInstalls";
 
 import type { TrendingBadgeKind } from "@/lib/trendingTypes";
 
@@ -143,9 +144,10 @@ export async function getTrendingSkillsWithBadges(skills: Skill[]): Promise<Skil
   const nowMs = Date.now();
 
   const slugs = skills.map((s) => s.slug);
-  const [metrics, feedback] = await Promise.all([
+  const [metrics, feedback, installCounts] = await Promise.all([
     readSkillMetricStore(),
     fetchSkillFeedbackRows(slugs),
+    readSkillInstallCounts(),
   ]);
 
   const commentsBySlug = new Map<string, SkillCommentRow[]>();
@@ -173,7 +175,9 @@ export async function getTrendingSkillsWithBadges(skills: Skill[]): Promise<Skil
   const scored = skills.map((skill) => {
     const slug = skill.slug;
 
-    const installsTotal = metrics.installs_total[slug] ?? 0;
+    const installsFromMetrics = metrics.installs_total[slug] ?? 0;
+    const installsFromSkillPage = installCounts[slug] ?? 0;
+    const installsTotal = installsFromMetrics + installsFromSkillPage;
     const viewsTotal = metrics.views_total[slug] ?? 0;
 
     const installsDecay = decayedCountFromByDay({

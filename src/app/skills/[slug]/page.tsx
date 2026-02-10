@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { notFound } from "next/navigation";
 import { getSkills, getSkillBySlug } from "@/lib/data";
 import { getBadgesForSkills } from "@/lib/badges";
@@ -13,7 +14,7 @@ import { RelatedKits } from "@/components/related-kits";
 import { CompatibilityMatrix } from "@/components/compatibility-matrix";
 import { buildSkillIssueBodyTemplate } from "@/lib/reportIssue";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { InstallCount } from "@/components/InstallCount";
+import { SkillInstallCta } from "@/components/skill-install-cta";
 import { SkillPageClient } from "@/components/skill-page-client";
 import { getCollectionsForSkill } from "@/lib/skillCollections";
 import { RunInReflecttButton } from "@/components/RunInReflecttButton";
@@ -23,6 +24,7 @@ import { SkillVersionHistory } from "@/components/skill-version-history";
 import { aggregateScorecards, readCanaryScorecards } from "@/lib/server/canaryScorecardStore";
 import { getSkillDependencies, getSkillDependents } from "@/lib/dependencies";
 import { getSkillReviews } from "@/lib/reviews";
+import { getSkillInstalls } from "@/lib/server/skillInstalls";
 import { SkillReviewsSection } from "@/components/skill-reviews-section";
 
 // Generate static paths for all skills
@@ -73,6 +75,8 @@ export default async function SkillPage({
 
   const skill = getSkillBySlug(slug);
   if (!skill) notFound();
+
+  const installs = await getSkillInstalls(skill.slug);
 
   const inCollections = await getCollectionsForSkill(skill.slug);
 
@@ -136,18 +140,14 @@ export default async function SkillPage({
       <main className="max-w-3xl mx-auto px-4 py-12">
         {/* Title area */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2 flex items-center gap-2 flex-wrap">
+          <h1 className="text-3xl font-bold text-[#F8FAFC] mb-2 flex items-center gap-3 flex-wrap">
             <span>🧰 {skill.name}</span>
+            <SkillInstallCta slug={skill.slug} initialInstalls={installs} />
           </h1>
           <div className="flex items-center gap-3 text-muted-foreground flex-wrap">
             <p>
               by <span className="text-foreground">{skill.author}</span>
             </p>
-            <span className="text-white/20">•</span>
-            <InstallCount 
-              skillSlug={skill.slug} 
-              className="text-sm text-cyan"
-            />
             {inCollections.length > 0 ? (
               <>
                 <span className="text-white/20">•</span>
