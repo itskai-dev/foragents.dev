@@ -200,6 +200,27 @@ export default function McpPage() {
                     {server.description}
                   </p>
 
+                  {/* Stats */}
+                  {(server.stars || server.installs || server.framework) && (
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3 font-mono">
+                      {server.stars && (
+                        <span className="flex items-center gap-1">
+                          ⭐ {server.stars.toLocaleString()}
+                        </span>
+                      )}
+                      {server.installs && (
+                        <span className="flex items-center gap-1">
+                          📦 {server.installs.toLocaleString()}
+                        </span>
+                      )}
+                      {server.framework && (
+                        <span className="text-[11px] text-muted-foreground/80">
+                          {server.framework}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {/* Install command - copyable */}
                   <div className="relative group/cmd">
                     <code className="block text-xs text-green bg-black/30 rounded px-3 py-2 mb-3 overflow-x-auto font-mono">

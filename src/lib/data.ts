@@ -55,6 +55,9 @@ export type McpServer = {
   category: string;
   install_cmd: string;
   tags: string[];
+  stars?: number;
+  installs?: number;
+  framework?: string;
 };
 
 export function getMcpServers(category?: string): McpServer[] {
