@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRecentlyViewed } from "@/hooks/use-recently-viewed";
 import { RecentlyViewed } from "@/components/recently-viewed";
 
@@ -11,8 +11,15 @@ interface SkillPageClientProps {
 
 export function SkillPageClient({ slug, name }: SkillPageClientProps) {
   const { addSkill } = useRecentlyViewed();
+  const lastTrackedSlugRef = useRef<string | null>(null);
 
   useEffect(() => {
+    if (!slug || lastTrackedSlugRef.current === slug) {
+      return;
+    }
+
+    lastTrackedSlugRef.current = slug;
+
     // Track this skill view (local UX) + page visit (global metrics)
     addSkill(slug, name);
 

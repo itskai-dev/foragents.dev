@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const STORAGE_KEY = "recentlyViewedSkills";
 const MAX_ITEMS = 5;
@@ -31,37 +31,34 @@ export function useRecentlyViewed() {
   }, []);
 
   // Add a skill to recently viewed
-  const addSkill = (slug: string, name: string) => {
+  const addSkill = useCallback((slug: string, name: string) => {
     try {
       setRecentlyViewed((prev) => {
         // Remove if already exists
         const filtered = prev.filter((skill) => skill.slug !== slug);
-        
+
         // Add to front
-        const updated = [
-          { slug, name, viewedAt: Date.now() },
-          ...filtered,
-        ].slice(0, MAX_ITEMS);
+        const updated = [{ slug, name, viewedAt: Date.now() }, ...filtered].slice(0, MAX_ITEMS);
 
         // Save to localStorage
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-        
+
         return updated;
       });
     } catch (error) {
       console.error("Failed to add skill to recently viewed:", error);
     }
-  };
+  }, []);
 
   // Clear all history
-  const clearHistory = () => {
+  const clearHistory = useCallback(() => {
     try {
       localStorage.removeItem(STORAGE_KEY);
       setRecentlyViewed([]);
     } catch (error) {
       console.error("Failed to clear recently viewed history:", error);
     }
-  };
+  }, []);
 
   return {
     recentlyViewed,
